@@ -29,6 +29,17 @@
 'use strict';
 var SAVE_KEY='hanvocab.v1';
 var META_KEY='hanvocab.v12.meta';
+/* V13: the sync meta follows the active identity (set by the V21 account
+   layer in localStorage['hanvocab.v13.session']). Guests keep the V12
+   key; each signed-in account gets its own meta key, so switching
+   accounts on one browser never mixes sync state. */
+var SESSION_KEY='hanvocab.v13.session';
+function metaKey(){
+  try{ var s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+    if(s&&s.mode==='account'&&s.uid) return META_KEY+'.'+s.uid;
+  }catch(e){}
+  return META_KEY;
+}
 var MAX_CLOUD_BYTES=900*1024;   /* Firestore doc limit is 1 MB */
 var MAX_IMPORT_BYTES=10*1024*1024;
 var SAVE_VERSION=12;
@@ -41,11 +52,11 @@ function hash(str){
   return ('0000000'+h.toString(16)).slice(-8);
 }
 function meta(){
-  try{ var m=JSON.parse(localStorage.getItem(META_KEY)||'null'); if(m&&typeof m==='object')return m; }catch(e){}
+  try{ var m=JSON.parse(localStorage.getItem(metaKey())||'null'); if(m&&typeof m==='object')return m; }catch(e){}
   return {};
 }
 function saveMeta(m){
-  try{ localStorage.setItem(META_KEY, JSON.stringify(m||{})); }catch(e){}
+  try{ localStorage.setItem(metaKey(), JSON.stringify(m||{})); }catch(e){}
 }
 function safeParse(raw){
   try{ var j=JSON.parse(raw); return (j&&typeof j==='object')?j:null; }catch(e){ return null; }
@@ -239,7 +250,7 @@ function ensureFB(){
       FB.db=firebase.firestore();
       if(!FB.authHooked){
         FB.authHooked=true;
-        FB.auth.onAuthStateChanged(function(u){ engine.onAuthUser(u?{uid:u.uid,email:u.email||'',displayName:u.displayName||''}:null); });
+        FB.auth.onAuthStateChanged(function(u){ engine.onAuthUser(u?{uid:u.uid,email:u.email||'',displayName:u.displayName||'',emailVerified:!!u.emailVerified}:null); });
       }
       return FB;
     })();
@@ -266,6 +277,46 @@ var FirebaseAdapter={
     });
   },
   signOut:function(){ return ensureFB().then(function(){ return FB.auth.signOut(); }); },
+  signInGoogleRedirect:function(){
+    /* Popup fallback: if the browser blocks popups, sign in by redirect
+       instead. After the redirect back, checkRedirectResult() picks up
+       the signed-in user (the V21 layer calls it at boot). */
+    return ensureFB().then(function(){
+      var p=new firebase.auth.GoogleAuthProvider();
+      return FB.auth.signInWithRedirect(p);
+    });
+  },
+  checkRedirectResult:function(){
+    return ensureFB().then(function(){
+      return FB.auth.getRedirectResult().then(function(cr){
+        if(cr&&cr.user) return {uid:cr.user.uid,email:cr.user.email||'',displayName:cr.user.displayName||''};
+        return null;
+      });
+    }).catch(function(){ return null; });
+  },
+  sendPasswordReset:function(email){
+    return ensureFB().then(function(){ return FB.auth.sendPasswordResetEmail(email); });
+  },
+  sendVerification:function(){
+    return ensureFB().then(function(){
+      var u=FB.auth.currentUser; if(!u) return Promise.reject(new Error('no-user'));
+      return u.sendEmailVerification();
+    });
+  },
+  updateDisplayName:function(name){
+    return ensureFB().then(function(){
+      var u=FB.auth.currentUser; if(!u) return Promise.reject(new Error('no-user'));
+      return u.updateProfile({displayName:name}).then(function(){ if(engine.user) engine.user.displayName=name; });
+    });
+  },
+  setPersistence:function(remember){
+    return ensureFB().then(function(){
+      return FB.auth.setPersistence(remember?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION);
+    });
+  },
+  emailVerified:function(){
+    try{ var u=FB.auth&&FB.auth.currentUser; return !!(u&&u.emailVerified); }catch(e){ return false; }
+  },
   load:function(uid){
     return ensureFB().then(function(){
       return docRef(uid).get().then(function(snap){
@@ -485,7 +536,7 @@ if(!configured()) engine.cloud='off';
 else engine.cloud='guest';
 
 window.__v20sync={
-  configured:configured, version:'12.0.0',
+  configured:configured, version:'13.0.0',
   status:function(){ return {cloud:engine.cloud, cloudMsg:engine.cloudMsg, user:engine.user, lastError:engine.lastError, conflict:engine.conflict?{localTime:engine.conflict.localTime, cloudTime:engine.conflict.cloudTime}:null}; },
   conflict:function(){ return engine.conflict; },
   onChange:function(cb){ if(typeof cb==='function') listeners.push(cb); },
@@ -496,6 +547,19 @@ window.__v20sync={
     var a=getAdapter();
     return (a.signOut?a.signOut():Promise.resolve()).then(function(){ engine.user=null; engine.conflict=null; setCloud(configured()?'guest':'off'); });
   },
+  signInGoogleRedirect:function(){ return getAdapter().signInGoogleRedirect?getAdapter().signInGoogleRedirect():Promise.reject(new Error('unsupported')); },
+  checkRedirectResult:function(){ return getAdapter().checkRedirectResult?getAdapter().checkRedirectResult():Promise.resolve(null); },
+  completeRedirect:function(){
+    /* After a redirect sign-in, pick up the signed-in user and publish it
+       through the normal auth channel (engine.user + listeners). */
+    return getAdapter().checkRedirectResult?getAdapter().checkRedirectResult().then(function(u){ if(u) engine.onAuthUser(u); return u; }):Promise.resolve(null);
+  },
+  sendPasswordReset:function(e){ return getAdapter().sendPasswordReset?getAdapter().sendPasswordReset(e):Promise.reject(new Error('unsupported')); },
+  sendVerification:function(){ return getAdapter().sendVerification?getAdapter().sendVerification():Promise.reject(new Error('unsupported')); },
+  updateDisplayName:function(n){ return getAdapter().updateDisplayName?getAdapter().updateDisplayName(n):Promise.reject(new Error('unsupported')); },
+  setPersistence:function(r){ return getAdapter().setPersistence?getAdapter().setPersistence(r):Promise.resolve(); },
+  emailVerified:function(){ return getAdapter().emailVerified?getAdapter().emailVerified():false; },
+  currentUser:function(){ return engine.user; },
   syncNow:function(opts){ return engine.syncNow(opts); },
   resolveConflict:function(c){ return engine.resolveConflict(c); },
   noteLocalSaved:function(){ engine.noteLocalSaved(); },

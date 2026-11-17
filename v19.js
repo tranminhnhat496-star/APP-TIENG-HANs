@@ -718,6 +718,6 @@ window.__v19={
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
     resolveUltimate:resolveUltimate},
-  version:'12.0.0'
+  version:'13.0.0'
 };
 })();

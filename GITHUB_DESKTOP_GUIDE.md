@@ -325,3 +325,62 @@ Repo: **APP-TIENG-HANS**.
   `hanvocab.v1`; bản sao lưu trước khi chuyển đổi vẫn nằm trong trình
   duyệt ở khóa `hanvocab.v11-backup` (xem được trong tab 💾 Dữ liệu sau
   khi nâng cấp lại lên V12).
+
+---
+
+# Cập nhật lên V13 — Login & Player Account System (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V13 không đổi khóa lưu `hanvocab.v1`, nhưng có file sao lưu ngoài máy
+  thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V13_Login_Account_System.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v21.js`, `v21.css`, `assets/avatars/` (10 file PNG),
+  `assets/mascot-chick.png` và các file khác) vào thư mục repository,
+  ghi đè các file cũ.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V13: Login & Player Account System` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. **Lần đầu mở sau khi cập nhật, game hiện màn hình chào mừng** (logo,
+   mascot gà con, 4 nút). Đây là hành vi mới của V13 — không phải lỗi.
+   Bấm **"Chơi với tư cách khách"** để vào game với tiến trình cũ của
+   bạn (dữ liệu không mất; lần sau mở game sẽ vào thẳng).
+3. Chơi một ván (học vài từ, đánh 1 boss) → tải lại trang → tiến trình
+   phải còn nguyên.
+4. Bấm **ảnh avatar ở góc trên** màn hình chính: phải mở **Trung tâm
+   tài khoản** (Hồ sơ, Avatar, Tài khoản, Đồng bộ, Sao lưu, Cài đặt).
+   Hồ sơ phải hiện đúng Level, XP, tiền vàng, kim cương, từ đã học,
+   boss đã thắng của bạn.
+5. Mở English Hub: trong thanh ngôn ngữ phải có nút **Tài khoản** mở
+   cùng Trung tâm tài khoản.
+6. Kiểm tra dữ liệu cũ: từ vựng, XP, kim cương, farm, boss và bản đồ
+   phải còn nguyên. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị
+   để khôi phục (Trung tâm tài khoản → Sao lưu & Khôi phục, hoặc tab
+   💾 Dữ liệu).
+7. **Đăng nhập là bước riêng, chưa bật mặc định.** Muốn bật, làm theo
+   file **FIREBASE_SETUP.md** trong ZIP (mục V13): bật Email/Password,
+   kiểm tra mẫu email xác minh + đặt lại mật khẩu, thêm domain GitHub
+   Pages vào Authorized Domains, dán cấu hình vào `firebase-config.js`
+   trong repo, push rồi chạy checklist V13.3 trong file đó. Chỉ sau khi
+   checklist đạt hết mới nên nói với người chơi rằng đăng nhập đã hoạt
+   động. Khi chưa cấu hình, màn hình chào mừng hiện rõ "Chưa cấu hình
+   Firebase" và chơi khách vẫn đầy đủ.
+
+## Quay lại V12 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V13 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V13 không đổi tên khóa lưu
+  `hanvocab.v1`; các bản lưu theo tài khoản (`hanvocab.v1.acc.*`) và
+  bản lưu khách (`hanvocab.v1.guest`) vẫn nằm trong trình duyệt và sẽ
+  được dùng lại khi nâng cấp lên V13 lần nữa.
