@@ -105,3 +105,130 @@
 - Thêm trong cùng bản lưu: `S.v7.en17` (`fav`: ID từ yêu thích, `claimed`: bài/chủ đề đã nhận thưởng).
 - `en15()` thêm `scope` (phạm vi Thư viện đang chọn; save cũ không có scope vẫn chạy, coi như không chọn).
 - Từ thư viện dùng chung bản ghi và hồ sơ SRS với từ V14/V15 (không tạo bản sao); từ bạn tự nhập giữ ID riêng.
+
+# Danh sách file đã thay đổi — V9 → V10
+
+## File mới (lớp V18 — toàn bộ tính năng V10 nằm ở đây)
+| File | Nội dung |
+|---|---|
+| `v18_data.js` | Dữ liệu tập trung 30 boss mới (10/khu vực) + 10 boss cũ (chỉ để hiển thị trong Bộ Sưu Tập): ID, tên EN/VI, ảnh, hệ, độ hiếm, cấp, HP, phòng thủ, kỹ năng, điều kiện mở khóa, chế độ hỏi, độ khó, thưởng (XP/kim cương/vật phẩm/đá/danh hiệu). |
+| `v18.js` | Engine chiến đấu V18: 3 khu vực, chọn ngôn ngữ EN/KO (khu vực 2), kỹ năng nguyên tố, 3 giai đoạn huyền thoại, thưởng lần đầu 1 lần, Bộ Sưu Tập, animation, SRS cho câu tiếng Anh (`mark18`), thống kê KO (`koStats`). |
+| `v18.css` | Theme V18: thẻ khu vực/boss, giao diện trận đấu, thanh HP, banner giai đoạn, Bộ Sưu Tập + bộ lọc, keyframes idle/hit/attack/special/defeat/victory, responsive + `prefers-reduced-motion`. |
+| `assets/bosses/v10/v10_*.png` (30 file) | Ảnh boss riêng, đã tách nền, tổng 7,9 MB. |
+| `assets/bosses/v10/manifest.json` | Danh sách 30 PNG: model tách nền, kích thước, dung lượng. |
+| `tools/split_bosses.py` | Script cắt + tách nền 30 boss từ 3 poster (tái tạo được). |
+| `build_v10.py` | Script build: V6 HTML + v15 + v16 + v17 + v18 → `index.html`. Kiểm tra đủ 30 boss (10/10/10), 30 PNG, không trùng ID boss cũ. |
+| `package_v10.py` | Script đóng gói ZIP V10 + kiểm tra nội dung ZIP. |
+| `README_V10_BOSSES.md` | Hướng dẫn sử dụng 30 boss mới. |
+| `CHANGELOG_V9_to_V10.md` | Changelog đầy đủ V9 → V10. |
+| `ASSET_REPORT_V10.md` | Báo cáo asset: cách cắt, model tách nền từng boss, hạn chế đã biết. |
+| `SMOKE_TEST_V10_2026-11-17.md` | Báo cáo kiểm thử V10 (205/205 jsdom, chạy 2 lần + 1 lần trên ZIP đã đóng gói). |
+
+## File sửa (chỉ sửa lớp V15 của V7/V8/V9, không động vào code V6)
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V10; thêm `<style id="v18">`, `<script id="v18data">`, `<script id="v18js">`; thêm `assets/bosses/v10/` (30 PNG + manifest). |
+| `v15.js` | Hub thêm tab `['collection','🏆 Bộ Sưu Tập']`; `renderTab()` chuyển tab collection sang `__v18.collectionHTML()`; `bossesHTML()` gắn thêm `__v18.arenasHTML()` sau danh sách 10 boss cũ; version `9.0.0` → `10.0.0`. Tất cả có guard nên V15 vẫn chạy nếu thiếu V18. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 như ở mục V7 (kể cả `Korean_Vocab_Farm_V6_Bilingual.html`, `v7.js`–`v14.js`, `assets/`).
+- Mọi file V7/V8/V9: `v15_data.js`, `v15_words.json`, `v16.js`, `v16.css`, `vendor/`, `samples/`, `v17.js`, `v17.css`, `v17_a1a2.js`, `v17_oxford.js`, `v17_a1a2.json`, `v17_oxford.json`, `v17_review.json`, `build_v7.py`, `build_v8.py`, `build_v9.py`, `README_V7.md`, `README_V8_IMPORT.md`, `README_V9_LIBRARY.md`, `CHANGELOG_V6_to_V7.md`, `CHANGELOG_V7_to_V8.md`, `CHANGELOG_V8_to_V9.md`, `REPORT_PDF_EXTRACTION.md`.
+- 10 boss cũ V15 và luật thưởng của chúng giữ nguyên.
+
+## Dữ liệu người chơi (localStorage) — bổ sung V10
+- Khóa `hanvocab.v1` **giữ nguyên**.
+- Thêm trong cùng bản lưu: `S.v7.en18` (`bosses`: boss đã thắng + vật phẩm, `stones`: đá nguyên tố, `titles`: danh hiệu, `koStats`: thống kê trận tiếng Hàn).
+- Save V9 mở bằng V10 chạy bình thường, không cần chuyển đổi.
+
+## V11 — Boss Adventure (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `v19_data.js` | Dữ liệu V19: 10 vùng đất (z1–z10), 30 boss `v11_*`, 10 hệ nguyên tố (thêm hệ Vũ trụ 🌀), độ hiếm, cấp/HP/phòng thủ, chế độ hỏi, độ khó, 5 kỹ năng + tuyệt kỹ mỗi boss, thưởng. |
+| `v19.js` | Lớp V19: bản đồ tương tác, Universal Combat Engine (5 tim, combo, chí mạng, khiên, đồng hồ), Knowledge Counterattack, hệ sao, thành thạo song ngữ, SRS qua `mark19()`. |
+| `v19.css` | Kiểu bản đồ, nút vùng, đường SVG phát sáng, bảng thông tin vùng, hoạt ảnh chiến đấu 6 trạng thái, `prefers-reduced-motion`. |
+| `assets/bosses/v11/v11_*.png` (30 file) | Ảnh boss riêng, tổng 1,9 MB (3 cắt nền trong suốt + 27 chân dung cắt sát). |
+| `assets/bosses/v11/manifest.json` | Danh sách 30 PNG: loại ảnh (u2net/portrait), vùng cắt, kích thước, dung lượng. |
+| `tools/split_bosses_v11.py` | Script cắt 30 boss từ poster V11 (tái tạo được). |
+| `build_v11.py` | Script build: V6 HTML + v15 + v16 + v17 + v18 + v19 → `index.html`. Kiểm tra đủ 30 boss V11 (10 vùng × 3), 30 PNG, không trùng ID cũ/V10. |
+| `package_v11.py` | Script đóng gói ZIP V11 + kiểm tra nội dung ZIP. |
+| `README_V11_BOSS_ADVENTURE.md` | Hướng dẫn sử dụng bản đồ + 30 boss mới. |
+| `CHANGELOG_V10_to_V11.md` | Changelog đầy đủ V10 → V11. |
+| `ASSET_REPORT_V11.md` | Báo cáo asset: hình học lưới, 4 model tách nền đã thử, giới hạn poster full-bleed, danh sách từng boss. |
+| `SMOKE_TEST_V11_2026-11-17.md` | Báo cáo kiểm thử V11 (342/342 jsdom ×2 + 342/342 trên ZIP đã đóng gói, hồi quy V10 18/18). |
+
+## File sửa (chỉ sửa lớp V15/V18, không động vào code V6)
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V11; thêm `<style id="v19">`, `<script id="v19data">`, `<script id="v19js">`; thêm `assets/bosses/v11/` (30 PNG + manifest). |
+| `v15.js` | Hub thêm tab `['map','🗺️ Bản Đồ Boss']`; `renderTab()` chuyển tab map sang `__v19.mapHTML()` (có guard); version `10.0.0` → `11.0.0`. |
+| `v18.js` | Bộ Sưu Tập hiển thị 70 boss: `allBosses()` gộp thêm boss V19; `isWon()`/`bossUnlocked()` rẽ nhánh theo `b.zone`; `elChip`/`rarChip` dùng `el.c \|\| el.color`; `arenaName()` xử lý ID vùng; `collFiltered()` thêm bộ lọc arena `map`; `collDetail()` dùng `__V19_DATA.byId` dự phòng; `challenge()` chuyển boss V19 sang bản đồ. |
+| `v19.js` | (trong quá trình kiểm thử) sửa lỗi crash khi tuyệt kỹ kích hoạt: chế độ câu hỏi dùng `F.caMode \|\| F.qmode`, banner phản công chỉ hiện khi đã có câu hỏi phản công. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6, V7, V8, V9 và V10 (kể cả `v18.js`/`v18_data.js` ngoài các sửa Bộ Sưu Tập ở trên, 30 PNG V10, `build_v10.py`, `package_v10.py`).
+- 10 boss cũ V15, 30 boss V10 và luật thưởng của chúng giữ nguyên.
+
+## Dữ liệu người chơi (localStorage) — bổ sung V11
+- Khóa `hanvocab.v1` **giữ nguyên**.
+- Thêm trong cùng bản lưu: `S.v7.en19` (`lang`: ngôn ngữ đang chọn trên bản đồ; `bosses`: thắng/sao theo từng ngôn ngữ EN/KO; `titles`: danh hiệu; `zoneClaimed`: vùng đã nhận thưởng theo từng ngôn ngữ; `koStats`: thống kê trận tiếng Hàn).
+- Save V10 mở bằng V11 chạy bình thường, không cần chuyển đổi.
+
+## V11.1 — Korean Boss Map Fix (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `build_v11_1.py` | Script build V11.1: build V11 + dòng tab tiếng Hàn (xem dưới) + kiểm tra `openMapFor` và version `11.1.0`. |
+| `package_v11_1.py` | Script đóng gói ZIP V11.1 + kiểm tra `openMapFor`/`v19kotab`/tiêu đề V11.1 trong ZIP. |
+| `README_V11_1_KOREAN_BOSS_MAP.md` | Hướng dẫn dùng bản đồ từ Korean Hub + giải thích lỗi `window.S`. |
+| `CHANGELOG_V11_to_V11_1.md` | Changelog đầy đủ V11 → V11.1. |
+| `SMOKE_TEST_V11_1_2026-11-17.md` | Báo cáo kiểm thử V11.1 (98/98 jsdom ×2). |
+
+## File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V11.1; **một dòng duy nhất** trong script V6 (dòng render `#tabs`): thêm nút `<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor('ko')">🗺️ Bản Đồ Boss</button>` sau các tab. Không sửa gì khác trong code V6. |
+| `v19.js` | Thêm `openMapFor(lang)`/`mapOrigin()` (điểm vào dùng chung, chỉ đổi ngôn ngữ chiến đấu, không đụng ngôn ngữ học chính); `openMap()` gọi `__v15.openHub('map')` thay vì `__v15.tab('map')` để mở được Hub khi Hub đang đóng; tiêu đề bản đồ theo ngôn ngữ (`보스 모험 지도` / `Legendary Boss Adventure Map`); `koCardsRaw()` — bộ câu hỏi tiếng Hàn theo deck đã chọn (≥8 thẻ) + **sửa lỗi `window.S` → `S`**; version `11.0.0` → `11.1.0`. |
+| `v18.js` | Sửa `koPool()`/`distractorsKO()` (`window.S` → `S`) — trận boss tiếng Hàn ở đấu trường V10 nay hỏi tiếng Hàn thật; version `10.0.0` → `10.0.1`. |
+| `v15.js` | Chỉ đổi version `11.0.0` → `11.1.0`. |
+| `v19.css` | Thêm `.tab.v19kotab` (vàng nhạt, icon 🗺️). |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 khác, V7/V8/V9/V10, dữ liệu V19 (10 vùng, 30 boss), 30 PNG V10 + 30 PNG V11, 10 boss cũ V15, 30 boss V10, luật thưởng, cơ chế học tiếng Hàn cũ, đấu trường boss tiếng Hàn cũ (chế độ "Đấu boss").
+
+## Dữ liệu người chơi (localStorage) — không đổi cấu trúc
+- Khóa `hanvocab.v1` **giữ nguyên**; `S.v7.en19` giữ nguyên cấu trúc.
+- Save V11 mở bằng V11.1 chạy bình thường, không cần chuyển đổi.
+
+## V12 — Player Save & Cloud Sync (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `build_v12.py` | Script build V12 (từ `build_v11_1.py`): chèn lớp V20, kiểm tra version 12.0.0 + `__v20`/`__v20sync`/`mergeSaves`. |
+| `package_v12.py` | Script đóng gói ZIP V12 + kiểm tra lớp V20, `firebase-config.js`, tiêu đề V12. |
+| `v20.js`, `v20_sync.js`, `v20.css` | Lớp V20 (xem dưới). Cũng có trong `src/`. |
+| `firebase-config.js` | Cấu hình Firebase để trống — người dùng tự điền project của mình. |
+| `firestore.rules` | Security Rules (chỉ chủ tài khoản đọc/ghi document của mình). |
+| `FIREBASE_SETUP.md` | Hướng dẫn tạo project, bật Auth, Firestore, Rules, Authorized Domains + checklist kiểm thử trực tiếp. |
+| `README_V12_SAVE_SYNC.md` | Hướng dẫn dùng hệ thống lưu + đồng bộ, giới hạn đã biết. |
+| `CHANGELOG_V11_1_to_V12.md` | Changelog đầy đủ V11.1 → V12 (gồm 5 lỗi tìm thấy khi kiểm thử). |
+| `SMOKE_TEST_V12_2026-11-17.md` | Báo cáo kiểm thử V12 (108/108 jsdom ×2). |
+
+## File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V12; thêm lớp V20: `<style id="v20">`, `<script src="firebase-config.js">`, `<script id="v20sync">`, `<script id="v20js">`. |
+| `v15.js` | Tab "Sao lưu" → "💾 Dữ liệu"; `backupHTML()` thêm panel V20 phía trên; version `11.1.0` → `12.0.0`. |
+| `v19.js` | Chỉ đổi version `11.1.0` → `12.0.0`. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 khác, V7/V8/V9/V10/V11/V11.1, dữ liệu từ vựng, 30 PNG V10 + 30 PNG V11, 10 boss cũ V15, 30 boss V10, 30 boss V11, luật thưởng, cơ chế học, farm, đấu trường boss tiếng Hàn cũ.
+
+## Dữ liệu người chơi (localStorage) — không đổi khóa, không đổi schema
+- Khóa `hanvocab.v1` **giữ nguyên**; schema không đổi nên không cần chuyển đổi dữ liệu.
+- Lần mở V12 đầu tiên: sao lưu toàn bộ bytes V11 vào `hanvocab.v11-backup` (chỉ ghi một lần), đóng dấu `S.v7.meta={saveVersion:12, migratedAt, prevVersion}`.
+- Meta vận hành (lần lưu/đồng bộ gần nhất, hash đồng bộ) nằm ở khóa riêng `hanvocab.v12.meta` để việc ghi meta không tự kích hoạt thêm lần lưu.
+- Save V11 mở bằng V12 chạy bình thường; có nút khôi phục bản trước khi chuyển đổi.

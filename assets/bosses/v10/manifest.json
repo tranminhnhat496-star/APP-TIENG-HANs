@@ -1,0 +1,512 @@
+[
+ {
+  "id": "v10_ancienttree",
+  "group": "leg",
+  "model": "isnet-anime",
+  "crop": [
+   1217,
+   515,
+   1536,
+   800
+  ],
+  "size": [
+   319,
+   278
+  ],
+  "solid_frac": 0.516,
+  "kb": 190.7
+ },
+ {
+  "id": "v10_dict",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   1929,
+   828,
+   2527,
+   1375
+  ],
+  "size": [
+   512,
+   501
+  ],
+  "solid_frac": 0.59,
+  "kb": 540.3
+ },
+ {
+  "id": "v10_dragon",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   1301,
+   146,
+   1899,
+   693
+  ],
+  "size": [
+   512,
+   504
+  ],
+  "solid_frac": 0.671,
+  "kb": 491.4
+ },
+ {
+  "id": "v10_fairy",
+  "group": "el",
+  "model": "isnet-anime",
+  "crop": [
+   1217,
+   520,
+   1536,
+   800
+  ],
+  "size": [
+   309,
+   260
+  ],
+  "solid_frac": 0.596,
+  "kb": 136.2
+ },
+ {
+  "id": "v10_firedragon",
+  "group": "leg",
+  "model": "u2netp",
+  "crop": [
+   0,
+   80,
+   329,
+   428
+  ],
+  "size": [
+   329,
+   348
+  ],
+  "solid_frac": 0.226,
+  "kb": 225.2
+ },
+ {
+  "id": "v10_fox",
+  "group": "el",
+  "model": "u2netp",
+  "crop": [
+   1217,
+   150,
+   1536,
+   425
+  ],
+  "size": [
+   315,
+   233
+  ],
+  "solid_frac": 0.624,
+  "kb": 140.3
+ },
+ {
+  "id": "v10_ghost",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   1929,
+   146,
+   2527,
+   693
+  ],
+  "size": [
+   511,
+   512
+  ],
+  "solid_frac": 0.597,
+  "kb": 425.3
+ },
+ {
+  "id": "v10_goblin",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   673,
+   146,
+   1271,
+   693
+  ],
+  "size": [
+   512,
+   492
+  ],
+  "solid_frac": 0.563,
+  "kb": 503.2
+ },
+ {
+  "id": "v10_godturtle",
+  "group": "leg",
+  "model": "isnet-general-use",
+  "crop": [
+   602,
+   515,
+   944,
+   800
+  ],
+  "size": [
+   315,
+   268
+  ],
+  "solid_frac": 0.566,
+  "kb": 163.5
+ },
+ {
+  "id": "v10_griffin",
+  "group": "el",
+  "model": "isnet-general-use",
+  "crop": [
+   295,
+   520,
+   636,
+   800
+  ],
+  "size": [
+   317,
+   269
+  ],
+  "solid_frac": 0.453,
+  "kb": 132.3
+ },
+ {
+  "id": "v10_icedragon",
+  "group": "el",
+  "model": "isnet-anime",
+  "crop": [
+   295,
+   170,
+   615,
+   425
+  ],
+  "size": [
+   289,
+   255
+  ],
+  "solid_frac": 0.553,
+  "kb": 139.7
+ },
+ {
+  "id": "v10_icewolf",
+  "group": "leg",
+  "model": "isnet-anime",
+  "crop": [
+   295,
+   170,
+   625,
+   428
+  ],
+  "size": [
+   274,
+   258
+  ],
+  "solid_frac": 0.543,
+  "kb": 156.8
+ },
+ {
+  "id": "v10_king",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   2557,
+   828,
+   3155,
+   1375
+  ],
+  "size": [
+   512,
+   494
+  ],
+  "solid_frac": 0.65,
+  "kb": 560.3
+ },
+ {
+  "id": "v10_mage",
+  "group": "el",
+  "model": "isnet-general-use",
+  "crop": [
+   910,
+   520,
+   1251,
+   800
+  ],
+  "size": [
+   330,
+   266
+  ],
+  "solid_frac": 0.397,
+  "kb": 156.4
+ },
+ {
+  "id": "v10_magma",
+  "group": "el",
+  "model": "isnet-general-use",
+  "crop": [
+   910,
+   150,
+   1251,
+   425
+  ],
+  "size": [
+   316,
+   209
+  ],
+  "solid_frac": 0.37,
+  "kb": 128.0
+ },
+ {
+  "id": "v10_ninetails",
+  "group": "leg",
+  "model": "isnet-general-use",
+  "crop": [
+   910,
+   515,
+   1251,
+   800
+  ],
+  "size": [
+   341,
+   275
+  ],
+  "solid_frac": 0.72,
+  "kb": 189.6
+ },
+ {
+  "id": "v10_octopus",
+  "group": "el",
+  "model": "isnet-general-use",
+  "crop": [
+   0,
+   520,
+   329,
+   800
+  ],
+  "size": [
+   329,
+   264
+  ],
+  "solid_frac": 0.648,
+  "kb": 168.0
+ },
+ {
+  "id": "v10_owl",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   45,
+   828,
+   643,
+   1375
+  ],
+  "size": [
+   512,
+   498
+  ],
+  "solid_frac": 0.712,
+  "kb": 507.6
+ },
+ {
+  "id": "v10_panda",
+  "group": "el",
+  "model": "isnet-anime",
+  "crop": [
+   602,
+   150,
+   918,
+   425
+  ],
+  "size": [
+   316,
+   238
+  ],
+  "solid_frac": 0.715,
+  "kb": 160.0
+ },
+ {
+  "id": "v10_phoenix",
+  "group": "leg",
+  "model": "isnet-anime",
+  "crop": [
+   0,
+   515,
+   329,
+   800
+  ],
+  "size": [
+   329,
+   285
+  ],
+  "solid_frac": 0.446,
+  "kb": 170.9
+ },
+ {
+  "id": "v10_seaoctopus",
+  "group": "leg",
+  "model": "u2netp",
+  "crop": [
+   911,
+   170,
+   1241,
+   428
+  ],
+  "size": [
+   330,
+   258
+  ],
+  "solid_frac": 0.296,
+  "kb": 165.9
+ },
+ {
+  "id": "v10_slime",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   45,
+   146,
+   643,
+   693
+  ],
+  "size": [
+   512,
+   472
+  ],
+  "solid_frac": 0.527,
+  "kb": 376.9
+ },
+ {
+  "id": "v10_spider",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   2557,
+   146,
+   3155,
+   693
+  ],
+  "size": [
+   512,
+   506
+  ],
+  "solid_frac": 0.494,
+  "kb": 482.3
+ },
+ {
+  "id": "v10_thunderlion",
+  "group": "leg",
+  "model": "isnet-general-use",
+  "crop": [
+   602,
+   170,
+   931,
+   428
+  ],
+  "size": [
+   286,
+   255
+  ],
+  "solid_frac": 0.482,
+  "kb": 133.3
+ },
+ {
+  "id": "v10_tiger",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   673,
+   828,
+   1271,
+   1375
+  ],
+  "size": [
+   512,
+   497
+  ],
+  "solid_frac": 0.755,
+  "kb": 532.8
+ },
+ {
+  "id": "v10_titan",
+  "group": "leg",
+  "model": "isnet-anime",
+  "crop": [
+   1218,
+   105,
+   1536,
+   428
+  ],
+  "size": [
+   318,
+   323
+  ],
+  "solid_frac": 0.538,
+  "kb": 204.2
+ },
+ {
+  "id": "v10_turtle",
+  "group": "el",
+  "model": "isnet-general-use",
+  "crop": [
+   602,
+   520,
+   944,
+   800
+  ],
+  "size": [
+   326,
+   270
+  ],
+  "solid_frac": 0.496,
+  "kb": 161.7
+ },
+ {
+  "id": "v10_unicorn",
+  "group": "el",
+  "model": "isnet-anime",
+  "crop": [
+   0,
+   150,
+   329,
+   425
+  ],
+  "size": [
+   279,
+   248
+  ],
+  "solid_frac": 0.6,
+  "kb": 127.2
+ },
+ {
+  "id": "v10_voidghost",
+  "group": "leg",
+  "model": "u2netp",
+  "crop": [
+   295,
+   515,
+   636,
+   800
+  ],
+  "size": [
+   327,
+   263
+  ],
+  "solid_frac": 0.464,
+  "kb": 160.7
+ },
+ {
+  "id": "v10_wizard",
+  "group": "en",
+  "model": "isnet-general-use",
+  "crop": [
+   1301,
+   828,
+   1899,
+   1375
+  ],
+  "size": [
+   512,
+   497
+  ],
+  "solid_frac": 0.739,
+  "kb": 509.8
+ }
+]

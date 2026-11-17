@@ -139,3 +139,189 @@ Repo: **APP-TIENG-HANS**.
   `v15.js` của V8), commit và push. Dữ liệu người chơi không bị ảnh hưởng vì
   V9 không đổi tên khóa lưu `hanvocab.v1`; khóa mới `S.v7.en17` và trường
   `scope` trong `S.v7.en15` chỉ bị V8 bỏ qua.
+
+# Hướng dẫn cập nhật lên V10 bằng GitHub Desktop
+
+## Chuẩn bị
+- Sao lưu tiến trình hiện tại: mở game V9 → English Hub → tab **Sao lưu** →
+  tải file sao lưu xuống (phòng khi cần quay lại).
+- Giải nén file `Korean_English_Vocab_Farm_V10_30_Bosses.zip` ra một thư mục.
+
+## Cập nhật
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v18.js`, `v18.css`, `v18_data.js`, `assets/bosses/v10/` và các file khác)
+  vào thư mục repository, ghi đè các file cũ.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V10: 30 new bosses (3 arenas + Boss Collection)` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Mở **English Hub** → tab **Bosses**: phải thấy 10 boss cũ + 3 thẻ khu vực
+   (English Challenge Arena, Elemental Arena, Legendary Boss Arena).
+3. Mở tab **🏆 Bộ Sưu Tập**: phải thấy 40 boss, có hình ảnh từng boss,
+   thanh tiến độ, ô tìm kiếm và bộ lọc.
+4. Đánh thử Vua Slime Từ Vựng: trả lời đúng vài câu, thanh HP boss phải
+   giảm, thắng phải nhận +50 XP và +1 kim cương (chỉ lần đầu).
+5. Kiểm tra dữ liệu cũ: chuyển sang Korean Farm, từ vựng và tiến trình tiếng
+   Hàn phải còn nguyên; mở tab 📚 Thư viện, 3 nhóm từ phải còn đủ. Nếu thiếu,
+   dùng file sao lưu đã tải ở bước chuẩn bị để khôi phục.
+6. Thử khu vực Nguyên Tố sau khi đã thắng 5 boss: chọn tiếng Hàn ở một trận,
+   câu hỏi phải là tiếng Hàn từ thẻ từ của bạn.
+
+## Quay lại V9 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước khi
+  nâng cấp V10 → **Revert this commit** (hoặc checkout lại `index.html` và
+  `v15.js` của V9), commit và push. Dữ liệu người chơi không bị ảnh hưởng vì
+  V10 không đổi tên khóa lưu `hanvocab.v1`; khóa mới `S.v7.en18` chỉ bị V9
+  bỏ qua.
+
+---
+
+# Cập nhật lên V11 — Boss Adventure (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay đổi
+  đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện tại,
+  vào English Hub → tab ⚙️ Cài đặt (hoặc mục Sao lưu), tải file sao lưu về máy.
+  V11 không đổi khóa lưu `hanvocab.v1` nên dữ liệu cũ vẫn mở được, nhưng có
+  bản sao lưu thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_Boss_Adventure_V11.zip` ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v19.js`, `v19.css`, `v19_data.js`, `assets/bosses/v11/` và các file khác)
+  vào thư mục repository, ghi đè các file cũ.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V11: Boss Adventure map + 30 legendary bosses` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Mở **English Hub** → tab **🗺️ Bản Đồ Boss**: phải thấy bản đồ dọc với 10
+   vùng đất, đường đi phát sáng, vùng Hỏa Ngục mở, 9 vùng còn lại khóa (🔒).
+3. Bấm vào vùng Hỏa Ngục: phải mở bảng thông tin với ảnh Hỏa Vương Diệt Thế,
+   3 boss, tiêu chí sao và nút bắt đầu chiến đấu.
+4. Đánh thử Hỏa Vương Diệt Thế: trả lời đúng vài câu, thanh HP boss phải
+   giảm; thắng phải nhận XP + kim cương (chỉ lần đầu).
+5. Mở tab **🏆 Bộ Sưu Tập**: phải thấy 70 boss, có bộ lọc 🗺️ Bản Đồ Boss (V11).
+6. Kiểm tra dữ liệu cũ: chuyển sang Korean Farm, từ vựng và tiến trình tiếng
+   Hàn phải còn nguyên; mở tab 📚 Thư viện, 3 nhóm từ phải còn đủ. Nếu thiếu,
+   dùng file sao lưu đã tải ở bước chuẩn bị để khôi phục.
+7. Thử chuyển ngôn ngữ trên bản đồ sang tiếng Hàn: tiến độ phải về 0/30
+   (độc lập với tiếng Anh).
+
+## Quay lại V10 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước khi
+  nâng cấp V11 → **Revert this commit** (hoặc checkout lại `index.html` và
+  `v15.js`/`v18.js` của V10), commit và push. Dữ liệu người chơi không bị ảnh
+  hưởng vì V11 không đổi tên khóa lưu `hanvocab.v1`; khóa mới `S.v7.en19` chỉ
+  bị V10 bỏ qua.
+
+---
+
+# Cập nhật lên V11.1 — Korean Boss Map Fix (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào English Hub → tab Sao lưu, tải file sao lưu về máy. V11.1 không
+  đổi khóa lưu `hanvocab.v1` nên dữ liệu cũ vẫn mở được, nhưng có bản sao
+  lưu thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V11_1_Korean_Boss_Map_Fix.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v19.js`, `v18.js`, `v15.js`, `v19.css` và các file khác) vào thư mục
+  repository, ghi đè các file cũ.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V11.1: Korean Boss Map fix` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Ở giao diện tiếng Hàn, nhìn thanh điều hướng (dưới cùng trên điện thoại,
+   phía trên khu vực học trên máy tính): phải thấy nút **🗺️ Bản Đồ Boss**
+   ở cuối thanh.
+3. Bấm nút đó: bản đồ phải mở ngay với tiêu đề **"보스 모험 지도 – Bản Đồ
+   Boss Tiếng Hàn"**, hiện 10 vùng đất, vùng Hỏa Ngục mở.
+4. Bấm vùng Hỏa Ngục → **Bắt đầu chiến đấu** với Hỏa Vương Diệt Thế:
+   câu hỏi phải là tiếng Hàn (từ Hangul, nghĩa tiếng Việt, nút "Nghe
+   phát âm"). Nếu bạn có dưới 8 thẻ tiếng Hàn, game sẽ báo rõ là đang
+   dùng câu hỏi tiếng Anh tạm thời.
+5. Thắng trận: phải nhận XP + kim cương lần đầu, vùng Băng Vực mở ra ở
+   phía tiếng Hàn.
+6. Đóng bản đồ (nút ✕): phải quay lại giao diện tiếng Hàn, thanh tab còn
+   nguyên nút Bản Đồ Boss.
+7. Mở English Hub → tab 🗺️ Bản Đồ Boss: tiêu đề phải là "Legendary Boss
+   Adventure Map" và tiến độ tiếng Anh phải là 0/30 (độc lập với tiếng
+   Hàn vừa thắng).
+8. Kiểm tra dữ liệu cũ: từ vựng và tiến trình tiếng Hàn phải còn nguyên;
+   đấu trường boss tiếng Hàn cũ (chế độ "Đấu boss" trong phần Học) vẫn
+   chơi được. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị để
+   khôi phục.
+
+## Quay lại V11 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V11.1 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V11.1 không đổi tên khóa lưu
+  `hanvocab.v1`; tiến trình bản đồ (`S.v7.en19`) của V11.1 vẫn được V11
+  đọc bình thường.
+
+---
+
+# Cập nhật lên V12 — Player Save & Cloud Sync (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V12 không đổi khóa lưu `hanvocab.v1` và tự giữ một bản sao lưu V11
+  trong trình duyệt khi mở lần đầu, nhưng có file sao lưu ngoài máy thì
+  luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V12_Save_Cloud_Sync.zip` ra
+  một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v20.js`, `v20_sync.js`, `v20.css`, `firebase-config.js`,
+  `firestore.rules` và các file khác) vào thư mục repository, ghi đè
+  các file cũ.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V12: Player Save & Cloud Sync` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Đầu trang tiếng Hàn phải hiện viên trạng thái **"● Đã lưu …"**.
+3. Chơi một ván (học vài từ, đánh 1 boss) → tải lại trang → tiến trình
+   phải còn nguyên.
+4. Mở English Hub → tab **💾 Dữ liệu**: phải thấy mục "Quản lý dữ liệu"
+   (trạng thái lưu, lần lưu gần nhất, thẻ chuyển đổi V12) và mục "Đồng
+   bộ đám mây" hiện **"Chưa cấu hình Firebase"** (đúng — vì chưa cấu
+   hình, game không giả vờ đã đồng bộ).
+5. Mở mục **Dữ liệu** ở giao diện tiếng Hàn: phải thấy nút **"☁️ Quản
+   lý dữ liệu & đồng bộ"**.
+6. Kiểm tra dữ liệu cũ: từ vựng, XP, kim cương, farm, boss và bản đồ
+   phải còn nguyên. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị
+   để khôi phục (tab 💾 Dữ liệu → chọn file).
+7. **Đồng bộ đám mây là bước riêng, chưa bật mặc định.** Muốn bật, làm
+   theo file **FIREBASE_SETUP.md** trong ZIP: tạo project Firebase, bật
+   Google + Email, dán Rules, thêm domain GitHub Pages vào Authorized
+   Domains, dán cấu hình vào `firebase-config.js` trong repo, push rồi
+   chạy checklist Bước 6 trong file đó. Chỉ sau khi checklist đạt hết
+   mới nên nói với người chơi rằng đồng bộ đã hoạt động.
+
+## Quay lại V11.1 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V12 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V12 không đổi tên khóa lưu
+  `hanvocab.v1`; bản sao lưu trước khi chuyển đổi vẫn nằm trong trình
+  duyệt ở khóa `hanvocab.v11-backup` (xem được trong tab 💾 Dữ liệu sau
+  khi nâng cấp lại lên V12).

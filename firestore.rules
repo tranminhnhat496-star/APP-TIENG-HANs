@@ -1,0 +1,39 @@
+rules_version = '2';
+
+// Firestore Security Rules — Korean & English Vocab Farm V12
+// Paste into: Firebase Console > Firestore Database > Rules > Publish.
+//
+// What they do:
+// - Each signed-in player can read/write ONLY their own document:
+//   /players/{their-uid}. Nobody can read or write anyone else's save,
+//   and anonymous/guest players (no auth) cannot touch Firestore at all.
+// - Everything else in the database is denied by default.
+// - Writes must carry a saveVersion (int) and updatedAt (int, epoch ms),
+//   so malformed payloads are rejected server-side.
+// - The 1 MB Firestore document limit is enforced by Firestore itself;
+//   the game additionally refuses to upload saves over 900 KB.
+//
+// What they do NOT do (be honest about this):
+// - They cannot stop a player from editing THEIR OWN save (that is
+//   inherent to client-side saves). If you later add leaderboards or
+//   competitive rewards, verify scores with Cloud Functions — see
+//   FIREBASE_SETUP.md, section "Chống gian lận".
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /players/{userId} {
+      // Read: only the owner, signed in.
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Write: only the owner, signed in, with a well-formed payload.
+      // (request.resource only exists on writes, so read and write are
+      // separate rules — combining them would break reads.)
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.saveVersion is int
+        && request.resource.data.updatedAt is int
+        && request.resource.data.data is map;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
