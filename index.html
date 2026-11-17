@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V14 — Basic Tactics Listening Vocabulary — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V15 — Premium Pet System — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -978,7 +978,7 @@ function setView(v){view=v;render()}
 const TI={study:'🌱',list:'📖',shop:'🛒',dex:'🏆',rem:'⏰',data:'💾'};
 function render(){
   const pg=$('#app');pg.classList.remove('pg');void pg.offsetWidth;pg.classList.add('pg');
-  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>';
+  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>'+'<button class="tab v23kotab" onclick="window.__v23&&__v23.openHub()" title="Thú Cưng — 펫"><span class="ti">🐾</span><span>Thú Cưng</span></button>';
   stats();({study:rStudy,list:rList,shop:rShop,dex:rDex,rem:rRem,data:rData})[view]()}
 
 function rStudy(){
@@ -4300,6 +4300,9 @@ function mark15(ok,w,mode){
   if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   if(mode){e.modeBest[mode]=e.modeBest[mode]||{played:0,correct:0,best:0};e.modeBest[mode].played++;if(ok)e.modeBest[mode].correct++}
   if(ok)waterFarm(); /* a correct answer waters a growing crop */
+  /* V23: a correct answer feeds the pet team (+2 XP, +1 affection each)
+     and speeds up the active hatch by 30s. Guarded — no team/hatch = no-op. */
+  if(ok){try{if(window.__v23)__v23.onLearnCorrect()}catch(e){}}
   sfx15(ok?'ok':'bad');
   save15();
   return xp;
@@ -4343,6 +4346,7 @@ function renderLangBar(){
     +'<button class="v15lb-btn '+(e.lang==='en'?'on':'')+'" onclick="__v15.setLang(\'en\')">🇬🇧 English Farm</button>'
     +'<span class="v15lb-meta">EN: '+c.mastered+' thuộc · '+c.due+' cần ôn</span>'
     +'<button class="v15lb-hub" onclick="__v15.openHub()">English Hub</button>'
+    +'<button class="v15lb-hub" onclick="window.__v23&&__v23.openHub()">🐾 Thú Cưng</button>'
     +'</div>';
 }
 function showChooser(){
@@ -4416,7 +4420,7 @@ function renderHub(){
   var e=en15(),c=counts15();
   h.innerHTML='<div class="v15hub-in">'
     +'<div class="v15hub-head"><div class="v15hub-title"><span class="v15ollie-sm">'+OLLIE_SVG+'</span><div><b>English Farm</b><span>Ollie\'s Farm · '+c.mastered+'/'+c.total+' từ đã thuộc · '+c.due+' từ cần ôn hôm nay</span></div></div>'
-    +'<div class="v15hub-headbtns"><span class="v15chip">'+icon15('coin.png')+' '+coins15()+' XP</span><span class="v15chip">'+icon15('gem.png')+' '+(S.v7.gems||0)+' 💎</span><button class="v15x" onclick="__v15.closeHub()" aria-label="Đóng">✕</button></div></div>'
+    +'<div class="v15hub-headbtns"><span class="v15chip">'+icon15('coin.png')+' '+coins15()+' XP</span><span class="v15chip">'+icon15('gem.png')+' '+(S.v7.gems||0)+' 💎</span><button class="btn sm" onclick="window.__v23&&__v23.openHub()">🐾 Thú Cưng</button><button class="v15x" onclick="__v15.closeHub()" aria-label="Đóng">✕</button></div></div>'
     +'<div class="v15tabs">'+hubTabs().map(function(t){return '<button class="v15tab '+(HUB.tab===t[0]?'on':'')+'" onclick="__v15.tab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('')+'</div>'
     +(window.__v17&&__v17.scopeBannerHTML?__v17.scopeBannerHTML():'')
     +'<div class="v15body" id="v15body"></div></div>';
@@ -4490,10 +4494,14 @@ function renderMode(){
 }
 function finishRound(title){
   var xp=M.score*2;
+  /* V23: team leader boosts learning XP (+5%/+10%/+20% by stage). */
+  var petBonus=0;
+  try{if(window.__v23)petBonus=Math.round(xp*__v23.learnXpBonus())}catch(e){}
   if(xp>0)gain15(xp);
+  if(petBonus>0)gain15(petBonus);
   var e=en15();if(M.score>(e.modeBest[M.mode]?e.modeBest[M.mode].best||0:0)){e.modeBest[M.mode]=e.modeBest[M.mode]||{played:0,correct:0,best:0};e.modeBest[M.mode].best=M.score}
   save15();sfx15(M.score>=Math.ceil((M.total||10)*0.6)?'win':'lose');
-  return '<div class="v15done"><div class="v15done-big">'+esc(title)+'</div><p>Bạn trả lời đúng <b>'+M.score+'/'+(M.total||10)+'</b> câu · +'+xp+' XP thưởng cuối ván.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\''+M.mode+'\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
+  return '<div class="v15done"><div class="v15done-big">'+esc(title)+'</div><p>Bạn trả lời đúng <b>'+M.score+'/'+(M.total||10)+'</b> câu · +'+(xp+petBonus)+' XP thưởng cuối ván'+(petBonus>0?' (gồm +'+petBonus+' XP nhờ thú cưng hỗ trợ)':'')+'.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\''+M.mode+'\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
 }
 function pickPool(n,onlyDue){
   var list=wordsFiltered({level:en15().level,topic:en15().topic,onlyDue:onlyDue});
@@ -5573,7 +5581,7 @@ window.__v15={
   /* V22 (Basic Tactics): gắn dữ liệu BT đã tải lười vào WORDS */
   attachBT:attachBT,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'14.0.0'
+  version:'15.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);
@@ -7718,6 +7726,8 @@ function startFight(b,lang){
     over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,
     timer:null,left:0,lastDmg:0,crit:false};
+  /* V23: pet team joins the fight (shield, energy, damage bonus). */
+  try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   nextQ();renderFight();
 }
 function timerFor(){
@@ -7811,6 +7821,9 @@ function answer(ok,timeout){
     if(F.phase===3&&b.arena==='leg')dmg=Math.round(dmg*1.5);
     if(crit)dmg*=2;
     dmg=Math.max(2,dmg-(b.def||0));
+    /* V23: pet team damage bonus + passives (burn / storm); also grants
+       pet XP/affection and speeds up the active hatch (onFightCorrect). */
+    try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
     if(b.arena==='leg'&&F.phase===2&&b.skill.id==='mountain')dmg=Math.max(2,dmg-3);
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
@@ -7823,7 +7836,15 @@ function answer(ok,timeout){
     if(b.arena==='leg'&&F.phase===3)cost=2;
     else if(b.arena==='leg'&&F.phase===2&&b.skill.id==='storm')cost=2;
     if(b.skill.id==='cleanse'&&!F.cleansed){cost=0;F.cleansed=true;F.banner='✨ Thanh Tẩy: lần sai đầu tiên không mất tim!'}
-    F.combo=0;F.hearts-=cost;F.anim='attack';F.wrongCount++;
+    F.combo=0;
+    /* V23: pet team shield absorbs the boss counterattack first. */
+    var petAbsorbed=false;
+    if(cost>0){try{if(window.__v23&&F.pet){var pr=__v23.onFightWrong(F);
+      if(pr==='rebirth'){F.banner=(F.banner?F.banner+' ':'')+'🌟 Tái Sinh: thú cưng chặn đòn phản công!';petAbsorbed=true;cost=0}
+      else if(pr==='shield'){F.banner=(F.banner?F.banner+' ':'')+'🛡️ Khiên đội hấp thụ đòn phản công!';petAbsorbed=true;cost=0}
+    }}catch(e){}}
+    F.hearts-=cost;F.anim='attack';F.wrongCount++;
+    if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
     if(F.cur&&F.cur.w)mark18(false,F.cur.w);
     if(F.cur&&F.cur.k)markKO(false);
     if(b.skill.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
@@ -7849,11 +7870,16 @@ function winReward(){
     F.rewardNote='Đánh lại để luyện tập: +10 XP. Phần thưởng lần đầu chỉ nhận một lần.';
   }else{
     e.bosses[b.id]={win:1,wins:1,at:Date.now(),item:b.reward.item};
-    gain18(b.reward.xp);
+    /* V23: team leader boosts boss XP; elemental bosses also drop 2 pet
+       evolution stones of their element (only for players using pets). */
+    var petBonus=0;
+    try{if(window.__v23)petBonus=Math.round(b.reward.xp*__v23.learnXpBonus())}catch(e){}
+    gain18(b.reward.xp+petBonus);
+    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
     try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
     if(b.reward.stone)e.stones[b.reward.stone]=(e.stones[b.reward.stone]||0)+1;
     if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
-    F.rewardNote='Phần thưởng lần đầu: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
+    F.rewardNote='Phần thưởng lần đầu: +'+(b.reward.xp+petBonus)+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
       +(b.reward.stone?', '+b.reward.stone:'')+(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
     F.firstWin=true;
   }
@@ -7918,7 +7944,8 @@ function renderFight(){
   +'<div class="v18hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
   +(F.left?'<div class="mute">Còn <span id="v18boss-t">'+F.left+'s</span></div>':'')
   +(F.banner?'<div class="v18banner">'+esc(F.banner)+'</div>':'')
-  +'</div></div>';
+  +'</div></div>'
+  +(window.__v23&&F.pet?__v23.battleBarHTML(F):'');
   if(F.over){
     h+='<div class="v18done"><div class="v18done-big">'+(F.over==='win'?'CHIẾN THẮNG!':'Thua rồi…')+'</div>'
     +'<p>'+(F.over==='win'?'Bạn đã đánh bại '+esc(b.vi)+'! '+esc(F.rewardNote):'Boss còn '+Math.max(0,F.hp)+' HP. Hãy luyện thêm rồi quay lại!')+'</p>'
@@ -8020,9 +8047,10 @@ window.__v18={
   speakKO:speakKO,en18:en18,arenaWins:arenaWins,totalWins:totalWins,
   oldWins:oldWins,arenaOpen:arenaOpen,bossUnlocked:bossUnlocked,isWon:isWon,
   get bosses(){return B18()},
+  _petRefresh:function(){try{renderFight()}catch(e){}},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en18:en18,legDiff:legDiff},
-  version:'14.0.0'
+  version:'15.0.0'
 };
 })();
 
@@ -8640,6 +8668,8 @@ function startFight(b,lang){
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
     enraged:false,nextTimer:0,nextVeil:false};
+  /* V23: pet team joins the fight (shield, energy, damage bonus). */
+  try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   if(lang==='ko'&&koCount()<8)
     F.banner='⚠️ Bạn mới có '+koCount()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
   nextQ();renderFight();
@@ -8791,6 +8821,9 @@ function answer(ok,timeout){
     var def=b.def||0;
     if(b.skills.pass.id==='bulwark'&&F.hp<=F.maxHp/2)def+=2;
     dmg=Math.max(2,dmg-def);
+    /* V23: pet team damage bonus + passives (burn / storm); also grants
+       pet XP/affection and speeds up the active hatch (onFightCorrect). */
+    try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -8804,7 +8837,15 @@ function answer(ok,timeout){
     if(b.skills.pass.id==='thorns'&&F.wrongCount%3===2)cost+=1;
     if(F.enraged){cost+=1;F.enraged=false}
     if(b.skills.elem.id==='cleanse'&&!F.cleansed){cost=0;F.cleansed=true;F.banner='✨ Thanh Tẩy: lần sai đầu tiên không mất tim!'}
-    F.combo=0;F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
+    F.combo=0;
+    /* V23: pet team shield absorbs the boss counterattack first. */
+    var petAbsorbed=false;
+    if(cost>0){try{if(window.__v23&&F.pet){var pr=__v23.onFightWrong(F);
+      if(pr==='rebirth'){F.banner=(F.banner?F.banner+' ':'')+'🌟 Tái Sinh: thú cưng chặn đòn phản công!';petAbsorbed=true;cost=0}
+      else if(pr==='shield'){F.banner=(F.banner?F.banner+' ':'')+'🛡️ Khiên đội hấp thụ đòn phản công!';petAbsorbed=true;cost=0}
+    }}catch(e){}}
+    F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
+    if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
     if(F.cur&&F.cur.w)mark19(false,F.cur.w);
     if(F.cur&&F.cur.k)markKO19(false);
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
@@ -8839,9 +8880,14 @@ function winReward(){
   }else{
     rec.win=1;rec.wins=1;rec.best=Math.max(rec.best||0,F.stars);
     e.bosses[b.id][lang]=rec;
-    gain19(b.reward.xp);
+    /* V23: team leader boosts boss XP; elemental bosses also drop 2 pet
+       evolution stones of their element (only for players using pets). */
+    var petBonus=0;
+    try{if(window.__v23)petBonus=Math.round(b.reward.xp*__v23.learnXpBonus())}catch(e){}
+    gain19(b.reward.xp+petBonus);
+    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
     try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
-    F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
+    F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+(b.reward.xp+petBonus)+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
       +(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
     if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
     F.firstWin=true;
@@ -8925,7 +8971,8 @@ function renderFight(){
   +(F.left?'<div class="mute">Còn <span id="v19boss-t">'+F.left+'s</span></div>':'')
   +(F.ultActive&&F.caQ>0?'<div class="v19banner">⚠️ PHẢN CÔNG BẰNG KIẾN THỨC — Câu '+(Math.min(F.caQ,3))+'/3 · Đúng '+F.caRight+'/3 · Đúng 3/3 phá hoàn toàn tuyệt kỹ!</div>':'')
   +(F.banner?'<div class="v19banner">'+esc(F.banner)+'</div>':'')
-  +'</div></div>';
+  +'</div></div>'
+  +(window.__v23&&F.pet?__v23.battleBarHTML(F):'');
   if(F.over){
     h+='<div class="v19done"><div class="v19done-big">'+(F.over==='win'?'CHIẾN THẮNG!':'Thua rồi…')+'</div>'
     +'<p>'+(F.over==='win'
@@ -9031,11 +9078,12 @@ window.__v19={
   zoneOpen:zoneOpen,zoneState:zoneState,bossUnlocked:bossUnlocked19,
   zoneWins:zoneWins,mapWon:mapWon,
   get bosses(){return D19()},
+  _petRefresh:function(){try{renderFight()}catch(e){}},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
     resolveUltimate:resolveUltimate},
-  version:'14.0.0'
+  version:'15.0.0'
 };
 })();
 
@@ -11866,6 +11914,1157 @@ window.__v22={
   _test:{spoken:function(){return SPOKEN_LOG.slice()},tts:function(){return ttsAvailable()},
     quest:function(){return ST.quest},reset:function(){DATA=null;DATA_P=null;DATA_ERR='';window.__V22_BT=null;SPOKEN_LOG.length=0;ST.view=null;ST.quest=null}},
   version:'14.0.0'
+};
+})();
+
+</script>
+
+<style id="v23">
+/* ===== V23 — Premium Pet System (V15) =====
+   Purple panels + glowing gold borders, matching the Pet Hub mockups.
+   Reuses the game's font and button feel; only pet-specific styles here. */
+#v23hub{position:fixed;inset:0;z-index:120;background:linear-gradient(180deg,#2A1B4E 0%,#1B1033 55%,#241640 100%);color:#FFF8E1;overflow-y:auto;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.v23head{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(180deg,#3B2370,#2A1B4E);border-bottom:3px solid #FFB020;box-shadow:0 4px 18px rgba(0,0,0,.45)}
+.v23title{font-size:22px;font-weight:800;color:#FFE66D;text-shadow:0 2px 0 #7A4A00,0 0 18px rgba(255,176,32,.5)}
+.v23wallet{display:flex;gap:8px;align-items:center}
+.v23chip{background:#1B1033;border:2px solid #FFB020;border-radius:999px;padding:5px 12px;font-weight:700;font-size:14px;color:#FFE66D;white-space:nowrap}
+.v23x{background:#E63946;color:#fff;border:2px solid #FFB020;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:800;cursor:pointer}
+.v23tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px 0}
+.v23tab{background:#3B2370;color:#D9C8FF;border:2px solid #7A5AC8;border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer}
+.v23tab.on{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border-color:#FFE66D;box-shadow:0 0 14px rgba(255,176,32,.55)}
+.v23body{padding:12px 14px 40px;max-width:1180px;margin:0 auto}
+.v23body h3{color:#FFE66D;margin:14px 0 8px;font-size:18px}
+.v23body h4{color:#D9C8FF;margin:14px 0 6px;font-size:15px}
+.v23note{color:#C9B8F0;font-size:13px;line-height:1.5}
+.v23empty{color:#C9B8F0;padding:18px;text-align:center}
+.v23emptybox{text-align:center;padding:40px 16px}
+.v23btn{display:inline-block;background:#3B2370;color:#fff;border:2px solid #7A5AC8;border-radius:12px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.v23btn:disabled{opacity:.45;cursor:not-allowed}
+.v23btn.pri{background:linear-gradient(180deg,#8B5CF6,#6D28D9);border-color:#C4B5FD}
+.v23btn.ok{background:linear-gradient(180deg,#22C55E,#15803D);border-color:#86EFAC}
+.v23btn.evo{background:linear-gradient(180deg,#A855F7,#7E22CE);border-color:#D8B4FE}
+.v23btn.gold{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border-color:#FFE66D}
+.v23btn.big{font-size:17px;padding:13px 22px;width:100%;margin-top:10px}
+.v23btn.sm{padding:6px 10px;font-size:12px}
+.v23btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.v23pets,.v23evo,.v23team{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+.v23side{background:rgba(59,35,112,.55);border:2px solid #7A5AC8;border-radius:16px;padding:12px}
+.v23detail{background:rgba(27,16,51,.75);border:2px solid #FFB020;border-radius:16px;padding:16px;box-shadow:0 0 22px rgba(255,176,32,.18)}
+.v23filter{display:flex;gap:8px;margin-bottom:10px}
+.v23filter select,.v23filter input{flex:1;min-width:0;padding:9px 10px;border:2px solid #7A5AC8;border-radius:10px;background:#1B1033;color:#FFF8E1;font:600 14px 'Be Vietnam Pro',sans-serif}
+.v23grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v23grid.big{grid-template-columns:repeat(4,1fr)}
+.v23cell{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:8px 4px;cursor:pointer;color:#FFF8E1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.v23cell.on{border-color:#FFB020;box-shadow:0 0 12px rgba(255,176,32,.5)}
+.v23cell.locked{opacity:.55}
+.v23celln{font-size:13px;font-weight:700;text-align:center;line-height:1.25}
+.v23cellm{font-size:11px;color:#C9B8F0}
+.v23count{color:#C9B8F0;font-size:12px;margin-top:8px}
+.v23list{display:grid;gap:6px}
+.v23row{display:flex;gap:10px;align-items:center;background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:6px 10px;cursor:pointer;color:#FFF8E1;text-align:left}
+.v23row.on{border-color:#FFB020}
+.v23row span{font-weight:700;font-size:14px}
+.v23row span i{display:block;font-weight:400;font-size:12px;color:#C9B8F0;font-style:normal}
+.v23petimg{position:relative;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,var(--elc,#7A5AC8) 0%,#241640 78%);border-radius:14px;overflow:hidden}
+.v23petimg img{width:100%;height:100%;object-fit:contain;display:block}
+.v23petfb{display:none;font-size:34px;font-weight:800;color:#FFE66D}
+.v23imgfail{background:var(--elc,#7A5AC8)}
+.v23imgfail .v23petfb{display:block}
+.v23cellimg{width:74px;height:74px}
+.v23rowimg{width:52px;height:52px;flex:none}
+.v23big{width:150px;height:150px;flex:none;border:3px solid #FFB020;box-shadow:0 0 24px rgba(255,176,32,.4)}
+.v23eggimg{width:96px;height:96px}
+.v23slotimg{width:110px;height:110px}
+.v23bfimg{width:44px;height:44px}
+.v23dhead{display:flex;gap:16px;align-items:center}
+.v23dhead h3{margin:0;font-size:22px}
+.v23lv{color:#C9B8F0;font-size:14px;margin-top:4px}
+.v23stars{letter-spacing:2px;font-size:15px}
+.v23rar{font-size:12px;color:#C9B8F0}
+.v23bar{display:flex;gap:10px;align-items:center;margin:10px 0;font-size:13px}
+.v23bar>span:first-child{width:96px;flex:none}
+.v23bar>span:last-child{white-space:nowrap}
+.v23bartrack{flex:1;height:14px;background:#1B1033;border:2px solid #7A5AC8;border-radius:999px;overflow:hidden}
+.v23barfill{height:100%;background:linear-gradient(90deg,#22C55E,#86EFAC);border-radius:999px;transition:width .4s}
+.v23barfill.aff{background:linear-gradient(90deg,#EC4899,#F9A8D4)}
+.v23barfill.en{background:linear-gradient(90deg,#FFD93D,#FFB020)}
+.v23stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.v23stats span{background:#1B1033;border:2px solid #5B3FA8;border-radius:10px;padding:7px 12px;font-size:13px}
+.v23stats b{color:#FFE66D}
+.v23skills{display:grid;gap:8px}
+.v23skill{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:10px 12px}
+.v23skill b{display:block;color:#FFE66D;font-size:14px}
+.v23skill span{display:block;font-size:13px;color:#E9DFFC;margin-top:2px}
+.v23skill i{display:block;font-size:12px;color:#9F8FD0;margin-top:4px;font-style:normal}
+.v23skill.locked{opacity:.6}
+.v23evochain{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.v23evochain.big{justify-content:center}
+.v23stage{background:#241640;border:2px solid #5B3FA8;border-radius:10px;padding:8px 12px;font-weight:700;font-size:13px}
+.v23stage.cur{border-color:#FFB020;background:#3A2500;color:#FFE66D;box-shadow:0 0 12px rgba(255,176,32,.5)}
+.v23stage.done{border-color:#22C55E;color:#86EFAC}
+.v23arr{color:#FFB020;font-weight:800}
+.v23cmp{width:100%;border-collapse:collapse;margin:8px 0}
+.v23cmp th,.v23cmp td{border:1px solid #5B3FA8;padding:8px 10px;text-align:left;font-size:14px}
+.v23cmp th{background:#3B2370;color:#FFE66D}
+.v23mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:8px 0}
+.v23mat{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:10px}
+.v23mat.ok{border-color:#22C55E}
+.v23mat.no{border-color:#E63946}
+.v23mat b{display:block;font-size:13px}
+.v23mat span{font-size:14px;color:#FFE66D}
+.v23mat i{display:block;font-size:12px;font-style:normal}
+.v23ok{color:#86EFAC;font-weight:700;font-size:16px}
+.v23hatch .v23card{background:rgba(27,16,51,.75);border:2px solid #FFB020;border-radius:16px;padding:16px;margin-bottom:12px}
+.v23hatchmain{display:flex;gap:16px;align-items:center}
+.v23timer{font-size:34px;font-weight:800;color:#FFE66D;text-shadow:0 0 16px rgba(255,176,32,.6)}
+.v23eggs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.v23eggcard{background:rgba(59,35,112,.55);border:2px solid #7A5AC8;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.v23eggcard b{font-size:15px}
+.v23eggcard span{font-size:12px;color:#C9B8F0}
+.v23matico{font-size:40px}
+.v23slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.v23slot{background:#241640;border:2px solid #5B3FA8;border-radius:14px;padding:12px;cursor:pointer;color:#FFF8E1;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:190px}
+.v23slot.on{border-color:#FFB020;box-shadow:0 0 14px rgba(255,176,32,.5)}
+.v23slot b{font-size:14px;text-align:center}
+.v23slot span{font-size:12px;color:#C9B8F0;text-align:center}
+.v23slotempty{font-size:40px;color:#7A5AC8}
+.v23collhead{margin-bottom:10px}
+.v23rewards{display:grid;gap:6px;margin-bottom:12px}
+.v23reward{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:9px 12px;font-size:13px}
+.v23shop h3{margin-top:16px}
+.v23toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);z-index:200;background:#1B1033;border:2px solid #FFB020;color:#FFE66D;border-radius:12px;padding:12px 18px;font-weight:700;font-size:14px;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.v23toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* battle bar injected into v18/v19 fights */
+.v23bar-fight{display:flex;gap:10px;align-items:center;background:rgba(27,16,51,.85);border:2px solid #FFB020;border-radius:14px;padding:8px 10px;margin:8px 0;flex-wrap:wrap}
+.v23bf-pets{display:flex;gap:6px}
+.v23bf-pet{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#C9B8F0}
+.v23bf-pet i{font-style:normal}
+.v23bf-mid{flex:1;min-width:180px;display:grid;gap:4px}
+.v23bf-row{display:flex;gap:8px;align-items:center;font-size:12px}
+.v23bf-row>span:first-child{width:96px;flex:none}
+.v23bf-note{font-size:11px;color:#C9B8F0}
+.v23bf-skill{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border:2px solid #FFE66D;border-radius:999px;padding:10px 16px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+.v23bf-skill:disabled{opacity:.45;cursor:not-allowed}
+/* Korean tabs entry (V15, one surgical line in the build): gold tint like the Boss Map tab. */
+.tab.v23kotab{color:#7a5b00}
+.tab.v23kotab .ti{font-size:24px;filter:drop-shadow(0 2px 2px #0003)}
+@media (max-width:760px){
+  .v23pets,.v23evo,.v23team{grid-template-columns:1fr}
+  .v23grid.big{grid-template-columns:repeat(3,1fr)}
+  .v23title{font-size:17px}
+  .v23dhead{flex-direction:column;text-align:center}
+  .v23slots{grid-template-columns:1fr 1fr 1fr}
+  .v23slot{min-height:150px}
+  .v23slotimg{width:74px;height:74px}
+  .v23big{width:120px;height:120px}
+}
+
+</style>
+<script id="v23data">
+/* ===== V23 DATA — Premium Pet System (V15) =====
+   Data-driven: species / eggs / skills / materials / shop / collection.
+   Art: assets/pets/v15/<id>_s<stage>.png, assets/pets/v15/eggs/egg_<el>.png
+   (generated chibi art + rembg; see ASSET_REPORT_V15.md).
+   Stats are on the game's own scale (boss HP 290-600, answer damage
+   ~12-30) — NOT the fantasy numbers on the reference mockups. */
+(function(){
+'use strict';
+var PET_ELEMENTS={
+  fire:{n:'Lửa',icon:'🔥',color:'#FF6B35'},
+  ice:{n:'Băng',icon:'❄️',color:'#5BC8E8'},
+  nature:{n:'Rừng',icon:'🌿',color:'#7ED957'},
+  water:{n:'Nước',icon:'💧',color:'#4A90E2'},
+  thunder:{n:'Sấm',icon:'⚡',color:'#FFD93D'},
+  light:{n:'Ánh Sáng',icon:'✨',color:'#FFE66D'},
+  dark:{n:'Bóng Tối',icon:'🌙',color:'#9B59B6'}
+};
+var PET_RARITY={
+  common:{n:'Thường',stars:2,color:'#B8C4CC'},
+  rare:{n:'Hiếm',stars:3,color:'#5BC8E8'},
+  epic:{n:'Sử thi',stars:4,color:'#B678F0'},
+  legendary:{n:'Huyền thoại',stars:5,color:'#FFB020'}
+};
+/* Stage multipliers (stats) and level gates. Stage index 0/1/2.
+   Lv cap per stage: 10 / 20 / 30. */
+var PET_STAGE_MULT=[1,1.6,2.4];
+var PET_STAGE_MAXLV=[10,20,30];
+var PET_STAGE_DMG=[5,10,15]; /* % damage bonus per team pet by stage */
+/* Skill types (battle):
+   active: dmg (flat damage), shield (+team shield), heal (+team shield, nature/water/light flavour)
+   passive: burn (+dmg per correct), frost (less shield drain), wisdom (+1 energy per 3-combo),
+            moon/tide/honey/crystal/grove (shield at start / on heart loss), rebirth (ignore first
+            heart loss once per fight), arcane (+1 starting energy), storm (+dmg when combo>=3),
+            holy (restore shield on heart loss)
+   ultimate: empowered active, only at stage 3 (leader). */
+var PET_SPECIES=[
+ {id:'dragon',n:'Rồng Lửa',el:'fire',rar:'legendary',egg:'fire',rate:0.60,
+  base:{hp:100,atk:20,def:10,spd:14},perLv:{hp:8,atk:2,def:1,spd:1},
+  stages:[{n:'Rồng Lửa Nhỏ',img:'dragon_s1.png'},{n:'Rồng Lửa',img:'dragon_s2.png'},{n:'Rồng Thần Lửa',img:'dragon_s3.png'}],
+  skills:{
+   a:{id:'firebreath',n:'Hơi Thở Lửa',type:'dmg',val:30,d:'Phun lửa gây sát thương lớn cho boss.'},
+   p:{id:'burn',n:'Thiêu Đốt',type:'burn',val:5,d:'Bị động: mỗi câu trả lời đúng gây thêm 5 sát thương (lửa thiêu đốt).'},
+   u:{id:'firesoul',n:'Hỏa Hồn',type:'dmg',val:60,d:'Tuyệt kỹ: ngọn lửa thần gây sát thương rất lớn cho boss.'}}},
+ {id:'phoenix',n:'Chim Phượng',el:'fire',rar:'epic',egg:'fire',rate:0.40,
+  base:{hp:85,atk:18,def:9,spd:18},perLv:{hp:7,atk:2,def:1,spd:1},
+  stages:[{n:'Phượng Con',img:'phoenix_s1.png'},{n:'Chim Phượng',img:'phoenix_s2.png'},{n:'Phượng Hoàng Lửa',img:'phoenix_s3.png'}],
+  skills:{
+   a:{id:'firebreath',n:'Hơi Thở Lửa',type:'dmg',val:26,d:'Phun lửa gây sát thương lớn cho boss.'},
+   p:{id:'rebirth',n:'Tái Sinh',type:'rebirth',val:1,d:'Bị động: mỗi trận một lần, bỏ qua lần mất tim đầu tiên.'},
+   u:{id:'firesoul',n:'Hỏa Hồn',type:'dmg',val:55,d:'Tuyệt kỹ: ngọn lửa thần gây sát thương rất lớn cho boss.'}}},
+ {id:'fox',n:'Hồ Ly Băng',el:'ice',rar:'epic',egg:'ice',rate:0.55,
+  base:{hp:80,atk:17,def:11,spd:19},perLv:{hp:7,atk:2,def:1,spd:1},
+  stages:[{n:'Hồ Ly Băng Nhỏ',img:'fox_s1.png'},{n:'Hồ Ly Băng',img:'fox_s2.png'},{n:'Hồ Ly Băng Thần',img:'fox_s3.png'}],
+  skills:{
+   a:{id:'iceshield',n:'Băng Thuẫn',type:'shield',val:80,d:'Tạo lá chắn băng hấp thụ sát thương của boss.'},
+   p:{id:'frost',n:'Hàn Khí',type:'frost',val:10,d:'Bị động: boss phản công làm vỡ ít khiên hơn 10 điểm.'},
+   u:{id:'iceguard',n:'Băng Thuẫn Thần',type:'shield',val:150,d:'Tuyệt kỹ: lá chắn băng lớn hấp thụ nhiều sát thương.'}}},
+ {id:'turtle',n:'Rùa Pha Lê',el:'water',rar:'rare',egg:'ice',rate:0.25,
+  base:{hp:110,atk:12,def:14,spd:8},perLv:{hp:9,atk:1,def:2,spd:0},
+  stages:[{n:'Rùa Pha Lê Nhỏ',img:'turtle_s1.png'},{n:'Rùa Pha Lê',img:'turtle_s2.png'},{n:'Rùa Pha Lê Thần',img:'turtle_s3.png'}],
+  skills:{
+   a:{id:'tideheal',n:'Hồi Phục Thủy Triều',type:'heal',val:70,d:'Hồi lại khiên đội bằng dòng nước chữa lành.'},
+   p:{id:'crystal',n:'Giáp Pha Lê',type:'crystal',val:15,d:'Bị động: boss phản công làm vỡ ít khiên hơn 15 điểm.'},
+   u:{id:'tideguard',n:'Thủy Triều Thần',type:'heal',val:140,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'whale',n:'Cá Voi Nhỏ',el:'water',rar:'common',egg:'ice',rate:0.20,
+  base:{hp:105,atk:13,def:12,spd:9},perLv:{hp:9,atk:1,def:1,spd:1},
+  stages:[{n:'Cá Voi Con',img:'whale_s1.png'},{n:'Cá Voi Nhỏ',img:'whale_s2.png'},{n:'Cá Voi Đại Dương',img:'whale_s3.png'}],
+  skills:{
+   a:{id:'tideheal',n:'Hồi Phục Thủy Triều',type:'heal',val:60,d:'Hồi lại khiên đội bằng dòng nước chữa lành.'},
+   p:{id:'tide',n:'Thủy Triều',type:'tide',val:20,d:'Bị động: khi mất một tim, hồi lại 20 khiên.'},
+   u:{id:'tideguard',n:'Thủy Triều Thần',type:'heal',val:120,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'owl',n:'Cú Thông Thái',el:'nature',rar:'rare',egg:'forest',rate:0.30,
+  base:{hp:75,atk:16,def:10,spd:16},perLv:{hp:6,atk:2,def:1,spd:1},
+  stages:[{n:'Cú Con',img:'owl_s1.png'},{n:'Cú Thông Thái',img:'owl_s2.png'},{n:'Cú Hiền Triết',img:'owl_s3.png'}],
+  skills:{
+   a:{id:'leafheal',n:'Hồi Phục Lá',type:'heal',val:65,d:'Hồi lại khiên đội bằng sức mạnh lá rừng.'},
+   p:{id:'wisdom',n:'Cổ Vũ Học Tập',type:'wisdom',val:1,d:'Bị động: mỗi chuỗi 3 câu đúng liên tiếp cho thêm 1 năng lượng.'},
+   u:{id:'sageheal',n:'Hồi Phục Hiền Triết',type:'heal',val:130,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'rabbit',n:'Thỏ Ngọc',el:'nature',rar:'common',egg:'forest',rate:0.25,
+  base:{hp:70,atk:14,def:9,spd:20},perLv:{hp:6,atk:1,def:1,spd:2},
+  stages:[{n:'Thỏ Ngọc Nhỏ',img:'rabbit_s1.png'},{n:'Thỏ Ngọc',img:'rabbit_s2.png'},{n:'Thỏ Ngọc Thần',img:'rabbit_s3.png'}],
+  skills:{
+   a:{id:'leafheal',n:'Hồi Phục Lá',type:'heal',val:55,d:'Hồi lại khiên đội bằng sức mạnh lá rừng.'},
+   p:{id:'moon',n:'Ánh Trăng',type:'moon',val:10,d:'Bị động: bắt đầu trận với thêm 10 khiên.'},
+   u:{id:'sageheal',n:'Hồi Phục Hiền Triết',type:'heal',val:110,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'bear',n:'Gấu Mật Ong',el:'nature',rar:'common',egg:'forest',rate:0.25,
+  base:{hp:115,atk:15,def:13,spd:7},perLv:{hp:9,atk:2,def:1,spd:0},
+  stages:[{n:'Gấu Con',img:'bear_s1.png'},{n:'Gấu Mật Ong',img:'bear_s2.png'},{n:'Gấu Mật Vàng',img:'bear_s3.png'}],
+  skills:{
+   a:{id:'honeyheal',n:'Mật Ngọt',type:'heal',val:60,d:'Hồi lại khiên đội bằng mật ong ngọt ngào.'},
+   p:{id:'honey',n:'Tổ Mật',type:'honey',val:10,d:'Bị động: bắt đầu trận với thêm 10 khiên.'},
+   u:{id:'sageheal',n:'Mật Vàng Thần',type:'heal',val:120,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'deer',n:'Hươu Rừng',el:'nature',rar:'common',egg:'forest',rate:0.20,
+  base:{hp:80,atk:15,def:10,spd:18},perLv:{hp:7,atk:1,def:1,spd:1},
+  stages:[{n:'Hươu Con',img:'deer_s1.png'},{n:'Hươu Rừng',img:'deer_s2.png'},{n:'Hươu Rừng Thần',img:'deer_s3.png'}],
+  skills:{
+   a:{id:'leafheal',n:'Hồi Phục Lá',type:'heal',val:60,d:'Hồi lại khiên đội bằng sức mạnh lá rừng.'},
+   p:{id:'grove',n:'Rừng Thiêng',type:'grove',val:15,d:'Bị động: bắt đầu trận với thêm 15 khiên.'},
+   u:{id:'sageheal',n:'Hồi Phục Hiền Triết',type:'heal',val:120,d:'Tuyệt kỹ: hồi lại nhiều khiên cho cả đội.'}}},
+ {id:'cat',n:'Mèo Phép',el:'dark',rar:'rare',egg:'dark',rate:0.60,
+  base:{hp:72,atk:19,def:8,spd:19},perLv:{hp:6,atk:2,def:1,spd:1},
+  stages:[{n:'Mèo Phép Nhỏ',img:'cat_s1.png'},{n:'Mèo Phép',img:'cat_s2.png'},{n:'Mèo Phép Thuật',img:'cat_s3.png'}],
+  skills:{
+   a:{id:'darkbolt',n:'Tia Bóng Tối',type:'dmg',val:28,d:'Bắn tia bóng tối gây sát thương lớn cho boss.'},
+   p:{id:'arcane',n:'Huyền Bí',type:'arcane',val:1,d:'Bị động: bắt đầu trận với thêm 1 năng lượng.'},
+   u:{id:'darknova',n:'Bóng Tối Thần',type:'dmg',val:58,d:'Tuyệt kỹ: vụ nổ bóng tối gây sát thương rất lớn.'}}},
+ {id:'wolf',n:'Sói Sấm',el:'thunder',rar:'rare',egg:'dark',rate:0.40,
+  base:{hp:85,atk:19,def:10,spd:17},perLv:{hp:7,atk:2,def:1,spd:1},
+  stages:[{n:'Sói Sấm Nhỏ',img:'wolf_s1.png'},{n:'Sói Sấm',img:'wolf_s2.png'},{n:'Sói Sấm Thần',img:'wolf_s3.png'}],
+  skills:{
+   a:{id:'thunderbolt',n:'Tia Sấm',type:'dmg',val:28,d:'Đánh tia sấm gây sát thương lớn cho boss.'},
+   p:{id:'storm',n:'Bão Sấm',type:'storm',val:8,d:'Bị động: khi chuỗi đúng từ 3 trở lên, mỗi câu đúng gây thêm 8 sát thương.'},
+   u:{id:'stormgod',n:'Sấm Thần',type:'dmg',val:58,d:'Tuyệt kỹ: cơn bão sấm gây sát thương rất lớn.'}}},
+ {id:'unicorn',n:'Kỳ Lân Ánh Sáng',el:'light',rar:'legendary',egg:'light',rate:0.70,
+  base:{hp:90,atk:17,def:12,spd:18},perLv:{hp:7,atk:2,def:1,spd:1},
+  stages:[{n:'Kỳ Lân Nhỏ',img:'unicorn_s1.png'},{n:'Kỳ Lân Ánh Sáng',img:'unicorn_s2.png'},{n:'Kỳ Lân Thánh Quang',img:'unicorn_s3.png'}],
+  skills:{
+   a:{id:'lightheal',n:'Ánh Sáng Chữa Lành',type:'heal',val:75,d:'Hồi lại khiên đội bằng ánh sáng thánh.'},
+   p:{id:'holy',n:'Thánh Quang',type:'holy',val:30,d:'Bị động: khi mất một tim, hồi lại 30 khiên.'},
+   u:{id:'holyguard',n:'Thánh Quang Thần',type:'heal',val:150,d:'Tuyệt kỹ: hồi lại rất nhiều khiên cho cả đội.'}}}
+];
+var PET_EGGS=[
+ {id:'fire',n:'Trứng Lửa',el:'fire',price:500,hatchMin:60,img:'egg_fire.png',d:'Nở ra thú hệ Lửa: Rồng Lửa, Chim Phượng.'},
+ {id:'ice',n:'Trứng Băng',el:'ice',price:800,hatchMin:90,img:'egg_ice.png',d:'Nở ra thú hệ Băng/Nước: Hồ Ly Băng, Rùa Pha Lê, Cá Voi Nhỏ.'},
+ {id:'forest',n:'Trứng Rừng',el:'nature',price:600,hatchMin:60,img:'egg_forest.png',d:'Nở ra thú hệ Rừng: Cú Thông Thái, Thỏ Ngọc, Gấu Mật Ong, Hươu Rừng.'},
+ {id:'light',n:'Trứng Ánh Sáng',el:'light',price:1500,hatchMin:180,img:'egg_light.png',d:'Nở ra thú hệ Ánh Sáng: Kỳ Lân Ánh Sáng (và đôi khi Chim Phượng).'},
+ {id:'dark',n:'Trứng Bóng Tối',el:'dark',price:2000,hatchMin:240,img:'egg_dark.png',d:'Nở ra thú hệ Bóng Tối/Sấm: Mèo Phép, Sói Sấm.'}
+];
+/* Light egg can also hatch a phoenix (30%) — the only cross-egg case. */
+var PET_EGG_EXTRA={light:[{sp:'phoenix',rate:0.30}]};
+var PET_MATERIALS=[
+ {id:'stone_fire',n:'Tinh Thể Lửa',el:'fire',price:200,d:'Dùng để tiến hóa thú hệ Lửa.'},
+ {id:'stone_ice',n:'Tinh Thể Băng',el:'ice',price:200,d:'Dùng để tiến hóa thú hệ Băng.'},
+ {id:'stone_nature',n:'Tinh Thể Rừng',el:'nature',price:200,d:'Dùng để tiến hóa thú hệ Rừng.'},
+ {id:'stone_water',n:'Tinh Thể Nước',el:'water',price:200,d:'Dùng để tiến hóa thú hệ Nước.'},
+ {id:'stone_thunder',n:'Tinh Thể Sấm',el:'thunder',price:200,d:'Dùng để tiến hóa thú hệ Sấm.'},
+ {id:'stone_light',n:'Tinh Thể Ánh Sáng',el:'light',price:200,d:'Dùng để tiến hóa thú hệ Ánh Sáng.'},
+ {id:'stone_dark',n:'Tinh Thể Bóng Tối',el:'dark',price:200,d:'Dùng để tiến hóa thú hệ Bóng Tối.'},
+ {id:'feather',n:'Lông Vàng',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'},
+ {id:'fruit',n:'Trái Phép Thuật',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'}
+];
+var PET_EVO_COST=[
+ {stone:10,feather:3,fruit:3,coins:5000},   /* stage 0 -> 1 */
+ {stone:20,feather:5,fruit:10,coins:20000}  /* stage 1 -> 2 */
+];
+var PET_EVO_LV=[10,20]; /* required pet level for stage 0->1, 1->2 */
+var PET_SHOP_EGGS=PET_EGGS;
+/* Collection milestones: owned distinct forms -> reward (once each). */
+var PET_COLLECTION_REWARDS=[
+ {forms:6,gems:5,mats:{},d:'Sưu tập 6 hình thái: +5 💎'},
+ {forms:12,gems:10,mats:{},egg:'forest',d:'Sưu tập 12 hình thái: +10 💎, 1 Trứng Rừng'},
+ {forms:24,gems:20,mats:{feather:5,fruit:5},d:'Sưu tập 24 hình thái: +20 💎, 5 Lông Vàng, 5 Trái Phép Thuật'},
+ {forms:36,gems:50,mats:{},title:'Bậc Thầy Thú Cưng',d:'Sưu tập đủ 36 hình thái: +50 💎, danh hiệu “Bậc Thầy Thú Cưng”'}
+];
+/* Affection milestones per pet (once each): 500/1000/1500. */
+var PET_AFFECTION_REWARDS=[
+ {aff:500,gems:5,d:'Thân thiết 500: +5 💎'},
+ {aff:1000,gems:10,d:'Thân thiết 1000: +10 💎'},
+ {aff:1500,gems:20,egg:null,d:'Thân thiết 1500: +20 💎'}
+];
+/* Hatch: learning speed-up + gems. */
+var PET_HATCH={
+  learnSecPerCorrect:30,   /* each correct answer cuts 30s off the active hatch */
+  speedMin:30, speedGems:5, /* -30 min */
+  instantGems:20            /* hatch now */
+};
+var PET_FEED={coins:100,xp:25,aff:10}; /* feed: 100 coins -> +25 XP, +10 affection */
+var PET_XP_PER_CORRECT=2;              /* each correct answer: +2 XP to every team pet */
+var PET_AFF_PER_CORRECT=1;             /* each correct answer: +1 affection to every team pet */
+var PET_TEAM_SKILL_COST=6;             /* energy to cast the team skill */
+var PET_TEAM_SKILL_MAX_ENERGY=10;
+var PET_SHIELD_DRAIN=60;               /* shield lost per boss counterattack (before reductions) */
+var PET_SHIELD_DRAIN_MIN=30;
+window.__V23_DATA={
+  version:'15.0.0',
+  elements:PET_ELEMENTS,rarity:PET_RARITY,
+  species:PET_SPECIES,eggs:PET_EGGS,eggExtra:PET_EGG_EXTRA,
+  materials:PET_MATERIALS,evoCost:PET_EVO_COST,evoLv:PET_EVO_LV,
+  collectionRewards:PET_COLLECTION_REWARDS,
+  affectionRewards:PET_AFFECTION_REWARDS,
+  hatch:PET_HATCH,feed:PET_FEED,
+  xpPerCorrect:PET_XP_PER_CORRECT,affPerCorrect:PET_AFF_PER_CORRECT,
+  teamSkillCost:PET_TEAM_SKILL_COST,teamSkillMaxEnergy:PET_TEAM_SKILL_MAX_ENERGY,
+  shieldDrain:PET_SHIELD_DRAIN,shieldDrainMin:PET_SHIELD_DRAIN_MIN,
+  stageMult:PET_STAGE_MULT,stageMaxLv:PET_STAGE_MAXLV,stageDmg:PET_STAGE_DMG
+};
+})();
+
+</script>
+<script id="v23js">
+/* ===== V23 — Premium Pet System (V15) =====
+   One shared system for English Hub + Korean Hub. Pets and team are
+   shared; vocabulary progress stays separate per language (V7 rule).
+   Save: S.v7.en23 = {pets:{}, eggs:{}, hatch:null|{egg,startedAt,endsAt},
+   mats:{}, team:[id|null x3], claimed:{}, affClaimed:{}, created}
+   V6 farm animals (S.own, assets/pets/*.png) are UNTOUCHED — this is a
+   separate combat-pet system with its own art in assets/pets/v15/.
+   All currency uses the game's own wallet: coins = S.xp - S.spent,
+   gems = S.v7.gems. No new currency (the mock's "energy 120/120" is
+   NOT implemented — there is no energy currency in this game). */
+(function(){
+'use strict';
+var D=window.__V23_DATA||{};
+var W=window;
+function S_(){try{return S}catch(e){return null}} /* V6 `let S` — bare, not window.S */
+function save23(){try{if(typeof save==='function')save()}catch(e){}}
+function saveNow23(){try{if(W.__v20&&__v20.saveNow)__v20.saveNow();else save23()}catch(e){save23()}}
+function coins23(){try{if(typeof coins==='function')return coins()}catch(e){}var s=S_();return s?((s.xp||0)-(s.spent||0)):0}
+function spendCoins23(n){var s=S_();if(!s)return false;if(coins23()<n)return false;s.spent=(s.spent||0)+n;return true}
+function gems23(){var s=S_();return s&&s.v7?(s.v7.gems||0):0}
+function addGems23(n){var s=S_();if(!s||!s.v7)return;s.v7.gems=(s.v7.gems||0)+n}
+function spendGems23(n){var s=S_();if(!s||!s.v7||gems23()<n)return false;s.v7.gems=(s.v7.gems||0)-n;return true}
+function gain23(n){try{if(typeof gain==='function'){gain(n);return}}catch(e){}var s=S_();if(s)s.xp=(s.xp||0)+n}
+function esc(s){try{if(W.__v15&&__v15.esc)return __v15.esc(s)}catch(e){}return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fmt(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+/* ---------- save ---------- */
+function en23(){
+  var s=S_();if(!s)return null;
+  if(!s.v7)s.v7={};
+  var e=s.v7.en23;
+  if(!e){
+    e={pets:{},eggs:{fire:1,forest:1},hatch:null,mats:{},team:[null,null,null],
+       claimed:{},affClaimed:{},created:Date.now()};
+    s.v7.en23=e;save23();
+  }
+  if(!e.pets)e.pets={};if(!e.eggs)e.eggs={};if(!e.mats)e.mats={};
+  if(!e.team||e.team.length!==3)e.team=[null,null,null];
+  if(!e.claimed)e.claimed={};if(!e.affClaimed)e.affClaimed={};
+  return e;
+}
+function spById(id){var L=D.species||[];for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
+function eggById(id){var L=D.eggs||[];for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
+function matById(id){var L=D.materials||[];for(var i=0;i<L.length;i++)if(L[i].id===id)return L[i];return null}
+/* ---------- stats / XP / affection ---------- */
+function statsOf(inst){
+  var sp=spById(inst.sp);if(!sp)return{hp:0,atk:0,def:0,spd:0};
+  var m=(D.stageMult||[1,1.6,2.4])[inst.st||0]||1,lv=inst.lv||1;
+  function st(base,per){return Math.round((base+per*(lv-1))*m)}
+  return{hp:st(sp.base.hp,sp.perLv.hp),atk:st(sp.base.atk,sp.perLv.atk),
+         def:st(sp.base.def,sp.perLv.def),spd:st(sp.base.spd,sp.perLv.spd)};
+}
+function powerOf(inst){var t=statsOf(inst);return t.hp+t.atk*10+t.def*5+t.spd*2}
+function xpNeed(lv){return 20*lv} /* Lv n -> n+1 costs 20n XP; total to Lv 30 = 8700 */
+function stageName(inst){var sp=spById(inst.sp);return sp?sp.stages[inst.st||0].n:''}
+function stageImg(inst){var sp=spById(inst.sp);return sp?('assets/pets/v15/'+sp.stages[inst.st||0].img):''}
+function skillUnlocks(inst){
+  /* skill 1 at Lv 1, skill 2 at Lv 5, ultimate at stage 3 */
+  var out=[];var sp=spById(inst.sp);if(!sp)return out;
+  out.push(sp.skills.a.id);
+  if((inst.lv||1)>=5)out.push(sp.skills.p.id);
+  if((inst.st||0)>=2)out.push(sp.skills.u.id);
+  return out;
+}
+function addPetXP(inst,n){
+  if(!inst||n<=0)return{leveled:0};
+  inst.xp=(inst.xp||0)+n;var leveled=0;
+  var cap=(D.stageMaxLv||[10,20,30])[inst.st||0]||10;
+  while((inst.lv||1)<cap&&(inst.xp||0)>=xpNeed(inst.lv||1)){
+    inst.xp-=xpNeed(inst.lv||1);inst.lv=(inst.lv||1)+1;leveled++;
+  }
+  if((inst.lv||1)>=cap)inst.xp=Math.min(inst.xp||0,xpNeed(cap));
+  inst.sk=skillUnlocks(inst);
+  return{leveled:leveled};
+}
+function addAff(inst,n){
+  if(!inst||n<=0)return[];
+  inst.aff=Math.min(1500,(inst.aff||0)+n);
+  var got=[],e=en23();if(!e)return got;
+  (D.affectionRewards||[]).forEach(function(r){
+    var k=inst.id+':'+r.aff;
+    if((inst.aff||0)>=r.aff&&!e.affClaimed[k]){
+      e.affClaimed[k]=1;addGems23(r.gems);
+      if(r.egg)e.eggs[r.egg]=(e.eggs[r.egg]||0)+1;
+      got.push(r);
+    }
+  });
+  return got;
+}
+var _petSeq=0; /* instance id counter: guarantees unique ids even when two
+  pets are created in the same millisecond (Date.now+random alone can collide) */
+function newPet(spId){
+  var sp=spById(spId);if(!sp)return null;
+  var id='p'+Date.now().toString(36)+(_petSeq++).toString(36)+Math.floor(Math.random()*1e6).toString(36);
+  var inst={id:id,sp:spId,st:0,lv:1,xp:0,aff:0,sk:[sp.skills.a.id],hatchedAt:Date.now()};
+  return inst;
+}
+/* ---------- eggs / hatch ---------- */
+function eggSpecies(eggId){
+  return (D.species||[]).filter(function(sp){return sp.egg===eggId});
+}
+function rollSpecies(eggId){
+  var ex=(D.eggExtra||{})[eggId];
+  if(ex)for(var i=0;i<ex.length;i++)if(Math.random()<ex[i].rate)return ex[i].sp;
+  var pool=eggSpecies(eggId);if(!pool.length)return null;
+  var tot=0;pool.forEach(function(sp){tot+=sp.rate||0});
+  var r=Math.random()*tot;
+  for(var j=0;j<pool.length;j++){r-=pool[j].rate||0;if(r<=0)return pool[j].id}
+  return pool[pool.length-1].id;
+}
+function hatchRemaining(){
+  var e=en23();if(!e||!e.hatch)return -1;
+  return Math.max(0,(e.hatch.endsAt||0)-Date.now());
+}
+function startHatch(eggId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  if(e.hatch)return{ok:false,msg:'Đang ấp một quả trứng rồi — chờ nở xong đã nhé.'};
+  var eg=eggById(eggId);if(!eg)return{ok:false,msg:'Không tìm thấy loại trứng này.'};
+  if((e.eggs[eggId]||0)<1)return{ok:false,msg:'Bạn không còn '+eg.n+'. Mua thêm ở Cửa hàng Pet nhé.'};
+  e.eggs[eggId]--;var now=Date.now();
+  e.hatch={egg:eggId,startedAt:now,endsAt:now+eg.hatchMin*60000};
+  saveNow23();return{ok:true,msg:'Đã bắt đầu ấp '+eg.n+'! Trứng sẽ nở sau '+eg.hatchMin+' phút (học bài sẽ giúp ấp nhanh hơn).'};
+}
+var _claimLock=false;
+function claimHatch(){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  if(_claimLock)return{ok:false,msg:'Đang xử lý, chờ một chút…'};
+  if(!e.hatch)return{ok:false,msg:'Không có trứng nào đang ấp.'};
+  if(hatchRemaining()>0)return{ok:false,msg:'Trứng chưa nở — còn '+fmtHatch(hatchRemaining())+' nữa.'};
+  _claimLock=true;
+  try{
+    var spId=rollSpecies(e.hatch.egg);
+    var inst=newPet(spId);
+    if(!inst)return{ok:false,msg:'Không nở được thú — thử lại sau nhé.'};
+    e.pets[inst.id]=inst;e.hatch=null;
+    saveNow23();
+    return{ok:true,pet:inst,msg:'Trứng đã nở! Bạn nhận được '+stageName(inst)+' ('+spById(spId).n+')!'};
+  }finally{_claimLock=false}
+}
+function speedHatch(){
+  var e=en23();if(!e||!e.hatch)return{ok:false,msg:'Không có trứng nào đang ấp.'};
+  var H=D.hatch||{};
+  if(!spendGems23(H.speedGems||5))return{ok:false,msg:'Không đủ kim cương (cần '+(H.speedGems||5)+' 💎).'};
+  e.hatch.endsAt=Math.max(Date.now(),(e.hatch.endsAt||0)-(H.speedMin||30)*60000);
+  save23();return{ok:true,msg:'Đã tăng tốc ấp trứng -'+(H.speedMin||30)+' phút!'};
+}
+function instantHatch(){
+  var e=en23();if(!e||!e.hatch)return{ok:false,msg:'Không có trứng nào đang ấp.'};
+  var H=D.hatch||{};
+  if(!spendGems23(H.instantGems||20))return{ok:false,msg:'Không đủ kim cương (cần '+(H.instantGems||20)+' 💎).'};
+  e.hatch.endsAt=Date.now();save23();
+  return claimHatch();
+}
+function fmtHatch(ms){
+  if(ms<=0)return'0:00';
+  var s=Math.ceil(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;
+  function p(n){return(n<10?'0':'')+n}
+  return h>0?(h+':'+p(m)+':'+p(ss)):(m+':'+p(ss));
+}
+/* ---------- evolution ---------- */
+function evoReq(inst){
+  var sp=spById(inst.sp);if(!sp)return null;
+  var st=inst.st||0;if(st>=2)return{max:true};
+  var cost=(D.evoCost||[])[st];if(!cost)return null;
+  var e=en23();
+  var mats=[{id:'stone_'+sp.el,need:cost.stone},{id:'feather',need:cost.feather},{id:'fruit',need:cost.fruit}];
+  var okLv=(inst.lv||1)>=(D.evoLv||[10,20])[st];
+  var okMats=mats.every(function(m){return (e.mats[m.id]||0)>=m.need});
+  var okCoins=coins23()>=cost.coins;
+  return{max:false,next:st+1,nextName:sp.stages[st+1].n,lvNeed:(D.evoLv||[10,20])[st],
+         okLv:okLv,mats:mats,okMats:okMats,coins:cost.coins,okCoins:okCoins,
+         ok:okLv&&okMats&&okCoins};
+}
+var _evoLock=false;
+function evolvePet(petId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  if(_evoLock)return{ok:false,msg:'Đang tiến hóa, chờ một chút…'};
+  var inst=e.pets[petId];if(!inst)return{ok:false,msg:'Không tìm thấy thú cưng này.'};
+  var req=evoReq(inst);
+  if(!req||req.max)return{ok:false,msg:'Thú này đã ở hình thái tối đa.'};
+  if(!req.ok){
+    if(!req.okLv)return{ok:false,msg:'Cần đạt cấp '+req.lvNeed+' mới tiến hóa được (hiện tại Lv.'+(inst.lv||1)+').'};
+    if(!req.okMats)return{ok:false,msg:'Chưa đủ nguyên liệu tiến hóa — xem chi tiết ở tab Tiến hóa.'};
+    return{ok:false,msg:'Không đủ vàng (cần '+fmt(req.coins)+' XP).'};
+  }
+  _evoLock=true;
+  try{
+    req.mats.forEach(function(m){e.mats[m.id]=(e.mats[m.id]||0)-m.need});
+    var s=S_();s.spent=(s.spent||0)+req.coins;
+    inst.st=(inst.st||0)+1;inst.sk=skillUnlocks(inst);
+    saveNow23();
+    return{ok:true,pet:inst,msg:'Tiến hóa thành công! '+stageName(inst)+' đã xuất hiện — kỹ năng mới đã mở khóa!'};
+  }finally{_evoLock=false}
+}
+/* ---------- feeding ---------- */
+function feedPet(petId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  var inst=e.pets[petId];if(!inst)return{ok:false,msg:'Không tìm thấy thú cưng này.'};
+  var F=D.feed||{coins:100,xp:25,aff:10};
+  if(!spendCoins23(F.coins))return{ok:false,msg:'Không đủ vàng (cần '+fmt(F.coins)+' XP) để cho ăn.'};
+  var lv=addPetXP(inst,F.xp);
+  var rewards=addAff(inst,F.aff);
+  save23();
+  var msg='Đã cho '+stageName(inst)+' ăn (+'+F.xp+' XP, +'+F.aff+' thân thiết).';
+  if(lv.leveled>0)msg+=' Lên cấp '+(inst.lv||1)+'!';
+  if(rewards.length)msg+=' Nhận thưởng thân thiết: '+rewards.map(function(r){return r.d}).join('; ');
+  return{ok:true,msg:msg};
+}
+/* ---------- team ---------- */
+function teamPets(){
+  var e=en23();if(!e)return[];
+  return (e.team||[null,null,null]).map(function(id){return id?e.pets[id]||null:null});
+}
+function setTeamSlot(slot,petId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  if(slot<0||slot>2)return{ok:false,msg:'Vị trí không hợp lệ.'};
+  if(petId&&!e.pets[petId])return{ok:false,msg:'Không tìm thấy thú cưng này.'};
+  var t=e.team;
+  if(petId){for(var i=0;i<3;i++)if(i!==slot&&t[i]===petId)t[i]=null} /* no duplicates */
+  t[slot]=petId||null;
+  save23();
+  return{ok:true,msg:petId?('Đã xếp '+stageName(e.pets[petId])+' vào vị trí '+(slot+1)+'.'):'Đã bỏ thú khỏi vị trí '+(slot+1)+'.'};
+}
+function suggestTeam(){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  var owned=Object.keys(e.pets).map(function(id){return e.pets[id]});
+  if(!owned.length)return{ok:false,msg:'Bạn chưa có thú cưng nào — ấp trứng trước nhé!'};
+  owned.sort(function(a,b){return powerOf(b)-powerOf(a)});
+  var pick=[],usedEl={};
+  owned.forEach(function(p){
+    if(pick.length>=3)return;
+    var sp=spById(p.sp);
+    if(!usedEl[sp.el]){pick.push(p);usedEl[sp.el]=1}
+  });
+  owned.forEach(function(p){if(pick.length<3&&pick.indexOf(p)<0)pick.push(p)});
+  e.team=[pick[0]?pick[0].id:null,pick[1]?pick[1].id:null,pick[2]?pick[2].id:null];
+  save23();
+  return{ok:true,msg:'Đã gợi ý đội hình: '+pick.map(function(p){return stageName(p)}).join(', ')+' (ưu tiên thú mạnh và khác hệ để kích hoạt Liên Kết Nguyên Tố).'};
+}
+function teamPower(){
+  var t=teamPets(),tot={hp:0,atk:0,def:0,spd:0,power:0};
+  t.forEach(function(p){if(!p)return;var s=statsOf(p);tot.hp+=s.hp;tot.atk+=s.atk;tot.def+=s.def;tot.spd+=s.spd;tot.power+=powerOf(p)});
+  return tot;
+}
+/* ---------- battle math (shared by v18/v19) ---------- */
+function teamBattle(){
+  var team=teamPets().filter(Boolean);
+  if(!team.length)return null;
+  var dmg=0,shieldStart=0,drainRed=0,startEnergy=0,burn=0,storm=0,
+      tide=0,holy=0,rebirth=false,wisdom=false,els={};
+  team.forEach(function(p){
+    var sp=spById(p.sp);if(!sp)return;
+    dmg+=(D.stageDmg||[5,10,15])[p.st||0]||0;
+    els[sp.el]=1;
+    if((p.lv||1)>=5){
+      var pv=sp.skills.p;
+      if(pv.type==='burn')burn+=pv.val;
+      else if(pv.type==='frost'||pv.type==='crystal')drainRed+=pv.val;
+      else if(pv.type==='wisdom')wisdom=true;
+      else if(pv.type==='moon'||pv.type==='honey'||pv.type==='grove')shieldStart+=pv.val;
+      else if(pv.type==='tide')tide+=pv.val;
+      else if(pv.type==='holy')holy+=pv.val;
+      else if(pv.type==='rebirth')rebirth=true;
+      else if(pv.type==='arcane')startEnergy+=pv.val;
+      else if(pv.type==='storm')storm+=pv.val;
+    }
+  });
+  if(Object.keys(els).length>=3)dmg+=10; /* Liên Kết Nguyên Tố */
+  dmg=Math.min(40,dmg);
+  var shieldMax=Math.round(team.reduce(function(a,p){return a+statsOf(p).hp},0)/5)+shieldStart;
+  var leader=team[0],lsp=spById(leader.sp);
+  var active=(leader.st||0)>=2?lsp.skills.u:lsp.skills.a;
+  var activeVal=active.val+((active.type==='dmg'?2:1)*(leader.lv||1));
+  return{
+    team:team,leader:leader,active:active,activeVal:activeVal,
+    dmgBonus:dmg,shieldMax:shieldMax,
+    drain:Math.max(D.shieldDrainMin||30,(D.shieldDrain||60)-drainRed),
+    startEnergy:startEnergy,burn:burn,storm:storm,tide:tide,holy:holy,
+    rebirth:rebirth,wisdom:wisdom,elements:Object.keys(els)
+  };
+}
+function battleStart(F){
+  var tb=teamBattle();if(!tb)return null;
+  F.pet={shield:tb.shieldMax,shieldMax:tb.shieldMax,energy:tb.startEnergy,
+         dmgBonus:tb.dmgBonus,burn:tb.burn,storm:tb.storm,tide:tb.tide,holy:tb.holy,
+         rebirth:tb.rebirth,rebirthUsed:false,wisdom:tb.wisdom,drain:tb.drain,
+         team:tb.team,leader:tb.leader,active:tb.active,activeVal:tb.activeVal,elements:tb.elements};
+  return F.pet;
+}
+/* Called on a CORRECT answer inside a fight (both EN and KO). Returns the
+   extra damage the pet passives add (burn / storm), or 0. */
+function onFightCorrect(F){
+  var extra=0;
+  if(F&&F.pet){
+    F.pet.energy=Math.min(D.teamSkillMaxEnergy||10,(F.pet.energy||0)+1);
+    if(F.pet.wisdom&&(F.combo||0)>0&&(F.combo||0)%3===0)F.pet.energy=Math.min(D.teamSkillMaxEnergy||10,F.pet.energy+1);
+    extra+=(F.pet.burn||0);
+    if((F.combo||0)>=3)extra+=(F.pet.storm||0);
+  }
+  onLearnCorrect();
+  return extra;
+}
+/* Called on a WRONG answer inside a fight. Returns:
+   'rebirth' (first heart loss ignored), 'shield' (shield absorbed the hit),
+   'heart' (shield is gone — the fight loses a heart as normal). */
+function onFightWrong(F){
+  if(!F||!F.pet)return'heart';
+  var P=F.pet;
+  if(P.rebirth&&!P.rebirthUsed){P.rebirthUsed=true;return'rebirth'}
+  if(P.shield>0){
+    P.shield=Math.max(0,P.shield-P.drain);
+    return'shield';
+  }
+  return'heart';
+}
+/* Called when the fight loses a heart (after onFightWrong returned 'heart').
+   Tide/Holy passives restore some shield. */
+function onHeartLost(F){
+  if(!F||!F.pet)return;
+  var P=F.pet,back=(P.tide||0)+(P.holy||0);
+  if(back>0)P.shield=Math.min(P.shieldMax,P.shield+back);
+}
+/* Team skill button (costs energy). Returns {ok,msg,dmg} — dmg is dealt to
+   the boss when the leader's active skill is a damage skill. */
+function castTeamSkill(F){
+  if(!F||!F.pet)return{ok:false,msg:'Không có đội hình thú cưng trong trận này.'};
+  var P=F.pet,cost=D.teamSkillCost||6;
+  if((P.energy||0)<cost)return{ok:false,msg:'Chưa đủ năng lượng (cần '+cost+', đang có '+(P.energy||0)+'). Trả lời đúng để tích năng lượng!'};
+  P.energy-=cost;
+  var msg='✨ '+P.active.n+'!';
+  var dmg=0;
+  if(P.active.type==='dmg'){dmg=P.activeVal;msg+=' Gây '+dmg+' sát thương cho boss.'}
+  else{P.shield=Math.min(P.shieldMax,P.shield+P.activeVal);msg+=' Hồi '+P.activeVal+' khiên đội.'}
+  return{ok:true,msg:msg,dmg:dmg};
+}
+/* ---------- learning hook: one correct answer anywhere (EN modes via
+   mark15, fights via onFightCorrect) ----------
+   Team pets gain XP + affection; the active hatch speeds up. Never throws. */
+function onLearnCorrect(){
+  try{
+    var e=en23();if(!e)return;
+    var changed=false;
+    teamPets().forEach(function(p){
+      if(!p)return;
+      addPetXP(p,D.xpPerCorrect||2);
+      addAff(p,D.affPerCorrect||1);
+      changed=true;
+    });
+    if(e.hatch){
+      e.hatch.endsAt=Math.max(Date.now(),(e.hatch.endsAt||0)-(D.hatch.learnSecPerCorrect||30)*1000);
+      changed=true;
+    }
+    if(changed)save23();
+  }catch(err){}
+}
+/* Learning XP bonus from the team leader (stage 1: +5%, 2: +10%, 3: +20%).
+   Applied by the caller at mode-finish / boss-reward sites only. */
+function learnXpBonus(){
+  var t=teamPets();var leader=t[0];
+  if(!leader)return 0;
+  return [0.05,0.10,0.20][leader.st||0]||0;
+}
+function learnXpBonusText(){
+  var b=learnXpBonus();
+  return b>0?('Thú cưng hỗ trợ: +'+Math.round(b*100)+'% XP học tập'):'';
+}
+/* ---------- UI: Pet Hub ---------- */
+var ST={tab:'pets',sel:null,evoSel:null,q:'',filter:'all',collFilter:'all',slot:0};
+var _timer=null;
+function toast23(msg){
+  try{if(W.__v15&&__v15.pop15){__v15.pop15(msg);return}}catch(e){}
+  var t=document.getElementById('v23toast');
+  if(!t){t=document.createElement('div');t.id='v23toast';t.className='v23toast';document.body.appendChild(t)}
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on')},2600);
+}
+function petImgHTML(inst,cls){
+  var sp=spById(inst.sp);if(!sp)return'';
+  var el=(D.elements||{})[sp.el]||{};
+  return '<span class="v23petimg '+(cls||'')+'" style="--elc:'+(el.color||'#999')+'">'
+    +'<img src="'+stageImg(inst)+'" alt="'+esc(stageName(inst))+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')">'
+    +'<span class="v23petfb">'+esc((stageName(inst)||'?').charAt(0))+'</span></span>';
+}
+function eggImgHTML(egg,cls){
+  return '<span class="v23petimg '+(cls||'')+'"><img src="assets/pets/v15/eggs/'+egg.img+'" alt="'+esc(egg.n)+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')"><span class="v23petfb">🥚</span></span>';
+}
+function starsHTML(rar){
+  var r=(D.rarity||{})[rar]||{stars:2};
+  var s='';for(var i=0;i<5;i++)s+=i<r.stars?'★':'☆';
+  return '<span class="v23stars" style="color:'+(r.color||'#999')+'">'+s+'</span>';
+}
+function openHub(tab){
+  ST.tab=tab||'pets';
+  var old=document.getElementById('v23hub');if(old)old.remove();
+  var h=document.createElement('div');h.id='v23hub';h.className='v23hub';
+  h.innerHTML='<div class="v23head"><div class="v23title">🐾 Hệ Thống Thú Cưng</div>'
+    +'<div class="v23wallet"><span class="v23chip">🪙 '+fmt(coins23())+' XP</span>'
+    +'<span class="v23chip">💎 '+fmt(gems23())+'</span>'
+    +'<button class="v23x" onclick="__v23.closeHub()" aria-label="Đóng">✕</button></div></div>'
+    +'<div class="v23tabs">'
+    +[['pets','Thú cưng'],['hatch','Ấp trứng'],['evo','Tiến hóa'],['team','Đội hình'],['skills','Kỹ năng'],['collection','Sưu tập'],['shop','Cửa hàng Pet']]
+      .map(function(t){return '<button class="v23tab'+(ST.tab===t[0]?' on':'')+'" onclick="__v23.openHub(\''+t[0]+'\')">'+t[1]+'</button>'}).join('')
+    +'</div><div class="v23body" id="v23body"></div>';
+  document.body.appendChild(h);
+  renderBody();
+  startTimer();
+}
+function closeHub(){
+  var h=document.getElementById('v23hub');if(h)h.remove();
+  if(_timer){clearInterval(_timer);_timer=null}
+}
+function renderBody(){
+  var b=document.getElementById('v23body');if(!b)return;
+  var fn={pets:tabPets,hatch:tabHatch,evo:tabEvo,team:tabTeam,skills:tabSkills,collection:tabCollection,shop:tabShop}[ST.tab]||tabPets;
+  b.innerHTML=fn();
+  var w=document.querySelector('#v23hub .v23wallet');
+  if(w)w.innerHTML='<span class="v23chip">🪙 '+fmt(coins23())+' XP</span><span class="v23chip">💎 '+fmt(gems23())+'</span><button class="v23x" onclick="__v23.closeHub()" aria-label="Đóng">✕</button>';
+}
+function rerender(){renderBody()}
+function startTimer(){
+  if(_timer)clearInterval(_timer);
+  _timer=setInterval(function(){
+    var t=document.getElementById('v23timer');if(!t)return;
+    var e=en23();if(!e||!e.hatch){rerender();return}
+    var rem=hatchRemaining();
+    t.textContent=fmtHatch(rem);
+    var bar=document.getElementById('v23hatchbar');
+    if(bar){var eg=eggById(e.hatch.egg);var tot=eg?eg.hatchMin*60000:1;
+      bar.style.width=Math.min(100,Math.round((1-rem/tot)*100))+'%'}
+    if(rem<=0)rerender();
+  },1000);
+}
+function goBoss(){
+  closeHub();
+  try{if(W.__v19&&__v19.openMap){__v19.openMap();return}}catch(e){}
+  try{if(W.__v15&&__v15.openHub){__v15.openHub('bosses');return}}catch(e){}
+}
+function ownedList(){
+  var e=en23();if(!e)return[];
+  return Object.keys(e.pets).map(function(id){return e.pets[id]});
+}
+function pickSel(){
+  var list=ownedList();
+  if(ST.sel&&list.some(function(p){return p.id===ST.sel}))return ST.sel;
+  return list.length?list[0].id:null;
+}
+/* ----- tab: pets ----- */
+function tabPets(){
+  var list=ownedList();
+  var q=(ST.q||'').toLowerCase(),f=ST.filter;
+  var shown=list.filter(function(p){
+    var sp=spById(p.sp);if(!sp)return false;
+    if(f!=='all'&&sp.el!==f)return false;
+    if(q&&stageName(p).toLowerCase().indexOf(q)<0&&sp.n.toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  var selId=pickSel();var sel=selId?(en23().pets[selId]||null):null;
+  var h='<div class="v23pets"><div class="v23side"><div class="v23filter">'
+    +'<select onchange="__v23.setFilter(this.value)">'
+    +'<option value="all">Tất cả hệ</option>'
+    +Object.keys(D.elements||{}).map(function(k){return '<option value="'+k+'"'+(f===k?' selected':'')+'>'+D.elements[k].icon+' '+D.elements[k].n+'</option>'}).join('')
+    +'</select>'
+    +'<input placeholder="Tìm thú cưng…" value="'+esc(ST.q||'')+'" oninput="__v23.setSearch(this.value)">'
+    +'</div><div class="v23grid">'
+    +(shown.length?shown.map(function(p){
+      var sp=spById(p.sp);
+      return '<button class="v23cell'+(selId===p.id?' on':'')+'" onclick="__v23.selectPet(\''+p.id+'\')">'
+        +petImgHTML(p,'v23cellimg')
+        +'<span class="v23celln">'+esc(stageName(p))+'</span>'
+        +'<span class="v23cellm">'+D.elements[sp.el].icon+' Lv.'+(p.lv||1)+'</span></button>';
+    }).join(''):'<p class="v23empty">Chưa có thú cưng nào khớp bộ lọc.</p>')
+    +'</div><p class="v23count">Bộ sưu tập thú cưng ('+list.length+' thú)</p></div>';
+  if(!sel){
+    h+='<div class="v23detail v23emptybox"><h3>Chưa có thú cưng nào</h3>'
+      +'<p>Ấp trứng để nhận thú cưng đầu tiên của bạn!</p>'
+      +'<button class="v23btn pri" onclick="__v23.openHub(\'hatch\')">🥚 Đi ấp trứng</button></div></div>';
+    return h;
+  }
+  var sp=spById(sel.sp),t=statsOf(sel);
+  var need=xpNeed(sel.lv||1),cap=(D.stageMaxLv||[10,20,30])[sel.st||0]||10;
+  var inTeam=teamPets().some(function(p){return p&&p.id===sel.id});
+  h+='<div class="v23detail"><div class="v23dhead">'+petImgHTML(sel,'v23big')
+    +'<div><h3>'+esc(stageName(sel))+'</h3><div>'+starsHTML(sp.rar)+' <span class="v23rar">'+(D.rarity[sp.rar]||{}).n+'</span></div>'
+    +'<div class="v23lv">Lv.'+(sel.lv||1)+'/'+cap+' · '+D.elements[sp.el].icon+' '+D.elements[sp.el].n+'</div></div></div>'
+    +'<div class="v23bar"><span>XP</span><div class="v23bartrack"><div class="v23barfill" style="width:'+Math.min(100,Math.round(((sel.xp||0)/need)*100))+'%"></div></div><span>'+(sel.xp||0)+'/'+need+'</span></div>'
+    +'<div class="v23bar"><span>❤️ Thân thiết</span><div class="v23bartrack"><div class="v23barfill aff" style="width:'+Math.min(100,Math.round(((sel.aff||0)/1500)*100))+'%"></div></div><span>'+(sel.aff||0)+'/1,500</span></div>'
+    +'<div class="v23stats"><span>❤️ HP <b>'+t.hp+'</b></span><span>⚔️ Công <b>'+t.atk+'</b></span><span>🛡️ Thủ <b>'+t.def+'</b></span><span>⚡ Tốc <b>'+t.spd+'</b></span></div>'
+    +'<h4>Kỹ năng</h4><div class="v23skills">'
+    +[['a','Kỹ năng chính'],['p','Bị động (mở ở Lv.5)'],['u','Tuyệt kỹ (hình thái 3)']].map(function(k){
+      var sk=sp.skills[k[0]],un=(sel.sk||[]).indexOf(sk.id)>=0;
+      return '<div class="v23skill'+(un?'':' locked')+'"><b>'+esc(sk.n)+'</b><span>'+esc(sk.d)+'</span><i>'+(un?'Đã mở':k[1])+'</i></div>';
+    }).join('')+'</div>'
+    +'<h4>Tiến hóa (3 giai đoạn)</h4><div class="v23evochain">'
+    +sp.stages.map(function(sg,i){
+      return '<span class="v23stage'+(i===(sel.st||0)?' cur':'')+(i<(sel.st||0)?' done':'')+'">'+esc(sg.n)+'</span>'+(i<2?'<span class="v23arr">➜</span>':'');
+    }).join('')+'</div>'
+    +'<div class="v23btns">'
+    +'<button class="v23btn ok" onclick="__v23.doFeed(\''+sel.id+'\')">🍖 Cho ăn (100 XP)</button>'
+    +'<button class="v23btn evo" onclick="__v23.openHub(\'evo\');__v23.selectEvo(\''+sel.id+'\')">🦋 Tiến hóa</button>'
+    +'<button class="v23btn" onclick="__v23.quickTeam(\''+sel.id+'\')">'+(inTeam?'✓ Đã trong đội':'⚔️ Thêm vào đội')+'</button>'
+    +'<button class="v23btn gold" onclick="__v23.goBoss()">⚔️ Ra trận</button>'
+    +'</div><p class="v23note">Cho ăn: +25 XP, +10 thân thiết (trả bằng XP). Trả lời đúng khi học hoặc đánh boss cũng cho thú trong đội +2 XP, +1 thân thiết và giúp trứng ấp nhanh hơn 30 giây.</p>'
+    +'</div></div>';
+  return h;
+}
+/* ----- tab: hatch ----- */
+function tabHatch(){
+  var e=en23();if(!e)return'<p>Không tải được dữ liệu thú cưng.</p>';
+  var h='<div class="v23hatch">';
+  if(e.hatch){
+    var eg=eggById(e.hatch.egg),rem=hatchRemaining();
+    var tot=eg?eg.hatchMin*60000:1;
+    h+='<div class="v23card"><h3>🥚 Đang ấp: '+esc(eg?eg.n:'')+'</h3><div class="v23hatchmain">'
+      +eggImgHTML(eg,'v23big')
+      +'<div><div class="v23timer" id="v23timer">'+fmtHatch(rem)+'</div>'
+      +'<div class="v23bartrack"><div class="v23barfill" id="v23hatchbar" style="width:'+Math.min(100,Math.round((1-rem/tot)*100))+'%"></div></div>'
+      +'<p class="v23note">Tổng thời gian: '+eg.hatchMin+' phút · Thời gian ấp tính bằng đồng hồ thật — đóng game rồi mở lại vẫn đúng. Học bài (trả lời đúng) giúp ấp nhanh hơn 30 giây mỗi câu.</p></div></div>'
+      +(rem<=0
+        ?'<button class="v23btn gold big" onclick="__v23.doClaim()">✨ Nở trứng — Nhận thú mới!</button>'
+        :'<div class="v23btns"><button class="v23btn" onclick="__v23.doSpeed()">⏩ Tăng tốc -30 phút (5 💎)</button>'
+          +'<button class="v23btn evo" onclick="__v23.doInstant()">⚡ Ấp ngay (20 💎)</button></div>')
+      +'</div>';
+  }else{
+    h+='<div class="v23card"><h3>🥚 Chưa có trứng nào đang ấp</h3><p>Chọn một quả trứng bên dưới để bắt đầu ấp. Mỗi lần chỉ ấp được một quả.</p></div>';
+  }
+  h+='<h3>Chọn trứng để ấp</h3><div class="v23eggs">'
+    +(D.eggs||[]).map(function(eg){
+      var n=e.eggs[eg.id]||0;
+      var pool=eggSpecies(eg.id).map(function(sp){return sp.n+' ('+Math.round(sp.rate*100)+'%)'}).join(', ');
+      return '<div class="v23eggcard">'+eggImgHTML(eg,'v23eggimg')
+        +'<b>'+esc(eg.n)+'</b><span>×'+n+' đang có</span>'
+        +'<span class="v23note">Ấp '+eg.hatchMin+' phút · '+esc(pool)+'</span>'
+        +'<button class="v23btn pri" '+(n<1||e.hatch?'disabled':'')+' onclick="__v23.doStartHatch(\''+eg.id+'\')">'+(e.hatch?'Đang ấp…':(n<1?'Hết trứng':'Bắt đầu ấp'))+'</button></div>';
+    }).join('')+'</div></div>';
+  return h;
+}
+/* ----- tab: evolution ----- */
+function tabEvo(){
+  var list=ownedList();
+  var selId=ST.evoSel&&list.some(function(p){return p.id===ST.evoSel})?ST.evoSel:(list.length?list[0].id:null);
+  var h='<div class="v23evo"><div class="v23side"><h3>Danh sách thú cưng</h3><div class="v23list">'
+    +(list.length?list.map(function(p){
+      return '<button class="v23row'+(selId===p.id?' on':'')+'" onclick="__v23.selectEvo(\''+p.id+'\')">'
+        +petImgHTML(p,'v23rowimg')+'<span>'+esc(stageName(p))+'<i>Lv.'+(p.lv||1)+' · '+(D.elements[spById(p.sp).el]||{}).n+'</i></span></button>';
+    }).join(''):'<p class="v23empty">Chưa có thú cưng nào — ấp trứng trước nhé!</p>')
+    +'</div></div>';
+  if(!selId){h+='<div class="v23detail v23emptybox"><p>Chọn một thú cưng để xem tiến hóa.</p></div></div>';return h}
+  var e=en23(),sel=e.pets[selId],sp=spById(sel.sp);
+  var req=evoReq(sel);
+  var cur=statsOf(sel);
+  var nextT=null;
+  if(req&&!req.max){var fake={sp:sel.sp,st:sel.st+1,lv:sel.lv||1};nextT=statsOf(fake)}
+  h+='<div class="v23detail"><h3>🦋 Tiến hóa — '+esc(stageName(sel))+'</h3>'
+    +'<div class="v23evochain big">'
+    +sp.stages.map(function(sg,i){
+      return '<span class="v23stage'+(i===(sel.st||0)?' cur':'')+(i<(sel.st||0)?' done':'')+'">'+esc(sg.n)+'</span>'+(i<2?'<span class="v23arr">➜</span>':'');
+    }).join('')+'</div>';
+  if(!req||req.max){
+    h+='<p class="v23ok">🌟 Thú này đã ở hình thái tối đa — '+esc(stageName(sel))+'!</p>'
+      +'<p class="v23note">Tuyệt kỹ '+esc(sp.skills.u.n)+' đã mở. Tiếp tục cho ăn và chiến đấu để thú mạnh hơn.</p>';
+  }else{
+    h+='<table class="v23cmp"><tr><th>Chỉ số</th><th>Trước ('+esc(stageName(sel))+')</th><th>Sau ('+esc(req.nextName)+')</th></tr>'
+      +[['HP',cur.hp,nextT.hp],['Công',cur.atk,nextT.atk],['Thủ',cur.def,nextT.def],['Tốc độ',cur.spd,nextT.spd]]
+        .map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td><b>'+r[2]+'</b></td></tr>'}).join('')
+      +'</table>'
+      +'<h4>Kỹ năng mở khóa</h4><p>'+esc(sp.skills.u.n)+' — '+esc(sp.skills.u.d)+'</p>'
+      +'<h4>Nguyên liệu tiến hóa</h4><div class="v23mats">'
+      +req.mats.map(function(m){
+        var mat=matById(m.id),have=e.mats[m.id]||0;
+        return '<div class="v23mat'+(have>=m.need?' ok':' no')+'"><b>'+esc(mat?mat.n:m.id)+'</b><span>'+have+'/'+m.need+'</span><i>'+(have>=m.need?'✓ Đủ':'✗ Thiếu')+'</i></div>';
+      }).join('')
+      +'<div class="v23mat'+(req.okCoins?' ok':' no')+'"><b>🪙 Vàng (XP)</b><span>'+fmt(coins23())+'/'+fmt(req.coins)+'</span><i>'+(req.okCoins?'✓ Đủ':'✗ Thiếu')+'</i></div>'
+      +'<div class="v23mat'+(req.okLv?' ok':' no')+'"><b>⭐ Cấp yêu cầu</b><span>Lv.'+(sel.lv||1)+'/'+req.lvNeed+'</span><i>'+(req.okLv?'✓ Đủ':'✗ Chưa đủ')+'</i></div>'
+      +'</div>'
+      +'<button class="v23btn gold big" '+(req.ok?'':'disabled')+' onclick="__v23.doEvolve(\''+sel.id+'\')">🦋 TIẾN HÓA</button>'
+      +(!req.ok?'<p class="v23note">Chưa đủ điều kiện. Nguyên liệu mua ở Cửa hàng Pet hoặc nhận khi thắng boss (đá nguyên tố theo hệ boss).</p>':'');
+  }
+  h+='</div></div>';
+  return h;
+}
+/* ----- tab: team ----- */
+function teamSkillRows(){
+  var tb=teamBattle();
+  if(!tb)return'<p class="v23empty">Chưa có đội hình — xếp ít nhất 1 thú vào đội để nhận hiệu ứng chiến đấu.</p>';
+  var rows=[];
+  rows.push({n:'Liên Kết Nguyên Tố',on:tb.elements.length>=3,
+    d:tb.elements.length>=3?'Đội có 3 hệ khác nhau: +10% sát thương (đã tính trong thưởng đội).':'Cần 3 thú khác hệ để kích hoạt (+10% sát thương).'});
+  rows.push({n:'Lá Chắn Đồng Đội',on:tb.shieldMax>0,
+    d:'Khiên đội '+fmt(tb.shieldMax)+' — hấp thụ đòn phản công của boss trước khi mất tim (mỗi đòn vỡ '+tb.drain+' khiên).'});
+  var heal=tb.team.some(function(p){return (p.lv||1)>=5&&['tide','holy'].indexOf(spById(p.sp).skills.p.type)>=0});
+  rows.push({n:'Hồi Phục Đồng Hành',on:heal,
+    d:heal?'Khi mất một tim, khiên đội hồi lại một phần (kỹ năng Thủy Triều / Thánh Quang).':'Cần thú có kỹ năng Thủy Triều hoặc Thánh Quang (mở ở Lv.5).'});
+  rows.push({n:'Bộ Ba Nguyên Tố — Kỹ năng phối hợp',on:(tb.energy===undefined||true),
+    d:'Nút kỹ năng trong trận dùng tuyệt kỹ của thú Chủ lực: '+esc(tb.active.n)+' ('+esc(tb.active.d)+'). Tốn '+(D.teamSkillCost||6)+' năng lượng — trả lời đúng để tích năng lượng.'});
+  return rows.map(function(r){
+    return '<div class="v23skill'+(r.on?'':' locked')+'"><b>'+esc(r.n)+'</b><span>'+esc(r.d)+'</span><i>'+(r.on?'Đang kích hoạt':'Chưa kích hoạt')+'</i></div>';
+  }).join('');
+}
+function tabTeam(){
+  var e=en23();if(!e)return'<p>Không tải được dữ liệu thú cưng.</p>';
+  var team=teamPets(),tot=teamPower(),tb=teamBattle();
+  var h='<div class="v23team"><div class="v23side"><h3>Danh sách thú cưng</h3><p class="v23note">Bấm vào một thú, rồi bấm vào vị trí muốn xếp. Bấm lại vị trí để bỏ thú ra.</p><div class="v23grid">'
+    +(ownedList().length?ownedList().map(function(p){
+      var sp=spById(p.sp);
+      return '<button class="v23cell" onclick="__v23.placePet(\''+p.id+'\')">'
+        +petImgHTML(p,'v23cellimg')
+        +'<span class="v23celln">'+esc(stageName(p))+'</span>'
+        +'<span class="v23cellm">'+D.elements[sp.el].icon+' Lv.'+(p.lv||1)+'</span></button>';
+    }).join(''):'<p class="v23empty">Chưa có thú cưng nào — ấp trứng trước nhé!</p>')
+    +'</div></div>'
+    +'<div class="v23detail"><h3>⚔️ Đội hình thú cưng</h3><p class="v23note">Chọn 3 thú cùng đồng hành ra trận! Thú trong đội nhận XP khi bạn trả lời đúng.</p>'
+    +'<div class="v23slots">'
+    +['Vị trí 1 · Chủ lực','Vị trí 2 · Hỗ trợ','Vị trí 3 · Phòng thủ'].map(function(label,i){
+      var p=team[i];
+      return '<button class="v23slot'+(ST.slot===i?' on':'')+'" onclick="__v23.pickSlot('+i+')">'
+        +(p?petImgHTML(p,'v23slotimg')+'<b>'+esc(stageName(p))+'</b><span>Lv.'+(p.lv||1)+' · '+(D.elements[spById(p.sp).el]||{}).n+'</span>'
+           :'<span class="v23slotempty">＋</span><b>'+label+'</b><span>Trống — bấm để chọn</span>')
+        +'</button>';
+    }).join('')+'</div>'
+    +'<div class="v23stats"><span>⚔️ Tổng lực chiến <b>'+fmt(tot.power)+'</b></span><span>❤️ HP đội <b>'+tot.hp+'</b></span><span>⚔️ Công <b>'+tot.atk+'</b></span><span>🛡️ Thủ <b>'+tot.def+'</b></span><span>⚡ Tốc <b>'+tot.spd+'</b></span></div>'
+    +(tb?'<div class="v23stats"><span>💥 Thưởng sát thương <b>+'+tb.dmgBonus+'%</b></span><span>🛡️ Khiên đội <b>'+fmt(tb.shieldMax)+'</b></span><span>⚡ Năng lượng khởi đầu <b>'+tb.startEnergy+'</b></span></div>':'')
+    +'<h4>Kỹ năng phối hợp đội hình</h4><div class="v23skills">'+teamSkillRows()+'</div>'
+    +'<div class="v23btns"><button class="v23btn" onclick="__v23.doSuggest()">✨ Gợi ý đội hình</button>'
+    +'<button class="v23btn ok" onclick="__v23.doSaveTeam()">✔ Lưu đội hình</button>'
+    +'<button class="v23btn gold" onclick="__v23.goBoss()">⚔️ Ra trận ngay</button></div>'
+    +'</div></div>';
+  return h;
+}
+/* ----- tab: skills ----- */
+function tabSkills(){
+  var tb=teamBattle();
+  var h='<div class="v23skillsTab">';
+  if(tb){
+    h+='<h3>Kỹ năng của đội hiện tại</h3><div class="v23skills">'
+      +'<div class="v23skill"><b>'+esc(tb.active.n)+' (Chủ lực: '+esc(stageName(tb.leader))+')</b><span>'+esc(tb.active.d)+' — hiệu lực '+tb.activeVal+'.</span><i>Kỹ năng phối hợp trong trận · tốn '+(D.teamSkillCost||6)+' năng lượng</i></div>'
+      +tb.team.filter(function(p){return (p.lv||1)>=5}).map(function(p){
+        var sk=spById(p.sp).skills.p;
+        return '<div class="v23skill"><b>'+esc(sk.n)+' ('+esc(stageName(p))+')</b><span>'+esc(sk.d)+'</span><i>Bị động trong trận</i></div>';
+      }).join('')
+      +'</div>';
+  }else{
+    h+='<p class="v23empty">Chưa có đội hình — xếp thú vào đội để xem kỹ năng chiến đấu.</p>';
+  }
+  h+='<h3>Bách khoa kỹ năng (12 loài × 3 kỹ năng)</h3><div class="v23skills">'
+    +(D.species||[]).map(function(sp){
+      return '<div class="v23skill"><b>'+esc(sp.n)+' — '+esc(sp.skills.a.n)+'</b><span>'+esc(sp.skills.a.d)+' Mở từ Lv.1.</span><i>Kỹ năng chính</i></div>'
+        +'<div class="v23skill"><b>'+esc(sp.n)+' — '+esc(sp.skills.p.n)+'</b><span>'+esc(sp.skills.p.d)+' Mở ở Lv.5.</span><i>Bị động</i></div>'
+        +'<div class="v23skill"><b>'+esc(sp.n)+' — '+esc(sp.skills.u.n)+'</b><span>'+esc(sp.skills.u.d)+' Mở ở hình thái 3.</span><i>Tuyệt kỹ</i></div>';
+    }).join('')+'</div></div>';
+  return h;
+}
+/* ----- tab: collection ----- */
+function tabCollection(){
+  var e=en23();if(!e)return'<p>Không tải được dữ liệu thú cưng.</p>';
+  var ownedForms={};
+  ownedList().forEach(function(p){ownedForms[p.sp+'_'+(p.st||0)]=p});
+  var total=36,got=Object.keys(ownedForms).length;
+  var f=ST.collFilter;
+  var h='<div class="v23coll"><div class="v23collhead"><h3>🏆 Bộ Sưu Tập Boss — Thú Cưng ('+got+'/'+total+')</h3>'
+    +'<div class="v23bartrack"><div class="v23barfill" style="width:'+Math.round(got/total*100)+'%"></div></div>'
+    +'<p class="v23note">Hoàn thành bộ sưu tập để nhận danh hiệu đặc biệt.</p></div>'
+    +'<div class="v23rewards"><h4>Phần thưởng sưu tập</h4>'
+    +(D.collectionRewards||[]).map(function(r,i){
+      var claimed=!!e.claimed['coll'+i];
+      return '<div class="v23reward"><span>'+esc(r.d)+'</span>'
+        +'<button class="v23btn sm" '+((got>=r.forms&&!claimed)?'':'disabled')+' onclick="__v23.claimCollection('+i+')">'
+        +(claimed?'Đã nhận':(got>=r.forms?'Nhận thưởng':'Cần '+r.forms+' hình thái'))+'</button></div>';
+    }).join('')+'</div>'
+    +'<div class="v23filter"><select onchange="__v23.setCollFilter(this.value)">'
+    +'<option value="all">Tất cả</option><option value="owned"'+(f==='owned'?' selected':'')+'>Đã sở hữu</option>'
+    +Object.keys(D.elements||{}).map(function(k){return '<option value="'+k+'"'+(f===k?' selected':'')+'>'+D.elements[k].icon+' '+D.elements[k].n+'</option>'}).join('')
+    +'</select></div><div class="v23grid big">'
+    +(D.species||[]).map(function(sp){
+      return [0,1,2].map(function(st){
+        if(f==='owned'&&!ownedForms[sp.id+'_'+st])return'';
+        if(f!=='all'&&f!=='owned'&&sp.el!==f)return'';
+        var inst=ownedForms[sp.id+'_'+st];
+        var fake={sp:sp.id,st:st,lv:1};
+        return '<div class="v23cell'+(inst?'':' locked')+'">'
+          +petImgHTML(fake,'v23cellimg')
+          +'<span class="v23celln">'+esc(sp.stages[st].n)+'</span>'
+          +'<span class="v23cellm">'+(inst?('Lv.'+(inst.lv||1)+' · Đã sở hữu'):'🔒 Chưa sở hữu')+'</span></div>';
+      }).join('');
+    }).join('')+'</div></div>';
+  return h;
+}
+function claimCollection(i){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  var r=(D.collectionRewards||[])[i];if(!r)return{ok:false,msg:'Không tìm thấy mốc thưởng.'};
+  if(e.claimed['coll'+i])return{ok:false,msg:'Đã nhận thưởng này rồi.'};
+  var ownedForms={};
+  ownedList().forEach(function(p){ownedForms[p.sp+'_'+(p.st||0)]=1});
+  if(Object.keys(ownedForms).length<r.forms)return{ok:false,msg:'Chưa đủ '+r.forms+' hình thái.'};
+  e.claimed['coll'+i]=1;
+  if(r.gems)addGems23(r.gems);
+  if(r.mats)Object.keys(r.mats).forEach(function(k){e.mats[k]=(e.mats[k]||0)+r.mats[k]});
+  if(r.egg)e.eggs[r.egg]=(e.eggs[r.egg]||0)+1;
+  if(r.title){
+    var s=S_();
+    if(s&&s.v7){if(!s.v7.en19)s.v7.en19={};if(!s.v7.en19.titles)s.v7.en19.titles=[];if(s.v7.en19.titles.indexOf(r.title)<0)s.v7.en19.titles.push(r.title)}
+  }
+  saveNow23();
+  return{ok:true,msg:'Đã nhận thưởng sưu tập: '+r.d};
+}
+/* ----- tab: shop ----- */
+function tabShop(){
+  var e=en23();if(!e)return'<p>Không tải được dữ liệu thú cưng.</p>';
+  var h='<div class="v23shop"><p class="v23note">Trả bằng XP (vàng chung của game). Mua trứng về ấp, mua nguyên liệu để tiến hóa thú.</p>'
+    +'<h3>🥚 Trứng thú cưng</h3><div class="v23eggs">'
+    +(D.eggs||[]).map(function(eg){
+      var n=e.eggs[eg.id]||0,can=coins23()>=eg.price;
+      return '<div class="v23eggcard">'+eggImgHTML(eg,'v23eggimg')
+        +'<b>'+esc(eg.n)+'</b><span>Đang có ×'+n+'</span>'
+        +'<span class="v23note">'+esc(eg.d)+'</span>'
+        +'<button class="v23btn pri" '+(can?'':'disabled')+' onclick="__v23.buyEgg(\''+eg.id+'\')">Mua · '+fmt(eg.price)+' XP</button></div>';
+    }).join('')+'</div>'
+    +'<h3>💎 Nguyên liệu tiến hóa</h3><div class="v23eggs">'
+    +(D.materials||[]).map(function(m){
+      var n=e.mats[m.id]||0,can=coins23()>=m.price;
+      return '<div class="v23eggcard"><div class="v23matico">'+(m.el?(D.elements[m.el]||{}).icon||'💎':'💎')+'</div>'
+        +'<b>'+esc(m.n)+'</b><span>Đang có ×'+n+'</span>'
+        +'<span class="v23note">'+esc(m.d)+'</span>'
+        +'<button class="v23btn pri" '+(can?'':'disabled')+' onclick="__v23.buyMat(\''+m.id+'\')">Mua · '+fmt(m.price)+' XP</button></div>';
+    }).join('')+'</div></div>';
+  return h;
+}
+function buyEgg(eggId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  var eg=eggById(eggId);if(!eg)return{ok:false,msg:'Không tìm thấy loại trứng này.'};
+  if(!spendCoins23(eg.price))return{ok:false,msg:'Không đủ vàng (cần '+fmt(eg.price)+' XP). Học bài để kiếm thêm XP nhé!'};
+  e.eggs[eggId]=(e.eggs[eggId]||0)+1;save23();
+  return{ok:true,msg:'Đã mua 1 '+eg.n+'! Sang tab Ấp trứng để bắt đầu ấp.'};
+}
+function buyMat(matId){
+  var e=en23();if(!e)return{ok:false,msg:'Không tải được dữ liệu thú cưng.'};
+  var m=matById(matId);if(!m)return{ok:false,msg:'Không tìm thấy nguyên liệu này.'};
+  if(!spendCoins23(m.price))return{ok:false,msg:'Không đủ vàng (cần '+fmt(m.price)+' XP).'};
+  e.mats[matId]=(e.mats[matId]||0)+1;save23();
+  return{ok:true,msg:'Đã mua 1 '+m.n+'.'};
+}
+/* ---------- battle bar (injected into v18/v19 fights) ---------- */
+function battleBarHTML(F){
+  if(!F||!F.pet)return'';
+  _fightF=F; /* the team-skill button casts on this fight */
+  var P=F.pet,cost=D.teamSkillCost||6;
+  var pct=Math.max(0,Math.round(P.shield/P.shieldMax*100));
+  return '<div class="v23bar-fight"><div class="v23bf-pets">'
+    +P.team.map(function(p){
+      return '<span class="v23bf-pet" title="'+esc(stageName(p))+' Lv.'+(p.lv||1)+'">'+petImgHTML(p,'v23bfimg')+'<i>Lv.'+(p.lv||1)+'</i></span>';
+    }).join('')
+    +'</div><div class="v23bf-mid">'
+    +'<div class="v23bf-row"><span>🛡️ Khiên đội</span><div class="v23bartrack"><div class="v23barfill" style="width:'+pct+'%"></div></div><span>'+P.shield+'/'+P.shieldMax+'</span></div>'
+    +'<div class="v23bf-row"><span>⚡ Năng lượng</span><div class="v23bartrack"><div class="v23barfill en" style="width:'+Math.round(P.energy/(D.teamSkillMaxEnergy||10)*100)+'%"></div></div><span>'+P.energy+'/'+(D.teamSkillMaxEnergy||10)+'</span></div>'
+    +'<div class="v23bf-note">Thú cưng hỗ trợ: +'+P.dmgBonus+'% sát thương · Trả lời đúng để tích năng lượng.</div></div>'
+    +'<button class="v23bf-skill" '+(P.energy>=cost?'':'disabled')+' onclick="window.__v23&&__v23.castSkillInFight()">'+esc(P.active.n)+' ('+cost+'⚡)</button>'
+    +'</div>';
+}
+/* The fight's current F is held here by v18/v19 when they render the bar. */
+var _fightF=null;
+function castSkillInFight(){
+  if(!_fightF||!_fightF.pet)return;
+  var r=castTeamSkill(_fightF);
+  toast23(r.msg);
+  if(r.ok&&r.dmg>0){
+    _fightF.hp=Math.max(0,(_fightF.hp||0)-r.dmg);
+    try{if(_fightF&&typeof _fightF.render==='function')_fightF.render()}catch(e){}
+  }
+  try{if(W.__v18&&__v18._petRefresh)__v18._petRefresh()}catch(e){}
+  try{if(W.__v19&&__v19._petRefresh)__v19._petRefresh()}catch(e){}
+}
+/* ---------- exports ---------- */
+W.__v23={
+  version:'15.0.0',
+  openHub:openHub,closeHub:closeHub,goBoss:goBoss,
+  setFilter:function(v){ST.filter=v;renderBody()},
+  setSearch:function(v){ST.q=v;var b=document.getElementById('v23body');if(b)b.innerHTML=tabPets()},
+  setCollFilter:function(v){ST.collFilter=v;renderBody()},
+  selectPet:function(id){ST.sel=id;renderBody()},
+  selectEvo:function(id){ST.evoSel=id;renderBody()},
+  pickSlot:function(i){ST.slot=i;renderBody()},
+  placePet:function(id){var r=setTeamSlot(ST.slot,id);toast23(r.msg);renderBody()},
+  quickTeam:function(id){
+    var e=en23();if(!e)return;
+    var t=e.team,slot=t.indexOf(null);
+    if(slot<0){toast23('Đội đã đủ 3 thú — bỏ một thú ra trước khi thêm.');return}
+    var r=setTeamSlot(slot,id);toast23(r.msg);renderBody();
+  },
+  doFeed:function(id){var r=feedPet(id);toast23(r.msg);renderBody()},
+  doEvolve:function(id){var r=evolvePet(id);toast23(r.msg);renderBody()},
+  doStartHatch:function(id){var r=startHatch(id);toast23(r.msg);renderBody()},
+  doClaim:function(){var r=claimHatch();toast23(r.msg);if(r.ok){ST.tab='pets';ST.sel=r.pet.id}renderBody()},
+  doSpeed:function(){var r=speedHatch();toast23(r.msg);renderBody()},
+  doInstant:function(){var r=instantHatch();toast23(r.msg);if(r.ok){ST.tab='pets';ST.sel=r.pet.id}renderBody()},
+  doSuggest:function(){var r=suggestTeam();toast23(r.msg);renderBody()},
+  doSaveTeam:function(){saveNow23();toast23('Đã lưu đội hình ✔')},
+  claimCollection:function(i){var r=claimCollection(i);toast23(r.msg);renderBody()},
+  buyEgg:function(id){var r=buyEgg(id);toast23(r.msg);renderBody()},
+  buyMat:function(id){var r=buyMat(id);toast23(r.msg);renderBody()},
+  /* battle + learning hooks (called by v15/v18/v19) */
+  battleStart:battleStart,onFightCorrect:onFightCorrect,onFightWrong:onFightWrong,
+  onHeartLost:onHeartLost,castTeamSkill:castTeamSkill,castSkillInFight:castSkillInFight,battleBarHTML:battleBarHTML,
+  onLearnCorrect:onLearnCorrect,learnXpBonus:learnXpBonus,learnXpBonusText:learnXpBonusText,
+  teamBattle:teamBattle,teamPets:teamPets,statsOf:statsOf,
+  setFight:function(F){_fightF=F},
+  data:function(){return D},
+  _test:{
+    en23:en23,rollSpecies:rollSpecies,statsOf:statsOf,xpNeed:xpNeed,
+    startHatch:startHatch,claimHatch:claimHatch,speedHatch:speedHatch,instantHatch:instantHatch,
+    buyEgg:buyEgg,buyMat:buyMat,claimCollection:claimCollection,teamBattle:teamBattle,
+    newPet:newPet,addPetXP:addPetXP,evolvePet:evolvePet,feedPet:feedPet,
+    setTeamSlot:setTeamSlot,suggestTeam:suggestTeam,
+    reset:function(){var s=S_();if(s&&s.v7)delete s.v7.en23;save23()},
+    /* test-only: force the active hatch to be ready now */
+    forceHatchReady:function(){var e=en23();if(e&&e.hatch)e.hatch.endsAt=Date.now();save23()}
+  }
 };
 })();
 

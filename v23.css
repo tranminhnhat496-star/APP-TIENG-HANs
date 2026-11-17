@@ -1,0 +1,138 @@
+/* ===== V23 — Premium Pet System (V15) =====
+   Purple panels + glowing gold borders, matching the Pet Hub mockups.
+   Reuses the game's font and button feel; only pet-specific styles here. */
+#v23hub{position:fixed;inset:0;z-index:120;background:linear-gradient(180deg,#2A1B4E 0%,#1B1033 55%,#241640 100%);color:#FFF8E1;overflow-y:auto;font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.v23head{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(180deg,#3B2370,#2A1B4E);border-bottom:3px solid #FFB020;box-shadow:0 4px 18px rgba(0,0,0,.45)}
+.v23title{font-size:22px;font-weight:800;color:#FFE66D;text-shadow:0 2px 0 #7A4A00,0 0 18px rgba(255,176,32,.5)}
+.v23wallet{display:flex;gap:8px;align-items:center}
+.v23chip{background:#1B1033;border:2px solid #FFB020;border-radius:999px;padding:5px 12px;font-weight:700;font-size:14px;color:#FFE66D;white-space:nowrap}
+.v23x{background:#E63946;color:#fff;border:2px solid #FFB020;border-radius:50%;width:34px;height:34px;font-size:16px;font-weight:800;cursor:pointer}
+.v23tabs{display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px 0}
+.v23tab{background:#3B2370;color:#D9C8FF;border:2px solid #7A5AC8;border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer}
+.v23tab.on{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border-color:#FFE66D;box-shadow:0 0 14px rgba(255,176,32,.55)}
+.v23body{padding:12px 14px 40px;max-width:1180px;margin:0 auto}
+.v23body h3{color:#FFE66D;margin:14px 0 8px;font-size:18px}
+.v23body h4{color:#D9C8FF;margin:14px 0 6px;font-size:15px}
+.v23note{color:#C9B8F0;font-size:13px;line-height:1.5}
+.v23empty{color:#C9B8F0;padding:18px;text-align:center}
+.v23emptybox{text-align:center;padding:40px 16px}
+.v23btn{display:inline-block;background:#3B2370;color:#fff;border:2px solid #7A5AC8;border-radius:12px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer}
+.v23btn:disabled{opacity:.45;cursor:not-allowed}
+.v23btn.pri{background:linear-gradient(180deg,#8B5CF6,#6D28D9);border-color:#C4B5FD}
+.v23btn.ok{background:linear-gradient(180deg,#22C55E,#15803D);border-color:#86EFAC}
+.v23btn.evo{background:linear-gradient(180deg,#A855F7,#7E22CE);border-color:#D8B4FE}
+.v23btn.gold{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border-color:#FFE66D}
+.v23btn.big{font-size:17px;padding:13px 22px;width:100%;margin-top:10px}
+.v23btn.sm{padding:6px 10px;font-size:12px}
+.v23btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.v23pets,.v23evo,.v23team{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+.v23side{background:rgba(59,35,112,.55);border:2px solid #7A5AC8;border-radius:16px;padding:12px}
+.v23detail{background:rgba(27,16,51,.75);border:2px solid #FFB020;border-radius:16px;padding:16px;box-shadow:0 0 22px rgba(255,176,32,.18)}
+.v23filter{display:flex;gap:8px;margin-bottom:10px}
+.v23filter select,.v23filter input{flex:1;min-width:0;padding:9px 10px;border:2px solid #7A5AC8;border-radius:10px;background:#1B1033;color:#FFF8E1;font:600 14px 'Be Vietnam Pro',sans-serif}
+.v23grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v23grid.big{grid-template-columns:repeat(4,1fr)}
+.v23cell{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:8px 4px;cursor:pointer;color:#FFF8E1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.v23cell.on{border-color:#FFB020;box-shadow:0 0 12px rgba(255,176,32,.5)}
+.v23cell.locked{opacity:.55}
+.v23celln{font-size:13px;font-weight:700;text-align:center;line-height:1.25}
+.v23cellm{font-size:11px;color:#C9B8F0}
+.v23count{color:#C9B8F0;font-size:12px;margin-top:8px}
+.v23list{display:grid;gap:6px}
+.v23row{display:flex;gap:10px;align-items:center;background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:6px 10px;cursor:pointer;color:#FFF8E1;text-align:left}
+.v23row.on{border-color:#FFB020}
+.v23row span{font-weight:700;font-size:14px}
+.v23row span i{display:block;font-weight:400;font-size:12px;color:#C9B8F0;font-style:normal}
+.v23petimg{position:relative;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,var(--elc,#7A5AC8) 0%,#241640 78%);border-radius:14px;overflow:hidden}
+.v23petimg img{width:100%;height:100%;object-fit:contain;display:block}
+.v23petfb{display:none;font-size:34px;font-weight:800;color:#FFE66D}
+.v23imgfail{background:var(--elc,#7A5AC8)}
+.v23imgfail .v23petfb{display:block}
+.v23cellimg{width:74px;height:74px}
+.v23rowimg{width:52px;height:52px;flex:none}
+.v23big{width:150px;height:150px;flex:none;border:3px solid #FFB020;box-shadow:0 0 24px rgba(255,176,32,.4)}
+.v23eggimg{width:96px;height:96px}
+.v23slotimg{width:110px;height:110px}
+.v23bfimg{width:44px;height:44px}
+.v23dhead{display:flex;gap:16px;align-items:center}
+.v23dhead h3{margin:0;font-size:22px}
+.v23lv{color:#C9B8F0;font-size:14px;margin-top:4px}
+.v23stars{letter-spacing:2px;font-size:15px}
+.v23rar{font-size:12px;color:#C9B8F0}
+.v23bar{display:flex;gap:10px;align-items:center;margin:10px 0;font-size:13px}
+.v23bar>span:first-child{width:96px;flex:none}
+.v23bar>span:last-child{white-space:nowrap}
+.v23bartrack{flex:1;height:14px;background:#1B1033;border:2px solid #7A5AC8;border-radius:999px;overflow:hidden}
+.v23barfill{height:100%;background:linear-gradient(90deg,#22C55E,#86EFAC);border-radius:999px;transition:width .4s}
+.v23barfill.aff{background:linear-gradient(90deg,#EC4899,#F9A8D4)}
+.v23barfill.en{background:linear-gradient(90deg,#FFD93D,#FFB020)}
+.v23stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.v23stats span{background:#1B1033;border:2px solid #5B3FA8;border-radius:10px;padding:7px 12px;font-size:13px}
+.v23stats b{color:#FFE66D}
+.v23skills{display:grid;gap:8px}
+.v23skill{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:10px 12px}
+.v23skill b{display:block;color:#FFE66D;font-size:14px}
+.v23skill span{display:block;font-size:13px;color:#E9DFFC;margin-top:2px}
+.v23skill i{display:block;font-size:12px;color:#9F8FD0;margin-top:4px;font-style:normal}
+.v23skill.locked{opacity:.6}
+.v23evochain{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.v23evochain.big{justify-content:center}
+.v23stage{background:#241640;border:2px solid #5B3FA8;border-radius:10px;padding:8px 12px;font-weight:700;font-size:13px}
+.v23stage.cur{border-color:#FFB020;background:#3A2500;color:#FFE66D;box-shadow:0 0 12px rgba(255,176,32,.5)}
+.v23stage.done{border-color:#22C55E;color:#86EFAC}
+.v23arr{color:#FFB020;font-weight:800}
+.v23cmp{width:100%;border-collapse:collapse;margin:8px 0}
+.v23cmp th,.v23cmp td{border:1px solid #5B3FA8;padding:8px 10px;text-align:left;font-size:14px}
+.v23cmp th{background:#3B2370;color:#FFE66D}
+.v23mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:8px 0}
+.v23mat{background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:10px}
+.v23mat.ok{border-color:#22C55E}
+.v23mat.no{border-color:#E63946}
+.v23mat b{display:block;font-size:13px}
+.v23mat span{font-size:14px;color:#FFE66D}
+.v23mat i{display:block;font-size:12px;font-style:normal}
+.v23ok{color:#86EFAC;font-weight:700;font-size:16px}
+.v23hatch .v23card{background:rgba(27,16,51,.75);border:2px solid #FFB020;border-radius:16px;padding:16px;margin-bottom:12px}
+.v23hatchmain{display:flex;gap:16px;align-items:center}
+.v23timer{font-size:34px;font-weight:800;color:#FFE66D;text-shadow:0 0 16px rgba(255,176,32,.6)}
+.v23eggs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.v23eggcard{background:rgba(59,35,112,.55);border:2px solid #7A5AC8;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.v23eggcard b{font-size:15px}
+.v23eggcard span{font-size:12px;color:#C9B8F0}
+.v23matico{font-size:40px}
+.v23slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.v23slot{background:#241640;border:2px solid #5B3FA8;border-radius:14px;padding:12px;cursor:pointer;color:#FFF8E1;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:190px}
+.v23slot.on{border-color:#FFB020;box-shadow:0 0 14px rgba(255,176,32,.5)}
+.v23slot b{font-size:14px;text-align:center}
+.v23slot span{font-size:12px;color:#C9B8F0;text-align:center}
+.v23slotempty{font-size:40px;color:#7A5AC8}
+.v23collhead{margin-bottom:10px}
+.v23rewards{display:grid;gap:6px;margin-bottom:12px}
+.v23reward{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#241640;border:2px solid #5B3FA8;border-radius:12px;padding:9px 12px;font-size:13px}
+.v23shop h3{margin-top:16px}
+.v23toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);z-index:200;background:#1B1033;border:2px solid #FFB020;color:#FFE66D;border-radius:12px;padding:12px 18px;font-weight:700;font-size:14px;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.v23toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* battle bar injected into v18/v19 fights */
+.v23bar-fight{display:flex;gap:10px;align-items:center;background:rgba(27,16,51,.85);border:2px solid #FFB020;border-radius:14px;padding:8px 10px;margin:8px 0;flex-wrap:wrap}
+.v23bf-pets{display:flex;gap:6px}
+.v23bf-pet{display:flex;flex-direction:column;align-items:center;font-size:11px;color:#C9B8F0}
+.v23bf-pet i{font-style:normal}
+.v23bf-mid{flex:1;min-width:180px;display:grid;gap:4px}
+.v23bf-row{display:flex;gap:8px;align-items:center;font-size:12px}
+.v23bf-row>span:first-child{width:96px;flex:none}
+.v23bf-note{font-size:11px;color:#C9B8F0}
+.v23bf-skill{background:linear-gradient(180deg,#FFB020,#E8890C);color:#3A2500;border:2px solid #FFE66D;border-radius:999px;padding:10px 16px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+.v23bf-skill:disabled{opacity:.45;cursor:not-allowed}
+/* Korean tabs entry (V15, one surgical line in the build): gold tint like the Boss Map tab. */
+.tab.v23kotab{color:#7a5b00}
+.tab.v23kotab .ti{font-size:24px;filter:drop-shadow(0 2px 2px #0003)}
+@media (max-width:760px){
+  .v23pets,.v23evo,.v23team{grid-template-columns:1fr}
+  .v23grid.big{grid-template-columns:repeat(3,1fr)}
+  .v23title{font-size:17px}
+  .v23dhead{flex-direction:column;text-align:center}
+  .v23slots{grid-template-columns:1fr 1fr 1fr}
+  .v23slot{min-height:150px}
+  .v23slotimg{width:74px;height:74px}
+  .v23big{width:120px;height:120px}
+}

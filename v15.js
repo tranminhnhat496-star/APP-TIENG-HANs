@@ -383,6 +383,9 @@ function mark15(ok,w,mode){
   if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   if(mode){e.modeBest[mode]=e.modeBest[mode]||{played:0,correct:0,best:0};e.modeBest[mode].played++;if(ok)e.modeBest[mode].correct++}
   if(ok)waterFarm(); /* a correct answer waters a growing crop */
+  /* V23: a correct answer feeds the pet team (+2 XP, +1 affection each)
+     and speeds up the active hatch by 30s. Guarded — no team/hatch = no-op. */
+  if(ok){try{if(window.__v23)__v23.onLearnCorrect()}catch(e){}}
   sfx15(ok?'ok':'bad');
   save15();
   return xp;
@@ -426,6 +429,7 @@ function renderLangBar(){
     +'<button class="v15lb-btn '+(e.lang==='en'?'on':'')+'" onclick="__v15.setLang(\'en\')">🇬🇧 English Farm</button>'
     +'<span class="v15lb-meta">EN: '+c.mastered+' thuộc · '+c.due+' cần ôn</span>'
     +'<button class="v15lb-hub" onclick="__v15.openHub()">English Hub</button>'
+    +'<button class="v15lb-hub" onclick="window.__v23&&__v23.openHub()">🐾 Thú Cưng</button>'
     +'</div>';
 }
 function showChooser(){
@@ -499,7 +503,7 @@ function renderHub(){
   var e=en15(),c=counts15();
   h.innerHTML='<div class="v15hub-in">'
     +'<div class="v15hub-head"><div class="v15hub-title"><span class="v15ollie-sm">'+OLLIE_SVG+'</span><div><b>English Farm</b><span>Ollie\'s Farm · '+c.mastered+'/'+c.total+' từ đã thuộc · '+c.due+' từ cần ôn hôm nay</span></div></div>'
-    +'<div class="v15hub-headbtns"><span class="v15chip">'+icon15('coin.png')+' '+coins15()+' XP</span><span class="v15chip">'+icon15('gem.png')+' '+(S.v7.gems||0)+' 💎</span><button class="v15x" onclick="__v15.closeHub()" aria-label="Đóng">✕</button></div></div>'
+    +'<div class="v15hub-headbtns"><span class="v15chip">'+icon15('coin.png')+' '+coins15()+' XP</span><span class="v15chip">'+icon15('gem.png')+' '+(S.v7.gems||0)+' 💎</span><button class="btn sm" onclick="window.__v23&&__v23.openHub()">🐾 Thú Cưng</button><button class="v15x" onclick="__v15.closeHub()" aria-label="Đóng">✕</button></div></div>'
     +'<div class="v15tabs">'+hubTabs().map(function(t){return '<button class="v15tab '+(HUB.tab===t[0]?'on':'')+'" onclick="__v15.tab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('')+'</div>'
     +(window.__v17&&__v17.scopeBannerHTML?__v17.scopeBannerHTML():'')
     +'<div class="v15body" id="v15body"></div></div>';
@@ -573,10 +577,14 @@ function renderMode(){
 }
 function finishRound(title){
   var xp=M.score*2;
+  /* V23: team leader boosts learning XP (+5%/+10%/+20% by stage). */
+  var petBonus=0;
+  try{if(window.__v23)petBonus=Math.round(xp*__v23.learnXpBonus())}catch(e){}
   if(xp>0)gain15(xp);
+  if(petBonus>0)gain15(petBonus);
   var e=en15();if(M.score>(e.modeBest[M.mode]?e.modeBest[M.mode].best||0:0)){e.modeBest[M.mode]=e.modeBest[M.mode]||{played:0,correct:0,best:0};e.modeBest[M.mode].best=M.score}
   save15();sfx15(M.score>=Math.ceil((M.total||10)*0.6)?'win':'lose');
-  return '<div class="v15done"><div class="v15done-big">'+esc(title)+'</div><p>Bạn trả lời đúng <b>'+M.score+'/'+(M.total||10)+'</b> câu · +'+xp+' XP thưởng cuối ván.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\''+M.mode+'\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
+  return '<div class="v15done"><div class="v15done-big">'+esc(title)+'</div><p>Bạn trả lời đúng <b>'+M.score+'/'+(M.total||10)+'</b> câu · +'+(xp+petBonus)+' XP thưởng cuối ván'+(petBonus>0?' (gồm +'+petBonus+' XP nhờ thú cưng hỗ trợ)':'')+'.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\''+M.mode+'\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
 }
 function pickPool(n,onlyDue){
   var list=wordsFiltered({level:en15().level,topic:en15().topic,onlyDue:onlyDue});
@@ -1656,7 +1664,7 @@ window.__v15={
   /* V22 (Basic Tactics): gắn dữ liệu BT đã tải lười vào WORDS */
   attachBT:attachBT,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'14.0.0'
+  version:'15.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);

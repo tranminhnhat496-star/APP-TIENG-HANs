@@ -298,3 +298,37 @@
 - Khóa `hanvocab.v1` **giữ nguyên** (ô lưu đang chơi); schema không đổi, chỉ thêm `S.v7.en22` (tiến trình Quest Basic Tactics: sao/best/lần chơi/lần nhận thưởng theo Unit; SRS box/due của từ BT dùng chung kho `S.v7.en`/`en15` như mọi từ tiếng Anh khác).
 - Dữ liệu Basic Tactics (819 mục) **không** lưu vào localStorage và **không** đưa vào payload Firestore — nó là dữ liệu cài sẵn như thư viện V17; chỉ tiến trình (ID + sao + box/due) được lưu/đồng bộ.
 - Save V13 mở bằng V14 chạy bình thường; không cần migration (cùng `hanvocab.v1`, `SAVE_VERSION` giữ 12).
+
+---
+
+## V15 — Premium Pet System (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `build_v15.py` | Script build V15 (từ `build_v14.py`): chèn lớp V23, kiểm tra 12 loài / 36 PNG thú + 5 PNG trứng (bắt buộc có kênh alpha) + kiểm tra bắt buộc mọi lớp `v15js`…`v23js` phải có trong HTML đã build; thêm nút 🐾 Thú Cưng vào tab tiếng Hàn. |
+| `package_v15.py` | Script đóng gói ZIP V15 + kiểm tra lớp V23, 41 PNG thú/trứng, tiêu đề V15. |
+| `v23_data.js`, `v23.js`, `v23.css` | Lớp V23 (xem dưới). Cũng có trong `src/`. |
+| `assets/pets/v15/` | 36 PNG thú (12 loài × 3 hình thái, nền trong suốt, 512×512) + `eggs/` 5 PNG trứng (tổng 8,4 MB). |
+| `README_V15_PETS.md` | Hướng dẫn dùng Hệ Thống Thú Cưng, kinh tế trong game, giới hạn đã biết (không trang bị, không thanh năng lượng, số liệu theo thang game). |
+| `CHANGELOG_V14_to_V15.md` | Changelog đầy đủ V14 → V15 (gồm 3 lỗi thật tìm thấy khi kiểm thử). |
+| `ASSET_REPORT_V15.md` | Báo cáo tài sản thú/trứng: cách tạo, danh sách file, kích thước. |
+| `SMOKE_TEST_V15_2026-11-17.md` | Báo cáo kiểm thử V15 (128/128 jsdom ×2 trên bản build + 1 lần trên ZIP đã đóng gói). |
+
+## File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V15; thêm lớp V23: `<style id="v23">`, `<script id="v23data">`, `<script id="v23js">`; nút 🐾 Thú Cưng ở tab tiếng Hàn (cạnh nút 🗺️ Bản Đồ Boss). |
+| `v15.js` | `mark15`: gọi `__v23.onLearnCorrect()` khi trả lời đúng (sửa `W.__v23` → `window.__v23`); `finishRound`: cộng thưởng XP thú + ghi chú; nút 🐾 Thú Cưng ở thanh ngôn ngữ và đầu trang Hub; version `14.0.0` → `15.0.0`. |
+| `v18.js` | Hook chiến đấu thú cưng (khiên đội, năng lượng, kỹ năng đội, rơi đá hệ khi thắng lần đầu); thêm export `_petRefresh`; version `14.0.0` → `15.0.0`. |
+| `v19.js` | Như v18.js (cho cả trận tiếng Anh và tiếng Hàn); thêm export `_petRefresh`; version `14.0.0` → `15.0.0`. |
+| `v23.js` | Mới (xem dưới). Sau kiểm thử đã sửa: `battleStart` chép `team` vào `F.pet` (thanh chiến đấu trước đó ném lỗi), export `castSkillInFight` (nút kỹ năng đội trước đó bấm không có tác dụng), ID thú thêm bộ đếm chống trùng. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 khác, V7–V14, `v20.js` (12.0.0), `v20_sync.js` (13.0.0), `v21.js` (13.0.0), `v22.js` (14.0.0), `firebase-config.js`, `firestore.rules`, dữ liệu từ vựng A1–A2/Oxford 3000/Basic Tactics, 60 PNG boss V10/V11, 10 boss cũ V15, luật thưởng, cơ chế học, farm, đấu trường boss tiếng Hàn cũ, hệ thống lưu V12, hệ thống tài khoản V13.
+
+## Dữ liệu người chơi (localStorage) — không đổi khóa chính, thêm khóa phụ
+- Khóa `hanvocab.v1` **giữ nguyên** (ô lưu đang chơi); schema không đổi, chỉ thêm `S.v7.en23` (thú sở hữu, trứng, trứng đang ấp + timestamp, nguyên liệu, đội hình, mốc thưởng đã nhận). Tạo lười khi mở Pet Hub lần đầu; người chơi chưa mở Pet Hub thì bản lưu không đổi gì.
+- `S.v7.en23` nằm trong payload Firestore sẵn có (`players/{uid}`); không tạo project Firebase mới, không đổi `firestore.rules`.
+- Vật nuôi nông trại V6 (`S.own`) không bị chạm tới.
+- Save V14 mở bằng V15 chạy bình thường; không cần migration (cùng `hanvocab.v1`, `SAVE_VERSION` giữ 12).

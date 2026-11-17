@@ -449,3 +449,72 @@ Repo: **APP-TIENG-HANS**.
   bản lưu và sẽ được dùng lại khi nâng cấp lên V14 lần nữa. File
   `basic_tactics_vocabulary.json` thừa ra sau khi revert có thể xóa
   khỏi repo (nó không được V13 dùng đến).
+
+---
+
+## V15 — Premium Pet System (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V15 không đổi khóa lưu `hanvocab.v1`, nhưng có file sao lưu ngoài máy
+  thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V15_Premium_Pet_System.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v23.js`, `v23_data.js`, `v23.css`, thư mục `assets/pets/v15/` và các
+  file khác) vào thư mục repository, ghi đè các file cũ. **Lưu ý:** thư mục
+  `assets/pets/v15/` (36 ảnh thú + 5 ảnh trứng) phải nằm đúng vị trí —
+  thiếu ảnh thì thú hiển thị vòng tròn chữ cái thay vì hình.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V15: Premium Pet System` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Bấm **🐾 Thú Cưng** (trong English Hub hoặc tab tiếng Hàn): Pet Hub
+   mở ra với 7 tab (Thú cưng, Ấp trứng, Tiến hóa, Đội hình, Kỹ năng,
+   Sưu tập, Cửa hàng Pet). Tab Ấp trứng phải thấy 1 Trứng Lửa + 1 Trứng
+   Rừng có sẵn.
+3. Tab Ấp trứng → bấm **Bắt đầu ấp** Trứng Lửa: đồng hồ đếm ngược chạy
+   (60 phút). Tải lại trang: thời gian còn lại phải đúng (không reset).
+   Học một ván tiếng Anh (trả lời đúng vài câu) rồi quay lại: thời gian
+   ấp phải giảm thêm.
+4. Chờ ấp xong (hoặc dùng **Ấp ngay** 20 💎 nếu đủ kim cương): bấm **Nở
+   trứng** → nhận thú mới, chỉ nhận được một lần từ quả trứng đó.
+5. Tab Thú cưng → chọn thú → **Cho ăn** (100 XP): cấp và độ thân thiết
+   tăng. Tab Tiến hóa: khi chưa đủ cấp/nguyên liệu, nút TIẾN HÓA phải mờ
+   và không bấm được.
+6. Tab Đội hình: xếp 3 thú vào 3 vị trí, bấm **Lưu đội hình**, tải lại
+   trang: đội hình phải còn nguyên.
+7. Đánh boss tiếng Anh (đấu trường hoặc Bản Đồ Boss): trong trận phải
+   thấy thanh khiên đội + thanh năng lượng + nút kỹ năng đội. Trả lời
+   đúng: năng lượng tăng, boss mất máu nhiều hơn bình thường. Trả lời
+   sai: khiên đội giảm trước, chưa mất tim ngay. Đủ 6 ⚡: bấm nút kỹ năng
+   đội → boss mất máu (hoặc khiên tăng) và năng lượng về 0.
+8. Đánh boss tiếng Hàn (Bản Đồ Boss → chọn 🇰🇷): câu hỏi phải là tiếng
+   Hàn (chọn từ Hangul), khiên đội và kỹ năng đội vẫn hoạt động.
+9. Chơi một ván rồi tải lại trang: thú, trứng, đội hình, XP, kim cương
+   phải còn nguyên.
+10. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000/Basic Tactics, từ tự
+    nhập, XP, kim cương, farm, vật nuôi nông trại, boss và bản đồ phải còn
+    nguyên. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị để khôi
+    phục.
+11. Kiểm tra trên điện thoại: Pet Hub, các tab và trận đấu phải hiển thị
+    vừa màn hình, không che khuất nút.
+12. Firebase: V15 không đổi code Firebase; nếu bạn chưa chạy checklist
+    FIREBASE_SETUP.md (mục 6 + V13.3) thì đăng nhập/đồng bộ thật vẫn chưa
+    được xác nhận — V15 không làm thay đổi trạng thái này.
+
+## Quay lại V14 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V15 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V15 không đổi tên khóa lưu
+  `hanvocab.v1`; tiến trình thú cưng (`S.v7.en23`) nằm trong bản lưu và sẽ
+  được dùng lại khi nâng cấp lên V15 lần nữa. Thư mục `assets/pets/v15/`
+  thừa ra sau khi revert có thể xóa khỏi repo (nó không được V14 dùng đến).

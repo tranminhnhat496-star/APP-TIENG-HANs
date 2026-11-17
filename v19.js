@@ -353,6 +353,8 @@ function startFight(b,lang){
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
     enraged:false,nextTimer:0,nextVeil:false};
+  /* V23: pet team joins the fight (shield, energy, damage bonus). */
+  try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   if(lang==='ko'&&koCount()<8)
     F.banner='⚠️ Bạn mới có '+koCount()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
   nextQ();renderFight();
@@ -504,6 +506,9 @@ function answer(ok,timeout){
     var def=b.def||0;
     if(b.skills.pass.id==='bulwark'&&F.hp<=F.maxHp/2)def+=2;
     dmg=Math.max(2,dmg-def);
+    /* V23: pet team damage bonus + passives (burn / storm); also grants
+       pet XP/affection and speeds up the active hatch (onFightCorrect). */
+    try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -517,7 +522,15 @@ function answer(ok,timeout){
     if(b.skills.pass.id==='thorns'&&F.wrongCount%3===2)cost+=1;
     if(F.enraged){cost+=1;F.enraged=false}
     if(b.skills.elem.id==='cleanse'&&!F.cleansed){cost=0;F.cleansed=true;F.banner='✨ Thanh Tẩy: lần sai đầu tiên không mất tim!'}
-    F.combo=0;F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
+    F.combo=0;
+    /* V23: pet team shield absorbs the boss counterattack first. */
+    var petAbsorbed=false;
+    if(cost>0){try{if(window.__v23&&F.pet){var pr=__v23.onFightWrong(F);
+      if(pr==='rebirth'){F.banner=(F.banner?F.banner+' ':'')+'🌟 Tái Sinh: thú cưng chặn đòn phản công!';petAbsorbed=true;cost=0}
+      else if(pr==='shield'){F.banner=(F.banner?F.banner+' ':'')+'🛡️ Khiên đội hấp thụ đòn phản công!';petAbsorbed=true;cost=0}
+    }}catch(e){}}
+    F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
+    if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
     if(F.cur&&F.cur.w)mark19(false,F.cur.w);
     if(F.cur&&F.cur.k)markKO19(false);
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
@@ -552,9 +565,14 @@ function winReward(){
   }else{
     rec.win=1;rec.wins=1;rec.best=Math.max(rec.best||0,F.stars);
     e.bosses[b.id][lang]=rec;
-    gain19(b.reward.xp);
+    /* V23: team leader boosts boss XP; elemental bosses also drop 2 pet
+       evolution stones of their element (only for players using pets). */
+    var petBonus=0;
+    try{if(window.__v23)petBonus=Math.round(b.reward.xp*__v23.learnXpBonus())}catch(e){}
+    gain19(b.reward.xp+petBonus);
+    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
     try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
-    F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
+    F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+(b.reward.xp+petBonus)+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
       +(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
     if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
     F.firstWin=true;
@@ -638,7 +656,8 @@ function renderFight(){
   +(F.left?'<div class="mute">Còn <span id="v19boss-t">'+F.left+'s</span></div>':'')
   +(F.ultActive&&F.caQ>0?'<div class="v19banner">⚠️ PHẢN CÔNG BẰNG KIẾN THỨC — Câu '+(Math.min(F.caQ,3))+'/3 · Đúng '+F.caRight+'/3 · Đúng 3/3 phá hoàn toàn tuyệt kỹ!</div>':'')
   +(F.banner?'<div class="v19banner">'+esc(F.banner)+'</div>':'')
-  +'</div></div>';
+  +'</div></div>'
+  +(window.__v23&&F.pet?__v23.battleBarHTML(F):'');
   if(F.over){
     h+='<div class="v19done"><div class="v19done-big">'+(F.over==='win'?'CHIẾN THẮNG!':'Thua rồi…')+'</div>'
     +'<p>'+(F.over==='win'
@@ -744,10 +763,11 @@ window.__v19={
   zoneOpen:zoneOpen,zoneState:zoneState,bossUnlocked:bossUnlocked19,
   zoneWins:zoneWins,mapWon:mapWon,
   get bosses(){return D19()},
+  _petRefresh:function(){try{renderFight()}catch(e){}},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
     resolveUltimate:resolveUltimate},
-  version:'14.0.0'
+  version:'15.0.0'
 };
 })();
