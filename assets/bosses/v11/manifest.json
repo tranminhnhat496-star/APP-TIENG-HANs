@@ -1,0 +1,512 @@
+[
+ {
+  "id": "v11_ancienttree",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   323,
+   411,
+   470,
+   596
+  ],
+  "size": [
+   135,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 67.1
+ },
+ {
+  "id": "v11_boneking",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   1223,
+   411,
+   1369,
+   596
+  ],
+  "size": [
+   134,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 67.7
+ },
+ {
+  "id": "v11_butterflyqueen",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   170,
+   669,
+   319,
+   849
+  ],
+  "size": [
+   137,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 66.0
+ },
+ {
+  "id": "v11_crystalbird",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   923,
+   669,
+   1069,
+   849
+  ],
+  "size": [
+   134,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 61.0
+ },
+ {
+  "id": "v11_fireking",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   15,
+   132,
+   166,
+   335
+  ],
+  "size": [
+   139,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 71.8
+ },
+ {
+  "id": "v11_goldephant",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   15,
+   669,
+   166,
+   849
+  ],
+  "size": [
+   139,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 67.0
+ },
+ {
+  "id": "v11_golem",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   923,
+   132,
+   1069,
+   335
+  ],
+  "size": [
+   134,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 69.3
+ },
+ {
+  "id": "v11_greendragon",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   1223,
+   132,
+   1369,
+   335
+  ],
+  "size": [
+   134,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 70.3
+ },
+ {
+  "id": "v11_heavenknight",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   1223,
+   669,
+   1369,
+   849
+  ],
+  "size": [
+   134,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 63.6
+ },
+ {
+  "id": "v11_icelong",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   170,
+   132,
+   319,
+   335
+  ],
+  "size": [
+   137,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 70.0
+ },
+ {
+  "id": "v11_icequeen",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   623,
+   411,
+   770,
+   596
+  ],
+  "size": [
+   135,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 65.6
+ },
+ {
+  "id": "v11_infinitydragon",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   1373,
+   669,
+   1533,
+   849
+  ],
+  "size": [
+   148,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 70.5
+ },
+ {
+  "id": "v11_lavadragon",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   774,
+   411,
+   919,
+   596
+  ],
+  "size": [
+   133,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 62.6
+ },
+ {
+  "id": "v11_lightdeer",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   1373,
+   411,
+   1533,
+   596
+  ],
+  "size": [
+   148,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 67.0
+ },
+ {
+  "id": "v11_nebuladragon",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   474,
+   669,
+   619,
+   849
+  ],
+  "size": [
+   133,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 63.8
+ },
+ {
+  "id": "v11_ninehead",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   474,
+   132,
+   619,
+   335
+  ],
+  "size": [
+   133,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 71.8
+ },
+ {
+  "id": "v11_ninetails",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   170,
+   411,
+   319,
+   596
+  ],
+  "size": [
+   137,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 62.0
+ },
+ {
+  "id": "v11_octopusking",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   1073,
+   411,
+   1219,
+   596
+  ],
+  "size": [
+   134,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 66.4
+ },
+ {
+  "id": "v11_oni",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   774,
+   669,
+   919,
+   849
+  ],
+  "size": [
+   133,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 63.3
+ },
+ {
+  "id": "v11_pandamaster",
+  "group": "r3",
+  "model": "u2net",
+  "crop": [
+   623,
+   669,
+   770,
+   849
+  ],
+  "size": [
+   147,
+   162
+  ],
+  "solid_frac": 0.52,
+  "kb": 51.9
+ },
+ {
+  "id": "v11_phoenix",
+  "group": "r1",
+  "model": "u2net",
+  "crop": [
+   623,
+   132,
+   770,
+   335
+  ],
+  "size": [
+   115,
+   151
+  ],
+  "solid_frac": 0.534,
+  "kb": 31.5
+ },
+ {
+  "id": "v11_seadragon",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   774,
+   132,
+   919,
+   335
+  ],
+  "size": [
+   133,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 69.4
+ },
+ {
+  "id": "v11_sharkking",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   323,
+   669,
+   470,
+   849
+  ],
+  "size": [
+   135,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 63.3
+ },
+ {
+  "id": "v11_snakequeen",
+  "group": "r3",
+  "model": "portrait",
+  "crop": [
+   1073,
+   669,
+   1219,
+   849
+  ],
+  "size": [
+   134,
+   180
+  ],
+  "solid_frac": 1.0,
+  "kb": 66.9
+ },
+ {
+  "id": "v11_spacewhale",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   15,
+   411,
+   166,
+   596
+  ],
+  "size": [
+   139,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 65.8
+ },
+ {
+  "id": "v11_stormeagle",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   923,
+   411,
+   1069,
+   596
+  ],
+  "size": [
+   134,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 65.8
+ },
+ {
+  "id": "v11_thunderminotaur",
+  "group": "r1",
+  "model": "u2net",
+  "crop": [
+   323,
+   132,
+   470,
+   335
+  ],
+  "size": [
+   147,
+   188
+  ],
+  "solid_frac": 0.495,
+  "kb": 64.0
+ },
+ {
+  "id": "v11_tigerwarrior",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   1373,
+   132,
+   1533,
+   335
+  ],
+  "size": [
+   148,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 77.3
+ },
+ {
+  "id": "v11_timemachine",
+  "group": "r2",
+  "model": "portrait",
+  "crop": [
+   474,
+   411,
+   619,
+   596
+  ],
+  "size": [
+   133,
+   185
+  ],
+  "solid_frac": 1.0,
+  "kb": 67.6
+ },
+ {
+  "id": "v11_voidknight",
+  "group": "r1",
+  "model": "portrait",
+  "crop": [
+   1073,
+   132,
+   1219,
+   335
+  ],
+  "size": [
+   134,
+   203
+  ],
+  "solid_frac": 1.0,
+  "kb": 71.9
+ }
+]

@@ -1,0 +1,19 @@
+/* ===== V20 — Save & Sync UI (V12) ===== */
+.v20panel{max-width:760px}
+.v20card{border:2px solid var(--line,#d8c9a3);border-radius:14px;padding:12px 14px;margin:12px 0;background:#fff}
+.v20card b{font-size:15px}
+.v20status{font-weight:700;margin:8px 0}
+.v20status.saved{color:var(--ok,#2e7d32)}
+.v20status.saving{color:var(--mute,#777)}
+.v20status.error{color:var(--bad,#c62828)}
+.v20auth{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.v20auth input{padding:10px;border:2px solid var(--line,#d8c9a3);border-radius:10px;font:inherit;width:100%;box-sizing:border-box}
+.v20vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.v20vs>div{border:1px solid var(--line,#d8c9a3);border-radius:10px;padding:10px}
+@media(max-width:640px){.v20vs{grid-template-columns:1fr}}
+.v20modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:1200;padding:12px}
+.v20modal .v20conflict{max-width:620px;max-height:90vh;overflow:auto}
+.v20pill{display:inline-block;font:600 12px 'Be Vietnam Pro',sans-serif;padding:4px 10px;border-radius:999px;margin:6px 0 0;background:#eee;color:#555}
+.v20pill.saved{background:#e6f4ea;color:#2e7d32}
+.v20pill.saving{background:#eef;color:#555}
+.v20pill.error{background:#fde8e8;color:#c62828}

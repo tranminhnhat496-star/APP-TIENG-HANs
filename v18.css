@@ -1,0 +1,68 @@
+/* ===== V18 — 30 NEW BOSSES (V10) ===== */
+.v18arenas{margin-top:18px;border-top:2px dashed var(--line);padding-top:14px}
+.v18arena-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:10px 0}
+.v18arena{background:var(--sf);border:2px solid var(--ac,#7C5CFF);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.v18arena b{font-size:17px}
+.v18arena p{margin:0;font-size:13px}
+.v18bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:12px 0}
+.v18boss{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.v18boss.done{border-color:var(--ok)}
+.v18boss img{width:100%;max-height:170px;object-fit:contain}
+.v18boss em{font-style:normal;font-size:12px;color:var(--mute)}
+.v18chip{display:inline-block;font-size:12px;font-weight:700;color:var(--ec,#999);border:1.5px solid var(--ec,#999);border-radius:999px;padding:1px 8px;margin-right:4px}
+.v18fight{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}
+.v18fight-top{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.v18boss-img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 14px #0006)}
+.v18boss-img.anim-idle{animation:v18float 3s ease-in-out infinite}
+.v18boss-img.anim-hit{animation:v18hit .45s}
+.v18boss-img.anim-attack{animation:v18lunge .4s}
+.v18boss-img.anim-special{animation:v18glow .8s}
+.v18boss-img.anim-defeat{animation:v18defeat .8s forwards}
+.v18fight.win .v18boss-img{animation:v18defeat .8s forwards}
+.v18fight-info{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px}
+.v18hpbar{height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin:6px 0}
+.v18hpbar i{display:block;height:100%;background:linear-gradient(90deg,#E8445F,#FF8A5C);transition:width .3s}
+.v18hearts{font-size:15px}
+.v18phase{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#B388FF,#E8445F);border-radius:999px;padding:2px 10px;margin-left:4px}
+.v18banner{font-size:13px;font-weight:700;color:#FFD23F;background:#3a2b00;border:1px solid #FFD23F55;border-radius:10px;padding:6px 10px;animation:v18fadein .3s}
+.v18qcard{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;text-align:center}
+.v18qword{font-size:22px;font-weight:800}
+.v18qword.small{font-size:17px}
+.v18qword.vi{font-size:20px}
+.v18opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.v18opt{padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--sf);font-size:15px;cursor:pointer;text-align:left}
+.v18opt.right{border-color:var(--ok);background:#1d5c33;color:#fff}
+.v18opt.wrong{border-color:var(--bad);background:#6b1d2a;color:#fff}
+.v18explain{margin:10px 0;font-weight:700}
+.v18passage{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+.v18warn{background:#4a2b00;border:1px solid #F4A259;border-radius:10px;padding:10px;margin:10px 0;font-size:13px}
+.v18done{text-align:center;padding:24px 12px}
+.v18done-big{font-size:26px;font-weight:800;animation:v18win .6s}
+.v18filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.v18filters input,.v18filters select{padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--sf);color:inherit;font-size:14px}
+.v18coll-head{margin:8px 0}
+.v18colls{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.v18coll{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.v18coll.done{border-color:var(--ok)}
+.v18coll.locked{opacity:.75}
+.v18coll img{width:100%;max-height:130px;object-fit:contain}
+.v18coll em{font-style:normal;font-size:12px;color:var(--mute)}
+.v18detail{display:flex;gap:16px;flex-wrap:wrap;background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:16px;margin-top:14px;position:relative}
+.v18detail img{width:200px;height:200px;object-fit:contain}
+.v18detail>div{flex:1;min-width:240px}
+@keyframes v18float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes v18hit{0%{transform:translateX(0);filter:drop-shadow(0 0 0 #E8445F)}25%{transform:translateX(-9px) rotate(-2deg);filter:drop-shadow(0 0 18px #E8445F)}60%{transform:translateX(7px)}100%{transform:translateX(0)}}
+@keyframes v18lunge{0%{transform:translateX(0) scale(1)}40%{transform:translateX(16px) scale(1.08)}100%{transform:translateX(0) scale(1)}}
+@keyframes v18glow{0%{filter:drop-shadow(0 0 0 #FFD23F);transform:scale(1)}50%{filter:drop-shadow(0 0 26px #FFD23F);transform:scale(1.07)}100%{filter:drop-shadow(0 0 0 #FFD23F);transform:scale(1)}}
+@keyframes v18defeat{to{transform:translateY(14px) rotate(-6deg) scale(.92);filter:grayscale(1) opacity(.55)}}
+@keyframes v18win{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+@keyframes v18fadein{from{opacity:0}to{opacity:1}}
+@media(max-width:640px){
+  .v18boss-img{width:110px;height:110px}
+  .v18opts{grid-template-columns:1fr}
+  .v18detail img{width:140px;height:140px}
+  .v18qword{font-size:19px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v18boss-img.anim-idle,.v18boss-img.anim-hit,.v18boss-img.anim-attack,.v18boss-img.anim-special,.v18done-big{animation:none}
+}

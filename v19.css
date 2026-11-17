@@ -1,0 +1,117 @@
+/* ===== V19 — Boss Map + Super Legendary bosses ===== */
+.v19mapwrap{max-width:760px;margin:0 auto}
+.v19langpick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.v19map-head{margin:10px 0 4px}
+.v19hpbar{height:10px;background:#2a2438;border-radius:6px;overflow:hidden;margin-top:4px}
+.v19hpbar i{display:block;height:100%;background:linear-gradient(90deg,#FFD23F,#E8445F);border-radius:6px;transition:width .4s}
+
+/* --- the map: sky, glowing path, floating islands --- */
+.v19map{position:relative;height:1500px;margin:14px 0;border-radius:18px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 30% at 50% 0%,rgba(199,125,255,.28),transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 55%,rgba(79,168,255,.20),transparent 70%),
+    radial-gradient(ellipse 80% 35% at 50% 100%,rgba(232,68,95,.22),transparent 70%),
+    linear-gradient(180deg,#1B1440 0%,#2B1B5E 45%,#3A2A6E 75%,#4A2A4E 100%);}
+.v19mappath{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.v19mappath path{fill:none;stroke:#FFD23F;stroke-width:3;opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(255,210,63,.9));
+  stroke-dasharray:10 6;animation:v19dash 2.4s linear infinite}
+@keyframes v19dash{to{stroke-dashoffset:-32}}
+.v19zone{position:absolute;transform:translateY(-50%);background:none;border:0;padding:0;cursor:pointer;width:150px}
+.v19zone:disabled{cursor:not-allowed}
+.v19zone.v19side-left{left:calc(22% - 75px)}
+.v19zone.v19side-right{left:calc(78% - 75px)}
+.v19zone.v19side-center{left:calc(50% - 75px)}
+.v19zone-island{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:10px 6px 8px;border-radius:16px;
+  background:radial-gradient(ellipse 120% 90% at 50% 0%,var(--zc,#7B61FF) 0%,rgba(20,14,44,.92) 78%);
+  border:2px solid color-mix(in srgb,var(--zc,#7B61FF) 70%,#fff);
+  box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 18px color-mix(in srgb,var(--zc,#7B61FF) 55%,transparent);
+  transition:transform .2s}
+.v19zone:not(:disabled):hover .v19zone-island{transform:translateY(-4px) scale(1.04)}
+.v19zone-island img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))}
+.v19zone-name{font-weight:700;color:#fff;font-size:15px;text-shadow:0 2px 4px rgba(0,0,0,.7)}
+.v19zone-meta{font-size:11px;color:#E8E2FF}
+.v19zone.v19st-locked .v19zone-island{filter:grayscale(.9) brightness(.55);box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.v19zone.v19st-completed .v19zone-island{box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 22px rgba(255,210,63,.8)}
+.v19zone.v19st-mastered .v19zone-island{box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 26px rgba(255,210,63,1);border-color:#FFD23F}
+
+/* --- zone detail --- */
+.v19zdetail{margin:14px 0;padding:14px;border:1px solid #3a2f5e;border-radius:14px;background:rgba(24,18,48,.9);position:relative}
+.v19zd-top{display:flex;gap:14px;align-items:flex-start}
+.v19zd-top img{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.v19zbosses{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.v19zboss{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid #3a2f5e;border-radius:12px;background:#241b42;text-align:left}
+.v19zboss img{width:100%;height:110px;object-fit:contain}
+.v19zboss.done{border-color:#4caf50}
+.v19zboss.locked{opacity:.55}
+.v19zboss em{font-style:normal;font-size:12px;color:#cbb8ff}
+
+/* --- chips --- */
+.v19chip{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;
+  color:#fff;background:color-mix(in srgb,var(--ec,#888) 75%,#000);margin-right:4px}
+.v19phase{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;background:#7B61FF;margin-left:4px}
+
+/* --- fight --- */
+.v19fight{margin:14px 0;padding:14px;border:1px solid #3a2f5e;border-radius:14px;background:rgba(24,18,48,.92)}
+.v19fight.win{border-color:#4caf50}
+.v19fight-top{display:flex;gap:14px;align-items:flex-start}
+.v19boss-img{width:130px;height:130px;object-fit:contain;flex:none;filter:drop-shadow(0 0 14px rgba(255,210,63,.35))}
+.v19fight-info{flex:1;min-width:0}
+.v19hearts{font-size:14px;margin:4px 0}
+.v19banner{margin-top:8px;padding:8px 10px;border-radius:10px;background:#3a2a10;color:#FFE066;font-weight:700}
+.v19qcard{margin-top:12px;padding:12px;border-radius:12px;background:#241b42}
+.v19qword{font-size:22px;font-weight:800}
+.v19qword.small{font-size:17px}
+.v19qword.vi{font-size:18px}
+.v19passage{margin-top:12px;padding:12px;border-radius:12px;background:#1c1533}
+.v19opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.v19opt{padding:10px;border-radius:10px;border:1px solid #4a3f7a;background:#2e2454;color:#fff;font-size:15px;cursor:pointer;text-align:left}
+.v19opt.right{background:#1e5c2e;border-color:#4caf50}
+.v19opt.wrong{background:#6e1b1b;border-color:#e8445f}
+.v19opt:disabled{opacity:.75;cursor:default}
+.v19explain{margin-top:10px;padding:8px;border-radius:8px;background:#1c1533}
+.v19warn{margin-top:10px;padding:10px;border-radius:10px;background:#3a2a10;color:#FFE066}
+.v19done{margin-top:12px;text-align:center}
+.v19done-big{font-size:26px;font-weight:900;color:#FFD23F}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{padding:8px 14px;border-radius:10px;border:1px solid #4a3f7a;background:#2e2454;color:#fff;cursor:pointer}
+.btn.pri{background:#7B61FF;border-color:#9d8cff;font-weight:700}
+.btn.sm{padding:4px 10px;font-size:13px}
+
+/* --- boss animations (CSS transforms + glow; no fake sprite frames) --- */
+@keyframes v19idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes v19hit{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+@keyframes v19attack{0%{transform:translateX(0) scale(1)}40%{transform:translateX(16px) scale(1.08)}100%{transform:translateX(0) scale(1)}}
+@keyframes v19special{0%{transform:scale(1)}50%{transform:scale(1.14);filter:drop-shadow(0 0 22px gold) brightness(1.3)}100%{transform:scale(1)}}
+@keyframes v19defeat{to{transform:rotate(10deg) translateY(12px);filter:grayscale(1) opacity(.55)}}
+@keyframes v19win{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.anim-idle{animation:v19idle 2.6s ease-in-out infinite}
+.anim-hit{animation:v19hit .45s ease}
+.anim-attack{animation:v19attack .45s ease}
+.anim-special{animation:v19special .8s ease}
+.anim-defeat{animation:v19defeat .8s ease forwards}
+.v19fight.win .v19boss-img{animation:v19win .9s ease 2}
+
+@media (max-width:640px){
+  .v19map{height:1300px}
+  .v19zone{width:118px}
+  .v19zone.v19side-left{left:calc(22% - 59px)}
+  .v19zone.v19side-right{left:calc(78% - 59px)}
+  .v19zone.v19side-center{left:calc(50% - 59px)}
+  .v19zone-island img{width:74px;height:74px}
+  .v19zone-name{font-size:13px}
+  .v19zbosses{grid-template-columns:1fr}
+  .v19opts{grid-template-columns:1fr}
+  .v19fight-top{flex-direction:column;align-items:center;text-align:center}
+  .v19boss-img{width:110px;height:110px}
+  .v19zd-top{flex-direction:column;align-items:center;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .anim-idle,.anim-hit,.anim-attack,.anim-special,.anim-defeat,.v19fight.win .v19boss-img,.v19mappath path{animation:none}
+}
+
+/* V11.1 — Boss Map entry in the Korean nav tabs (#tabs, V6 inline render).
+   Reuses the .tab look; only a gold tint marks it as the adventure entry. */
+.tab.v19kotab{color:#7a5b00}
+.tab.v19kotab .ti{font-size:24px;filter:drop-shadow(0 2px 2px #0003)}

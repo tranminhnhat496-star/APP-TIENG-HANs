@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V9 — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V12 — Save &amp; Cloud Sync — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -978,7 +978,7 @@ function setView(v){view=v;render()}
 const TI={study:'🌱',list:'📖',shop:'🛒',dex:'🏆',rem:'⏰',data:'💾'};
 function render(){
   const pg=$('#app');pg.classList.remove('pg');void pg.offsetWidth;pg.classList.add('pg');
-  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('');
+  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>';
   stats();({study:rStudy,list:rList,shop:rShop,dex:rDex,rem:rRem,data:rData})[view]()}
 
 function rStudy(){
@@ -4321,7 +4321,7 @@ function closeHub15(){
   renderLangBar();
 }
 function hubTabs(){
-  return [['learn','Học tập'],['library','📚 Thư viện'],['farm','English Farm'],['bosses','Bosses'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','Sao lưu']];
+  return [['learn','Học tập'],['library','📚 Thư viện'],['farm','English Farm'],['bosses','Bosses'],['collection','🏆 Bộ Sưu Tập'],['map','🗺️ Bản Đồ Boss'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','💾 Dữ liệu']];
 }
 function renderHub(){
   var h=$('#v15hub');if(!h)return;
@@ -4341,6 +4341,8 @@ function renderTab(){
   else if(HUB.tab==='library')b.innerHTML=(window.__v17&&__v17.libraryHTML())||'<p class="mute">Đang tải thư viện từ vựng…</p>';
   else if(HUB.tab==='farm')b.innerHTML=farmHTML();
   else if(HUB.tab==='bosses')b.innerHTML=bossesHTML();
+  else if(HUB.tab==='collection')b.innerHTML=(window.__v18&&__v18.collectionHTML())||'<p class="mute">Đang tải bộ sưu tập boss…</p>';
+  else if(HUB.tab==='map')b.innerHTML=(window.__v19&&__v19.mapHTML())||'<p class="mute">Đang tải bản đồ boss…</p>';
   else if(HUB.tab==='review')b.innerHTML=reviewHTML();
   else if(HUB.tab==='stats')b.innerHTML=statsHTML();
   else if(HUB.tab==='vocab')b.innerHTML=vocabHTML();
@@ -4981,7 +4983,7 @@ function bossesHTML(){
     var un=bossUnlocked(i);
     return '<div class="v15boss '+(done?'done':'')+'"><img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'"><b>'+(i+1)+'. '+esc(b.n)+'</b><span>'+esc(b.vi)+' · HP '+b.hp+' · '+esc(b.skill)+'</span><span>Thưởng: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)+'</span>'
     +(done?'<em>Đã thắng ✓ — '+esc(b.reward.item)+' đã nhận</em>':(un?'<button class="btn pri" onclick="__v15.bossFight(\''+b.id+'\')">Khiêu chiến</button>':'<em>🔒 Thắng boss trước để mở khóa</em>'))+'</div>';
-  }).join('')+'</div><div id="v15bossfight"></div>';
+  }).join('')+'</div>'+(window.__v18&&__v18.arenasHTML?__v18.arenasHTML():'')+'<div id="v15bossfight"></div>';
 }
 function bossFight(id){
   var b=BOSSES.filter(function(x){return x.id===id})[0];if(!b)return;
@@ -5353,7 +5355,8 @@ function vocabExportCSV(){
 /* ---------- BACKUP / RESTORE ---------- */
 function backupHTML(){
   var raw='';try{raw=localStorage.getItem('hanvocab.v1')||''}catch(e){}
-  return '<h3>Sao lưu &amp; khôi phục</h3>'
+  return (window.__v20&&__v20.dataPanelHTML?__v20.dataPanelHTML():'')
+  +'<h3>Sao lưu &amp; khôi phục</h3>'
   +'<p class="mute">Dữ liệu người chơi lưu trong localStorage với khóa <b>hanvocab.v1</b> (giữ nguyên từ V6 — không đổi tên, không xóa). Sao lưu gồm toàn bộ từ tiếng Hàn, tiến trình tiếng Anh (V14 + V15), XP, 💎, farm và boss.</p>'
   +'<div class="v15statgrid"><div class="v15stat"><b>'+(raw.length/1024).toFixed(1)+' KB</b><span>kích thước bản lưu</span></div><div class="v15stat"><b>'+counts15().total+'</b><span>từ tiếng Anh</span></div><div class="v15stat"><b>'+(S.cards?S.cards.length:0)+'</b><span>thẻ tiếng Hàn</span></div></div>'
   +'<div class="acts"><button class="btn pri" onclick="__v15.backupExport()">Tải file sao lưu (.json)</button></div>'
@@ -5420,7 +5423,7 @@ window.__v15={
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
   gain15:gain15,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'9.0.0'
+  version:'12.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);
@@ -7003,6 +7006,2811 @@ window.__v17={
   speak:speak,toggleMastered:toggleMastered,toggleFav:toggleFav,copyToPersonal:copyToPersonal,claim:claim,
   get state(){return V},
   version:'9.0.0'
+};
+})();
+
+</script>
+
+<style id="v18">
+/* ===== V18 — 30 NEW BOSSES (V10) ===== */
+.v18arenas{margin-top:18px;border-top:2px dashed var(--line);padding-top:14px}
+.v18arena-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin:10px 0}
+.v18arena{background:var(--sf);border:2px solid var(--ac,#7C5CFF);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.v18arena b{font-size:17px}
+.v18arena p{margin:0;font-size:13px}
+.v18bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:12px 0}
+.v18boss{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.v18boss.done{border-color:var(--ok)}
+.v18boss img{width:100%;max-height:170px;object-fit:contain}
+.v18boss em{font-style:normal;font-size:12px;color:var(--mute)}
+.v18chip{display:inline-block;font-size:12px;font-weight:700;color:var(--ec,#999);border:1.5px solid var(--ec,#999);border-radius:999px;padding:1px 8px;margin-right:4px}
+.v18fight{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}
+.v18fight-top{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.v18boss-img{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 6px 14px #0006)}
+.v18boss-img.anim-idle{animation:v18float 3s ease-in-out infinite}
+.v18boss-img.anim-hit{animation:v18hit .45s}
+.v18boss-img.anim-attack{animation:v18lunge .4s}
+.v18boss-img.anim-special{animation:v18glow .8s}
+.v18boss-img.anim-defeat{animation:v18defeat .8s forwards}
+.v18fight.win .v18boss-img{animation:v18defeat .8s forwards}
+.v18fight-info{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px}
+.v18hpbar{height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin:6px 0}
+.v18hpbar i{display:block;height:100%;background:linear-gradient(90deg,#E8445F,#FF8A5C);transition:width .3s}
+.v18hearts{font-size:15px}
+.v18phase{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#B388FF,#E8445F);border-radius:999px;padding:2px 10px;margin-left:4px}
+.v18banner{font-size:13px;font-weight:700;color:#FFD23F;background:#3a2b00;border:1px solid #FFD23F55;border-radius:10px;padding:6px 10px;animation:v18fadein .3s}
+.v18qcard{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:14px;margin:12px 0;text-align:center}
+.v18qword{font-size:22px;font-weight:800}
+.v18qword.small{font-size:17px}
+.v18qword.vi{font-size:20px}
+.v18opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.v18opt{padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--sf);font-size:15px;cursor:pointer;text-align:left}
+.v18opt.right{border-color:var(--ok);background:#1d5c33;color:#fff}
+.v18opt.wrong{border-color:var(--bad);background:#6b1d2a;color:#fff}
+.v18explain{margin:10px 0;font-weight:700}
+.v18passage{background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+.v18warn{background:#4a2b00;border:1px solid #F4A259;border-radius:10px;padding:10px;margin:10px 0;font-size:13px}
+.v18done{text-align:center;padding:24px 12px}
+.v18done-big{font-size:26px;font-weight:800;animation:v18win .6s}
+.v18filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.v18filters input,.v18filters select{padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--sf);color:inherit;font-size:14px}
+.v18coll-head{margin:8px 0}
+.v18colls{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.v18coll{background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.v18coll.done{border-color:var(--ok)}
+.v18coll.locked{opacity:.75}
+.v18coll img{width:100%;max-height:130px;object-fit:contain}
+.v18coll em{font-style:normal;font-size:12px;color:var(--mute)}
+.v18detail{display:flex;gap:16px;flex-wrap:wrap;background:var(--sf);border:2px solid var(--line);border-radius:16px;padding:16px;margin-top:14px;position:relative}
+.v18detail img{width:200px;height:200px;object-fit:contain}
+.v18detail>div{flex:1;min-width:240px}
+@keyframes v18float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes v18hit{0%{transform:translateX(0);filter:drop-shadow(0 0 0 #E8445F)}25%{transform:translateX(-9px) rotate(-2deg);filter:drop-shadow(0 0 18px #E8445F)}60%{transform:translateX(7px)}100%{transform:translateX(0)}}
+@keyframes v18lunge{0%{transform:translateX(0) scale(1)}40%{transform:translateX(16px) scale(1.08)}100%{transform:translateX(0) scale(1)}}
+@keyframes v18glow{0%{filter:drop-shadow(0 0 0 #FFD23F);transform:scale(1)}50%{filter:drop-shadow(0 0 26px #FFD23F);transform:scale(1.07)}100%{filter:drop-shadow(0 0 0 #FFD23F);transform:scale(1)}}
+@keyframes v18defeat{to{transform:translateY(14px) rotate(-6deg) scale(.92);filter:grayscale(1) opacity(.55)}}
+@keyframes v18win{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+@keyframes v18fadein{from{opacity:0}to{opacity:1}}
+@media(max-width:640px){
+  .v18boss-img{width:110px;height:110px}
+  .v18opts{grid-template-columns:1fr}
+  .v18detail img{width:140px;height:140px}
+  .v18qword{font-size:19px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v18boss-img.anim-idle,.v18boss-img.anim-hit,.v18boss-img.anim-attack,.v18boss-img.anim-special,.v18done-big{animation:none}
+}
+
+</style>
+<script id="v18data">
+/* ===== V18 DATA — 30 NEW BOSSES (V10) =====
+   Additive layer. 3 arenas x 10 bosses.
+   - Arena 1 "en": English Challenge — new versions of the 10 English skills.
+     IDs use the v10_ prefix so they never collide with the 10 V15 bosses
+     (slime, goblin, dragon, ghost, spider, owl, tiger, wizard,
+     dictionary, king) whose fights still run in v15.js untouched.
+   - Arena 2 "el": Elemental — EN or KO questions (player picks).
+   - Arena 3 "leg": Legendary — 3 phases (P1 / P2 at <=50% / P3 at <=20%).
+   Images: assets/bosses/v10/<id>.png — cut from the 3 posters Anh sent
+   (see tools/split_bosses.py + ASSET_REPORT_V10.md).
+   Fields: id, n (EN name), vi, img, arena, el, rarity, lv, hp, def,
+   skill {id,n,desc}, unlock {type}, mode, diff, lang, lib, reward
+   {xp,gems,item,stone?,title?}.
+   def = flat damage reduction on the player's hits (min 2 dmg).
+   reward.item / .stone / .title are first-win only; replays give +10 XP.
+*/
+window.__V18_BOSSES = window.__V18_BOSSES || {};
+window.__V18_BOSSES.arenas = [
+  {id:'en', n:'English Challenge Arena', vi:'Đấu Trường Thử Thách Tiếng Anh',
+   desc:'10 boss gắn với 10 kỹ năng học tiếng Anh: từ vựng, chính tả, ngữ pháp, nghe, xếp câu, đọc hiểu, tốc độ, phát âm, từ nâng cao và boss cuối tổng hợp.',
+   need:'Luôn mở. Mở khóa theo thứ tự trong đấu trường.',
+   icon:'🇬🇧', color:'#7C5CFF'},
+  {id:'el', n:'Elemental Arena', vi:'Đấu Trường Nguyên Tố',
+   desc:'10 boss nguyên tố. Trước mỗi trận, chọn học tiếng Anh hoặc tiếng Hàn. Mỗi nguyên tố có kỹ năng riêng — nhưng không kỹ năng nào làm câu hỏi trở nên không thể trả lời.',
+   need:'Cần thắng tổng cộng 5 boss (boss cũ V15 + Đấu Trường 1). Mở khóa theo thứ tự trong đấu trường.',
+   icon:'🔥', color:'#E8445F'},
+  {id:'leg', n:'Legendary Boss Arena', vi:'Đấu Trường Huyền Thoại',
+   desc:'10 boss mạnh nhất. Mỗi boss có 3 giai đoạn: P1 khởi đầu, P2 cường hóa khi HP còn 50%, P3 tuyệt kỹ khi HP còn 20%. Độ khó câu hỏi tăng theo tiến trình học của bạn.',
+   need:'Cần thắng 5 boss nguyên tố. Mở khóa theo thứ tự trong đấu trường.',
+   icon:'👑', color:'#F4A259'}
+];
+window.__V18_BOSSES.elements = {
+  fire:  {n:'Lửa',       ic:'🔥', color:'#E8445F', skill:'Thiêu đốt: trả lời sai, boss hồi HP.'},
+  ice:   {n:'Băng',      ic:'❄️', color:'#4FA8FF', skill:'Đóng băng: giảm thời gian trả lời.'},
+  thunder:{n:'Sấm',      ic:'⚡', color:'#FFD23F', skill:'Tấn công liên tiếp khi bạn trả lời sai.'},
+  water: {n:'Nước',      ic:'💧', color:'#2E9BFF', skill:'Hồi HP theo thời gian.'},
+  wind:  {n:'Gió',       ic:'🌪️', color:'#7FE3D0', skill:'Tăng tốc: đồng hồ ngắn hơn, sát thương của bạn cao hơn.'},
+  earth: {n:'Đất',       ic:'⛰️', color:'#B07D4F', skill:'Tạo lá chắn / phòng thủ cao.'},
+  dark:  {n:'Bóng tối',  ic:'🌙', color:'#8E7CFF', skill:'Ẩn một phần gợi ý (IPA).'},
+  nature:{n:'Thiên nhiên',ic:'🌿', color:'#58B368', skill:'Hồi phục theo thời gian.'},
+  light: {n:'Ánh sáng',  ic:'✨', color:'#FFC93C', skill:'Thanh tẩy hiệu ứng bất lợi.'}
+};
+window.__V18_BOSSES.rarities = {
+  common:   {n:'Thường',    color:'#9AA5B1'},
+  rare:     {n:'Hiếm',      color:'#4FA8FF'},
+  epic:     {n:'Sử thi',    color:'#B388FF'},
+  legendary:{n:'Huyền thoại',color:'#FFB020'},
+  mythic:   {n:'Thần thoại',color:'#FF5C8A'}
+};
+
+/* ---------- ARENA 1: ENGLISH CHALLENGE (10) ---------- */
+window.__V18_BOSSES.en = [
+{id:'v10_slime',n:'Vocabulary Slime King',vi:'Vua Slime Từ Vựng',img:'assets/bosses/v10/v10_slime.png',arena:'en',el:'nature',rarity:'common',lv:1,hp:70,def:0,mode:'mc',diff:'A1',lang:'en',lib:'a1a2',skill:{id:'none',n:'Làm quen',desc:'Không có kỹ năng đặc biệt — boss làm quen.'},unlock:{type:'prev'},reward:{xp:50,gems:1,item:'Slime Crown'}},
+{id:'v10_goblin',n:'Spelling Goblin',vi:'Yêu Tinh Chính Tả',img:'assets/bosses/v10/v10_goblin.png',arena:'en',el:'dark',rarity:'common',lv:2,hp:80,def:0,mode:'type',diff:'A1',lang:'en',lib:'',skill:{id:'timer',n:'Đồng Hồ Cát',desc:'Đồng hồ 12 giây / câu — hết giờ tính là sai.'},unlock:{type:'prev'},reward:{xp:60,gems:1,item:'Goblin Quill'}},
+{id:'v10_dragon',n:'Grammar Dragon',vi:'Rồng Ngữ Pháp',img:'assets/bosses/v10/v10_dragon.png',arena:'en',el:'fire',rarity:'common',lv:3,hp:100,def:1,mode:'grammar',diff:'A2',lang:'en',lib:'',skill:{id:'enrage_timer',n:'Nộ Long',desc:'Khi HP dưới 50%, đồng hồ 10 giây / câu.'},unlock:{type:'prev'},reward:{xp:70,gems:2,item:'Dragon Grammar'}},
+{id:'v10_ghost',n:'Sound Spirit',vi:'Ma Thần Âm Thanh',img:'assets/bosses/v10/v10_ghost.png',arena:'en',el:'light',rarity:'rare',lv:4,hp:90,def:0,mode:'listen',diff:'A2',lang:'en',lib:'',skill:{id:'one_listen',n:'Tiếng Vang',desc:'Chỉ được nghe 1 lần duy nhất mỗi câu.'},unlock:{type:'prev'},reward:{xp:70,gems:2,item:'Ghost Earbuds'}},
+{id:'v10_spider',n:'Sentence Spider',vi:'Nhện Câu Chữ',img:'assets/bosses/v10/v10_spider.png',arena:'en',el:'dark',rarity:'rare',lv:5,hp:100,def:1,mode:'builder',diff:'A2',lang:'en',lib:'',skill:{id:'shuffle',n:'Mạng Nhện',desc:'Câu bị xáo trộn hoàn toàn — chọn câu đúng trong 4 đáp án.'},unlock:{type:'prev'},reward:{xp:80,gems:2,item:'Spider Web'}},
+{id:'v10_owl',n:'Oxford Owl',vi:'Cú Oxford',img:'assets/bosses/v10/v10_owl.png',arena:'en',el:'light',rarity:'rare',lv:6,hp:120,def:1,mode:'read',diff:'B1',lang:'en',lib:'oxford',skill:{id:'read2',n:'Mắt Cú',desc:'Đọc đoạn văn rồi trả lời 2 câu hỏi liên tiếp. Từ vựng lấy từ Oxford 3000.'},unlock:{type:'prev'},reward:{xp:90,gems:2,item:'Oxford Feather'}},
+{id:'v10_tiger',n:'Speed Tiger',vi:'Hổ Tốc Độ',img:'assets/bosses/v10/v10_tiger.png',arena:'en',el:'thunder',rarity:'epic',lv:7,hp:110,def:1,mode:'speed',diff:'B1',lang:'en',lib:'',skill:{id:'speed',n:'Tốc Độ Sấm Sét',desc:'Đồng hồ 8 giây / câu, sát thương của bạn x1.5.'},unlock:{type:'prev'},reward:{xp:90,gems:2,item:'Tiger Stopwatch'}},
+{id:'v10_wizard',n:'Pronunciation Wizard',vi:'Pháp Sư Phát Âm',img:'assets/bosses/v10/v10_wizard.png',arena:'en',el:'light',rarity:'epic',lv:8,hp:130,def:2,mode:'speak',diff:'B1',lang:'en',lib:'',skill:{id:'speak',n:'Giọng Thần',desc:'Nói đúng từ để gây sát thương. Không có micro? Dùng chế độ nghe-chọn thay thế.'},unlock:{type:'prev'},reward:{xp:100,gems:3,item:'Wizard Mic'}},
+{id:'v10_dict',n:'Dark Dictionary',vi:'Từ Điển Bóng Tối',img:'assets/bosses/v10/v10_dict.png',arena:'en',el:'dark',rarity:'epic',lv:9,hp:150,def:2,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'mixed_hard',n:'Trang Tối',desc:'Câu hỏi trộn mọi kỹ năng, độ khó tăng dần.'},unlock:{type:'prev'},reward:{xp:120,gems:3,item:'Dark Page+'}},
+{id:'v10_king',n:'English King',vi:'Vua Tiếng Anh',img:'assets/bosses/v10/v10_king.png',arena:'en',el:'light',rarity:'legendary',lv:10,hp:200,def:3,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'final',n:'Vương Miện',desc:'Boss cuối: trộn mọi kỹ năng + đồng hồ 12 giây. Cần thắng 9 boss trước trong đấu trường.'},unlock:{type:'prev'},reward:{xp:200,gems:5,item:'English King Crown',title:'Vua Tiếng Anh'}}
+];
+
+/* ---------- ARENA 2: ELEMENTAL (10) ---------- */
+window.__V18_BOSSES.el = [
+{id:'v10_unicorn',n:'Celestial Unicorn',vi:'Kỳ Lân Thần Vũ',img:'assets/bosses/v10/v10_unicorn.png',arena:'el',el:'light',rarity:'rare',lv:11,hp:130,def:1,mode:'mc',diff:'A2',lang:'both',lib:'',skill:{id:'cleanse',n:'Thanh Tẩy',desc:'Ánh sáng thanh tẩy: lần trả lời sai đầu tiên trong trận không mất tim.'},unlock:{type:'prev'},reward:{xp:90,gems:2,item:'Unicorn Horn',stone:'Đá Ánh Sáng'}},
+{id:'v10_icedragon',n:'Ice Dragon',vi:'Long Băng Tuyết',img:'assets/bosses/v10/v10_icedragon.png',arena:'el',el:'ice',rarity:'rare',lv:12,hp:140,def:1,mode:'listen',diff:'A2',lang:'both',lib:'',skill:{id:'freeze',n:'Đóng Băng',desc:'Băng giá làm chậm bạn: mỗi câu chỉ có 15 giây để trả lời.'},unlock:{type:'prev'},reward:{xp:95,gems:2,item:'Ice Scale',stone:'Đá Băng'}},
+{id:'v10_panda',n:'Bamboo Knight Panda',vi:'Gấu Trúc Hiệp Sĩ',img:'assets/bosses/v10/v10_panda.png',arena:'el',el:'nature',rarity:'rare',lv:13,hp:150,def:2,mode:'builder',diff:'A2',lang:'both',lib:'',skill:{id:'shield',n:'Lá Chắn Đất',desc:'Gấu trúc dựng lá chắn 30 HP: sát thương bạn gây ra chỉ còn một nửa cho tới khi lá chắn vỡ.'},unlock:{type:'prev'},reward:{xp:100,gems:2,item:'Bamboo Staff',stone:'Đá Đất'}},
+{id:'v10_magma',n:'Magma Colossus',vi:'Dung Nham Khổng Lồ',img:'assets/bosses/v10/v10_magma.png',arena:'el',el:'fire',rarity:'epic',lv:14,hp:160,def:2,mode:'type',diff:'B1',lang:'both',lib:'',skill:{id:'burn',n:'Thiêu Đốt',desc:'Lửa thiêu đốt: mỗi lần bạn trả lời sai, boss hồi 8 HP.'},unlock:{type:'prev'},reward:{xp:110,gems:3,item:'Magma Core',stone:'Đá Lửa'}},
+{id:'v10_fox',n:'Cherry Blossom Fox',vi:'Hồ Ly Anh Đào',img:'assets/bosses/v10/v10_fox.png',arena:'el',el:'nature',rarity:'epic',lv:15,hp:170,def:2,mode:'grammar',diff:'B1',lang:'both',lib:'',skill:{id:'heal',n:'Hoa Anh Đào',desc:'Hồ ly hồi phục: sau mỗi 4 câu hỏi, boss hồi 6 HP.'},unlock:{type:'prev'},reward:{xp:115,gems:3,item:'Sakura Charm',stone:'Đá Hoa',title:'Bạn Của Hồ Ly'}},
+{id:'v10_octopus',n:'Deep Sea Octopus',vi:'Bạch Tuộc Biển Sâu',img:'assets/bosses/v10/v10_octopus.png',arena:'el',el:'water',rarity:'epic',lv:16,hp:180,def:2,mode:'mc',diff:'B1',lang:'both',lib:'',skill:{id:'regen',n:'Dòng Chảy',desc:'Nước hồi HP: sau mỗi 2 lần bạn trả lời sai, boss hồi 10 HP.'},unlock:{type:'prev'},reward:{xp:120,gems:3,item:'Ocean Pearl',stone:'Đá Nước'}},
+{id:'v10_griffin',n:'Storm Griffin',vi:'Sư Điểu Thần Phong',img:'assets/bosses/v10/v10_griffin.png',arena:'el',el:'wind',rarity:'epic',lv:17,hp:190,def:2,mode:'speed',diff:'B1',lang:'both',lib:'',skill:{id:'gale',n:'Cơn Lốc',desc:'Gió tăng tốc: đồng hồ 8 giây / câu, nhưng sát thương của bạn x1.25.'},unlock:{type:'prev'},reward:{xp:125,gems:3,item:'Storm Feather',stone:'Đá Gió'}},
+{id:'v10_turtle',n:'Mountain Turtle',vi:'Rùa Núi Trường Thọ',img:'assets/bosses/v10/v10_turtle.png',arena:'el',el:'earth',rarity:'legendary',lv:18,hp:200,def:4,mode:'read',diff:'B2',lang:'both',lib:'',skill:{id:'shell',n:'Mai Rùa',desc:'Phòng thủ thép: sát thương bạn gây ra giảm 4 (tối thiểu 2).'},unlock:{type:'prev'},reward:{xp:135,gems:4,item:'Turtle Shell',stone:'Đá Núi',title:'Phá Giáp'}},
+{id:'v10_mage',n:'Night Shadow Mage',vi:'Pháp Sư Bóng Đêm',img:'assets/bosses/v10/v10_mage.png',arena:'el',el:'dark',rarity:'legendary',lv:19,hp:220,def:3,mode:'speak',diff:'B2',lang:'both',lib:'',skill:{id:'veil',n:'Màn Đêm',desc:'Bóng tối che gợi ý: câu hỏi trắc nghiệm không hiện phiên âm IPA.'},unlock:{type:'prev'},reward:{xp:145,gems:4,item:'Shadow Orb',stone:'Đá Bóng Tối'}},
+{id:'v10_fairy',n:'Forest Flower Fairy',vi:'Tiên Hoa Rừng Xanh',img:'assets/bosses/v10/v10_fairy.png',arena:'el',el:'nature',rarity:'legendary',lv:20,hp:240,def:3,mode:'mixed',diff:'B2',lang:'both',lib:'',skill:{id:'bloom',n:'Hoa Rừng',desc:'Thiên nhiên hồi phục: sau mỗi 3 câu hỏi, boss hồi 8 HP.'},unlock:{type:'prev'},reward:{xp:160,gems:4,item:'Fairy Bloom',stone:'Đá Rừng',title:'Người Bảo Vệ Rừng'}}
+];
+
+/* ---------- ARENA 3: LEGENDARY (10) ---------- */
+window.__V18_BOSSES.leg = [
+{id:'v10_firedragon',n:'Inferno Dragon',vi:'Hắc Long Nham Hỏa',img:'assets/bosses/v10/v10_firedragon.png',arena:'leg',el:'fire',rarity:'epic',lv:21,hp:220,def:2,mode:'mixed',diff:'B1',lang:'en',lib:'',skill:{id:'inferno',n:'Hỏa Ngục',desc:'P2 (HP ≤50%): đồng hồ 10 giây / câu. P3 (HP ≤20%): tuyệt kỹ Hỏa Ngục — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:160,gems:4,item:'Inferno Fang',title:'Kẻ Săn Rồng'}},
+{id:'v10_icewolf',n:'Frost Wolf King',vi:'Lang Vương Băng Sương',img:'assets/bosses/v10/v10_icewolf.png',arena:'leg',el:'ice',rarity:'epic',lv:22,hp:240,def:2,mode:'mixed',diff:'B1',lang:'en',lib:'',skill:{id:'blizzard',n:'Bão Tuyết',desc:'P2: đồng hồ 10 giây / câu. P3: tuyệt kỹ Bão Tuyết — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:170,gems:4,item:'Frost Fang',title:'Thợ Săn Tuyết'}},
+{id:'v10_thunderlion',n:'Thunder Lion God',vi:'Lôi Thần Sư Vương',img:'assets/bosses/v10/v10_thunderlion.png',arena:'leg',el:'thunder',rarity:'epic',lv:23,hp:260,def:3,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'storm',n:'Bão Sấm',desc:'P2: boss đánh liên tiếp — trả lời sai mất 2 tim. P3: tuyệt kỹ Bão Sấm, đồng hồ 8 giây / câu.'},unlock:{type:'prev'},reward:{xp:180,gems:5,item:'Thunder Mane',title:'Chúa Tể Sấm Sét'}},
+{id:'v10_seaoctopus',n:'Ocean King Octopus',vi:'Bạch Tuộc Đại Dương',img:'assets/bosses/v10/v10_seaoctopus.png',arena:'leg',el:'water',rarity:'epic',lv:24,hp:280,def:3,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'tide',n:'Thủy Triều',desc:'P2: boss hồi 10 HP sau mỗi 3 câu hỏi. P3: tuyệt kỹ Thủy Triều — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:190,gems:5,item:'Tide Crown',title:'Vua Biển'}},
+{id:'v10_titan',n:'Magma Titan',vi:'Titan Dung Nham',img:'assets/bosses/v10/v10_titan.png',arena:'leg',el:'fire',rarity:'legendary',lv:25,hp:300,def:3,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'quake',n:'Địa Chấn',desc:'P2: lá chắn 40 HP (sát thương giảm một nửa tới khi vỡ). P3: tuyệt kỹ Địa Chấn — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:210,gems:5,item:'Titan Heart',title:'Kẻ Hạ Titan'}},
+{id:'v10_phoenix',n:'Holy Phoenix',vi:'Phượng Hoàng Thánh Quang',img:'assets/bosses/v10/v10_phoenix.png',arena:'leg',el:'light',rarity:'legendary',lv:26,hp:320,def:3,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'rebirth',n:'Tái Sinh',desc:'P2: phượng hoàng hồi 20 HP một lần khi HP xuống dưới 50%. P3: tuyệt kỹ Thánh Quang — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:230,gems:6,item:'Phoenix Feather',title:'Người Tái Sinh'}},
+{id:'v10_voidghost',n:'Void Phantom',vi:'Bóng Ma Hư Không',img:'assets/bosses/v10/v10_voidghost.png',arena:'leg',el:'dark',rarity:'legendary',lv:27,hp:340,def:4,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'void',n:'Hư Không',desc:'P2: ẩn IPA trong câu hỏi trắc nghiệm. P3: tuyệt kỹ Hư Không — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:250,gems:6,item:'Void Shard',title:'Kẻ Nhìn Xuyên Bóng Tối'}},
+{id:'v10_godturtle',n:'Divine Tortoise',vi:'Huyền Quy Thần Thú',img:'assets/bosses/v10/v10_godturtle.png',arena:'leg',el:'earth',rarity:'legendary',lv:28,hp:360,def:5,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'mountain',n:'Núi Thần',desc:'P2: phòng thủ tăng thêm (sát thương bạn gây ra giảm thêm 3). P3: tuyệt kỹ Núi Thần — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:270,gems:7,item:'Divine Shell',title:'Phá Núi Thần'}},
+{id:'v10_ninetails',n:'Nine-Tailed Fox',vi:'Cửu Vĩ Ma Ảnh',img:'assets/bosses/v10/v10_ninetails.png',arena:'leg',el:'dark',rarity:'legendary',lv:29,hp:380,def:4,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'illusion',n:'Ảo Ảnh',desc:'P2: đáp án bị xáo trộn thêm một lần nữa. P3: tuyệt kỹ Ảo Ảnh — trả lời sai mất 2 tim.'},unlock:{type:'prev'},reward:{xp:290,gems:7,item:'Nine Tails',title:'Người Thuần Hồ Ly'}},
+{id:'v10_ancienttree',n:'Ancient Tree God',vi:'Cổ Thụ Thần Mộc',img:'assets/bosses/v10/v10_ancienttree.png',arena:'leg',el:'nature',rarity:'mythic',lv:30,hp:420,def:5,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'worldtree',n:'Cội Nguồn',desc:'P2: boss hồi 12 HP sau mỗi 3 câu hỏi. P3: tuyệt kỹ Cội Nguồn — trả lời sai mất 2 tim, đồng hồ 8 giây / câu.'},unlock:{type:'prev'},reward:{xp:320,gems:8,item:'World Seed',title:'Chúa Tể Rừng Xanh'}}
+];
+
+/* ---------- THE 10 ORIGINAL V15 BOSSES (display-only copy for the Collection) ----------
+   Fights for these still run in v15.js untouched. This copy only lets the
+   Collection show all 40 bosses in one place. Win state is read live from
+   S.v7.en15.bosses via __v15.en15(). */
+window.__V18_BOSSES.old = [
+{id:'slime',n:'Vocabulary Slime',vi:'Nhớt từ vựng',img:'assets/bosses/dokkaebi.png',arena:'old',el:'nature',rarity:'common',lv:1,hp:60,def:0,mode:'mc',diff:'A1',lang:'en',lib:'',skill:{id:'none',n:'Làm quen',desc:'Không có kỹ năng đặc biệt — boss làm quen.'},reward:{xp:40,gems:1,item:'Slime Badge'}},
+{id:'goblin',n:'Spelling Goblin',vi:'Yêu tinh chính tả',img:'assets/bosses/gangsi.png',arena:'old',el:'dark',rarity:'common',lv:2,hp:70,def:0,mode:'type',diff:'A1',lang:'en',lib:'',skill:{id:'timer',n:'Đồng Hồ Cát',desc:'Đồng hồ 12 giây / câu — hết giờ tính là sai.'},reward:{xp:50,gems:1,item:'Goblin Hat'}},
+{id:'dragon',n:'Grammar Dragon',vi:'Rồng ngữ pháp',img:'assets/bosses/gongnyong.png',arena:'old',el:'fire',rarity:'common',lv:3,hp:90,def:0,mode:'grammar',diff:'A2',lang:'en',lib:'',skill:{id:'enrage_timer',n:'Nộ Long',desc:'Đồng hồ 10 giây / câu khi HP dưới 50%.'},reward:{xp:60,gems:2,item:'Dragon Scale'}},
+{id:'ghost',n:'Listening Ghost',vi:'Ma nghe hiểu',img:'assets/bosses/gwisin.png',arena:'old',el:'light',rarity:'rare',lv:4,hp:80,def:0,mode:'listen',diff:'A2',lang:'en',lib:'',skill:{id:'one_listen',n:'Tiếng Vang',desc:'Chỉ được nghe 1 lần duy nhất mỗi câu.'},reward:{xp:60,gems:2,item:'Ghost Lantern'}},
+{id:'spider',n:'Sentence Spider',vi:'Nhện xếp câu',img:'assets/bosses/f4_treant.png',arena:'old',el:'dark',rarity:'rare',lv:5,hp:90,def:0,mode:'builder',diff:'A2',lang:'en',lib:'',skill:{id:'shuffle',n:'Mạng Nhện',desc:'Câu bị xáo trộn hoàn toàn — chọn câu đúng trong 4 đáp án.'},reward:{xp:60,gems:2,item:'Spider Silk'}},
+{id:'owl',n:'Reading Owl',vi:'Cú đọc hiểu',img:'assets/bosses/astral_raven.png',arena:'old',el:'light',rarity:'rare',lv:6,hp:100,def:0,mode:'read',diff:'B1',lang:'en',lib:'',skill:{id:'read2',n:'Mắt Cú',desc:'Đọc đoạn văn rồi trả lời 2 câu hỏi liên tiếp.'},reward:{xp:70,gems:2,item:'Owl Feather'}},
+{id:'tiger',n:'Speed Tiger',vi:'Hổ tốc độ',img:'assets/bosses/thunder_tiger.png',arena:'old',el:'thunder',rarity:'epic',lv:7,hp:100,def:0,mode:'speed',diff:'B1',lang:'en',lib:'',skill:{id:'speed',n:'Tốc Độ Sấm Sét',desc:'Đồng hồ 8 giây / câu, sát thương của bạn x1.5.'},reward:{xp:70,gems:2,item:'Tiger Claw'}},
+{id:'wizard',n:'Pronunciation Wizard',vi:'Phù thủy phát âm',img:'assets/bosses/yong.png',arena:'old',el:'light',rarity:'epic',lv:8,hp:110,def:0,mode:'speak',diff:'B1',lang:'en',lib:'',skill:{id:'speak',n:'Giọng Thần',desc:'Nói đúng từ để gây sát thương. Không có micro? Dùng chế độ nghe-chọn thay thế.'},reward:{xp:80,gems:3,item:'Wizard Wand'}},
+{id:'dictionary',n:'Dark Dictionary',vi:'Từ điển bóng tối',img:'assets/bosses/crystal_beetle_king.png',arena:'old',el:'dark',rarity:'epic',lv:9,hp:130,def:0,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'mixed_hard',n:'Trang Tối',desc:'Câu hỏi trộn mọi kỹ năng, độ khó tăng dần.'},reward:{xp:90,gems:3,item:'Dark Page'}},
+{id:'king',n:'English King',vi:'Vua tiếng Anh',img:'assets/bosses/coral_queen.png',arena:'old',el:'light',rarity:'legendary',lv:10,hp:160,def:0,mode:'mixed',diff:'B2',lang:'en',lib:'',skill:{id:'final',n:'Vương Miện',desc:'Boss cuối: trộn mọi kỹ năng + đồng hồ 12 giây. Cần thắng 9 boss trước.'},reward:{xp:150,gems:5,item:'English Crown'}}
+];
+window.__V18_BOSSES.all = function(){
+  return window.__V18_BOSSES.old.concat(
+    window.__V18_BOSSES.en, window.__V18_BOSSES.el, window.__V18_BOSSES.leg);
+};
+window.__V18_BOSSES.byId = function(id){
+  var all = window.__V18_BOSSES.all();
+  for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
+  return null;
+};
+
+</script>
+<script id="v18js">
+/* ===== V18 — 30 NEW BOSSES (V10, additive layer) =====
+   Built ON TOP of V9. It never edits V6/V14/V15/V16/V17 logic — the only
+   touch points in v15.js are three surgical, guarded hooks (see
+   CHANGED_FILES.md): a "collection" hub tab, the bosses tab appending
+   __v18.arenasHTML(), and version '10.0.0'. The 10 original V15 bosses
+   still fight in v15.js untouched; V18 only reads their win state
+   (S.v7.en15.bosses) for arena unlocks and the Collection.
+
+   New state (new key, migration-safe): S.v7.en18 = {bosses:{}, stones:{},
+   titles:[], koStats:{right:0,wrong:0}, created}. First-win rewards are
+   once-only; replay wins give +10 XP practice reward.
+   Shared wallet: XP via __v15.gain15(), gems via S.v7.gems — same as V15.
+   EN word SRS: mark18() mirrors V15 mark15() exactly (box/right/wrong/
+   review/due/intv, 10-minute anti-farm XP rule) so boss fights feed the
+   same SRS boxes. KO answers only touch en18.koStats — the Korean deck
+   (S.cards) is never modified by V18.
+*/
+(function(){
+'use strict';
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function V15(){return window.__v15||null}
+function B18(){return window.__V18_BOSSES||{}}
+function arenaMeta(id){var a=(B18().arenas||[]);for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];return null}
+function bossById(id){return (B18().byId?B18().byId(id):null)}
+function newBosses(){var d=B18();return (d.en||[]).concat(d.el||[],d.leg||[])}
+function v19Bosses(){return (window.__V19_DATA&&__V19_DATA.bosses)||[]}
+function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses())}
+
+/* ---------- V18 state (new key) ---------- */
+function en18(){
+  try{S.v7=S.v7||{}}catch(e){return {}}
+  var e=S.v7.en18;
+  if(!e){e=S.v7.en18={bosses:{},stones:{},titles:[],koStats:{right:0,wrong:0},created:Date.now()};}
+  e.bosses=e.bosses||{};e.stones=e.stones||{};e.titles=e.titles||[];
+  e.koStats=e.koStats||{right:0,wrong:0};
+  return e;
+}
+function save18(){var v=V15();if(v)v.save15()}
+function gain18(n){var v=V15();if(v)v.gain15(n)}
+function pop18(t){var v=V15();if(v)v.pop15(t)}
+
+/* ---------- wins / unlocks ---------- */
+function oldWins(){try{var e=V15().en15().bosses||{};var n=0;for(var k in e)if(e[k]&&e[k].win)n++;return n}catch(err){return 0}}
+function arenaWins(a){var e=en18(),list=(B18()[a]||[]),n=0;list.forEach(function(b){if(e.bosses[b.id]&&e.bosses[b.id].win)n++});return n}
+function totalWins(){return oldWins()+arenaWins('en')+arenaWins('el')+arenaWins('leg')}
+function arenaOpen(a){
+  if(a==='en')return true;
+  if(a==='el')return totalWins()>=5;
+  if(a==='leg')return arenaWins('el')>=5;
+  return false;
+}
+function arenaNeedText(a){
+  if(a==='el')return 'Cần thắng tổng cộng 5 boss ('+totalWins()+'/5).';
+  if(a==='leg')return 'Cần thắng 5 boss nguyên tố ('+arenaWins('el')+'/5).';
+  return '';
+}
+function bossUnlocked(b){
+  if(b.zone){var v19b=window.__v19;return v19b?v19b.bossUnlocked(b.id):false}
+  if(!arenaOpen(b.arena))return false;
+  var list=B18()[b.arena]||[],i=list.indexOf(b);
+  if(i<=0)return true;
+  var prev=list[i-1];
+  return !!(en18().bosses[prev.id]&&en18().bosses[prev.id].win);
+}
+function isWon(b){
+  if(b.zone){var v19=window.__v19;return v19?v19.isWonAny(b.id):false}
+  if(b.arena==='old'){try{var e=V15().en15().bosses||{};return !!(e[b.id]&&e[b.id].win)}catch(err){return false}}
+  return !!(en18().bosses[b.id]&&en18().bosses[b.id].win);
+}
+function elChip(b){
+  var el=(B18().elements||{})[b.el]||((window.__V19_DATA||{}).elements||{})[b.el];if(!el)return '';
+  return '<span class="v18chip" style="--ec:'+(el.c||el.color)+'">'+el.ic+' '+esc(el.n)+'</span>';
+}
+function rarChip(b){
+  var r=((B18().rarities||{})[b.rarity])||(((window.__V19_DATA||{}).rarities||{})[b.rarity])||{n:b.rarity,c:'#999'};
+  return '<span class="v18chip rar-'+b.rarity+'" style="--ec:'+(r.c||r.color)+'">'+esc(r.n)+'</span>';
+}
+
+/* ---------- arenas section (appended to the V15 bosses tab) ---------- */
+function arenasHTML(){
+  var h='<div class="v18arenas"><h3>⚔️ Đấu Trường Mới — 30 boss (V10)</h3>'
+  +'<p class="mute">Ba đấu trường mới với 30 boss từ 3 bộ sưu tập bạn gửi. Boss cũ vẫn ở trên — đánh thắng boss để mở khóa đấu trường tiếp theo. Phần thưởng lần đầu chỉ nhận một lần; đánh lại chỉ được +10 XP luyện tập.</p>'
+  +'<div class="v18arena-cards">';
+  (B18().arenas||[]).forEach(function(a){
+    var wins=arenaWins(a.id),open=arenaOpen(a.id);
+    h+='<div class="v18arena" style="--ac:'+a.color+'"><b>'+a.icon+' '+esc(a.n)+'</b><span>'+esc(a.vi)+'</span><p>'+esc(a.desc)+'</p><p class="mute">'+esc(a.need)+'</p><span>Đã thắng: '+wins+'/10</span>'
+    +(open?'<button class="btn pri" onclick="__v18.openArena(\''+a.id+'\')">Vào đấu trường</button>':'<em>🔒 '+esc(arenaNeedText(a.id))+'</em>')
+    +'</div>';
+  });
+  h+='</div><div class="acts"><button class="btn" onclick="__v18.openCollection()">🏆 Xem Bộ Sưu Tập Boss (40 boss)</button></div><div id="v18fight"></div></div>';
+  return h;
+}
+function openCollection(){var v=V15();if(v)v.tab('collection')}
+function bossCardHTML(b){
+  var won=isWon(b),un=bossUnlocked(b);
+  var h='<div class="v18boss '+(won?'done':'')+'"><img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<b>'+b.lv+'. '+esc(b.vi)+'</b><span class="mute">'+esc(b.n)+'</span>'
+  +'<span>'+elChip(b)+rarChip(b)+' · HP '+b.hp+' · Lv '+b.lv+'</span>'
+  +'<span>'+esc(b.skill.n)+' — '+esc(b.skill.desc)+'</span>'
+  +'<span>Thưởng lần đầu: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)
+  +(b.reward.stone?', '+esc(b.reward.stone):'')+(b.reward.title?', danh hiệu “'+esc(b.reward.title)+'”':'')+'</span>'
+  +(won?'<em>Đã thắng ✓ — '+esc(b.reward.item)+' đã nhận</em>'
+    :(un?'<button class="btn pri" onclick="__v18.fight(\''+b.id+'\')">Khiêu chiến</button>'
+    :'<em>🔒 '+(arenaOpen(b.arena)?'Thắng boss trước để mở khóa':'Chưa mở đấu trường')+'</em>'))
+  +'</div>';
+  return h;
+}
+function openArena(a){
+  var host=$('#v15body');if(!host)return;
+  var meta=arenaMeta(a);if(!meta)return;
+  var list=B18()[a]||[];
+  var h='<div class="v18arena-view"><button class="btn sm" onclick="__v15.tab(\'bosses\')">← Quay lại Bosses</button>'
+  +'<h3>'+meta.icon+' '+esc(meta.n)+'</h3><p class="mute">'+esc(meta.desc)+'</p>'
+  +'<p class="mute">'+esc(meta.need)+' · Đã thắng '+arenaWins(a)+'/10</p>';
+  if(a==='el')h+='<p class="mute">Mỗi trận: chọn học 🇬🇧 tiếng Anh hoặc 🇰🇷 tiếng Hàn trước khi đánh. Câu hỏi tiếng Hàn lấy từ chính bộ thẻ tiếng Hàn của bạn.</p>';
+  if(a==='leg')h+='<p class="mute">Mỗi boss có 3 giai đoạn: P1 khởi đầu, P2 cường hóa khi HP còn 50%, P3 tuyệt kỹ khi HP còn 20%. Độ khó câu hỏi tăng theo số từ bạn đã thuộc.</p>';
+  h+='<div class="v18bosses">'+list.map(bossCardHTML).join('')+'</div><div id="v18fight"></div></div>';
+  host.innerHTML=h;
+  var f=$('#v18fight');if(f)f.scrollIntoView&&f.scrollIntoView();
+}
+
+/* ---------- Collection (hub tab) ---------- */
+var CF={q:'',arena:'all',el:'all',rar:'all',st:'all',detail:null};
+function collFiltered(){
+  var q=(CF.q||'').toLowerCase();
+  return allBosses().filter(function(b){
+    if(CF.arena==='map'){if(!b.zone)return false}
+    else if(CF.arena!=='all'&&b.arena!==CF.arena)return false;
+    if(CF.el!=='all'&&b.el!==CF.el)return false;
+    if(CF.rar!=='all'&&b.rarity!==CF.rar)return false;
+    var won=isWon(b),un=bossUnlocked(b);
+    if(CF.st==='won'&&!won)return false;
+    if(CF.st==='open'&&!(un&&!won))return false;
+    if(CF.st==='locked'&&un)return false;
+    var skn=b.skill?b.skill.n:(b.skills?b.skills.elem.n+' '+b.skills.ult.n:'');
+    if(q&&(b.vi.toLowerCase().indexOf(q)<0&&b.n.toLowerCase().indexOf(q)<0&&skn.toLowerCase().indexOf(q)<0))return false;
+    return true;
+  });
+}
+function arenaName(a){
+  if(a==='old')return 'Boss gốc V7';
+  if(a&&a[0]==='z'&&window.__V19_DATA){var z=__V19_DATA.zoneById(a);return z?('🗺️ '+z.vi):a}
+  var m=arenaMeta(a);return m?m.vi:a;
+}
+function collCardHTML(b){
+  var won=isWon(b),un=bossUnlocked(b);
+  return '<div class="v18coll '+(won?'done':'')+(!un?'locked':'')+'" onclick="__v18.collDetail(\''+b.id+'\')">'
+  +'<img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<b>'+esc(b.vi)+'</b><span class="mute">'+esc(b.n)+'</span>'
+  +'<span>'+elChip(b)+rarChip(b)+'</span>'
+  +'<span class="mute">'+esc(b.zone?arenaName(b.zone):arenaName(b.arena))+' · Lv '+b.lv+' · HP '+b.hp+'</span>'
+  +'<em>'+(won?'✅ Đã thắng':(un?'⚔️ Có thể đánh':'🔒 Đang khóa'))+'</em></div>';
+}
+function collGridHTML(){
+  var list=collFiltered();
+  var won=allBosses().filter(isWon).length,total=allBosses().length;
+  var h='<div class="v18coll-head"><b>'+won+'/'+total+' boss đã thắng ('+Math.round(won/total*100)+'%)</b>'
+  +'<div class="v18hpbar"><i style="width:'+(won/total*100)+'%"></i></div></div>'
+  +'<div class="v18colls">'+(list.length?list.map(collCardHTML).join(''):'<p class="mute">Không có boss nào khớp bộ lọc.</p>')+'</div>';
+  return h;
+}
+function collectionHTML(){
+  var els=B18().elements||{},rars=B18().rarities||{};
+  var tot19=allBosses().length;
+  var h='<h3>🏆 Bộ Sưu Tập Boss — '+tot19+' boss</h3>'
+  +'<p class="mute">Boss gốc (10), 30 boss đấu trường (V10)'+(tot19>40?' và 30 boss bản đồ (V11)':'')+'. Bấm vào một boss để xem chi tiết. Phần thưởng lần đầu chỉ nhận một lần.</p>'
+  +'<div class="v18filters"><input id="v18coll-q" type="search" placeholder="Tìm boss…" value="'+esc(CF.q)+'" oninput="__v18.collSearch(this.value)">'
+  +'<select onchange="__v18.collSet(\'arena\',this.value)">'
+  +'<option value="all">Tất cả đấu trường</option>'
+  +'<option value="old"'+(CF.arena==='old'?' selected':'')+'>Boss gốc V7</option>'
+  +'<option value="map"'+(CF.arena==='map'?' selected':'')+'>🗺️ Bản Đồ Boss (V11)</option>'
+  +(B18().arenas||[]).map(function(a){return '<option value="'+a.id+'"'+(CF.arena===a.id?' selected':'')+'>'+esc(a.vi)+'</option>'}).join('')
+  +'</select>'
+  +'<select onchange="__v18.collSet(\'el\',this.value)"><option value="all">Tất cả hệ</option>'
+  +Object.keys(els).map(function(k){return '<option value="'+k+'"'+(CF.el===k?' selected':'')+'>'+els[k].ic+' '+esc(els[k].n)+'</option>'}).join('')
+  +'</select>'
+  +'<select onchange="__v18.collSet(\'rar\',this.value)"><option value="all">Tất cả độ hiếm</option>'
+  +Object.keys(rars).map(function(k){return '<option value="'+k+'"'+(CF.rar===k?' selected':'')+'>'+esc(rars[k].n)+'</option>'}).join('')
+  +'</select>'
+  +'<select onchange="__v18.collSet(\'st\',this.value)"><option value="all">Tất cả trạng thái</option>'
+  +'<option value="won"'+(CF.st==='won'?' selected':'')+'>Đã thắng</option>'
+  +'<option value="open"'+(CF.st==='open'?' selected':'')+'>Có thể đánh</option>'
+  +'<option value="locked"'+(CF.st==='locked'?' selected':'')+'>Đang khóa</option></select></div>'
+  +'<div id="v18collgrid">'+collGridHTML()+'</div><div id="v18colldetail"></div>';
+  return h;
+}
+function collApply(){var g=$('#v18collgrid');if(g)g.innerHTML=collGridHTML()}
+function collSearch(q){CF.q=q;collApply()}
+function collSet(k,v){CF[k]=v;var v15=V15();if(v15)v15.renderTab()}
+function collDetail(id){
+  CF.detail=id;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  var host=$('#v18colldetail');if(!host)return;
+  var won=isWon(b),un=bossUnlocked(b);
+  var e=en18();
+  var rec=b.arena==='old'?null:(e.bosses[b.id]||null);
+  var h='<div class="v18detail"><button class="v15x" onclick="__v18.collCloseDetail()" aria-label="Đóng">✕</button>'
+  +'<img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<div><h3>'+esc(b.vi)+' <span class="mute">'+esc(b.n)+'</span></h3>'
+  +'<p>'+elChip(b)+rarChip(b)+' · Lv '+b.lv+' · '+esc(b.zone?arenaName(b.zone):arenaName(b.arena))+'</p>'
+  +'<p>HP '+b.hp+' · Phòng thủ '+b.def+' · Chế độ: '+esc(b.mode)+' · Độ khó: '+esc(b.diff)+' · Ngôn ngữ: '+(b.lang==='both'?'Anh / Hàn (chọn trước trận)':(b.lang==='ko'?'Tiếng Hàn':'Tiếng Anh'))+'</p>'
+  +'<p><b>Kỹ năng:</b> '+(b.skill?esc(b.skill.n)+' — '+esc(b.skill.desc):esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n))+'</p>'
+  +'<p><b>Thưởng lần đầu:</b> +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)
+  +(b.reward.stone?', '+esc(b.reward.stone):'')+(b.reward.title?', danh hiệu “'+esc(b.reward.title)+'”':'')+'</p>'
+  +'<p><b>Trạng thái:</b> '+(won?'✅ Đã thắng'+(rec&&rec.wins>1?' ('+rec.wins+' lần)':''):(un?'⚔️ Có thể khiêu chiến':'🔒 Đang khóa — '+(b.arena==='old'?'thắng boss trước trong tab Bosses':(b.zone?'thắng boss trước trên bản đồ để mở khóa':esc(arenaNeedText(b.arena)||'thắng boss trước để mở khóa')))))+'</p>'
+  +(won?'':'<div class="acts">'+(un?'<button class="btn pri" onclick="__v18.challenge(\''+b.id+'\')">Khiêu chiến</button>':'')+'</div>')
+  +'</div></div>';
+  host.innerHTML=h;
+  host.scrollIntoView&&host.scrollIntoView();
+}
+function collCloseDetail(){var host=$('#v18colldetail');if(host)host.innerHTML='';CF.detail=null}
+function challenge(id){
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  if(b.zone){var v19=window.__v19;if(v19){v19.openMap();v19.fight(id)}return}
+  if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
+  openArena(b.arena);fight(id);
+}
+
+/* ---------- question pools ---------- */
+function distractorsEN(w,n){
+  var v=V15();var words=(v&&v.words)||[];
+  var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  return shuffle(pool).slice(0,n);
+}
+function legDiff(){var m=0;try{m=V15().counts().mastered}catch(e){}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
+function wordPool(b){
+  var v=V15();var words=(v&&v.words)||[];
+  var list=words.filter(function(w){
+    if(b.lib==='a1a2'&&(!w.lib||w.lib.indexOf('a1a2')<0))return false;
+    if(b.lib==='oxford'&&(!w.lib||w.lib.indexOf('oxford')<0))return false;
+    if(b.arena==='leg'){var lv=legDiff();if(lv.indexOf(w.lv)<0)return false}
+    else if(b.diff&&w.lv!==b.diff)return false;
+    return true;
+  });
+  if(list.length<12)list=words.slice();
+  return shuffle(list);
+}
+function grammarPool(b){
+  var g=(window.__V15_DATA&&__V15_DATA.grammar)||[];
+  var list=g.filter(function(x){return b.arena==='leg'?legDiff().indexOf(x.lv)>=0:x.lv===b.diff});
+  return shuffle(list.length?list:g);
+}
+function readPool(){return shuffle((window.__V15_DATA&&__V15_DATA.reading)||[])}
+function builderPool(){return shuffle((window.__V15_DATA&&__V15_DATA.builder)||[])}
+function koPool(){
+  var cards=[];try{cards=(S&&S.cards)||[]}catch(e){}
+  cards=cards.filter(function(c){return c&&c.h&&c.m});
+  return shuffle(cards);
+}
+function distractorsKO(c,n){
+  var cards=[];try{cards=(S&&S.cards)||[]}catch(e){}
+  var pool=cards.filter(function(x){return x.id!==c.id&&x.h&&x.m});
+  return shuffle(pool).slice(0,n);
+}
+
+/* ---------- SRS marking (mirrors V15 mark15; no farm watering — V15-internal) ---------- */
+function dayNo18(){return Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)}
+function todayStr18(){return new Date().toDateString()}
+function mark18(ok,w){
+  if(!w)return;
+  var v=V15();if(!v)return;
+  var old=v.enOld(),e=v.en15(),id=w.id,before=old.box[id]||0;
+  old.box=old.box||{};old.right=old.right||{};old.wrong=old.wrong||{};
+  old.review=old.review||[];old.xpAt=old.xpAt||{};
+  if(ok){
+    old.right[id]=(old.right[id]||0)+1;
+    old.streak=(old.streak||0)+1;
+    old.box[id]=Math.min(5,before+1);
+    var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
+    var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
+    e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
+  }else{
+    old.wrong[id]=(old.wrong[id]||0)+1;
+    old.streak=0;old.box[id]=0;
+    if(old.review.indexOf(id)<0)old.review.push(id);
+    e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+  }
+  var xp=0;
+  if(ok&&old.box[id]>before){
+    var last=old.xpAt[id]||0;
+    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  }
+  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+  if(xp>0)gain18(xp);
+  var dn=dayNo18();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+  if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
+  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
+  save18();
+}
+function markKO(ok){
+  var e=en18();
+  if(ok)e.koStats.right++;else e.koStats.wrong++;
+  save18();
+}
+
+/* ---------- fight engine ---------- */
+var F=null;
+function fight(id,lang){
+  var b=bossById(id);if(!b)return;
+  if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
+  if(!bossUnlocked(b)){pop18('Boss này chưa mở khóa.');return}
+  if(!document.querySelector('#v18fight'))openArena(b.arena);
+  if(b.lang==='both'&&!lang){showLangPick(b);return}
+  startFight(b,lang||'en');
+}
+function showLangPick(b){
+  var host=$('#v18fight');if(!host)return;
+  host.innerHTML='<div class="v18fight"><h3>'+esc(b.vi)+'</h3><p class="mute">Chọn ngôn ngữ cho trận này — câu hỏi lấy từ '+(b.lang==='both'?'bộ từ của ngôn ngữ đó':'')+':</p><div class="acts"><button class="btn pri" onclick="__v18.fight(\''+b.id+'\',\'en\')">🇬🇧 Tiếng Anh</button><button class="btn pri" onclick="__v18.fight(\''+b.id+'\',\'ko\')">🇰🇷 Tiếng Hàn</button></div><div class="acts"><button class="btn" onclick="__v18.close()">Đóng</button></div></div>';
+  host.scrollIntoView&&host.scrollIntoView();
+}
+function startFight(b,lang){
+  var hearts=b.arena==='leg'?5:(b.arena==='el'?4:3);
+  F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:hearts,maxHearts:hearts,
+    combo:0,score:0,q:0,qCount:0,wrongCount:0,phase:1,
+    shield:(b.skill.id==='shield'?30:0),cleansed:false,reborn:false,
+    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
+    anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,
+    timer:null,left:0,lastDmg:0,crit:false};
+  nextQ();renderFight();
+}
+function timerFor(){
+  var b=F.boss,sk=b.skill.id;
+  if(b.id==='v10_goblin')return 12;
+  if(b.id==='v10_dragon'&&F.hp<=F.maxHp/2)return 10;
+  if(b.id==='v10_tiger')return 8;
+  if(b.id==='v10_king')return 12;
+  if(sk==='freeze')return 15;
+  if(sk==='gale')return 8;
+  if(b.arena==='leg'){
+    if(F.phase===2&&(sk==='inferno'||sk==='blizzard'))return 10;
+    if(F.phase===3&&(sk==='storm'||sk==='worldtree'))return 8;
+  }
+  return 0;
+}
+function nextQ(){
+  if(!F)return;
+  var b=F.boss;
+  var mode=b.mode==='mixed'?['mc','grammar','listen','builder'][F.q%4]:b.mode;
+  if(b.mode==='speed')mode='mc';
+  /* KO fights: grammar/builder/reading/speaking have no Korean equivalent
+     (they test English grammar, English sentences, English passages) —
+     map them to Korean multiple-choice so a KO fight stays Korean. */
+  if(F.lang==='ko'){
+    if(b.mode==='mixed')mode=['mc','type','listen','mc'][F.q%4];
+    else if(mode==='grammar'||mode==='builder'||mode==='read'||mode==='speak')mode='mc';
+  }
+  F.qmode=mode;
+  F.hideIpa=(b.skill.id==='veil')||(b.arena==='leg'&&F.phase>=2&&b.skill.id==='void');
+  if(!F.pools)F.pools={grammar:grammarPool(b),read:readPool(),builder:builderPool(),words:wordPool(b),ko:koPool()};
+  var P=F.pools;
+  F.qCount++;
+  /* KO questions (elemental arena, Korean chosen) */
+  if(F.lang==='ko'&&(mode==='mc'||mode==='type'||mode==='listen')){
+    if(P.ko.length>=8){
+      var c=P.ko[F.q%P.ko.length];
+      F.cur={k:c,opts:shuffle([c].concat(distractorsKO(c,3))),ko:true};
+      F.answered=null;F.ok=null;startTimer();return;
+    }
+  }
+  if(mode==='grammar'){F.cur={g:P.grammar[F.q%P.grammar.length]}}
+  else if(mode==='read'){var p=P.read[F.q%P.read.length];F.cur={p:p,q:p.qs[F.q%p.qs.length]}}
+  else if(mode==='builder'){var s=P.builder[F.q%P.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');F.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
+  else if(mode==='speak'){var w=P.words[F.q%P.words.length];F.cur={w:w,opts:shuffle([w].concat(distractorsEN(w,3)))}}
+  else{var w2=P.words[F.q%P.words.length];var opts=shuffle([w2].concat(distractorsEN(w2,3)));F.cur={w:w2,opts:opts,optsVi:shuffle([w2].concat(distractorsEN(w2,3)))}}
+  F.answered=null;F.ok=null;
+  startTimer();
+}
+function startTimer(){
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  var limit=timerFor();
+  if(!limit){F.left=0;return}
+  F.left=limit;
+  F.timer=setInterval(function(){
+    if(!F)return;
+    F.left--;
+    var t=$('#v18boss-t');if(t)t.textContent=F.left+'s';
+    if(F.left<=0){clearInterval(F.timer);F.timer=null;answer(false,true)}
+  },1000);
+}
+function healBoss(n,msg){
+  if(!F||F.over)return;
+  F.hp=Math.min(F.maxHp,F.hp+n);
+  F.banner=(F.banner?F.banner+' ':'')+msg;
+}
+function checkPhase(){
+  var b=F.boss;if(b.arena!=='leg'||F.over)return;
+  if(F.phase===1&&F.hp<=F.maxHp/2){
+    F.phase=2;F.anim='special';
+    F.banner='⚡ '+b.vi+' cường hóa! Giai đoạn 2 — '+b.skill.n+'!';
+    if(b.skill.id==='rebirth'){healBoss(20,'🔥 Tái Sinh: phượng hoàng hồi 20 HP!');F.reborn=true}
+    if(b.skill.id==='quake'){F.shield=40;F.banner+=' Lá chắn 40 HP!'}
+  }
+  if(F.phase===2&&F.hp<=F.maxHp*0.2){
+    F.phase=3;F.anim='special';
+    F.banner='💥 TUYỆT KỸ: '+b.skill.n+'! Giai đoạn 3 — trả lời sai mất 2 tim!';
+  }
+}
+function answer(ok,timeout){
+  if(!F||F.answered!==null)return;
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  F.answered=timeout?'timeout':1;F.ok=ok;
+  var b=F.boss;
+  if(ok){
+    F.combo++;F.score++;
+    var crit=(F.combo%5===0)||(Math.random()<0.1);
+    var dmg=12+F.combo*2;
+    if(b.id==='v10_tiger')dmg=Math.round(dmg*1.5);
+    if(b.skill.id==='gale')dmg=Math.round(dmg*1.25);
+    if(F.phase===3&&b.arena==='leg')dmg=Math.round(dmg*1.5);
+    if(crit)dmg*=2;
+    dmg=Math.max(2,dmg-(b.def||0));
+    if(b.arena==='leg'&&F.phase===2&&b.skill.id==='mountain')dmg=Math.max(2,dmg-3);
+    var dealt=dmg;
+    if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
+    F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
+    if(F.cur&&F.cur.w)mark18(true,F.cur.w);
+    if(F.cur&&F.cur.k)markKO(true);
+    pop18((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
+  }else{
+    var cost=1;
+    if(b.arena==='leg'&&F.phase===3)cost=2;
+    else if(b.arena==='leg'&&F.phase===2&&b.skill.id==='storm')cost=2;
+    if(b.skill.id==='cleanse'&&!F.cleansed){cost=0;F.cleansed=true;F.banner='✨ Thanh Tẩy: lần sai đầu tiên không mất tim!'}
+    F.combo=0;F.hearts-=cost;F.anim='attack';F.wrongCount++;
+    if(F.cur&&F.cur.w)mark18(false,F.cur.w);
+    if(F.cur&&F.cur.k)markKO(false);
+    if(b.skill.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
+    if(b.skill.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
+  }
+  var qc=F.qCount;
+  if(b.skill.id==='heal'&&qc>0&&qc%4===0)healBoss(6,'🌸 Hoa Anh Đào: boss hồi 6 HP!');
+  if(b.skill.id==='bloom'&&qc>0&&qc%3===0)healBoss(8,'🌿 Hoa Rừng: boss hồi 8 HP!');
+  if(b.arena==='leg'&&F.phase===2&&b.skill.id==='tide'&&qc>0&&qc%3===0)healBoss(10,'🌊 Thủy Triều: boss hồi 10 HP!');
+  if(b.arena==='leg'&&F.phase===2&&b.skill.id==='worldtree'&&qc>0&&qc%3===0)healBoss(12,'🌳 Cội Nguồn: boss hồi 12 HP!');
+  checkPhase();
+  if(F.hp<=0){F.hp=0;F.over='win';F.anim='defeat';winReward()}
+  else if(F.hearts<=0){F.hearts=0;F.over='lose';F.anim='attack'}
+  save18();renderFight();
+  if(F&&!F.over){var f=F;setTimeout(function(){if(F===f&&!F.over){F.anim='idle';var h=$('#v18fight');if(h)renderFight()}},450)}
+}
+function winReward(){
+  var b=F.boss,e=en18();
+  var rec=e.bosses[b.id]||{};
+  if(rec.win){
+    rec.wins=(rec.wins||1)+1;e.bosses[b.id]=rec;
+    gain18(10);
+    F.rewardNote='Đánh lại để luyện tập: +10 XP. Phần thưởng lần đầu chỉ nhận một lần.';
+  }else{
+    e.bosses[b.id]={win:1,wins:1,at:Date.now(),item:b.reward.item};
+    gain18(b.reward.xp);
+    try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
+    if(b.reward.stone)e.stones[b.reward.stone]=(e.stones[b.reward.stone]||0)+1;
+    if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
+    F.rewardNote='Phần thưởng lần đầu: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
+      +(b.reward.stone?', '+b.reward.stone:'')+(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
+    F.firstWin=true;
+  }
+  save18();
+}
+function pick(i){
+  if(!F||F.answered!==null||F.over)return;
+  var mode=F.qmode,ok=false;
+  if(mode==='grammar')ok=(i===F.cur.g.a);
+  else if(mode==='read')ok=(i===F.cur.q.a);
+  else if(mode==='builder')ok=(F.cur.opts[i]===F.cur.s.s);
+  else if(mode==='speak')ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.w.id);
+  else if(F.cur.ko)ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.k.id);
+  else if(mode==='type'||mode==='listen')ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.w.id);
+  else ok=(!!F.cur.optsVi[i]&&F.cur.optsVi[i].id===F.cur.w.id);
+  answer(ok,false);
+}
+function next(){
+  if(!F||F.over)return;
+  F.q++;F.banner=null;nextQ();renderFight();
+}
+function close(){
+  if(F&&F.timer)clearInterval(F.timer);
+  var a=F?F.boss.arena:'en';F=null;
+  var host=$('#v18fight');if(host)host.innerHTML='';
+  openArena(a);
+}
+function speakWord(id){
+  var v=V15();if(v)v.speakWord(id);
+}
+function bossSpeak(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR||!F)return;
+  var w=F.cur.w;if(!w)return;
+  var rec=new SR();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=3;
+  try{rec.start()}catch(e){return}
+  rec.onresult=function(ev){
+    var heard='';try{heard=ev.results[0][0].transcript||''}catch(e){}
+    F.heard=heard;
+    var norm=function(s){return (s||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim()};
+    var ok=norm(heard)===norm(w.en)||norm(heard).indexOf(norm(w.en))>=0;
+    answer(ok,false);
+  };
+  rec.onerror=function(){F.heard='(không nghe được)';renderFight()};
+}
+
+/* ---------- fight rendering ---------- */
+function speakKO(text){
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
+}
+function renderFight(){
+  var host=$('#v18fight');if(!host)return;
+  if(!F){host.innerHTML='';return}
+  var b=F.boss;
+  var phaseTxt=b.arena==='leg'?'<span class="v18phase">Giai đoạn '+F.phase+'/3'+(F.phase===1?' — khởi đầu':(F.phase===2?' — cường hóa':' — TUYỆT KỸ'))+'</span>':'';
+  var h='<div class="v18fight '+(F.over==='win'?'win':'')+'">'
+  +'<div class="v18fight-top"><img class="v18boss-img anim-'+F.anim+'" src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<div class="v18fight-info"><b>'+esc(b.vi)+'</b> <span class="mute">'+esc(b.n)+' · Lv '+b.lv+'</span>'
+  +'<div>'+elChip(b)+rarChip(b)+phaseTxt+'</div>'
+  +'<span>'+esc(b.skill.n)+' — '+esc(b.skill.desc)+'</span>'
+  +'<div class="v18hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'
+  +'<div class="v18hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
+  +(F.left?'<div class="mute">Còn <span id="v18boss-t">'+F.left+'s</span></div>':'')
+  +(F.banner?'<div class="v18banner">'+esc(F.banner)+'</div>':'')
+  +'</div></div>';
+  if(F.over){
+    h+='<div class="v18done"><div class="v18done-big">'+(F.over==='win'?'CHIẾN THẮNG!':'Thua rồi…')+'</div>'
+    +'<p>'+(F.over==='win'?'Bạn đã đánh bại '+esc(b.vi)+'! '+esc(F.rewardNote):'Boss còn '+Math.max(0,F.hp)+' HP. Hãy luyện thêm rồi quay lại!')+'</p>'
+    +'<div class="acts"><button class="btn pri" onclick="__v18.fight(\''+b.id+'\''+(b.lang==='both'?',\''+F.lang+'\'':'')+')">Đánh lại</button><button class="btn" onclick="__v18.close()">Đóng</button></div></div>';
+  }else{
+    h+=qHTML();
+  }
+  h+='</div>';
+  host.innerHTML=h;
+}
+function feedback(ex){
+  if(F.answered===null)return '';
+  var h='<div class="v18explain" style="color:var(--'+(F.ok?'ok':'bad')+')">'+(F.ok?'Đòn đánh trúng!':'Boss phản công!')+(ex?' <span class="mute">'+esc(ex)+'</span>':'')+'</div><div class="acts"><button class="btn pri" onclick="__v18.next()">Tiếp tục</button></div>';
+  return h;
+}
+function optBtn(label,i,correct){
+  var cl='';if(F.answered!==null)cl=(correct?'right':(i===F.answered?'wrong':''));
+  return '<button class="v18opt '+cl+'" '+(F.answered!==null?'disabled':'')+' onclick="__v18.pick('+i+')">'+label+'</button>';
+}
+function qHTML(){
+  var c=F.cur,mode=F.qmode;
+  if(c.ko){
+    var k=c.k;
+    if(mode==='listen'){
+      return '<div class="v18qcard"><div class="v18qword">Nghe tiếng Hàn</div><div class="acts"><button class="btn pri" onclick="__v18.speakKO(\''+esc(k.h).replace(/'/g,'\\\'')+'\')">Nghe phát âm</button></div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.h),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+    }
+    if(mode==='type'){
+      return '<div class="v18qcard"><div class="v18qword vi">'+esc(k.m)+'</div><div class="mute">Chọn từ tiếng Hàn đúng</div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.h),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+    }
+    return '<div class="v18qcard"><div class="v18qword">'+esc(k.h)+'</div><div class="mute">'+esc(k.p||'')+' · Chọn nghĩa đúng</div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.m),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='grammar'){
+    var g=c.g;
+    return '<div class="v18qcard"><div class="v18qword small">'+esc(g.q)+'</div></div><div class="v18opts">'+g.o.map(function(o,i){return optBtn(esc(o),i,i===g.a)}).join('')+'</div>'+feedback(g.ex);
+  }
+  if(mode==='read'){
+    var q=c.q;
+    return '<div class="v18passage"><b>'+esc(c.p.title)+'</b><p>'+esc(c.p.text)+'</p></div><div class="v18qcard"><div class="v18qword small">'+esc(q.q)+'</div></div><div class="v18opts">'+q.o.map(function(o,i){return optBtn(esc(o),i,i===q.a)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='builder'){
+    return '<div class="v18qcard"><div class="v18qword small">Chọn câu đúng · Nghĩa: '+esc(c.s.vi)+'</div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o),i,o===c.s.s)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='speak'){
+    var w=c.w,supported=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+    var h='<div class="v18qcard"><div class="v18qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.vi)+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe mẫu</button></div></div>';
+    if(supported){
+      h+='<p class="mute">Bấm “Nói” và đọc to từ trên. Máy sẽ so khớp phát âm của bạn.</p><div class="acts"><button class="btn pri" onclick="__v18.bossSpeak()">Nói</button></div>';
+      if(F.heard)h+='<div class="v18explain">Máy nghe được: “<b>'+esc(F.heard)+'</b>”</div>';
+    }else{
+      h+='<div class="v18warn"><b>Trình duyệt không hỗ trợ nhận dạng giọng nói.</b> Chế độ thay thế: nghe mẫu rồi chọn từ bạn nghe được — không chấm điểm phát âm.</div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w.id)}).join('')+'</div>';
+      F.cur.opts=c.opts;
+    }
+    h+=feedback('');
+    return h;
+  }
+  var w2=c.w;
+  if(mode==='listen'){
+    return '<div class="v18qcard"><div class="v18qword">Nghe</div><div class="acts"><button class="btn pri" onclick="__v15.speakWord(\''+w2.id+'\')">Nghe phát âm (1 lần)</button></div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='type'){
+    return '<div class="v18qcard"><div class="v18qword vi">'+esc(w2.vi)+'</div><div class="mute">Chọn cách viết đúng của từ này</div></div><div class="v18opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  }
+  return '<div class="v18qcard"><div class="v18qword">'+esc(w2.en)+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v18opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+}
+
+/* ---------- test hooks (used by the jsdom suite; harmless in production) ---------- */
+function pickCorrect(){
+  if(!F||F.answered!==null||F.over)return false;
+  var mode=F.qmode,idx=-1;
+  if(mode==='grammar')idx=F.cur.g.a;
+  else if(mode==='read')idx=F.cur.q.a;
+  else if(mode==='builder')idx=F.cur.opts.indexOf(F.cur.s.s);
+  else if(F.cur.ko)idx=F.cur.opts.findIndex(function(o){return o.id===F.cur.k.id});
+  else if(mode==='speak'){answer(true,F.cur.en,F.cur.en);return true;}
+  else if(mode==='type'||mode==='listen')idx=F.cur.opts.findIndex(function(o){return o.id===F.cur.w.id});
+  else idx=F.cur.optsVi.findIndex(function(o){return o.id===F.cur.w.id});
+  if(idx<0)return false;
+  pick(idx);return true;
+}
+function pickWrong(){
+  if(!F||F.answered!==null||F.over)return false;
+  var mode=F.qmode,idx=-1;
+  if(mode==='grammar')idx=(F.cur.g.a+1)%F.cur.g.o.length;
+  else if(mode==='read')idx=(F.cur.q.a+1)%F.cur.q.o.length;
+  else if(mode==='builder')idx=F.cur.opts.findIndex(function(o){return o!==F.cur.s.s});
+  else if(F.cur.ko)idx=F.cur.opts.findIndex(function(o){return o.id!==F.cur.k.id});
+  else if(mode==='speak'){answer(false,'',F.cur.en);return true;}
+  else if(mode==='type'||mode==='listen')idx=F.cur.opts.findIndex(function(o){return o.id!==F.cur.w.id});
+  else idx=F.cur.optsVi.findIndex(function(o){return o.id!==F.cur.w.id});
+  if(idx<0)return false;
+  pick(idx);return true;
+}
+
+window.__v18={
+  arenasHTML:arenasHTML,openArena:openArena,openCollection:openCollection,
+  collectionHTML:collectionHTML,collSearch:collSearch,collSet:collSet,
+  collDetail:collDetail,collCloseDetail:collCloseDetail,challenge:challenge,
+  fight:fight,pick:pick,next:next,close:close,speakWord:speakWord,bossSpeak:bossSpeak,
+  speakKO:speakKO,en18:en18,arenaWins:arenaWins,totalWins:totalWins,
+  oldWins:oldWins,arenaOpen:arenaOpen,bossUnlocked:bossUnlocked,isWon:isWon,
+  get bosses(){return B18()},
+  _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
+    fight:fight,close:close,next:next,en18:en18,legDiff:legDiff},
+  version:'10.0.1'
+};
+})();
+
+</script>
+
+<style id="v19">
+/* ===== V19 — Boss Map + Super Legendary bosses ===== */
+.v19mapwrap{max-width:760px;margin:0 auto}
+.v19langpick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.v19map-head{margin:10px 0 4px}
+.v19hpbar{height:10px;background:#2a2438;border-radius:6px;overflow:hidden;margin-top:4px}
+.v19hpbar i{display:block;height:100%;background:linear-gradient(90deg,#FFD23F,#E8445F);border-radius:6px;transition:width .4s}
+
+/* --- the map: sky, glowing path, floating islands --- */
+.v19map{position:relative;height:1500px;margin:14px 0;border-radius:18px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 30% at 50% 0%,rgba(199,125,255,.28),transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 55%,rgba(79,168,255,.20),transparent 70%),
+    radial-gradient(ellipse 80% 35% at 50% 100%,rgba(232,68,95,.22),transparent 70%),
+    linear-gradient(180deg,#1B1440 0%,#2B1B5E 45%,#3A2A6E 75%,#4A2A4E 100%);}
+.v19mappath{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.v19mappath path{fill:none;stroke:#FFD23F;stroke-width:3;opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(255,210,63,.9));
+  stroke-dasharray:10 6;animation:v19dash 2.4s linear infinite}
+@keyframes v19dash{to{stroke-dashoffset:-32}}
+.v19zone{position:absolute;transform:translateY(-50%);background:none;border:0;padding:0;cursor:pointer;width:150px}
+.v19zone:disabled{cursor:not-allowed}
+.v19zone.v19side-left{left:calc(22% - 75px)}
+.v19zone.v19side-right{left:calc(78% - 75px)}
+.v19zone.v19side-center{left:calc(50% - 75px)}
+.v19zone-island{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:10px 6px 8px;border-radius:16px;
+  background:radial-gradient(ellipse 120% 90% at 50% 0%,var(--zc,#7B61FF) 0%,rgba(20,14,44,.92) 78%);
+  border:2px solid color-mix(in srgb,var(--zc,#7B61FF) 70%,#fff);
+  box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 18px color-mix(in srgb,var(--zc,#7B61FF) 55%,transparent);
+  transition:transform .2s}
+.v19zone:not(:disabled):hover .v19zone-island{transform:translateY(-4px) scale(1.04)}
+.v19zone-island img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))}
+.v19zone-name{font-weight:700;color:#fff;font-size:15px;text-shadow:0 2px 4px rgba(0,0,0,.7)}
+.v19zone-meta{font-size:11px;color:#E8E2FF}
+.v19zone.v19st-locked .v19zone-island{filter:grayscale(.9) brightness(.55);box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.v19zone.v19st-completed .v19zone-island{box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 22px rgba(255,210,63,.8)}
+.v19zone.v19st-mastered .v19zone-island{box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 26px rgba(255,210,63,1);border-color:#FFD23F}
+
+/* --- zone detail --- */
+.v19zdetail{margin:14px 0;padding:14px;border:1px solid #3a2f5e;border-radius:14px;background:rgba(24,18,48,.9);position:relative}
+.v19zd-top{display:flex;gap:14px;align-items:flex-start}
+.v19zd-top img{width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.v19zbosses{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.v19zboss{display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid #3a2f5e;border-radius:12px;background:#241b42;text-align:left}
+.v19zboss img{width:100%;height:110px;object-fit:contain}
+.v19zboss.done{border-color:#4caf50}
+.v19zboss.locked{opacity:.55}
+.v19zboss em{font-style:normal;font-size:12px;color:#cbb8ff}
+
+/* --- chips --- */
+.v19chip{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;
+  color:#fff;background:color-mix(in srgb,var(--ec,#888) 75%,#000);margin-right:4px}
+.v19phase{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;background:#7B61FF;margin-left:4px}
+
+/* --- fight --- */
+.v19fight{margin:14px 0;padding:14px;border:1px solid #3a2f5e;border-radius:14px;background:rgba(24,18,48,.92)}
+.v19fight.win{border-color:#4caf50}
+.v19fight-top{display:flex;gap:14px;align-items:flex-start}
+.v19boss-img{width:130px;height:130px;object-fit:contain;flex:none;filter:drop-shadow(0 0 14px rgba(255,210,63,.35))}
+.v19fight-info{flex:1;min-width:0}
+.v19hearts{font-size:14px;margin:4px 0}
+.v19banner{margin-top:8px;padding:8px 10px;border-radius:10px;background:#3a2a10;color:#FFE066;font-weight:700}
+.v19qcard{margin-top:12px;padding:12px;border-radius:12px;background:#241b42}
+.v19qword{font-size:22px;font-weight:800}
+.v19qword.small{font-size:17px}
+.v19qword.vi{font-size:18px}
+.v19passage{margin-top:12px;padding:12px;border-radius:12px;background:#1c1533}
+.v19opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.v19opt{padding:10px;border-radius:10px;border:1px solid #4a3f7a;background:#2e2454;color:#fff;font-size:15px;cursor:pointer;text-align:left}
+.v19opt.right{background:#1e5c2e;border-color:#4caf50}
+.v19opt.wrong{background:#6e1b1b;border-color:#e8445f}
+.v19opt:disabled{opacity:.75;cursor:default}
+.v19explain{margin-top:10px;padding:8px;border-radius:8px;background:#1c1533}
+.v19warn{margin-top:10px;padding:10px;border-radius:10px;background:#3a2a10;color:#FFE066}
+.v19done{margin-top:12px;text-align:center}
+.v19done-big{font-size:26px;font-weight:900;color:#FFD23F}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{padding:8px 14px;border-radius:10px;border:1px solid #4a3f7a;background:#2e2454;color:#fff;cursor:pointer}
+.btn.pri{background:#7B61FF;border-color:#9d8cff;font-weight:700}
+.btn.sm{padding:4px 10px;font-size:13px}
+
+/* --- boss animations (CSS transforms + glow; no fake sprite frames) --- */
+@keyframes v19idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes v19hit{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+@keyframes v19attack{0%{transform:translateX(0) scale(1)}40%{transform:translateX(16px) scale(1.08)}100%{transform:translateX(0) scale(1)}}
+@keyframes v19special{0%{transform:scale(1)}50%{transform:scale(1.14);filter:drop-shadow(0 0 22px gold) brightness(1.3)}100%{transform:scale(1)}}
+@keyframes v19defeat{to{transform:rotate(10deg) translateY(12px);filter:grayscale(1) opacity(.55)}}
+@keyframes v19win{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.anim-idle{animation:v19idle 2.6s ease-in-out infinite}
+.anim-hit{animation:v19hit .45s ease}
+.anim-attack{animation:v19attack .45s ease}
+.anim-special{animation:v19special .8s ease}
+.anim-defeat{animation:v19defeat .8s ease forwards}
+.v19fight.win .v19boss-img{animation:v19win .9s ease 2}
+
+@media (max-width:640px){
+  .v19map{height:1300px}
+  .v19zone{width:118px}
+  .v19zone.v19side-left{left:calc(22% - 59px)}
+  .v19zone.v19side-right{left:calc(78% - 59px)}
+  .v19zone.v19side-center{left:calc(50% - 59px)}
+  .v19zone-island img{width:74px;height:74px}
+  .v19zone-name{font-size:13px}
+  .v19zbosses{grid-template-columns:1fr}
+  .v19opts{grid-template-columns:1fr}
+  .v19fight-top{flex-direction:column;align-items:center;text-align:center}
+  .v19boss-img{width:110px;height:110px}
+  .v19zd-top{flex-direction:column;align-items:center;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .anim-idle,.anim-hit,.anim-attack,.anim-special,.anim-defeat,.v19fight.win .v19boss-img,.v19mappath path{animation:none}
+}
+
+/* V11.1 — Boss Map entry in the Korean nav tabs (#tabs, V6 inline render).
+   Reuses the .tab look; only a gold tint marks it as the adventure entry. */
+.tab.v19kotab{color:#7a5b00}
+.tab.v19kotab .ti{font-size:24px;filter:drop-shadow(0 2px 2px #0003)}
+
+</style>
+<script id="v19data">
+/* V19 data — Boss Map: 10 zones x 3 bosses = 30 Super Legendary bosses.
+   IDs use the v11_ prefix (never collide with V15 old ids or V18 v10_ ids).
+   Each boss has 5 skills: basic / elemental / tactical / passive / ultimate.
+   Skill EFFECTS come from a fixed palette (see v19.js); names are unique
+   per boss. Elements: V18's 9 + cosmic (Vũ trụ) for the Tinh Vân / Vô Cực
+   zones. Images: assets/bosses/v11/<id>.png (3 transparent cutouts +
+   27 tight portraits, see ASSET_REPORT_V11.md).
+   Zone order follows the reference map poster (bottom -> top):
+   z1 Hỏa Ngục, z2 Băng Vực, z3 Lôi Đình, z4 Hắc Ám, z5 Thiên Giới,
+   z6 Đại Dương, z7 Cổ Thụ, z8 Cơ Giới, z9 Tinh Vân, z10 Vô Cực. */
+(function(){
+var EL={
+ fire:{n:'Lửa',ic:'🔥',c:'#E8445F'},
+ ice:{n:'Băng',ic:'❄️',c:'#7CC7FF'},
+ thunder:{n:'Sấm',ic:'⚡',c:'#FFD23F'},
+ water:{n:'Nước',ic:'💧',c:'#4FA8FF'},
+ wind:{n:'Gió',ic:'🌪️',c:'#8FE3C0'},
+ earth:{n:'Đất',ic:'⛰️',c:'#C98A4B'},
+ dark:{n:'Bóng tối',ic:'🌙',c:'#9B7BFF'},
+ nature:{n:'Thiên nhiên',ic:'🌿',c:'#7ED957'},
+ light:{n:'Ánh sáng',ic:'⭐',c:'#FFE066'},
+ cosmic:{n:'Vũ trụ',ic:'🌀',c:'#C77DFF'}
+};
+var RAR={legendary:{n:'Huyền thoại',c:'#B388FF'},mythic:{n:'Thần thoại',c:'#FFD23F'}};
+var IMG=function(id){return 'assets/bosses/v11/'+id+'.png'};
+/* skills: [basicName, elemId, elemName, tactId, tactName, passId, passName, ultName]
+   elem ids: burn freeze chain veil cleanse regen heal gale shield rift
+   tact ids: tshield theal ttimer tveil tenrage
+   pass ids: bulwark vampiric swift thorns */
+function B(id,n,vi,zone,el,rar,lv,hp,def,mode,diff,sk,ult,xp,gems,item,title){
+  return {id:id,n:n,vi:vi,img:IMG(id),zone:zone,el:el,rarity:rar,lv:lv,hp:hp,def:def,
+    mode:mode,diff:diff,lang:'both',
+    skills:{basic:{n:sk[0]},
+      elem:{id:sk[1],n:sk[2]},
+      tact:{id:sk[3],n:sk[4]},
+      pass:{id:sk[5],n:sk[6]},
+      ult:{n:ult}},
+    reward:{xp:xp,gems:gems,item:item,title:title||null}};
+}
+var ZONES=[
+ {id:'z1',n:'Fire Hell',vi:'Hỏa Ngục',el:'fire',c:'#E8445F',top:88,side:'center',
+  desc:'Núi lửa và dung nham. Nơi bắt đầu hành trình chinh phục bản đồ.',
+  challenge:'Từ vựng cơ bản',main:'v11_fireking',bosses:['v11_fireking','v11_lavadragon','v11_oni'],
+  reward:{xp:100,gems:3,item:'Rương Hỏa Ngục'}},
+ {id:'z2',n:'Ice Realm',vi:'Băng Vực',el:'ice',c:'#7CC7FF',top:79,side:'left',
+  desc:'Băng tuyết vĩnh cửu. Rèn luyện tai nghe và vốn từ.',
+  challenge:'Từ vựng và nghe hiểu',main:'v11_icelong',bosses:['v11_icelong','v11_icequeen','v11_crystalbird'],
+  reward:{xp:100,gems:3,item:'Rương Băng Vực'}},
+ {id:'z3',n:'Thunder Peaks',vi:'Lôi Đình',el:'thunder',c:'#FFD23F',top:70,side:'right',
+  desc:'Đỉnh núi sấm sét. Chỉ những ai phản xạ nhanh mới đi tiếp.',
+  challenge:'Trả lời nhanh',main:'v11_thunderminotaur',bosses:['v11_thunderminotaur','v11_stormeagle','v11_tigerwarrior'],
+  reward:{xp:100,gems:3,item:'Rương Lôi Đình'}},
+ {id:'z4',n:'Dark Abyss',vi:'Hắc Ám',el:'dark',c:'#9B7BFF',top:61,side:'left',
+  desc:'Vực sâu bóng tối. Chính tả và nhận diện từ là chìa khóa.',
+  challenge:'Chính tả và nhận diện từ',main:'v11_voidknight',bosses:['v11_voidknight','v11_boneking','v11_snakequeen'],
+  reward:{xp:100,gems:3,item:'Rương Hắc Ám'}},
+ {id:'z5',n:'Heavenly Realm',vi:'Thiên Giới',el:'light',c:'#FFE066',top:52,side:'center',
+  desc:'Cõi sáng của thần thú. Thử thách cấu trúc câu.',
+  challenge:'Cấu trúc câu',main:'v11_phoenix',bosses:['v11_phoenix','v11_heavenknight','v11_lightdeer'],
+  reward:{xp:100,gems:3,item:'Rương Thiên Giới'}},
+ {id:'z6',n:'Deep Ocean',vi:'Đại Dương',el:'water',c:'#4FA8FF',top:43,side:'right',
+  desc:'Biển sâu thăm thẳm. Luyện nghe hiểu dưới áp lực.',
+  challenge:'Nghe hiểu',main:'v11_octopusking',bosses:['v11_octopusking','v11_seadragon','v11_sharkking'],
+  reward:{xp:100,gems:3,item:'Rương Đại Dương'}},
+ {id:'z7',n:'Ancient Forest',vi:'Cổ Thụ',el:'nature',c:'#7ED957',top:34,side:'left',
+  desc:'Rừng cổ đại. Ôn tập những từ khó nhất bạn từng học.',
+  challenge:'Ôn tập từ khó',main:'v11_ancienttree',bosses:['v11_ancienttree','v11_ninetails','v11_pandamaster'],
+  reward:{xp:100,gems:3,item:'Rương Cổ Thụ'}},
+ {id:'z8',n:'Clockwork City',vi:'Cơ Giới',el:'earth',c:'#C98A4B',top:25,side:'right',
+  desc:'Thành phố máy móc và thời gian. Mọi câu hỏi đều có giới hạn.',
+  challenge:'Phản xạ có giới hạn thời gian',main:'v11_timemachine',bosses:['v11_timemachine','v11_golem','v11_goldephant'],
+  reward:{xp:100,gems:3,item:'Rương Cơ Giới'}},
+ {id:'z9',n:'Nebula Expanse',vi:'Tinh Vân',el:'cosmic',c:'#C77DFF',top:16,side:'left',
+  desc:'Không gian và vũ trụ. Tổng hợp mọi kỹ năng đã học.',
+  challenge:'Tổng hợp nhiều kỹ năng',main:'v11_nebuladragon',bosses:['v11_nebuladragon','v11_spacewhale','v11_ninehead'],
+  reward:{xp:100,gems:3,item:'Rương Tinh Vân'}},
+ {id:'z10',n:'Infinity World',vi:'Vô Cực',el:'cosmic',c:'#C77DFF',top:6,side:'center',
+  desc:'Thế giới cuối. Trận chiến cuối cùng với Ma Long Vô Cực.',
+  challenge:'Final Boss Battle',main:'v11_infinitydragon',bosses:['v11_infinitydragon','v11_greendragon','v11_butterflyqueen'],
+  reward:{xp:200,gems:5,item:'Rương Vô Cực'}}
+];
+var BOSSES=[
+ /* z1 Hỏa Ngục */
+ B('v11_fireking','Fire King','Hỏa Vương Diệt Thế','z1','fire','mythic',33,325,3,'mc','A2',['Vuốt Lửa','burn','Hỏa Diệm Thiêu Đốt','tshield','Khiên Hỏa Diệm','bulwark','Giáp Lửa Bất Diệt'],'Diệt Thế Long Viêm',70,2,'Vương Miện Lửa','Hỏa Vương'),
+ B('v11_lavadragon','Lava Dragon','Rồng Dung Nham','z1','fire','legendary',32,300,3,'type','A2',['Nanh Dung Nham','burn','Dung Nham Phun Trào','theal','Dưỡng Nham','vampiric','Hút Sinh Lực Nham'],'Nham Thạch Diệt Thế',70,2,'Vảy Dung Nham'),
+ B('v11_oni','Blood Oni','Oni Huyết Ảnh','z1','dark','legendary',31,290,3,'mc','A2',['Chùy Huyết','veil','Huyết Ảnh Che Phủ','tenrage','Huyết Nộ','thorns','Gai Huyết Ảnh'],'Huyết Ảnh Diệt Hồn',70,2,'Mặt Nạ Oni'),
+ /* z2 Băng Vực */
+ B('v11_icelong','Polar Ice Dragon','Băng Long Cực Quang','z2','ice','mythic',36,350,4,'listen','A2',['Hơi Thở Băng','freeze','Băng Phong Cực Quang','tshield','Khiên Băng Vĩnh Cửu','bulwark','Giáp Băng Dày'],'Tuyệt Đối Băng Phong',80,2,'Vảy Băng Long','Băng Long Chúa'),
+ B('v11_icequeen','Ice Queen','Nữ Hoàng Băng Giá','z2','ice','legendary',35,325,4,'listen','B1',['Trượng Băng','freeze','Băng Giá Vĩnh Cửu','ttimer','Đóng Băng Thời Gian','swift','Bước Chân Băng'],'Băng Hậu Tuyệt Kỹ',80,2,'Vương Miện Băng'),
+ B('v11_crystalbird','Crystal Bird','Thiên Điểu Pha Lê','z2','ice','legendary',34,315,4,'mc','B1',['Mỏ Pha Lê','freeze','Pha Lê Băng Vũ','tveil','Sương Mù Pha Lê','swift','Đôi Cánh Băng'],'Tinh Thể Băng Phong',80,2,'Lông Pha Lê'),
+ /* z3 Lôi Đình */
+ B('v11_thunderminotaur','Thunder Minotaur','Lôi Thần Minotaur','z3','thunder','mythic',39,375,4,'speed','B1',['Rìu Sấm','chain','Lôi Đình Chấn Động','tenrage','Cơn Thịnh Nộ Sấm','bulwark','Giáp Sấm Bất Diệt'],'Lôi Thần Phán Quyết',90,2,'Sừng Lôi Thần','Lôi Thần'),
+ B('v11_stormeagle','Storm Eagle','Điểu Vương Phong Lôi','z3','wind','legendary',38,350,4,'speed','B1',['Vuốt Gió','gale','Phong Lôi Bão Táp','ttimer','Cơn Lốc Thời Gian','swift','Đôi Cánh Bão'],'Phong Lôi Diệt Thế',90,2,'Lông Bão'),
+ B('v11_tigerwarrior','Tiger Warrior','Mãnh Hổ Võ Thần','z3','thunder','legendary',37,340,4,'mc','B1',['Vuốt Hổ','chain','Hổ Gầm Sấm Sét','tshield','Giáp Hổ Vương','bulwark','Da Hổ Sét'],'Bạch Hổ Diệt Thế',90,2,'Nanh Hổ Trắng'),
+ /* z4 Hắc Ám */
+ B('v11_voidknight','Void Knight','Kỵ Sĩ Hư Không','z4','dark','mythic',42,400,5,'type','B1',['Kiếm Hư Không','veil','Hư Không Che Phủ','tveil','Màn Đêm Hư Không','vampiric','Hút Hồn'],'Hư Không Diệt Thế',100,3,'Kiếm Hư Không','Kỵ Sĩ Hư Không'),
+ B('v11_boneking','Bone King','Vua Xương Bóng Tối','z4','dark','legendary',41,375,5,'type','B1',['Trượng Xương','veil','Xương Khô Nguyền Rủa','theal','Triệu Hồi Xương','vampiric','Hút Sinh Khí'],'Vong Hồn Quân Đoàn',100,3,'Vương Miện Xương'),
+ B('v11_snakequeen','Snake Queen','Nữ Vương Xà Ảnh','z4','dark','legendary',40,365,5,'mc','B1',['Nanh Độc','veil','Xà Nhãn Mê Hoặc','tenrage','Cơn Thịnh Nộ Xà','thorns','Vảy Gai Độc'],'Xà Hậu Thạch Hóa',100,3,'Vảy Xà Hậu'),
+ /* z5 Thiên Giới */
+ B('v11_phoenix','Holy Phoenix','Thần Phượng Viêm Quang','z5','light','mythic',45,425,5,'builder','B1',['Lông Lửa Thiêng','cleanse','Thánh Quang Tái Sinh','theal','Niết Bàn Hồi Phục','bulwark','Lông Phượng Bất Diệt'],'Phượng Hoàng Niết Bàn',110,3,'Lông Phượng','Phượng Hoàng'),
+ B('v11_heavenknight','Heaven Knight','Hiệp Sĩ Thiên Giới','z5','light','legendary',44,400,5,'grammar','B1',['Kiếm Thánh','cleanse','Thiên Giới Bảo Hộ','tshield','Khiên Thiên Sứ','bulwark','Giáp Thánh Quang'],'Thiên Giới Phán Xét',110,3,'Khiên Thiên Sứ'),
+ B('v11_lightdeer','Light Deer God','Lộc Thần Ánh Sáng','z5','light','legendary',43,390,5,'builder','B2',['Gạc Sáng','cleanse','Lộc Quang Chữa Lành','ttimer','Ánh Sáng Đóng Băng','swift','Bước Chân Ánh Sáng'],'Thánh Lộc Quang Huy',110,3,'Gạc Lộc Thần'),
+ /* z6 Đại Dương */
+ B('v11_octopusking','Octopus King','Bạch Tuộc Vương Giả','z6','water','mythic',48,450,6,'listen','B1',['Xúc Tu','regen','Vương Giả Thủy Triều','theal','Thủy Triều Hồi Phục','vampiric','Hút Thủy Triều'],'Đại Dương Nộ Triều',120,3,'Vương Miện Biển','Vua Biển'),
+ B('v11_seadragon','Abyss Sea Dragon','Hải Long Vực Sâu','z6','water','legendary',47,425,6,'listen','B2',['Vây Sóng','regen','Vực Sâu Hồi Phục','tshield','Khiên Vực Sâu','bulwark','Vảy Vực Sâu'],'Vực Sâu Diệt Thế',120,3,'Vảy Hải Long'),
+ B('v11_sharkking','Shark Tyrant','Cá Mập Bạo Chúa','z6','water','legendary',46,415,6,'mc','B2',['Hàm Cá Mập','regen','Huyết Hải Cuồng Bạo','tenrage','Cơn Thịnh Nộ Biển','thorns','Vây Gai Biển'],'Huyết Hải Cuồng Triều',120,3,'Răng Cá Mập'),
+ /* z7 Cổ Thụ */
+ B('v11_ancienttree','Ancient Tree God','Thần Mộc Cổ Đại','z7','nature','mythic',51,475,6,'mixed','B1',['Cành Cổ Thụ','heal','Cổ Thụ Hồi Sinh','theal','Nhựa Sống Cổ Thụ','vampiric','Rễ Hút Sinh Lực'],'Cổ Thụ Vạn Niên',130,4,'Hạt Cổ Thụ','Thần Mộc'),
+ B('v11_ninetails','Nine-Tailed Fox','Hồ Ly Cửu Vĩ','z7','fire','legendary',50,450,6,'mixed','B1',['Lửa Hồ Ly','burn','Hồ Hỏa Cửu Vĩ','tveil','Ảo Ảnh Cửu Vĩ','thorns','Đuôi Gai Lửa'],'Cửu Vĩ Diệt Thế',130,4,'Đuôi Hồ Ly'),
+ B('v11_pandamaster','Panda Master','Đại Sư Gấu Trúc','z7','nature','legendary',49,440,6,'read','B2',['Quyền Trúc','heal','Trúc Lâm Dưỡng Sinh','tshield','Khiên Trúc Lâm','bulwark','Áo Giáp Trúc'],'Vô Cực Trúc Quyền',130,4,'Gậy Trúc'),
+ /* z8 Cơ Giới */
+ B('v11_timemachine','Time Machine','Cỗ Máy Thời Gian','z8','earth','mythic',54,500,7,'speed','B2',['Bánh Răng','shield','Thời Gian Hộ Giáp','ttimer','Đảo Ngược Đồng Hồ','swift','Bánh Răng Tốc Độ'],'Dòng Thời Gian Đứt Gãy',140,4,'Bánh Răng Vàng','Chúa Tể Thời Gian'),
+ B('v11_golem','Mystic Golem','Golem Huyền Thạch','z8','earth','legendary',53,475,7,'speed','B2',['Nắm Đấm Đá','shield','Huyền Thạch Khiên','tshield','Khiên Huyền Thạch','bulwark','Da Đá Huyền Thạch'],'Núi Đá Sụp Đổ',140,4,'Lõi Huyền Thạch'),
+ B('v11_goldephant','Golden Elephant God','Voi Thần Kim Giáp','z8','earth','legendary',52,465,7,'mc','B2',['Ngà Vàng','shield','Kim Giáp Bất Hoại','theal','Hồi Phục Kim Giáp','vampiric','Hút Vàng'],'Voi Thần Chấn Động',140,4,'Ngà Voi Vàng'),
+ /* z9 Tinh Vân */
+ B('v11_nebuladragon','Nebula Dragon','Rồng Tinh Vân','z9','cosmic','mythic',57,525,7,'mixed','B2',['Vuốt Tinh Vân','rift','Tinh Vân Hỗn Loạn','tveil','Sương Mù Tinh Vân','swift','Đôi Cánh Tinh Vân'],'Vũ Trụ Sụp Đổ',150,4,'Vảy Tinh Vân','Chúa Tể Tinh Vân'),
+ B('v11_spacewhale','Galaxy Whale','Cá Voi Tinh Hà','z9','cosmic','legendary',56,500,7,'mixed','B2',['Vây Tinh Hà','rift','Tinh Hà Xoáy','theal','Hồi Phục Tinh Hà','vampiric','Hút Tinh Hà'],'Hố Đen Tinh Hà',150,4,'Vây Cá Voi'),
+ B('v11_ninehead','Nine-Headed Dragon','Cửu Đầu Hắc Long','z9','dark','legendary',55,490,7,'mixed','B2',['Chín Đầu Rồng','veil','Cửu Đầu Ám Ảnh','tenrage','Cơn Thịnh Nộ Cửu Đầu','thorns','Vảy Gai Hắc Ám'],'Cửu Đầu Hỗn Mang',150,4,'Đầu Rồng Hắc Ám'),
+ /* z10 Vô Cực */
+ B('v11_infinitydragon','Infinity Dragon','Ma Long Vô Cực','z10','cosmic','mythic',60,600,8,'mixed','B2',['Vuốt Vô Cực','rift','Vô Cực Hỗn Mang','tenrage','Cơn Thịnh Nộ Vô Cực','thorns','Vảy Gai Vô Cực'],'Vô Cực Diệt Thế',160,5,'Vảy Vô Cực','Chúa Tể Vô Cực'),
+ B('v11_greendragon','Emerald Dragon','Thanh Long Lục Bảo','z10','nature','legendary',59,550,8,'mixed','B2',['Vuốt Lục Bảo','heal','Lục Bảo Sinh Cơ','tshield','Khiên Lục Bảo','bulwark','Vảy Lục Bảo'],'Rừng Thiêng Nộ Diệm',160,5,'Vảy Lục Bảo'),
+ B('v11_butterflyqueen','Dream Butterfly Queen','Nữ Hoàng Bướm Mộng','z10','nature','legendary',58,540,8,'mixed','B2',['Cánh Mộng','heal','Mộng Điệp Hồi Phục','theal','Giấc Mộng Hồi Phục','vampiric','Hút Giấc Mơ'],'Giấc Mộng Vĩnh Hằng',160,5,'Cánh Bướm Mộng')
+];
+var byId={};BOSSES.forEach(function(b){byId[b.id]=b});
+var zoneById={};ZONES.forEach(function(z){zoneById[z.id]=z});
+window.__V19_DATA={
+  elements:EL,rarities:RAR,zones:ZONES,bosses:BOSSES,
+  byId:function(id){return byId[id]||null},
+  zoneById:function(id){return zoneById[id]||null},
+  zoneOf:function(bossId){var b=byId[bossId];return b?zoneById[b.zone]:null},
+  all:function(){return BOSSES.slice()}
+};
+})();
+
+</script>
+<script id="v19js">
+/* ===== V19 — BOSS MAP + 30 SUPER LEGENDARY BOSSES (V11, additive layer) =====
+   Built ON TOP of V10. It never edits V6/V14/V15/V16/V17/V18 logic — the only
+   touch points are guarded hooks: a "map" hub tab in v15.js, and a V11 group
+   in the V18 Collection (see CHANGED_FILES.md). The 10 old V15 bosses and
+   the 30 V18 bosses keep fighting in their own engines untouched.
+
+   Universal Combat Engine (UCE): one ruleset shared with the V18 arena
+   engine — same damage formula (12 + combo x2 - def, min 2), same crit rule
+   (guaranteed every 5th combo + 10% random), same timer/phase structure —
+   extended here with: 5 skills per boss (basic / elemental / tactical /
+   passive / ultimate), Awakening (P2, <=50% HP), Berserk + Ultimate with a
+   Knowledge Counterattack (P3, <=20% HP), star ratings (1-3), and bilingual
+   mastery (each boss has a SEPARATE English and Korean progress record).
+
+   New state (new key, migration-safe): S.v7.en19 = {lang, bosses:{id:
+   {en:{win,wins,stars,best}, ko:{...}}}, titles:[], zoneClaimed:{},
+   koStats:{right,wrong}, created}. First-win rewards are once-only PER
+   LANGUAGE; replay wins give +10 XP. EN answers feed the same SRS boxes
+   (mark19 mirrors mark15/mark18); KO answers only touch en19.koStats —
+   the Korean deck (S.cards) is never modified by V19.
+*/
+(function(){
+'use strict';
+function $(s){return document.querySelector(s)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function V15(){return window.__v15||null}
+function D19(){return window.__V19_DATA||{}}
+function save19(){var v=V15();if(v)v.save15()}
+function gain19(n){var v=V15();if(v&&v.gain15)v.gain15(n)}
+function pop19(t){var v=V15();if(v&&v.pop15)v.pop15(t)}
+
+/* ---------- V19 state (new key) ---------- */
+function en19(){
+  try{S.v7=S.v7||{}}catch(e){return {lang:'en',bosses:{},titles:[],zoneClaimed:{},koStats:{right:0,wrong:0}}}
+  var e=S.v7.en19;
+  if(!e){e=S.v7.en19={lang:'en',bosses:{},titles:[],zoneClaimed:{},koStats:{right:0,wrong:0},created:Date.now()};}
+  e.bosses=e.bosses||{};e.titles=e.titles||[];e.zoneClaimed=e.zoneClaimed||{};
+  e.koStats=e.koStats||{right:0,wrong:0};
+  if(!e.lang)e.lang='en';
+  return e;
+}
+function rec19(id,lang){
+  var e=en19();e.bosses[id]=e.bosses[id]||{};
+  var r=e.bosses[id][lang];
+  if(!r){r={win:0,wins:0,stars:0,best:0};e.bosses[id][lang]=r}
+  return r;
+}
+function lang19(){return en19().lang||'en'}
+function setLang19(l){
+  if(l!=='en'&&l!=='ko')return;
+  en19().lang=l;save19();renderMap();
+}
+function isWon19(id,lang){lang=lang||lang19();var r=(en19().bosses[id]||{})[lang];return !!(r&&r.win)}
+function isWonAny19(id){return isWon19(id,'en')||isWon19(id,'ko')}
+function isMastered19(id){return isWon19(id,'en')&&isWon19(id,'ko')}
+function stars19(id,lang){lang=lang||lang19();var r=(en19().bosses[id]||{})[lang];return r?r.stars||0:0}
+function zoneBosses(zid){var z=D19().zoneById(zid);return z?z.bosses:[]}
+function zoneWins(zid,lang){lang=lang||lang19();var n=0;zoneBosses(zid).forEach(function(id){if(isWon19(id,lang))n++});return n}
+function zoneStars(zid,lang){lang=lang||lang19();var n=0;zoneBosses(zid).forEach(function(id){n+=stars19(id,lang)});return n}
+function zoneOpen(zid,lang){
+  lang=lang||lang19();
+  var zones=D19().zones||[],i=-1;
+  for(var k=0;k<zones.length;k++)if(zones[k].id===zid)i=k;
+  if(i<=0)return true;
+  var prev=zones[i-1];
+  return isWon19(prev.main,lang);
+}
+function zoneState(zid,lang){
+  lang=lang||lang19();
+  if(!zoneOpen(zid,lang))return 'locked';
+  var w=zoneWins(zid,lang),s=zoneStars(zid,lang);
+  if(w>=3&&s>=9)return 'mastered';
+  if(w>=3)return 'completed';
+  if(w>=1)return 'progress';
+  return 'unlocked';
+}
+function zoneNeedText(zid,lang){
+  lang=lang||lang19();
+  var zones=D19().zones||[],i=-1;
+  for(var k=0;k<zones.length;k++)if(zones[k].id===zid)i=k;
+  if(i<=0)return '';
+  var prev=zones[i-1],pb=D19().byId(prev.main);
+  return 'Cần đánh bại '+(pb?pb.vi:prev.main)+' ở '+(lang==='ko'?'Tiếng Hàn':'Tiếng Anh')+' để mở khóa.';
+}
+function bossUnlocked19(id,lang){
+  lang=lang||lang19();
+  var b=D19().byId(id);if(!b)return false;
+  if(!zoneOpen(b.zone,lang))return false;
+  var list=zoneBosses(b.zone),i=list.indexOf(id);
+  if(i<=0)return true;
+  return isWon19(list[i-1],lang);
+}
+function mapWon(lang){lang=lang||lang19();var n=0;(D19().bosses||[]).forEach(function(b){if(isWon19(b.id,lang))n++});return n}
+function elChip19(b){
+  var el=(D19().elements||{})[b.el];if(!el)return '';
+  return '<span class="v19chip" style="--ec:'+el.c+'">'+el.ic+' '+esc(el.n)+'</span>';
+}
+function rarChip19(b){
+  var r=((D19().rarities||{})[b.rarity])||{n:b.rarity,c:'#999'};
+  return '<span class="v19chip" style="--ec:'+r.c+'">'+esc(r.n)+'</span>';
+}
+function starStr(n){return '★'.repeat(n||0)+'☆'.repeat(Math.max(0,3-(n||0)))}
+
+/* ---------- Boss Map ---------- */
+function mapPathD(){
+  /* smooth glowing path through the zone nodes (top% / side -> x%/y%) */
+  var zones=(D19().zones||[]).slice().reverse(); /* z10 top -> z1 bottom */
+  var pts=zones.map(function(z){
+    var x=z.side==='left'?22:(z.side==='right'?78:50);
+    return [x,z.top];
+  });
+  if(pts.length<2)return '';
+  var d='M '+pts[0][0]+' '+pts[0][1];
+  for(var i=1;i<pts.length;i++){
+    var p0=pts[i-1],p1=pts[i];
+    var mx=(p0[0]+p1[0])/2;
+    d+=' C '+mx+' '+p0[1]+', '+mx+' '+p1[1]+', '+p1[0]+' '+p1[1];
+  }
+  return d;
+}
+function zoneNodeHTML(z,lang){
+  var st=zoneState(z.id,lang);
+  var main=D19().byId(z.main);
+  var w=zoneWins(z.id,lang),s=zoneStars(z.id,lang);
+  var badge=st==='locked'?'🔒 Khóa':(st==='mastered'?'👑 Làm chủ':(st==='completed'?'✅ Hoàn thành':(st==='progress'?'⚔️ '+w+'/3':'🗺️ Mở')));
+  return '<button class="v19zone v19side-'+z.side+' v19st-'+st+'" style="top:'+z.top+'%;--zc:'+z.c+'" '
+  +(st==='locked'?'disabled':'')+' onclick="__v19.zoneDetail(\''+z.id+'\')" aria-label="'+esc(z.vi)+'">'
+  +'<span class="v19zone-island"><img src="'+(main?main.img:'')+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+  +'<span class="v19zone-name">'+esc(z.vi)+'</span>'
+  +'<span class="v19zone-meta">'+badge+' · '+starStr(s>0?Math.round(s/3):0)+' '+w+'/3 boss</span></span></button>';
+}
+function mapHTML(){
+  var lang=lang19();
+  var won=mapWon(lang),total=(D19().bosses||[]).length||30;
+  var mastered=(D19().bosses||[]).filter(function(b){return isMastered19(b.id)}).length;
+  var h='<div class="v19mapwrap"><h3>'+(lang==='ko'?'🗺️ 보스 모험 지도 – Bản Đồ Boss Tiếng Hàn':'🗺️ Legendary Boss Adventure Map')+'</h3>'
+  +'<p class="mute">Chinh phục 10 vùng đất, 30 boss Siêu Huyền Thoại. Tiến trình tiếng Anh và tiếng Hàn độc lập — thắng bằng tiếng Anh không tính cho tiếng Hàn.</p>'
+  +'<div class="v19langpick"><span class="mute">Ngôn ngữ chiến đấu:</span> '
+  +'<button class="btn '+(lang==='en'?'pri':'')+'" onclick="__v19.setLang(\'en\')">🇬🇧 Tiếng Anh</button>'
+  +'<button class="btn '+(lang==='ko'?'pri':'')+'" onclick="__v19.setLang(\'ko\')">🇰🇷 Tiếng Hàn</button>'
+  +(lang==='ko'?'<span class="mute">Câu hỏi tiếng Hàn lấy từ thẻ từ của bạn (cần ≥8 thẻ).</span>':'')
+  +'</div>'
+  +'<div class="v19map-head"><b>Hoàn thành: '+won+'/'+total+' Boss '+(lang==='ko'?'🇰🇷':'🇬🇧')+'</b>'
+  +(mastered?' · 🌐 Song ngữ: '+mastered+'/30 boss':'')
+  +'<div class="v19hpbar"><i style="width:'+Math.round(won/total*100)+'%"></i></div></div>'
+  +'<div class="v19map" id="v19map"><svg class="v19mappath" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="'+mapPathD()+'" vector-effect="non-scaling-stroke"/></svg>'
+  +(D19().zones||[]).map(function(z){return zoneNodeHTML(z,lang)}).join('')
+  +'</div><div id="v19zonedetail"></div><div id="v19fight"></div></div>';
+  return h;
+}
+function renderMap(){
+  var v=V15();if(!v)return;
+  if(v.tab&&document.querySelector('#v15body')){
+    /* only re-render when the map tab is showing */
+    var b=$('#v15body');
+    if(b&&b.querySelector('.v19mapwrap'))b.innerHTML=mapHTML();
+  }
+}
+function openMap(){var v=V15();if(v)v.openHub('map')}
+/* V11.1 — one shared entry point for both hubs. Opens the SAME Boss Map
+   (no copy), pre-selects the combat language, and remembers which hub the
+   player came from. It never touches the main learning-language choice
+   (__v15.setLang): only the V19 combat language (en19().lang) changes. */
+var MAP_ORIGIN='en'; /* 'en' = English Hub, 'ko' = Korean Hub */
+function openMapFor(lang){
+  if(lang==='en'||lang==='ko'){en19().lang=lang;save19();}
+  MAP_ORIGIN=(lang==='en'||lang==='ko')?lang:lang19();
+  openMap();
+}
+function mapOrigin(){return MAP_ORIGIN}
+function zoneDetail(zid){
+  var z=D19().zoneById(zid);if(!z)return;
+  var lang=lang19();
+  var host=$('#v19zonedetail');if(!host)return;
+  var st=zoneState(zid,lang);
+  var main=D19().byId(z.main);
+  var h='<div class="v19zdetail"><button class="v15x" onclick="__v19.zoneClose()" aria-label="Đóng">✕</button>'
+  +'<div class="v19zd-top"><img src="'+(main?main.img:'')+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<div><h3>'+esc(z.vi)+' <span class="mute">'+esc(z.n)+'</span></h3>'
+  +'<p>'+elChip19({el:z.el})+' · Thử thách: '+esc(z.challenge)+'</p>'
+  +'<p class="mute">'+esc(z.desc)+'</p>'
+  +'<p><b>Trạng thái ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+'):</b> '
+  +(st==='locked'?'🔒 Đang khóa — '+esc(zoneNeedText(zid,lang))
+    :st==='mastered'?'👑 Đã làm chủ (3 sao cả 3 boss)'
+    :st==='completed'?'✅ Đã hoàn thành ('+zoneWins(zid,lang)+'/3 boss)'
+    :st==='progress'?'⚔️ Đang chinh phục ('+zoneWins(zid,lang)+'/3 boss)'
+    :'🗺️ Đã mở — chưa thắng boss nào')
+  +'</p>'
+  +'<p><b>Thưởng hoàn thành vùng (mỗi ngôn ngữ, 1 lần):</b> +'+z.reward.xp+' XP, +'+z.reward.gems+' 💎, '+esc(z.reward.item)+'</p>'
+  +'<p class="mute">⭐ Thắng trận · ⭐⭐ Thắng với độ chính xác ≥ 80% · ⭐⭐⭐ Độ chính xác ≥ 90% và còn ít nhất 3 tim.</p>'
+  +'</div></div>';
+  if(st!=='locked'){
+    h+='<div class="v19zbosses">'+z.bosses.map(function(id){
+      var b=D19().byId(id);if(!b)return '';
+      var won=isWon19(id,lang),un=bossUnlocked19(id,lang),st2=stars19(id,lang);
+      var mast=isMastered19(id);
+      return '<div class="v19zboss '+(won?'done':'')+(!un?'locked':'')+'">'
+      +'<img src="'+b.img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+      +'<b>'+esc(b.vi)+'</b><span class="mute">'+esc(b.n)+' · Lv '+b.lv+'</span>'
+      +'<span>'+elChip19(b)+rarChip19(b)+'</span>'
+      +'<span class="mute">HP '+b.hp+' · Thủ '+b.def+' · '+esc(b.mode)+' · '+esc(b.diff)+'</span>'
+      +'<span>'+starStr(st2)+(mast?' 🌐 Song ngữ':'')+'</span>'
+      +'<em>'+(won?'✅ Đã thắng ('+starStr(st2)+')':(un?'⚔️ Có thể đánh':'🔒 Thắng boss trước để mở'))+'</em>'
+      +'<p class="mute">Kỹ năng: '+esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n)+'</p>'
+      +(un?'<button class="btn pri" onclick="__v19.fight(\''+b.id+'\')">Bắt đầu chiến đấu</button>':'')
+      +'</div>';
+    }).join('')+'</div>';
+  }
+  h+='</div>';
+  host.innerHTML=h;
+  host.scrollIntoView&&host.scrollIntoView();
+}
+function zoneClose(){var host=$('#v19zonedetail');if(host)host.innerHTML=''}
+function challenge(id){fight(id)}
+
+/* ---------- question pools (same sources as V18; shared ruleset) ---------- */
+function distractorsEN(w,n){
+  var v=V15();var words=(v&&v.words)||[];
+  var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  return shuffle(pool).slice(0,n);
+}
+function wordPool(b){
+  var v=V15();var words=(v&&v.words)||[];
+  var list=words.filter(function(w){
+    if(b.diff&&w.lv!==b.diff)return false;
+    return true;
+  });
+  if(list.length<12)list=words.slice();
+  return shuffle(list);
+}
+function grammarPool(b){
+  var g=(window.__V15_DATA&&__V15_DATA.grammar)||[];
+  var list=g.filter(function(x){return x.lv===b.diff});
+  return shuffle(list.length?list:g);
+}
+function readPool(){return shuffle((window.__V15_DATA&&__V15_DATA.reading)||[])}
+function builderPool(){return shuffle((window.__V15_DATA&&__V15_DATA.builder)||[])}
+function koCardsRaw(){
+  /* Korean question pool: all of the player's Korean cards (Hangul + meaning).
+     If the player has selected a Korean deck (S.deck) and that deck holds
+     at least 8 usable cards, questions come from that deck only; otherwise
+     the pool falls back to all cards. No SRS-status filter: boss questions
+     use the deck as it is, mastered or not.
+     NOTE (V11.1 fix): read bare S, NOT window.S — V6 declares `let S`, a
+     lexical global that is NOT a window property, so window.S is undefined
+     and the pool used to come back empty (every KO fight silently fell back
+     to English questions with a "0/8 cards" banner). Same fix in v18.js. */
+  var cards=[];try{cards=(S&&S.cards)||[]}catch(e){}
+  cards=cards.filter(function(c){return c&&c.h&&c.m});
+  var deck='';try{deck=(S&&S.deck)||''}catch(e){}
+  if(deck){
+    var dc=cards.filter(function(c){return c.d===deck});
+    if(dc.length>=8)return dc;
+  }
+  return cards;
+}
+function koCards(){return shuffle(koCardsRaw())}
+function koPool(){
+  return koCards();
+}
+function distractorsKO(c,n){
+  var pool=koCardsRaw().filter(function(x){return x.id!==c.id&&x.h&&x.m});
+  return shuffle(pool).slice(0,n);
+}
+function koCount(){return koCardsRaw().length}
+
+/* ---------- SRS marking (mirrors V15 mark15 / V18 mark18) ---------- */
+function dayNo19(){return Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)}
+function todayStr19(){return new Date().toDateString()}
+function mark19(ok,w){
+  if(!w)return;
+  var v=V15();if(!v)return;
+  var old=v.enOld(),e=v.en15(),id=w.id,before=old.box[id]||0;
+  old.box=old.box||{};old.right=old.right||{};old.wrong=old.wrong||{};
+  old.review=old.review||[];old.xpAt=old.xpAt||{};
+  if(ok){
+    old.right[id]=(old.right[id]||0)+1;
+    old.streak=(old.streak||0)+1;
+    old.box[id]=Math.min(5,before+1);
+    var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
+    var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
+    e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
+  }else{
+    old.wrong[id]=(old.wrong[id]||0)+1;
+    old.streak=0;old.box[id]=0;
+    if(old.review.indexOf(id)<0)old.review.push(id);
+    e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+  }
+  var xp=0;
+  if(ok&&old.box[id]>before){
+    var last=old.xpAt[id]||0;
+    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  }
+  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+  if(xp>0)gain19(xp);
+  var dn=dayNo19();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+  if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
+  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
+  save19();
+}
+function markKO19(ok){
+  var e=en19();
+  if(ok)e.koStats.right++;else e.koStats.wrong++;
+  save19();
+}
+
+/* ---------- Universal Combat Engine (UCE) ---------- */
+var F=null;
+function fight(id){
+  var b=D19().byId(id);if(!b)return;
+  if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
+  if(!document.querySelector('#v19fight'))openMap();
+  startFight(b,lang19());
+}
+function startFight(b,lang){
+  F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
+    combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
+    shield:(b.skills.elem.id==='shield'?30:0),cleansed:false,
+    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
+    anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
+    timer:null,left:0,lastDmg:0,crit:false,
+    ultUsed:false,ultActive:false,caQ:0,caRight:0,
+    enraged:false,nextTimer:0,nextVeil:false};
+  if(lang==='ko'&&koCount()<8)
+    F.banner='⚠️ Bạn mới có '+koCount()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
+  nextQ();renderFight();
+}
+function timerFor(){
+  var b=F.boss,sk=b.skills.elem.id;
+  if(F.nextTimer>0){var t=F.nextTimer;F.nextTimer=0;return t}
+  if(F.ultActive)return 15;
+  var lim=0;
+  if(sk==='freeze')lim=15;
+  else if(sk==='gale')lim=8;
+  else if(sk==='rift')lim=12;
+  else if(b.mode==='speed')lim=8;
+  else if(F.phase===3)lim=10;
+  /* passive swift only shortens an existing timer — it never creates one */
+  if(b.skills.pass.id==='swift'&&lim>0)lim=Math.max(5,lim-2);
+  return lim;
+}
+function nextQ(){
+  if(!F)return;
+  if(F.ultActive){
+    /* Knowledge Counterattack: 3 quick questions, no normal combat effects */
+    if(F.caQ>=3){resolveUltimate();return}
+    var b=F.boss;
+    var mode=['mc','type','listen'][F.caQ%3];
+    if(F.lang==='ko')mode=['mc','type','listen'][F.caQ%3];
+    F.qmode='ca-'+mode;F.caMode=mode;
+    if(!F.pools)F.pools={grammar:grammarPool(b),read:readPool(),builder:builderPool(),words:wordPool(b),ko:koPool()};
+    var P=F.pools;
+    F.caQ++;
+    if(F.lang==='ko'&&P.ko.length>=8){
+      var c=P.ko[(F.q+F.caQ)%P.ko.length];
+      F.cur={k:c,opts:shuffle([c].concat(distractorsKO(c,3))),ko:true};
+    }else{
+      var w=P.words[(F.q+F.caQ)%P.words.length];
+      var opts=shuffle([w].concat(distractorsEN(w,3)));
+      F.cur={w:w,opts:opts,optsVi:shuffle([w].concat(distractorsEN(w,3)))};
+    }
+    F.answered=null;F.ok=null;startTimer();return;
+  }
+  var b2=F.boss;
+  var mode=b2.mode==='mixed'?['mc','grammar','listen','builder'][F.q%4]:b2.mode;
+  if(b2.mode==='speed')mode='mc';
+  if(F.lang==='ko'){
+    if(b2.mode==='mixed')mode=['mc','type','listen','mc'][F.q%4];
+    else if(mode==='grammar'||mode==='builder'||mode==='read'||mode==='speak')mode='mc';
+  }
+  F.qmode=mode;
+  F.hideIpa=(b2.skills.elem.id==='veil'||b2.skills.elem.id==='rift')||F.nextVeil;
+  F.nextVeil=false;
+  if(!F.pools)F.pools={grammar:grammarPool(b2),read:readPool(),builder:builderPool(),words:wordPool(b2),ko:koPool()};
+  var P2=F.pools;
+  F.qCount++;
+  if(F.lang==='ko'&&(mode==='mc'||mode==='type'||mode==='listen')){
+    if(P2.ko.length>=8){
+      var c2=P2.ko[F.q%P2.ko.length];
+      F.cur={k:c2,opts:shuffle([c2].concat(distractorsKO(c2,3))),ko:true};
+      F.answered=null;F.ok=null;startTimer();return;
+    }
+  }
+  if(mode==='grammar'){F.cur={g:P2.grammar[F.q%P2.grammar.length]}}
+  else if(mode==='read'){var p=P2.read[F.q%P2.read.length];F.cur={p:p,q:p.qs[F.q%p.qs.length]}}
+  else if(mode==='builder'){var s=P2.builder[F.q%P2.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');F.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
+  else if(mode==='speak'){var w2=P2.words[F.q%P2.words.length];F.cur={w:w2,opts:shuffle([w2].concat(distractorsEN(w2,3)))}}
+  else{var w3=P2.words[F.q%P2.words.length];var opts2=shuffle([w3].concat(distractorsEN(w3,3)));F.cur={w:w3,opts:opts2,optsVi:shuffle([w3].concat(distractorsEN(w3,3)))}}
+  F.answered=null;F.ok=null;
+  startTimer();
+}
+function startTimer(){
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  var limit=timerFor();
+  if(!limit){F.left=0;return}
+  F.left=limit;
+  F.timer=setInterval(function(){
+    if(!F)return;
+    F.left--;
+    var t=$('#v19boss-t');if(t)t.textContent=F.left+'s';
+    if(F.left<=0){clearInterval(F.timer);F.timer=null;answer(false,true)}
+  },1000);
+}
+function healBoss(n,msg){
+  if(!F||F.over)return;
+  F.hp=Math.min(F.maxHp,F.hp+n);
+  F.banner=(F.banner?F.banner+' ':'')+msg;
+}
+function useTact(){
+  /* tactical skill: every 5th answered question */
+  var b=F.boss,t=b.skills.tact.id;
+  if(t==='tshield'){F.shield=(F.shield||0)+15;F.banner='🛡️ '+b.vi+' dùng '+b.skills.tact.n+': +15 khiên!'}
+  else if(t==='theal'){healBoss(12,'💚 '+b.vi+' dùng '+b.skills.tact.n+': hồi 12 HP!')}
+  else if(t==='ttimer'){F.nextTimer=10;F.banner='⏳ '+b.vi+' dùng '+b.skills.tact.n+': câu sau chỉ còn 10 giây!'}
+  else if(t==='tveil'){F.nextVeil=true;F.banner='🌫️ '+b.vi+' dùng '+b.skills.tact.n+': câu sau ẩn phiên âm!'}
+  else if(t==='tenrage'){F.enraged=true;F.banner='😡 '+b.vi+' dùng '+b.skills.tact.n+': lần sai sau mất thêm 1 tim!'}
+}
+function checkPhase(){
+  var b=F.boss;if(!b||F.over||F.hp<=0||F.ultActive||F.ultUsed)return;
+  if(F.phase===1&&F.hp<=F.maxHp/2){
+    F.phase=2;F.anim='special';
+    F.banner='⚡ AWAKENING — '+b.vi+' thức tỉnh! Giai đoạn 2: phòng thủ và kỹ năng mạnh hơn!';
+  }
+  if(F.phase===2&&F.hp<=F.maxHp*0.2){
+    /* Berserk begins with the Ultimate: Knowledge Counterattack */
+    F.ultActive=true;F.caQ=0;F.caRight=0;F.anim='special';
+    F.banner='⚠️ BOSS ĐANG CHUẨN BỊ TUYỆT KỸ: '+b.skills.ult.n+'! Trả lời đúng 3 câu liên tiếp để phản công!';
+  }
+}
+function resolveUltimate(){
+  /* 3/3: phá hoàn toàn + phản 40 sát thương · 2/3: phản 15, mất 1 tim
+     1/3: mất 1 tim · 0/3: mất 2 tim (sát thương tối đa, có giới hạn) */
+  var b=F.boss,r=F.caRight;
+  F.ultActive=false;F.ultUsed=true;F.phase=3;F.anim='special';
+  if(r===3){
+    F.hp=Math.max(0,F.hp-40);
+    F.banner='💥 PHÁ TUYỆT KỸ! Bạn trả lời đúng 3/3 — phản 40 sát thương! '+b.vi+' bước vào giai đoạn Cuồng nộ (sai mất 2 tim)!';
+  }else if(r===2){
+    F.hp=Math.max(0,F.hp-15);F.hearts=Math.max(0,F.hearts-1);
+    F.banner='🛡️ Phản công một phần (2/3): giảm 70% sát thương, phản 15 sát thương, mất 1 tim. Giai đoạn Cuồng nộ bắt đầu!';
+  }else if(r===1){
+    F.hearts=Math.max(0,F.hearts-1);
+    F.banner='😖 Chỉ đúng 1/3: giảm 30% sát thương, mất 1 tim. Giai đoạn Cuồng nộ bắt đầu!';
+  }else{
+    F.hearts=Math.max(0,F.hearts-2);
+    F.banner='💢 Không phá được tuyệt kỹ (0/3): nhận sát thương tối đa, mất 2 tim! Giai đoạn Cuồng nộ bắt đầu!';
+  }
+  if(F.hp<=0){F.hp=0;F.over='win';F.anim='defeat';winReward()}
+  else if(F.hearts<=0){F.hearts=0;F.over='lose';F.anim='attack'}
+  save19();renderFight();
+}
+function answer(ok,timeout){
+  if(!F||F.answered!==null)return;
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  F.answered=timeout?'timeout':1;F.ok=ok;
+  var b=F.boss;
+  if(F.ultActive){
+    /* counterattack questions: score only, no boss damage / no heart loss yet */
+    if(ok){F.caRight++;F.right++}else F.wrong++;
+    if(F.cur&&F.cur.w)mark19(ok,F.cur.w);
+    if(F.cur&&F.cur.k)markKO19(ok);
+    renderFight();
+    return;
+  }
+  if(ok){
+    F.combo++;F.score++;F.right++;
+    var crit=(F.combo%5===0)||(Math.random()<0.1);
+    var dmg=12+F.combo*2;
+    if(b.skills.elem.id==='gale')dmg=Math.round(dmg*1.25);
+    if(F.phase===3)dmg=Math.round(dmg*1.5);
+    if(crit)dmg*=2;
+    var def=b.def||0;
+    if(b.skills.pass.id==='bulwark'&&F.hp<=F.maxHp/2)def+=2;
+    dmg=Math.max(2,dmg-def);
+    var dealt=dmg;
+    if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
+    F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
+    if(F.cur&&F.cur.w)mark19(true,F.cur.w);
+    if(F.cur&&F.cur.k)markKO19(true);
+    pop19((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
+  }else{
+    var cost=1;
+    if(F.phase===3)cost=2;
+    if(b.skills.elem.id==='chain'&&F.wrongCount%3===2)cost+=1;
+    if(b.skills.pass.id==='thorns'&&F.wrongCount%3===2)cost+=1;
+    if(F.enraged){cost+=1;F.enraged=false}
+    if(b.skills.elem.id==='cleanse'&&!F.cleansed){cost=0;F.cleansed=true;F.banner='✨ Thanh Tẩy: lần sai đầu tiên không mất tim!'}
+    F.combo=0;F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
+    if(F.cur&&F.cur.w)mark19(false,F.cur.w);
+    if(F.cur&&F.cur.k)markKO19(false);
+    if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
+    if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
+    if(b.skills.pass.id==='vampiric')healBoss(4,'🧛 Hút Sinh Lực: boss hồi 4 HP!');
+  }
+  var qc=F.qCount;
+  if(b.skills.elem.id==='heal'&&qc>0&&qc%4===0)healBoss(6,'🌸 Hồi Phục: boss hồi 6 HP!');
+  if(qc>0&&qc%5===0)useTact();
+  checkPhase();
+  if(F.hp<=0){F.hp=0;F.over='win';F.anim='defeat';winReward()}
+  else if(F.hearts<=0){F.hearts=0;F.over='lose';F.anim='attack'}
+  save19();renderFight();
+  if(F&&!F.over){var f=F;setTimeout(function(){if(F===f&&!F.over){F.anim='idle';var h=$('#v19fight');if(h)renderFight()}},450)}
+}
+function starCalc(){
+  var tot=F.right+F.wrong;
+  var acc=tot?F.right/tot:0;
+  var s=1;
+  if(acc>=0.8)s=2;
+  if(acc>=0.9&&F.hearts>=3)s=3;
+  return s;
+}
+function winReward(){
+  var b=F.boss,lang=F.lang,e=en19();
+  var rec=rec19(b.id,lang);
+  F.stars=starCalc();
+  if(rec.win){
+    rec.wins=(rec.wins||1)+1;e.bosses[b.id][lang]=rec;
+    gain19(10);
+    F.rewardNote='Đánh lại để luyện tập: +10 XP. Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+') chỉ nhận một lần.';
+  }else{
+    rec.win=1;rec.wins=1;rec.best=Math.max(rec.best||0,F.stars);
+    e.bosses[b.id][lang]=rec;
+    gain19(b.reward.xp);
+    try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
+    F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
+      +(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
+    if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
+    F.firstWin=true;
+    /* bilingual mastery badge + title */
+    if(isMastered19(b.id)&&e.titles.indexOf('Bậc Thầy Song Ngữ')<0){
+      e.titles.push('Bậc Thầy Song Ngữ');
+      F.rewardNote+=' 🌐 Song ngữ: đã đánh bại boss này bằng cả hai ngôn ngữ — danh hiệu “Bậc Thầy Song Ngữ”!';
+    }
+    /* zone completion (per language, once) */
+    var z=D19().zoneById(b.zone);
+    if(z&&zoneWins(b.zone,lang)>=3){
+      var ck=e.zoneClaimed[b.zone]=e.zoneClaimed[b.zone]||{};
+      if(!ck[lang]){
+        ck[lang]=1;
+        gain19(z.reward.xp);
+        try{S.v7.gems=(S.v7.gems||0)+z.reward.gems}catch(err){}
+        F.rewardNote+=' 🎁 Hoàn thành vùng '+z.vi+': +'+z.reward.xp+' XP, +'+z.reward.gems+' 💎, '+z.reward.item+'.';
+      }
+    }
+  }
+  if(F.stars>(rec.stars||0)){rec.stars=F.stars;e.bosses[b.id][lang]=rec}
+  save19();
+}
+function pick(i){
+  if(!F||F.answered!==null||F.over)return;
+  var mode=F.ultActive?F.caMode:F.qmode,ok=false;
+  if(mode==='grammar')ok=(i===F.cur.g.a);
+  else if(mode==='read')ok=(i===F.cur.q.a);
+  else if(mode==='builder')ok=(F.cur.opts[i]===F.cur.s.s);
+  else if(mode==='speak')ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.w.id);
+  else if(F.cur.ko)ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.k.id);
+  else if(mode==='type'||mode==='listen')ok=(!!F.cur.opts[i]&&F.cur.opts[i].id===F.cur.w.id);
+  else ok=(!!F.cur.optsVi[i]&&F.cur.optsVi[i].id===F.cur.w.id);
+  answer(ok,false);
+}
+function next(){
+  if(!F||F.over)return;
+  if(F.ultActive){F.answered=null;F.ok=null;nextQ();renderFight();return}
+  F.q++;F.banner=null;nextQ();renderFight();
+}
+function close(){
+  if(F&&F.timer)clearInterval(F.timer);
+  F=null;
+  var host=$('#v19fight');if(host)host.innerHTML='';
+  renderMap();
+}
+function speakWord(id){var v=V15();if(v)v.speakWord(id)}
+function bossSpeak(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR||!F)return;
+  var w=F.cur.w;if(!w)return;
+  var rec=new SR();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=3;
+  try{rec.start()}catch(e){return}
+  rec.onresult=function(ev){
+    var heard='';try{heard=ev.results[0][0].transcript||''}catch(e){}
+    F.heard=heard;
+    var norm=function(s){return (s||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim()};
+    var ok=norm(heard)===norm(w.en)||norm(heard).indexOf(norm(w.en))>=0;
+    answer(ok,false);
+  };
+  rec.onerror=function(){F.heard='(không nghe được)';renderFight()};
+}
+function speakKO(text){
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
+}
+
+/* ---------- fight rendering ---------- */
+function renderFight(){
+  var host=$('#v19fight');if(!host)return;
+  if(!F){host.innerHTML='';return}
+  var b=F.boss;
+  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/3'+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
+  var sk=b.skills;
+  var h='<div class="v19fight '+(F.over==='win'?'win':'')+'">'
+  +'<div class="v19fight-top"><img class="v19boss-img anim-'+F.anim+'" src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
+  +'<div class="v19fight-info"><b>'+esc(b.vi)+'</b> <span class="mute">'+esc(b.n)+' · Lv '+b.lv+' · '+esc((D19().zoneById(b.zone)||{}).vi||'')+'</span>'
+  +'<div>'+elChip19(b)+rarChip19(b)+phaseTxt+'</div>'
+  +'<span class="mute">⚔️ '+esc(sk.basic.n)+' · '+esc(sk.elem.n)+' · '+esc(sk.tact.n)+' · '+esc(sk.pass.n)+' · 💥 '+esc(sk.ult.n)+'</span>'
+  +'<div class="v19hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'
+  +'<div class="v19hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
+  +(F.left?'<div class="mute">Còn <span id="v19boss-t">'+F.left+'s</span></div>':'')
+  +(F.ultActive&&F.caQ>0?'<div class="v19banner">⚠️ PHẢN CÔNG BẰNG KIẾN THỨC — Câu '+(Math.min(F.caQ,3))+'/3 · Đúng '+F.caRight+'/3 · Đúng 3/3 phá hoàn toàn tuyệt kỹ!</div>':'')
+  +(F.banner?'<div class="v19banner">'+esc(F.banner)+'</div>':'')
+  +'</div></div>';
+  if(F.over){
+    h+='<div class="v19done"><div class="v19done-big">'+(F.over==='win'?'CHIẾN THẮNG!':'Thua rồi…')+'</div>'
+    +'<p>'+(F.over==='win'
+      ?'Bạn đã đánh bại '+esc(b.vi)+'! '+starStr(F.stars)+' '+esc(F.rewardNote)
+      :'Boss còn '+Math.max(0,F.hp)+' HP. Hãy luyện thêm rồi quay lại!')+'</p>'
+    +'<p class="mute">Độ chính xác: '+F.right+'/'+(F.right+F.wrong)+' câu đúng.</p>'
+    +'<div class="acts"><button class="btn pri" onclick="__v19.fight(\''+b.id+'\')">Đánh lại</button><button class="btn" onclick="__v19.close()">Về bản đồ</button></div></div>';
+  }else{
+    h+=qHTML();
+  }
+  h+='</div>';
+  host.innerHTML=h;
+}
+function feedback(ex){
+  if(F.answered===null)return '';
+  var h='<div class="v19explain" style="color:var(--'+(F.ok?'ok':'bad')+')">'+(F.ok?'Đòn đánh trúng!':'Boss phản công!')+(ex?' <span class="mute">'+esc(ex)+'</span>':'')+'</div><div class="acts"><button class="btn pri" onclick="__v19.next()">Tiếp tục</button></div>';
+  return h;
+}
+function optBtn(label,i,correct){
+  var cl='';if(F.answered!==null)cl=(correct?'right':(i===F.answered?'wrong':''));
+  return '<button class="v19opt '+cl+'" '+(F.answered!==null?'disabled':'')+' onclick="__v19.pick('+i+')">'+label+'</button>';
+}
+function qHTML(){
+  var c=F.cur,mode=F.ultActive?(F.caMode||F.qmode):F.qmode;
+  if(c.ko){
+    var k=c.k;
+    if(mode==='listen'){
+      return '<div class="v19qcard"><div class="v19qword">Nghe tiếng Hàn</div><div class="acts"><button class="btn pri" onclick="__v19.speakKO(\''+esc(k.h).replace(/'/g,'\\\'')+'\')">Nghe phát âm</button></div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.h),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+    }
+    if(mode==='type'){
+      return '<div class="v19qcard"><div class="v19qword vi">'+esc(k.m)+'</div><div class="mute">Chọn từ tiếng Hàn đúng</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.h),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+    }
+    return '<div class="v19qcard"><div class="v19qword">'+esc(k.h)+'</div><div class="mute">'+esc(k.p||'')+' · Chọn nghĩa đúng</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.m),i,o.id===k.id)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='grammar'){
+    var g=c.g;
+    return '<div class="v19qcard"><div class="v19qword small">'+esc(g.q)+'</div></div><div class="v19opts">'+g.o.map(function(o,i){return optBtn(esc(o),i,i===g.a)}).join('')+'</div>'+feedback(g.ex);
+  }
+  if(mode==='read'){
+    var q=c.q;
+    return '<div class="v19passage"><b>'+esc(c.p.title)+'</b><p>'+esc(c.p.text)+'</p></div><div class="v19qcard"><div class="v19qword small">'+esc(q.q)+'</div></div><div class="v19opts">'+q.o.map(function(o,i){return optBtn(esc(o),i,i===q.a)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='builder'){
+    return '<div class="v19qcard"><div class="v19qword small">Chọn câu đúng · Nghĩa: '+esc(c.s.vi)+'</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o),i,o===c.s.s)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='speak'){
+    var w=c.w,supported=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+    var h='<div class="v19qcard"><div class="v19qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.vi)+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe mẫu</button></div></div>';
+    if(supported){
+      h+='<p class="mute">Bấm “Nói” và đọc to từ trên. Máy sẽ so khớp phát âm của bạn.</p><div class="acts"><button class="btn pri" onclick="__v19.bossSpeak()">Nói</button></div>';
+      if(F.heard)h+='<div class="v19explain">Máy nghe được: “<b>'+esc(F.heard)+'</b>”</div>';
+    }else{
+      h+='<div class="v19warn"><b>Trình duyệt không hỗ trợ nhận dạng giọng nói.</b> Chế độ thay thế: nghe mẫu rồi chọn từ bạn nghe được — không chấm điểm phát âm.</div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w.id)}).join('')+'</div>';
+      F.cur.opts=c.opts;
+    }
+    h+=feedback('');
+    return h;
+  }
+  var w2=c.w;
+  if(mode==='listen'){
+    return '<div class="v19qcard"><div class="v19qword">Nghe</div><div class="acts"><button class="btn pri" onclick="__v15.speakWord(\''+w2.id+'\')">Nghe phát âm (1 lần)</button></div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  }
+  if(mode==='type'){
+    return '<div class="v19qcard"><div class="v19qword vi">'+esc(w2.vi)+'</div><div class="mute">Chọn cách viết đúng của từ này</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  }
+  return '<div class="v19qcard"><div class="v19qword">'+esc(w2.en)+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v19opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+}
+
+/* ---------- test hooks (used by the jsdom suite; harmless in production) ---------- */
+function pickCorrect(){
+  if(!F||F.answered!==null||F.over)return false;
+  var mode=F.ultActive?F.caMode:F.qmode,idx=-1;
+  if(mode==='grammar')idx=F.cur.g.a;
+  else if(mode==='read')idx=F.cur.q.a;
+  else if(mode==='builder')idx=F.cur.opts.indexOf(F.cur.s.s);
+  else if(F.cur.ko)idx=F.cur.opts.findIndex(function(o){return o.id===F.cur.k.id});
+  else if(mode==='speak'){answer(true,F.cur.en,F.cur.en);return true;}
+  else if(mode==='type'||mode==='listen')idx=F.cur.opts.findIndex(function(o){return o.id===F.cur.w.id});
+  else idx=F.cur.optsVi.findIndex(function(o){return o.id===F.cur.w.id});
+  if(idx<0)return false;
+  pick(idx);return true;
+}
+function pickWrong(){
+  if(!F||F.answered!==null||F.over)return false;
+  var mode=F.ultActive?F.caMode:F.qmode,idx=-1;
+  if(mode==='grammar')idx=(F.cur.g.a+1)%F.cur.g.o.length;
+  else if(mode==='read')idx=(F.cur.q.a+1)%F.cur.q.o.length;
+  else if(mode==='builder')idx=F.cur.opts.findIndex(function(o){return o!==F.cur.s.s});
+  else if(F.cur.ko)idx=F.cur.opts.findIndex(function(o){return o.id!==F.cur.k.id});
+  else if(mode==='speak'){answer(false,'',F.cur.en);return true;}
+  else if(mode==='type'||mode==='listen')idx=F.cur.opts.findIndex(function(o){return o.id!==F.cur.w.id});
+  else idx=F.cur.optsVi.findIndex(function(o){return o.id!==F.cur.w.id});
+  if(idx<0)return false;
+  pick(idx);return true;
+}
+
+window.__v19={
+  mapHTML:mapHTML,renderMap:renderMap,openMap:openMap,openMapFor:openMapFor,mapOrigin:mapOrigin,
+  zoneDetail:zoneDetail,zoneClose:zoneClose,challenge:challenge,
+  fight:fight,pick:pick,next:next,close:close,speakWord:speakWord,bossSpeak:bossSpeak,
+  speakKO:speakKO,en19:en19,setLang:setLang19,lang:lang19,
+  isWon:isWon19,isWonAny:isWonAny19,isMastered:isMastered19,stars:stars19,
+  zoneOpen:zoneOpen,zoneState:zoneState,bossUnlocked:bossUnlocked19,
+  zoneWins:zoneWins,mapWon:mapWon,
+  get bosses(){return D19()},
+  _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
+    fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
+    setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
+    resolveUltimate:resolveUltimate},
+  version:'12.0.0'
+};
+})();
+
+</script>
+
+<style id="v20">
+/* ===== V20 — Save & Sync UI (V12) ===== */
+.v20panel{max-width:760px}
+.v20card{border:2px solid var(--line,#d8c9a3);border-radius:14px;padding:12px 14px;margin:12px 0;background:#fff}
+.v20card b{font-size:15px}
+.v20status{font-weight:700;margin:8px 0}
+.v20status.saved{color:var(--ok,#2e7d32)}
+.v20status.saving{color:var(--mute,#777)}
+.v20status.error{color:var(--bad,#c62828)}
+.v20auth{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.v20auth input{padding:10px;border:2px solid var(--line,#d8c9a3);border-radius:10px;font:inherit;width:100%;box-sizing:border-box}
+.v20vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.v20vs>div{border:1px solid var(--line,#d8c9a3);border-radius:10px;padding:10px}
+@media(max-width:640px){.v20vs{grid-template-columns:1fr}}
+.v20modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:1200;padding:12px}
+.v20modal .v20conflict{max-width:620px;max-height:90vh;overflow:auto}
+.v20pill{display:inline-block;font:600 12px 'Be Vietnam Pro',sans-serif;padding:4px 10px;border-radius:999px;margin:6px 0 0;background:#eee;color:#555}
+.v20pill.saved{background:#e6f4ea;color:#2e7d32}
+.v20pill.saving{background:#eef;color:#555}
+.v20pill.error{background:#fde8e8;color:#c62828}
+
+</style>
+<script id="v20cfg" src="firebase-config.js"></script>
+<script id="v20sync">
+/* ===== V20 — CLOUD SYNC ENGINE (V12, additive layer) =====
+   Local-first save sync. The game ALWAYS works offline (localStorage);
+   the cloud is an optional second copy, only when the player signs in
+   AND a Firebase project is configured (see firebase-config.js).
+
+   HONEST LIMITS (read before claiming sync "works"):
+   - The Firebase adapter below is complete code, but it has NOT been
+     tested against a live Firebase project from this environment (no
+     project, no real sign-in popup here). The engine logic (compare /
+     conflict / merge / offline queue) IS tested with a mock adapter in
+     the jsdom suite. Anh must follow FIREBASE_SETUP.md and run the live
+     checklist on GitHub Pages before telling players sync works.
+   - Firestore documents cap at 1 MB: saves larger than 900 KB are
+     refused for cloud upload (local save keeps working). The built-in
+     A1-A2/Oxford library is code, not save data, so it is never uploaded.
+   - The cloud never silently overwrites anything: if local and cloud
+     both changed since the last sync, the player CHOOSES (local / cloud
+     / safe merge), after both sides are snapshotted. Auto-sync only ever
+     UPLOADS; it never downloads or reloads on its own.
+   - Merge never sums XP/gems/items: currencies take the MAX, boss
+     progress unions (win on either side counts, stars take max), cards
+     union by id. See mergeSaves().
+   - Client-side saves can be edited by their owner; Firestore Rules stop
+     cross-account access, not self-editing. Competitive features would
+     need server-side (Cloud Functions) verification — out of scope for a
+     static GitHub Pages game, noted in FIREBASE_SETUP.md.
+*/
+(function(){
+'use strict';
+var SAVE_KEY='hanvocab.v1';
+var META_KEY='hanvocab.v12.meta';
+var MAX_CLOUD_BYTES=900*1024;   /* Firestore doc limit is 1 MB */
+var MAX_IMPORT_BYTES=10*1024*1024;
+var SAVE_VERSION=12;
+
+/* ---------- small helpers (shared with v20.js via __v20sync) ---------- */
+function hash(str){
+  /* FNV-1a, deterministic; good enough to detect "did the save change" */
+  var h=0x811c9dc5; str=String(str==null?'':str);
+  for(var i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=(h*0x01000193)>>>0; }
+  return ('0000000'+h.toString(16)).slice(-8);
+}
+function meta(){
+  try{ var m=JSON.parse(localStorage.getItem(META_KEY)||'null'); if(m&&typeof m==='object')return m; }catch(e){}
+  return {};
+}
+function saveMeta(m){
+  try{ localStorage.setItem(META_KEY, JSON.stringify(m||{})); }catch(e){}
+}
+function safeParse(raw){
+  try{ var j=JSON.parse(raw); return (j&&typeof j==='object')?j:null; }catch(e){ return null; }
+}
+function hasProgress(S){
+  if(!S) return false;
+  if((S.xp||0)>0) return true;
+  if(((S.cards||[]).length)>20) return true; /* fresh V6 seed has 20 cards */
+  if(S.v7&&((S.v7.gems||0)>0)) return true;
+  var v7=S.v7||{};
+  var en=[v7.en18, v7.en19];
+  for(var i=0;i<en.length;i++){
+    var b=en[i]&&en[i].bosses;
+    if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) return true; }
+  }
+  if(v7.en15&&v7.en15.bosses){ var b15=v7.en15.bosses; for(var k in b15){ if(b15[k]) return true; } }
+  return false;
+}
+function validateSave(obj){
+  /* structural validation for imported / downloaded saves. Returns
+     {ok:boolean, errors:[...]}. Never executes anything from the file:
+     JSON.parse only builds data, and we only read known fields. */
+  var errs=[];
+  if(!obj||typeof obj!=='object'||Array.isArray(obj)) return {ok:false, errors:['not-an-object']};
+  if(!Array.isArray(obj.cards)){ errs.push('missing-cards'); }
+  else{
+    if(obj.cards.length>20000) errs.push('too-many-cards');
+    for(var i=0;i<Math.min(obj.cards.length,20000);i++){
+      var c=obj.cards[i];
+      if(!c||typeof c!=='object'||typeof c.id!=='string'||!c.id||typeof c.h!=='string'||typeof c.m!=='string'){
+        errs.push('bad-card@'+i); break;
+      }
+    }
+  }
+  if(obj.decks!==undefined&&!Array.isArray(obj.decks)) errs.push('bad-decks');
+  if(obj.xp!==undefined&&typeof obj.xp!=='number') errs.push('bad-xp');
+  if(obj.v7!==undefined&&(typeof obj.v7!=='object'||obj.v7===null||Array.isArray(obj.v7))) errs.push('bad-v7');
+  /* prototype-pollution guard: refuse suspicious keys anywhere shallow */
+  var bad=['__proto__','constructor','prototype'];
+  function scan(o,depth){
+    if(depth>4||!o||typeof o!=='object') return;
+    for(var k in o){ if(bad.indexOf(k)>=0){ errs.push('bad-key:'+k); return; } scan(o[k],depth+1); }
+  }
+  scan(obj,0);
+  return {ok:errs.length===0, errors:errs};
+}
+function snapshot(key, raw){
+  try{ localStorage.setItem(key, raw); return true; }catch(e){ return false; }
+}
+
+/* ---------- merge (never sums currencies; unions progress) ---------- */
+function unionById(a,b,newerFirst){
+  /* arrays of {id,...}: union by id; on conflict the copy from the newer
+     save wins. `newerFirst` is the array from the newer save. */
+  var out=[], seen={};
+  function push(arr){ for(var i=0;i<(arr||[]).length;i++){ var x=arr[i]; if(!x||!x.id||seen[x.id])continue; seen[x.id]=1; out.push(x); } }
+  if(newerFirst){ push(newerFirst); push(newerFirst===a?b:a); }
+  else { push(a); push(b); }
+  return out;
+}
+function mergeBossMaps(a,b){
+  /* {bossId:{en:{win,wins,stars},ko:{...}}}: win if either won, stars/wins max */
+  var out={};
+  function put(map){
+    if(!map) return;
+    for(var id in map){
+      var src=map[id]; if(!src) continue;
+      var dst=out[id]=out[id]||{};
+      ['en','ko'].forEach(function(l){
+        var r=src[l]; if(!r) return;
+        var d=dst[l]=dst[l]||{win:0,wins:0,stars:0};
+        d.win=(d.win||r.win)?1:0;
+        d.wins=Math.max(d.wins||0,r.wins||0);
+        d.stars=Math.max(d.stars||0,r.stars||0);
+        if(r.best!==undefined) d.best=Math.max(d.best||0,r.best);
+      });
+    }
+  }
+  put(a); put(b);
+  return out;
+}
+function mergeSaves(localS, cloudS, localTime, cloudTime){
+  /* Returns a NEW save object (neither input is mutated). Currencies take
+     the MAX (never summed). Farm state, settings and deck choice come from
+     the newer save. Boss/library progress unions. */
+  var newerIsCloud=(cloudTime||0)>(localTime||0);
+  var newer=newerIsCloud?cloudS:localS, older=newerIsCloud?localS:cloudS;
+  var out={};
+  var keys={};
+  [localS,cloudS].forEach(function(s){ if(s) for(var k in s) keys[k]=1; });
+  for(var k in keys){
+    if(k==='cards') out.cards=unionById(localS.cards, cloudS.cards, newer.cards);
+    else if(k==='decks') out.decks=unionById(localS.decks, cloudS.decks, newer.decks);
+    else if(k==='xp') out.xp=Math.max(localS.xp||0, cloudS.xp||0);
+    else if(k==='v7'){
+      var v7={};
+      var vk={}; [localS.v7,cloudS.v7].forEach(function(v){ if(v) for(var kk in v) vk[kk]=1; });
+      for(var kk in vk){
+        if(kk==='gems') v7.gems=Math.max((localS.v7&&localS.v7.gems)||0,(cloudS.v7&&cloudS.v7.gems)||0);
+        else if(kk==='en18'||kk==='en19'){
+          var l=(localS.v7&&localS.v7[kk])||{}, c=(cloudS.v7&&cloudS.v7[kk])||{};
+          var m={};
+          for(var mk in l) m[mk]=l[mk];
+          for(var mk2 in c){
+            if(mk2==='bosses') m.bosses=mergeBossMaps(l.bosses, c.bosses);
+            else if(mk2==='titles') m.titles=Array.from(new Set([].concat(l.titles||[],c.titles||[])));
+            else if(mk2==='zoneClaimed'){
+              var z={}; [l.zoneClaimed,c.zoneClaimed].forEach(function(zc){ if(zc) for(var z2 in zc){ z[z2]=Object.assign({}, z[z2]||{}, zc[z2]); } }); m.zoneClaimed=z;
+            }
+            else if(mk2==='koStats') m.koStats={right:Math.max((l.koStats||{}).right||0,(c.koStats||{}).right||0), wrong:Math.max((l.koStats||{}).wrong||0,(c.koStats||{}).wrong||0)};
+            else if(mk2==='stones') m.stones=Math.max(l.stones||0, c.stones||0);
+            else if(m[mk2]===undefined) m[mk2]=c[mk2];
+          }
+          if(!m.bosses) m.bosses=mergeBossMaps(l.bosses, c.bosses);
+          v7[kk]=m;
+        }
+        else if(kk==='en15'){
+          var l15=(localS.v7&&localS.v7.en15)||{}, c15=(cloudS.v7&&cloudS.v7.en15)||{};
+          var m15={};
+          for(var k15 in l15) m15[k15]=l15[k15];
+          for(var k15b in c15){
+            if(k15b==='old'&&l15.old&&c15.old){
+              var o={};
+              ['box','right','wrong','xpAt'].forEach(function(f){
+                o[f]={};
+                [l15.old[f],c15.old[f]].forEach(function(src){ if(src) for(var wid in src) o[f][wid]=Math.max(o[f][wid]||0, src[wid]||0); });
+              });
+              o.review=Array.from(new Set([].concat(l15.old.review||[],c15.old.review||[])));
+              o.streak=Math.max(l15.old.streak||0, c15.old.streak||0);
+              m15.old=o;
+            } else if(m15[k15b]===undefined) m15[k15b]=c15[k15b];
+          }
+          v7.en15=m15;
+        }
+        else if(kk==='en16'){
+          var l16=(localS.v7&&localS.v7.en16)||{}, c16=(cloudS.v7&&cloudS.v7.en16)||{};
+          var m16={};
+          for(var k16 in l16) m16[k16]=l16[k16];
+          for(var k16b in c16){
+            if(k16b==='decks') m16.decks=unionById(l16.decks, c16.decks, newer.v7.en16?newer.v7.en16.decks:null);
+            else if(m16[k16b]===undefined) m16[k16b]=c16[k16b];
+          }
+          v7.en16=m16;
+        }
+        else if(kk==='en17'){
+          var l17=(localS.v7&&localS.v7.en17)||{}, c17=(cloudS.v7&&cloudS.v7.en17)||{};
+          var m17={};
+          for(var k17 in l17) m17[k17]=l17[k17];
+          for(var k17b in c17){
+            if(k17b==='fav'||k17b==='mastered') m17[k17b]=Array.from(new Set([].concat(l17[k17b]||[],c17[k17b]||[])));
+            else if(m17[k17b]===undefined) m17[k17b]=c17[k17b];
+          }
+          v7.en17=m17;
+        }
+        else if(kk==='meta') v7.meta=newer.v7.meta||older.v7.meta;
+        else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
+      }
+      out.v7=v7;
+    }
+    else if(k==='opt'||k==='deck'||k==='rem'||k==='skin') out[k]=(newer[k]!==undefined?newer[k]:older[k]);
+    else out[k]=(newer[k]!==undefined?newer[k]:older[k]);
+  }
+  return out;
+}
+
+/* ---------- Firebase adapter (lazy SDK, compat builds) ---------- */
+var CFG=(window.__FIREBASE_CONFIG__||{});
+function configured(){ return !!(CFG&&CFG.apiKey&&CFG.projectId); }
+var FB={app:null, auth:null, db:null, loading:null, authHooked:false};
+var SDK_URLS=[
+  'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js'
+];
+function loadScript(src){
+  return new Promise(function(res,rej){
+    var s=document.createElement('script');
+    s.src=src; s.onload=function(){res()}; s.onerror=function(){rej(new Error('sdk-load-failed: '+src))};
+    document.head.appendChild(s);
+  });
+}
+function ensureFB(){
+  if(!configured()) return Promise.reject(new Error('not-configured'));
+  if(FB.app) return Promise.resolve(FB);
+  if(!FB.loading){
+    FB.loading=(async function(){
+      for(var i=0;i<SDK_URLS.length;i++){ await loadScript(SDK_URLS[i]); }
+      if(!window.firebase||!firebase.initializeApp) throw new Error('sdk-missing');
+      FB.app=firebase.initializeApp(CFG);
+      FB.auth=firebase.auth();
+      FB.db=firebase.firestore();
+      if(!FB.authHooked){
+        FB.authHooked=true;
+        FB.auth.onAuthStateChanged(function(u){ engine.onAuthUser(u?{uid:u.uid,email:u.email||'',displayName:u.displayName||''}:null); });
+      }
+      return FB;
+    })();
+  }
+  return FB.loading;
+}
+function docRef(uid){ return FB.db.collection('players').doc(uid); }
+var FirebaseAdapter={
+  kind:'firebase',
+  signInGoogle:function(){
+    return ensureFB().then(function(){
+      var p=new firebase.auth.GoogleAuthProvider();
+      return FB.auth.signInWithPopup(p).then(function(cr){ return {uid:cr.user.uid,email:cr.user.email||'',displayName:cr.user.displayName||''}; });
+    });
+  },
+  signInEmail:function(email,pw){
+    return ensureFB().then(function(){
+      return FB.auth.signInWithEmailAndPassword(email,pw).then(function(cr){ return {uid:cr.user.uid,email:cr.user.email||'',displayName:cr.user.displayName||''}; });
+    });
+  },
+  signUpEmail:function(email,pw){
+    return ensureFB().then(function(){
+      return FB.auth.createUserWithEmailAndPassword(email,pw).then(function(cr){ return {uid:cr.user.uid,email:cr.user.email||'',displayName:cr.user.displayName||''}; });
+    });
+  },
+  signOut:function(){ return ensureFB().then(function(){ return FB.auth.signOut(); }); },
+  load:function(uid){
+    return ensureFB().then(function(){
+      return docRef(uid).get().then(function(snap){
+        if(!snap.exists) return null;
+        var d=snap.data()||{};
+        return {saveVersion:d.saveVersion||0, updatedAt:d.updatedAt||0, data:d.data||null};
+      });
+    });
+  },
+  save:function(uid,payload){
+    return ensureFB().then(function(){
+      return docRef(uid).set(payload).then(function(){ return {updatedAt:payload.updatedAt}; });
+    });
+  }
+};
+
+/* ---------- sync engine ---------- */
+var engine={
+  user:null, adapter:FirebaseAdapter, testAdapter:null,
+  cloud:'off', /* off | guest | ready | syncing | synced | offline | conflict | cloud-newer | error */
+  cloudMsg:'', conflict:null, syncing:false, pending:false, lastError:''
+};
+function setCloud(st,msg){
+  engine.cloud=st; engine.cloudMsg=msg||'';
+  notify();
+}
+var listeners=[];
+function notify(){
+  listeners.forEach(function(cb){ try{cb(engine);}catch(e){} });
+}
+function getAdapter(){ return engine.testAdapter||engine.adapter; }
+function readLocal(){
+  var raw=''; try{ raw=localStorage.getItem(SAVE_KEY)||''; }catch(e){}
+  return {raw:raw, obj:safeParse(raw), hash:hash(raw)};
+}
+function writeLocalRaw(raw){
+  try{ localStorage.setItem(SAVE_KEY, raw); return true; }catch(e){ return false; }
+}
+function sizeCheck(raw){
+  if((raw||'').length>MAX_CLOUD_BYTES) return {ok:false, reason:'save-too-large'};
+  return {ok:true};
+}
+function applyCloudData(data){
+  /* writes the cloud save locally; caller reloads the page afterwards */
+  var v=validateSave(data);
+  if(!v.ok) return {ok:false, errors:v.errors};
+  var raw=JSON.stringify(data);
+  var cur=readLocal();
+  snapshot('hanvocab.v12.pre-download-'+Date.now(), cur.raw);
+  if(!writeLocalRaw(raw)) return {ok:false, errors:['write-failed']};
+  var m=meta(); m.lastSyncAt=Date.now(); m.lastSyncHash=hash(raw); m.lastSyncAtCloud=engine._cloudUpdatedAt||0; saveMeta(m);
+  return {ok:true};
+}
+engine.onAuthUser=function(u){
+  var prevUid=engine.user&&engine.user.uid;
+  engine.user=u||null;
+  if(!u){ setCloud(configured()?'guest':'off'); return; }
+  if(u.uid!==prevUid){ setCloud('ready'); } /* new/different account: ask before syncing */
+  notify();
+};
+engine.syncNow=function(opts){
+  opts=opts||{};
+  var auto=!!opts.auto;
+  if(!configured()){ setCloud('off'); return Promise.resolve({ok:false, reason:'not-configured'}); }
+  if(!engine.user){ setCloud('guest'); return Promise.resolve({ok:false, reason:'guest'}); }
+  if(typeof navigator!=='undefined'&&navigator.onLine===false){ setCloud('offline'); engine.pending=true; return Promise.resolve({ok:false, reason:'offline'}); }
+  if(engine.syncing) return Promise.resolve({ok:false, reason:'busy'});
+  engine.syncing=true; setCloud('syncing');
+  var adapter=getAdapter();
+  var uid=engine.user.uid;
+  var m0=meta();
+  /* Account switch guard: if this device last synced a DIFFERENT account,
+     never upload the local save into the new account on its own. The
+     player must explicitly confirm (panel passes force:true after a
+     confirm dialog). Local data is never mixed into another account. */
+  if(m0.lastSyncUid&&m0.lastSyncUid!==uid&&!opts.force){
+    engine.syncing=false; setCloud('ready');
+    return Promise.resolve({ok:false, reason:'account-changed'});
+  }
+  return adapter.load(uid).then(function(cloud){
+    var loc=readLocal();
+    var m=meta();
+    if(!cloud||!cloud.data){
+      var chk=sizeCheck(loc.raw);
+      if(!chk.ok){ engine.syncing=false; setCloud('error','save-too-large'); return {ok:false, reason:'save-too-large'}; }
+      var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:loc.obj}).then(function(){
+        m.lastSyncAt=now; m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+        engine.syncing=false; setCloud('synced'); return {ok:true, action:'uploaded'};
+      });
+    }
+    engine._cloudUpdatedAt=cloud.updatedAt||0;
+    var cloudHash=hash(JSON.stringify(cloud.data));
+    if(cloudHash===loc.hash){
+      m.lastSyncAt=Date.now(); m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=cloud.updatedAt||0; saveMeta(m);
+      engine.syncing=false; setCloud('synced'); return {ok:true, action:'already-synced'};
+    }
+    var localHas=hasProgress(loc.obj), cloudHas=hasProgress(cloud.data);
+    var localChanged=(m.lastSyncHash!==undefined&&m.lastSyncHash!==null)?(loc.hash!==m.lastSyncHash):localHas;
+    var cloudChanged=(m.lastSyncAtCloud===undefined||m.lastSyncAtCloud===null)?cloudHas:(cloud.updatedAt!==m.lastSyncAtCloud);
+    if(!localHas&&cloudHas){
+      /* only the cloud has real progress: download (manual sync only) */
+      if(auto){ engine.syncing=false; setCloud('cloud-newer'); return {ok:false, reason:'cloud-newer', action:'download-available'}; }
+      var r=applyCloudData(cloud.data);
+      engine.syncing=false;
+      if(!r.ok){ setCloud('error','bad-cloud-data'); return {ok:false, reason:'bad-cloud-data', errors:r.errors}; }
+      setCloud('synced'); return {ok:true, action:'downloaded', needsReload:true};
+    }
+    if(localHas&&!cloudHas){
+      var chk2=sizeCheck(loc.raw);
+      if(!chk2.ok){ engine.syncing=false; setCloud('error','save-too-large'); return {ok:false, reason:'save-too-large'}; }
+      var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:loc.obj}).then(function(){
+        m.lastSyncAt=now; m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+        engine.syncing=false; setCloud('synced'); return {ok:true, action:'uploaded'};
+      });
+    }
+    if(!localChanged&&cloudChanged){
+      if(auto){ engine.syncing=false; setCloud('cloud-newer'); return {ok:false, reason:'cloud-newer', action:'download-available'}; }
+      var r2=applyCloudData(cloud.data);
+      engine.syncing=false;
+      if(!r2.ok){ setCloud('error','bad-cloud-data'); return {ok:false, reason:'bad-cloud-data', errors:r2.errors}; }
+      setCloud('synced'); return {ok:true, action:'downloaded', needsReload:true};
+    }
+    if(!localHas&&!cloudHas){
+      /* neither side has real progress (two fresh saves): nothing to fight
+         over — upload local to establish the cloud doc. */
+      var chk4=sizeCheck(loc.raw);
+      if(!chk4.ok){ engine.syncing=false; setCloud('error','save-too-large'); return {ok:false, reason:'save-too-large'}; }
+      var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:loc.obj}).then(function(){
+        m.lastSyncAt=now; m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+        engine.syncing=false; setCloud('synced'); return {ok:true, action:'uploaded'};
+      });
+    }
+    if(localChanged&&!cloudChanged){
+      var chk3=sizeCheck(loc.raw);
+      if(!chk3.ok){ engine.syncing=false; setCloud('error','save-too-large'); return {ok:false, reason:'save-too-large'}; }
+      var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:loc.obj}).then(function(){
+        m.lastSyncAt=now; m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+        engine.syncing=false; setCloud('synced'); return {ok:true, action:'uploaded'};
+      });
+    }
+    /* both sides changed since the last sync: NEVER auto-pick. */
+    engine.conflict={local:loc.obj, cloud:cloud.data, localTime:m.lastSavedAt||0, cloudTime:cloud.updatedAt||0, localHash:loc.hash, cloudHash:cloudHash};
+    snapshot('hanvocab.v12.conflict-local-'+Date.now(), loc.raw);
+    snapshot('hanvocab.v12.conflict-cloud-'+Date.now(), JSON.stringify(cloud.data));
+    engine.syncing=false; setCloud('conflict'); return {ok:false, reason:'conflict'};
+  }).catch(function(err){
+    engine.syncing=false;
+    var msg=(err&&err.message)||String(err);
+    if(/offline|network|Failed to fetch|sdk-load-failed/i.test(msg)){ setCloud('offline'); engine.pending=true; return {ok:false, reason:'offline'}; }
+    engine.lastError=msg; setCloud('error',msg); return {ok:false, reason:'error', error:msg};
+  });
+};
+engine.resolveConflict=function(choice){
+  var c=engine.conflict;
+  if(!c) return Promise.resolve({ok:false, reason:'no-conflict'});
+  var uid=engine.user&&engine.user.uid;
+  if(!uid) return Promise.resolve({ok:false, reason:'guest'});
+  if(typeof navigator!=='undefined'&&navigator.onLine===false){ setCloud('offline'); return Promise.resolve({ok:false, reason:'offline'}); }
+  var adapter=getAdapter();
+  var m=meta();
+  if(choice==='local'){
+    var loc=readLocal();
+    var chk=sizeCheck(loc.raw);
+    if(!chk.ok){ setCloud('error','save-too-large'); return Promise.resolve({ok:false, reason:'save-too-large'}); }
+    var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:loc.obj}).then(function(){
+      m.lastSyncAt=now; m.lastSyncHash=loc.hash; m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+      engine.conflict=null; setCloud('synced'); return {ok:true, action:'kept-local'};
+    });
+  }
+  if(choice==='cloud'){
+    var r=applyCloudData(c.cloud);
+    if(!r.ok){ setCloud('error','bad-cloud-data'); return Promise.resolve({ok:false, reason:'bad-cloud-data', errors:r.errors}); }
+    engine.conflict=null; setCloud('synced'); return Promise.resolve({ok:true, action:'kept-cloud', needsReload:true});
+  }
+  if(choice==='merge'){
+    var merged=mergeSaves(c.local, c.cloud, c.localTime, c.cloudTime);
+    var v=validateSave(merged);
+    if(!v.ok){ setCloud('error','bad-merge'); return Promise.resolve({ok:false, reason:'bad-merge', errors:v.errors}); }
+    var raw=JSON.stringify(merged);
+    var chk2=sizeCheck(raw);
+    if(!chk2.ok){ setCloud('error','save-too-large'); return Promise.resolve({ok:false, reason:'save-too-large'}); }
+    snapshot('hanvocab.v12.pre-merge-'+Date.now(), readLocal().raw);
+    if(!writeLocalRaw(raw)){ setCloud('error','write-failed'); return Promise.resolve({ok:false, reason:'write-failed'}); }
+    var now=Date.now();
+      return adapter.save(uid,{saveVersion:SAVE_VERSION,updatedAt:now,data:merged}).then(function(){
+      m.lastSyncAt=now; m.lastSyncHash=hash(raw); m.lastSyncUid=uid; m.lastSyncAtCloud=now; saveMeta(m);
+      engine.conflict=null; setCloud('synced'); return {ok:true, action:'merged', needsReload:true};
+    });
+  }
+  return Promise.resolve({ok:false, reason:'bad-choice'});
+};
+engine.noteLocalSaved=function(){
+  /* called by the save manager after a successful local flush. Schedules
+     an upload-only auto-sync (never a download/reload) when signed in. */
+  if(!configured()||!engine.user) return;
+  if(typeof navigator!=='undefined'&&navigator.onLine===false){ engine.pending=true; setCloud('offline'); return; }
+  if(engine._autoT) clearTimeout(engine._autoT);
+  engine._autoT=setTimeout(function(){ engine._autoT=null; if(engine.cloud!=='conflict') engine.syncNow({auto:true}); }, engine._autoDelay||5000);
+};
+function onOnline(){
+  if(engine.pending&&engine.user&&configured()){
+    engine.pending=false;
+    engine.syncNow({auto:true});
+  }
+}
+function onOffline(){ engine.pending=true; if(engine.user) setCloud('offline'); }
+try{
+  window.addEventListener('online', onOnline);
+  window.addEventListener('offline', onOffline);
+}catch(e){}
+if(!configured()) engine.cloud='off';
+else engine.cloud='guest';
+
+window.__v20sync={
+  configured:configured, version:'12.0.0',
+  status:function(){ return {cloud:engine.cloud, cloudMsg:engine.cloudMsg, user:engine.user, lastError:engine.lastError, conflict:engine.conflict?{localTime:engine.conflict.localTime, cloudTime:engine.conflict.cloudTime}:null}; },
+  conflict:function(){ return engine.conflict; },
+  onChange:function(cb){ if(typeof cb==='function') listeners.push(cb); },
+  signInGoogle:function(){ return getAdapter().signInGoogle().then(function(u){ engine.onAuthUser(u); return u; }); },
+  signInEmail:function(e,p){ return getAdapter().signInEmail(e,p).then(function(u){ engine.onAuthUser(u); return u; }); },
+  signUpEmail:function(e,p){ return getAdapter().signUpEmail(e,p).then(function(u){ engine.onAuthUser(u); return u; }); },
+  signOut:function(){
+    var a=getAdapter();
+    return (a.signOut?a.signOut():Promise.resolve()).then(function(){ engine.user=null; engine.conflict=null; setCloud(configured()?'guest':'off'); });
+  },
+  syncNow:function(opts){ return engine.syncNow(opts); },
+  resolveConflict:function(c){ return engine.resolveConflict(c); },
+  noteLocalSaved:function(){ engine.noteLocalSaved(); },
+  meta:meta, saveMeta:saveMeta, hash:hash, validateSave:validateSave,
+  hasProgress:hasProgress, mergeSaves:mergeSaves, applyCloudData:applyCloudData,
+  snapshot:snapshot, readLocal:readLocal,
+  MAX_CLOUD_BYTES:MAX_CLOUD_BYTES, MAX_IMPORT_BYTES:MAX_IMPORT_BYTES, SAVE_VERSION:SAVE_VERSION,
+  _test:{
+    engine:engine, setAdapter:function(a){ engine.testAdapter=a; },
+    setConfig:function(c){ CFG=c||{}; if(!configured()) engine.cloud='off'; else if(!engine.user) engine.cloud='guest'; notify(); },
+    getConfig:function(){ return CFG; },
+    setUser:function(u){ engine.onAuthUser(u); },
+    setAutoDelay:function(ms){ engine._autoDelay=ms; },
+    applyCloudData:applyCloudData, mergeSaves:mergeSaves, validateSave:validateSave, hasProgress:hasProgress
+  }
+};
+})();
+
+</script>
+<script id="v20js">
+/* ===== V20 — SAVE MANAGER + MIGRATION + DATA PANEL (V12, additive) =====
+   Wraps the game's single save funnel (V6 `save()` — every layer funnels
+   through it: save15/save7/save19 all call it) with:
+   - debounced, verified writes (read-back check; a failed write is
+     reported as an error, never as "saved")
+   - flush on page hide / close (visibilitychange + beforeunload)
+   - a visible save status (panel + header pill) with last-saved time
+   - one-time V11 -> V12 migration: pre-migration backup, structural
+     validation + repair of missing subkeys, version stamp, rollback
+   - the "Quản lý dữ liệu" panel (rendered into the Backup tab) and the
+     Korean Data-view entry button (V16-style setView/render wrap)
+   The cloud sync engine lives in v20_sync.js (__v20sync); this file only
+   reads its state and calls its methods (guarded — the game works fully
+   without any cloud configuration).
+*/
+(function(){
+'use strict';
+var SAVE_KEY='hanvocab.v1';
+var BACKUP_KEY='hanvocab.v11-backup';
+var SAVE_VERSION=12;
+function $(s){return document.querySelector(s)}
+function getS(){ try{ return S; }catch(e){ return null; } } /* V6 declares `let S` — a lexical global, NOT window.S (V11.1 lesson) */
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sync(){ return window.__v20sync||null; }
+function fmtTime(ts){
+  if(!ts) return 'chưa có';
+  try{ var d=new Date(ts); return d.toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}); }catch(e){ return String(ts); }
+}
+
+/* ---------- meta (lives outside the save, so stamping it never re-saves) ---------- */
+function meta(){ var s=sync(); return s?s.meta():{}; }
+function saveMeta(m){ var s=sync(); if(s) s.saveMeta(m); }
+
+/* ---------- save manager: wrap the one global save() ---------- */
+var origSave=null;
+var dirty=false, timer=null, lastFlush=0, dirtySince=0, saveState='idle', saveError='';
+var DEBOUNCE_MS=800;
+function setSaveState(st,err){
+  saveState=st; saveError=err||'';
+  renderPill();
+  /* update the panel in place — never re-render the whole tab here, or the
+     player would lose what they are typing in the sign-in form */
+  var el=document.querySelector('#v20panel .v20status');
+  if(el){ el.textContent=saveStateText()+(saveError?' — '+saveError:''); el.className='v20status '+st; }
+  var lt=document.querySelector('#v20lastsaved');
+  if(lt){ var m=meta(); lt.textContent=fmtTime(m.lastSavedAt); }
+}
+function verifyWrite(){
+  /* Strong check: the bytes on disk must equal the current in-memory save.
+     The V6 save() swallows its own errors, so a failed write is invisible
+     unless we compare read-back content — a shape/count check alone would
+     pass against stale data with the same shape. */
+  try{
+    var raw=localStorage.getItem(SAVE_KEY)||'';
+    if(!raw) return {ok:false, error:'empty-after-write'};
+    var S0=getS();
+    if(!S0) return {ok:false, error:'no-state'};
+    if(raw!==JSON.stringify(S0)) return {ok:false, error:'readback-mismatch'};
+    var j=JSON.parse(raw);
+    if(!j||!Array.isArray(j.cards)) return {ok:false, error:'bad-shape-after-write'};
+    return {ok:true};
+  }catch(e){ return {ok:false, error:'readback-failed'}; }
+}
+function flush(){
+  if(timer){ clearTimeout(timer); timer=null; }
+  if(!dirty) return true;
+  dirty=false; dirtySince=0; lastFlush=Date.now();
+  var ok=false;
+  try{ if(origSave) origSave(); else if(typeof save==='function') save(); ok=true; }catch(e){ ok=false; }
+  if(ok){
+    var v=verifyWrite();
+    if(v.ok){
+      var m=meta(); m.lastSavedAt=Date.now(); saveMeta(m);
+      setSaveState('saved');
+      var s2=sync(); if(s2) s2.noteLocalSaved();
+      return true;
+    }
+    setSaveState('error', v.error||'verify-failed');
+    dirty=true;
+    return false;
+  }
+  setSaveState('error','write-failed');
+  dirty=true;
+  return false;
+}
+function requestSave(){
+  if(!dirty) dirtySince=Date.now();
+  dirty=true;
+  setSaveState('saving');
+  if(!timer) timer=setTimeout(flush, DEBOUNCE_MS);
+  /* safety: never let a pending save sit longer than 5s */
+  if(dirtySince&&Date.now()-dirtySince>5000) flush();
+}
+function saveNow(){
+  /* explicit "save now": always write the current state, even if nothing
+     called save() since the last flush (e.g. the player edited data and
+     pressed the button directly). */
+  dirty=true;
+  var r=flush();
+  if(r&&window.__v15&&window.__v15.pop15) window.__v15.pop15('Đã lưu trên thiết bị.');
+  return r;
+}
+function wrapSave(){
+  if(window.save&&window.save.__v20) return;
+  try{
+    origSave=window.save;
+    var w=function(){ requestSave(); };
+    w.__v20=true;
+    window.save=w;
+  }catch(e){}
+}
+function installFlushHooks(){
+  try{
+    window.addEventListener('beforeunload', function(){ if(dirty) flush(); });
+    document.addEventListener('visibilitychange', function(){ if(document.hidden&&dirty) flush(); });
+  }catch(e){}
+}
+
+/* ---------- migration V11 -> V12 (one-time, checked, rollbackable) ---------- */
+function saveStamp(){
+  var S0=getS(); return (S0&&S0.v7&&S0.v7.meta)||null;
+}
+function runMigration(){
+  var res={done:false, reason:'', backup:false, repaired:[]};
+  var raw=''; try{ raw=localStorage.getItem(SAVE_KEY)||''; }catch(e){}
+  if(!raw){ res.reason='no-save'; return res; }
+  var cur=saveStamp();
+  if(cur&&cur.saveVersion>=SAVE_VERSION){ res.done=true; res.reason='already-v12'; return res; }
+  /* 1) pre-migration backup of the exact V11 bytes (never overwritten) */
+  try{
+    if(!localStorage.getItem(BACKUP_KEY)){
+      localStorage.setItem(BACKUP_KEY, JSON.stringify({savedAt:Date.now(), version:cur?cur.saveVersion||11:11, raw:raw}));
+      res.backup=true;
+    } else res.backup=true; /* already kept from the first V12 boot */
+  }catch(e){ res.reason='backup-failed'; return res; }
+  /* 2) validate + repair the few fields no layer self-heals (never delete
+     anything). en/en15/en16/en17/en18/en19 are NOT repaired here: each
+     layer lazily creates its own subkey with the full default shape
+     (enOld()/en15()/en19()...), and writing a half-empty `{}` would
+     defeat that self-healing (it is truthy, so `||` never replaces it). */
+  var S0=getS();
+  if(!S0||!Array.isArray(S0.cards)){ res.reason='bad-save-shape'; return res; }
+  S0.v7=S0.v7||{};
+  var v7=S0.v7;
+  if(!Array.isArray(S0.decks)) { S0.decks=[]; res.repaired.push('decks'); }
+  if(typeof S0.xp!=='number') { S0.xp=0; res.repaired.push('xp'); }
+  /* 3) stamp (old stamp kept as prevVersion) */
+  var prev=cur?cur.saveVersion||11:11;
+  v7.meta={saveVersion:SAVE_VERSION, migratedAt:Date.now(), prevVersion:prev};
+  res.done=true; res.reason='migrated';
+  /* persist the stamp through the normal (wrapped) save path */
+  try{ if(typeof save==='function') save(); }catch(e){}
+  flush();
+  return res;
+}
+function restorePreMigration(){
+  var b=null;
+  try{ b=JSON.parse(localStorage.getItem(BACKUP_KEY)||'null'); }catch(e){}
+  if(!b||!b.raw) return {ok:false, reason:'no-backup'};
+  var s=sync(); if(!s) return {ok:false, reason:'no-sync-module'};
+  var j=safeParseLocal(b.raw);
+  if(!j) return {ok:false, reason:'bad-backup'};
+  var v=s.validateSave(j);
+  if(!v.ok) return {ok:false, reason:'invalid-backup', errors:v.errors};
+  snapshot('hanvocab.v12.pre-rollback-'+Date.now(), localStorage.getItem(SAVE_KEY)||'');
+  try{ localStorage.setItem(SAVE_KEY, b.raw); }catch(e){ return {ok:false, reason:'write-failed'}; }
+  return {ok:true};
+}
+function safeParseLocal(raw){ try{ var j=JSON.parse(raw); return (j&&typeof j==='object')?j:null; }catch(e){ return null; } }
+function snapshot(key, raw){ try{ localStorage.setItem(key, raw); return true; }catch(e){ return false; } }
+
+/* ---------- import (validated; snapshots current save first) ---------- */
+var lastImportError=null;
+function importFile(input, fallback){
+  var f=input&&input.files&&input.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    lastImportError=null;
+    var raw=String(rd.result||'');
+    if(raw.length>((sync()?sync().MAX_IMPORT_BYTES:10*1024*1024))){
+      lastImportError=['file-too-large']; alert('File sao lưu quá lớn (tối đa 10 MB).'); return;
+    }
+    var j=safeParseLocal(raw);
+    if(!j){ lastImportError=['bad-json']; alert('File sao lưu không hợp lệ: không đọc được JSON.'); return; }
+    var s=sync(); if(!s){ if(fallback) return fallback(input); return; }
+    var v=s.validateSave(j);
+    if(!v.ok){
+      lastImportError=v.errors;
+      alert('File sao lưu không hợp lệ: '+v.errors.slice(0,3).join(', ')+'. Dữ liệu hiện tại không thay đổi.');
+      return;
+    }
+    var cur=''; try{ cur=localStorage.getItem(SAVE_KEY)||''; }catch(e){}
+    snapshot('hanvocab.v12.preimport-'+Date.now(), cur);
+    var stamp=(j.v7&&j.v7.meta&&j.v7.meta.saveVersion)||11;
+    if(!confirm('Khôi phục bản lưu này (phiên bản '+stamp+')? Dữ liệu hiện tại sẽ được thay thế — bản sao lưu trước khi khôi phục đã được giữ lại.')) return;
+    try{ localStorage.setItem(SAVE_KEY, JSON.stringify(j)); }catch(e){ alert('Không ghi được dữ liệu (bộ nhớ trình duyệt đầy?).'); return; }
+    location.reload();
+  };
+  rd.readAsText(f);
+}
+function exportFile(){
+  var v=window.__v15;
+  if(v&&v.backupExport) v.backupExport();
+}
+
+/* ---------- header pill (always-visible save status, Korean side) ---------- */
+function renderPill(){
+  var pill=$('#v20savepill'); if(!pill) return;
+  var m=meta();
+  var txt='', cls='';
+  if(saveState==='saving'){ txt='○ Đang lưu…'; cls='saving'; }
+  else if(saveState==='error'){ txt='⚠ Lỗi lưu! Mở mục Dữ liệu để kiểm tra.'; cls='error'; }
+  else if(saveState==='saved'){ txt='● Đã lưu '+(m.lastSavedAt?fmtTime(m.lastSavedAt):''); cls='saved'; }
+  else { txt=m.lastSavedAt?('● Đã lưu '+fmtTime(m.lastSavedAt)):'● Chưa lưu lần nào'; cls='idle'; }
+  var st=syncStatusText();
+  if(st) txt+=' · '+st;
+  pill.textContent=txt;
+  pill.className='v20pill '+cls;
+}
+function syncStatusText(){
+  var s=sync(); if(!s) return '';
+  var st=s.status();
+  if(!s.configured()) return 'Đám mây: chưa cấu hình';
+  if(!st.user) return 'Đám mây: khách (chưa đăng nhập)';
+  var map={ready:'sẵn sàng đồng bộ', syncing:'đang đồng bộ…', synced:'đã đồng bộ', offline:'mất mạng — lưu cục bộ', conflict:'xung đột dữ liệu!', 'cloud-newer':'có dữ liệu mới trên đám mây', error:'lỗi đồng bộ'};
+  return '☁ '+(map[st.cloud]||st.cloud);
+}
+function installPill(){
+  try{
+    var top=document.querySelector('.top>div');
+    if(!top||document.getElementById('v20savepill')) return;
+    var pill=document.createElement('span');
+    pill.id='v20savepill'; pill.className='v20pill idle';
+    pill.textContent='● Đang tải…';
+    top.appendChild(pill);
+    renderPill();
+  }catch(e){}
+}
+
+/* ---------- Korean Data-view entry (V16-style wrap, no V6 edit) ---------- */
+function injectDataBtn(){
+  try{
+    var app=document.getElementById('app');
+    if(!app||document.getElementById('v20ko-btn')) return;
+    var b=app.querySelector('[onclick="backup()"]');
+    if(!b||!b.parentNode) return;
+    var div=document.createElement('div');
+    div.className='acts'; div.style.margin='10px 0';
+    div.innerHTML='<button class="btn pri" id="v20ko-btn" onclick="window.__v15&&__v15.openHub(\'backup\')">☁️ Quản lý dữ liệu &amp; đồng bộ</button>'
+      +'<span class="mute" id="v20ko-status"></span>';
+    b.parentNode.parentNode.insertBefore(div, b.parentNode);
+    var st=$('#v20ko-status'); if(st) st.textContent=syncStatusText();
+  }catch(e){}
+}
+function wrapGlobals(){
+  try{
+    if(typeof window.setView==='function'&&!window.setView.__v20){
+      var _sv=window.setView;
+      var nw=function(v){ _sv(v); if(v==='data') setTimeout(injectDataBtn,0); };
+      nw.__v20=true; window.setView=nw;
+    }
+    if(typeof window.render==='function'&&!window.render.__v20){
+      var _r=window.render;
+      var nr=function(){ _r(); try{ if(typeof view!=='undefined'&&view==='data') setTimeout(injectDataBtn,0); }catch(e){} };
+      nr.__v20=true; window.render=nr;
+    }
+  }catch(e){}
+}
+
+/* ---------- Data Management panel (rendered into the Backup tab) ---------- */
+function saveSizeKB(){
+  try{ return ((localStorage.getItem(SAVE_KEY)||'').length/1024).toFixed(1); }catch(e){ return '?'; }
+}
+function dataPanelHTML(){
+  var m=meta(), st=syncStatusText(), s=sync();
+  var stt=s?s.status():{cloud:'off', user:null};
+  var mig=saveStamp();
+  var hasBackup=false; try{ hasBackup=!!localStorage.getItem(BACKUP_KEY); }catch(e){}
+  var S0=getS();
+  var h='<div class="v20panel" id="v20panel">'
+  +'<h3>💾 Quản lý dữ liệu</h3>'
+  /* save status */
+  +'<div class="v20card"><b>Trạng thái lưu</b><p class="v20status '+saveState+'">'+esc(saveStateText())+(saveError?' — '+esc(saveError):'')+'</p>'
+  +'<p class="mute">Lần lưu gần nhất: <b id="v20lastsaved">'+esc(fmtTime(m.lastSavedAt))+'</b> · Kích thước bản lưu: <b>'+saveSizeKB()+' KB</b> · Khóa: <b>hanvocab.v1</b></p>'
+  +'<div class="acts"><button class="btn pri" onclick="__v20.saveNow()">Lưu tiến trình ngay</button></div>'
+  +'<p class="mute">Game tự lưu sau mỗi bài học, câu trả lời, trận boss, phần thưởng, mua sắm, trồng/trồng cây và đổi cài đặt (ghi dồn 0,8 giây để tránh ghi liên tục). Đóng tab cũng tự lưu.</p></div>'
+  /* migration */
+  +'<div class="v20card"><b>Chuyển đổi dữ liệu</b><p class="mute">Phiên bản dữ liệu: <b>'+(mig?('V'+mig.saveVersion+' (từ V'+(mig.prevVersion||'?')+', '+fmtTime(mig.migratedAt)+')'):'chưa chuyển đổi')+'</b></p>'
+  +'<p class="mute">Bản sao lưu trước khi chuyển đổi: <b>'+(hasBackup?'đã giữ lại':'không có')+'</b></p>'
+  +(hasBackup?'<div class="acts"><button class="btn" onclick="__v20.rollback()">Khôi phục bản trước khi chuyển đổi</button></div>':'')
+  +'</div>'
+  /* cloud */
+  +'<div class="v20card"><b>☁️ Đồng bộ đám mây</b><p class="mute">'+esc(st)+'</p>';
+  if(!s||!s.configured()){
+    h+='<p class="mute">Chưa cấu hình Firebase — game vẫn lưu đầy đủ trên thiết bị này. Để bật đồng bộ, làm theo <b>FIREBASE_SETUP.md</b> trong file ZIP (tạo project Firebase, bật Google + Email, dán cấu hình vào <b>firebase-config.js</b>), rồi tải lại trang. <b>Không có cấu hình thì không có đồng bộ — game không bao giờ giả vờ đã đồng bộ.</b></p>';
+  }else{
+    if(stt.user){
+      h+='<p>Đã đăng nhập: <b>'+esc(stt.user.email||stt.user.displayName||stt.user.uid)+'</b> <span class="mute">('+esc(stt.user.uid.slice(0,8))+'…)</span></p>'
+      +'<p class="mute">Lần đồng bộ gần nhất: <b>'+esc(fmtTime(m.lastSyncAt))+'</b></p>'
+      +'<div class="acts"><button class="btn pri" onclick="__v20.syncNow()">Đồng bộ ngay</button><button class="btn" onclick="__v20.signOut()">Đăng xuất</button></div>';
+    }else{
+      h+='<p class="mute">Chưa đăng nhập — đang chơi với tư cách khách, tiến trình chỉ lưu trên thiết bị này.</p>'
+      +'<div class="acts"><button class="btn pri" onclick="__v20.signInGoogle()">Đăng nhập bằng Google</button></div>'
+      +'<div class="v20auth"><input id="v20email" type="email" placeholder="Email" autocomplete="email"><input id="v20pw" type="password" placeholder="Mật khẩu" autocomplete="current-password">'
+      +'<div class="acts"><button class="btn" onclick="__v20.signInEmail()">Đăng nhập bằng Email</button><button class="btn" onclick="__v20.signUpEmail()">Tạo tài khoản mới</button></div></div>'
+      +'<p class="mute">Mỗi tài khoản có dữ liệu riêng. Đăng nhập tài khoản khác sẽ so sánh dữ liệu trước khi làm gì — không tự ghi đè.</p>';
+    }
+  }
+  h+='</div>'
+  /* conflict host */
+  +'<div id="v20conflict"></div>'
+  +'</div>';
+  return h;
+}
+function saveStateText(){
+  if(saveState==='saving') return 'Đang lưu…';
+  if(saveState==='error') return 'Lỗi lưu dữ liệu — bản lưu trên thiết bị có thể chưa cập nhật';
+  if(saveState==='saved') return 'Đã lưu trên thiết bị';
+  return 'Sẵn sàng';
+}
+function conflictHTML(){
+  var s=sync(); if(!s) return '';
+  var c=s.conflict(); if(!c) return '';
+  function sum(x){
+    if(!x) return 'không có dữ liệu';
+    var wins=0; ['en18','en19'].forEach(function(k){ var b=x.v7&&x.v7[k]&&x.v7[k].bosses; if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; } });
+    return 'XP '+(x.xp||0)+' · 💎 '+((x.v7&&x.v7.gems)||0)+' · '+(x.cards||[]).length+' thẻ Hàn · '+wins+' boss đã thắng';
+  }
+  return '<div class="v20modal"><div class="v20card v20conflict"><h3>⚠️ Dữ liệu trên thiết bị và đám mây khác nhau</h3>'
+  +'<p class="mute">Cả hai bên đều đã thay đổi từ lần đồng bộ trước. Game <b>không tự chọn</b> — bạn hãy chọn. Trước khi áp dụng, cả hai bản đều đã được sao lưu lại.</p>'
+  +'<div class="v20vs"><div><b>📱 Trên thiết bị này</b><p class="mute">'+esc(sum(c.local))+' · lưu '+esc(fmtTime(c.localTime))+'</p></div>'
+  +'<div><b>☁️ Trên đám mây</b><p class="mute">'+esc(sum(c.cloud))+' · lưu '+esc(fmtTime(c.cloudTime))+'</p></div></div>'
+  +'<div class="acts"><button class="btn pri" onclick="__v20.resolveConflict(\'local\')">Dùng bản trên thiết bị này</button>'
+  +'<button class="btn" onclick="__v20.resolveConflict(\'cloud\')">Dùng bản trên đám mây</button>'
+  +'<button class="btn" onclick="__v20.resolveConflict(\'merge\')">Hợp nhất an toàn</button></div>'
+  +'<p class="mute">Hợp nhất an toàn: boss đã thắng ở bên nào cũng tính, sao lấy mức cao nhất; XP/kim cương lấy mức cao nhất (không cộng dồn); thẻ từ hợp nhất theo ID.</p>'
+  +'</div></div>';
+}
+function refreshConflict(){
+  var host=$('#v20conflict'); if(!host) return;
+  host.innerHTML=conflictHTML();
+}
+function syncNow(){
+  var s=sync(); if(!s) return Promise.resolve({ok:false, reason:'no-sync-module'});
+  return s.syncNow({auto:false}).then(function(r){
+    refreshConflict();
+    if(window.__v15&&window.__v15.renderTab){ try{ window.__v15.renderTab(); }catch(e){} }
+    if(r&&r.ok){
+      if(r.needsReload){ if(window.__v15&&window.__v15.pop15) window.__v15.pop15('Đã tải dữ liệu đám mây — đang tải lại…'); setTimeout(function(){ location.reload(); },800); }
+      else if(window.__v15&&window.__v15.pop15) window.__v15.pop15(r.action==='uploaded'?'Đã đồng bộ lên đám mây.':'Đã đồng bộ.');
+    }else{
+      if(r&&r.reason==='account-changed'){
+        if(confirm('Bạn vừa đăng nhập một tài khoản khác. Tải tiến trình trên thiết bị này lên tài khoản mới? (Bấm Hủy để giữ nguyên, không đồng bộ.)')){
+          s.syncNow({auto:false, force:true}).then(function(r2){ if(window.__v15) try{ window.__v15.renderTab(); }catch(e){} return r2; });
+        }
+      }
+      else if(r&&r.reason==='conflict'){ refreshConflict(); }
+      else if(r&&r.reason==='cloud-newer'){ if(window.__v15&&window.__v15.pop15) window.__v15.pop15('Có dữ liệu mới trên đám mây — bấm Đồng bộ ngay để tải về.'); }
+      else if(r&&r.reason==='offline'){ if(window.__v15&&window.__v15.pop15) window.__v15.pop15('Mất mạng — vẫn lưu trên thiết bị, sẽ đồng bộ khi có mạng.'); }
+      else if(r&&r.reason==='not-configured'){ if(window.__v15&&window.__v15.pop15) window.__v15.pop15('Chưa cấu hình Firebase — xem FIREBASE_SETUP.md.'); }
+    }
+    return r;
+  });
+}
+function resolveConflict(choice){
+  var s=sync(); if(!s) return Promise.resolve({ok:false});
+  return s.resolveConflict(choice).then(function(r){
+    refreshConflict();
+    if(window.__v15&&window.__v15.renderTab){ try{ window.__v15.renderTab(); }catch(e){} }
+    if(r&&r.ok&&r.needsReload){ if(window.__v15&&window.__v15.pop15) window.__v15.pop15('Đã áp dụng lựa chọn — đang tải lại…'); setTimeout(function(){ location.reload(); },800); }
+    return r;
+  });
+}
+function rollback(){
+  if(!confirm('Khôi phục bản sao lưu trước khi chuyển đổi sang V12? Tiến trình hiện tại sẽ được giữ lại trong một bản sao lưu khác trước khi khôi phục.')) return;
+  var r=restorePreMigration();
+  if(r.ok){ alert('Đã khôi phục bản trước khi chuyển đổi. Trang sẽ tải lại.'); location.reload(); }
+  else alert('Không khôi phục được: '+(r.reason||'không rõ')+'.');
+}
+
+/* ---------- auth wrappers (panel buttons) ---------- */
+function authErr(e){
+  var m=(e&&e.message)||String(e||'');
+  var map={'auth/popup-closed-by-user':'Bạn đã đóng cửa sổ đăng nhập.', 'auth/cancelled-popup-request':'Đăng nhập bị hủy.', 'auth/network-request-failed':'Mất mạng — kiểm tra kết nối rồi thử lại.', 'auth/user-not-found':'Không tìm thấy tài khoản với email này.', 'auth/wrong-password':'Sai mật khẩu.', 'auth/email-already-in-use':'Email này đã có tài khoản — hãy đăng nhập.', 'auth/weak-password':'Mật khẩu cần ít nhất 6 ký tự.', 'auth/invalid-email':'Email không hợp lệ.', 'auth/operation-not-allowed':'Phương thức đăng nhập này chưa được bật trong Firebase Console.'};
+  for(var k in map){ if(m.indexOf(k)>=0) return map[k]; }
+  return 'Đăng nhập thất bại: '+m;
+}
+function signInGoogle(){
+  var s=sync(); if(!s||!s.configured()){ alert('Chưa cấu hình Firebase — xem FIREBASE_SETUP.md.'); return Promise.resolve(null); }
+  return s.signInGoogle().then(function(u){ if(window.__v15) try{ window.__v15.renderTab(); }catch(e){} return u; })
+    .catch(function(e){ alert(authErr(e)); return null; });
+}
+function signInEmail(){
+  var s=sync(); if(!s||!s.configured()){ alert('Chưa cấu hình Firebase — xem FIREBASE_SETUP.md.'); return Promise.resolve(null); }
+  var em=($('#v20email')||{}).value||'', pw=($('#v20pw')||{}).value||'';
+  if(!em||!pw){ alert('Nhập email và mật khẩu.'); return Promise.resolve(null); }
+  return s.signInEmail(em,pw).then(function(u){ if(window.__v15) try{ window.__v15.renderTab(); }catch(e){} return u; })
+    .catch(function(e){ alert(authErr(e)); return null; });
+}
+function signUpEmail(){
+  var s=sync(); if(!s||!s.configured()){ alert('Chưa cấu hình Firebase — xem FIREBASE_SETUP.md.'); return Promise.resolve(null); }
+  var em=($('#v20email')||{}).value||'', pw=($('#v20pw')||{}).value||'';
+  if(!em||!pw){ alert('Nhập email và mật khẩu để tạo tài khoản.'); return Promise.resolve(null); }
+  return s.signUpEmail(em,pw).then(function(u){ if(window.__v15) try{ window.__v15.renderTab(); }catch(e){} return u; })
+    .catch(function(e){ alert(authErr(e)); return null; });
+}
+function signOut(){
+  var s=sync(); if(!s) return Promise.resolve();
+  return s.signOut().then(function(){ if(window.__v15) try{ window.__v15.renderTab(); }catch(e){} });
+}
+
+/* ---------- init ---------- */
+function init20(){
+  if(window.__v20) return;
+  runMigration();
+  wrapSave();
+  installFlushHooks();
+  installPill();
+  wrapGlobals();
+  var s=sync();
+  if(s) s.onChange(function(){ renderPill(); refreshConflict(); });
+  /* wrap the old import so file restores go through validation + snapshot */
+  try{
+    var v=window.__v15;
+    if(v&&v.backupImport&&!v.backupImport.__v20){
+      var _bi=v.backupImport;
+      var nw=function(input){ importFile(input,_bi); };
+      nw.__v20=true; v.backupImport=nw;
+    }
+  }catch(e){}
+  setSaveState(meta().lastSavedAt?'saved':'idle');
+}
+init20();
+
+window.__v20={
+  saveNow:saveNow, flush:flush,
+  status:function(){ return {saveState:saveState, saveError:saveError, lastSavedAt:meta().lastSavedAt||0}; },
+  statusText:saveStateText, syncStatusText:syncStatusText,
+  dataPanelHTML:dataPanelHTML, conflictHTML:conflictHTML, refreshConflict:refreshConflict,
+  importFile:importFile, exportFile:exportFile,
+  syncNow:syncNow, resolveConflict:resolveConflict,
+  signInGoogle:signInGoogle, signInEmail:signInEmail, signUpEmail:signUpEmail, signOut:signOut,
+  rollback:rollback, runMigration:runMigration, restorePreMigration:restorePreMigration,
+  meta:meta, injectDataBtn:injectDataBtn,
+  version:'12.0.0',
+  _test:{
+    saveState:function(){ return saveState; }, flush:flush, requestSave:requestSave,
+    verifyWrite:verifyWrite, runMigration:runMigration, restorePreMigration:restorePreMigration,
+    importFile:importFile, lastImportError:function(){ return lastImportError; },
+    setDirty:function(){ dirty=true; }, isDirty:function(){ return dirty; },
+    snapshot:snapshot, BACKUP_KEY:BACKUP_KEY
+  }
 };
 })();
 

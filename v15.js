@@ -404,7 +404,7 @@ function closeHub15(){
   renderLangBar();
 }
 function hubTabs(){
-  return [['learn','Học tập'],['library','📚 Thư viện'],['farm','English Farm'],['bosses','Bosses'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','Sao lưu']];
+  return [['learn','Học tập'],['library','📚 Thư viện'],['farm','English Farm'],['bosses','Bosses'],['collection','🏆 Bộ Sưu Tập'],['map','🗺️ Bản Đồ Boss'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','💾 Dữ liệu']];
 }
 function renderHub(){
   var h=$('#v15hub');if(!h)return;
@@ -424,6 +424,8 @@ function renderTab(){
   else if(HUB.tab==='library')b.innerHTML=(window.__v17&&__v17.libraryHTML())||'<p class="mute">Đang tải thư viện từ vựng…</p>';
   else if(HUB.tab==='farm')b.innerHTML=farmHTML();
   else if(HUB.tab==='bosses')b.innerHTML=bossesHTML();
+  else if(HUB.tab==='collection')b.innerHTML=(window.__v18&&__v18.collectionHTML())||'<p class="mute">Đang tải bộ sưu tập boss…</p>';
+  else if(HUB.tab==='map')b.innerHTML=(window.__v19&&__v19.mapHTML())||'<p class="mute">Đang tải bản đồ boss…</p>';
   else if(HUB.tab==='review')b.innerHTML=reviewHTML();
   else if(HUB.tab==='stats')b.innerHTML=statsHTML();
   else if(HUB.tab==='vocab')b.innerHTML=vocabHTML();
@@ -1064,7 +1066,7 @@ function bossesHTML(){
     var un=bossUnlocked(i);
     return '<div class="v15boss '+(done?'done':'')+'"><img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'"><b>'+(i+1)+'. '+esc(b.n)+'</b><span>'+esc(b.vi)+' · HP '+b.hp+' · '+esc(b.skill)+'</span><span>Thưởng: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)+'</span>'
     +(done?'<em>Đã thắng ✓ — '+esc(b.reward.item)+' đã nhận</em>':(un?'<button class="btn pri" onclick="__v15.bossFight(\''+b.id+'\')">Khiêu chiến</button>':'<em>🔒 Thắng boss trước để mở khóa</em>'))+'</div>';
-  }).join('')+'</div><div id="v15bossfight"></div>';
+  }).join('')+'</div>'+(window.__v18&&__v18.arenasHTML?__v18.arenasHTML():'')+'<div id="v15bossfight"></div>';
 }
 function bossFight(id){
   var b=BOSSES.filter(function(x){return x.id===id})[0];if(!b)return;
@@ -1436,7 +1438,8 @@ function vocabExportCSV(){
 /* ---------- BACKUP / RESTORE ---------- */
 function backupHTML(){
   var raw='';try{raw=localStorage.getItem('hanvocab.v1')||''}catch(e){}
-  return '<h3>Sao lưu &amp; khôi phục</h3>'
+  return (window.__v20&&__v20.dataPanelHTML?__v20.dataPanelHTML():'')
+  +'<h3>Sao lưu &amp; khôi phục</h3>'
   +'<p class="mute">Dữ liệu người chơi lưu trong localStorage với khóa <b>hanvocab.v1</b> (giữ nguyên từ V6 — không đổi tên, không xóa). Sao lưu gồm toàn bộ từ tiếng Hàn, tiến trình tiếng Anh (V14 + V15), XP, 💎, farm và boss.</p>'
   +'<div class="v15statgrid"><div class="v15stat"><b>'+(raw.length/1024).toFixed(1)+' KB</b><span>kích thước bản lưu</span></div><div class="v15stat"><b>'+counts15().total+'</b><span>từ tiếng Anh</span></div><div class="v15stat"><b>'+(S.cards?S.cards.length:0)+'</b><span>thẻ tiếng Hàn</span></div></div>'
   +'<div class="acts"><button class="btn pri" onclick="__v15.backupExport()">Tải file sao lưu (.json)</button></div>'
@@ -1503,7 +1506,7 @@ window.__v15={
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
   gain15:gain15,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'9.0.0'
+  version:'12.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);
