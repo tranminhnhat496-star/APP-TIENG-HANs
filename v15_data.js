@@ -1,0 +1,158 @@
+/* ===== V15 DATA — English grammar, reading, sentence builder =====
+   Hand-authored banks. Every item has one correct answer + explanation.
+   Grammar: 48 items (A1 x12, A2 x12, B1 x12, B2 x12).
+   Reading: 8 passages (A1 x3, A2 x3, B1 x2), 3 questions each.
+   Builder: 40 sentences to rebuild from shuffled tokens. */
+window.__V15_DATA = window.__V15_DATA || {};
+window.__V15_DATA.grammar = [
+/* ---- A1 ---- */
+{lv:'A1',q:'She ___ a teacher.',o:['is','are','am','be'],a:0,ex:'She (số ít) dùng "is".'},
+{lv:'A1',q:'I ___ breakfast every morning.',o:['eats','eat','eating','eated'],a:1,ex:'I dùng động từ nguyên thể "eat" ở hiện tại đơn.'},
+{lv:'A1',q:'___ you like coffee?',o:['Does','Do','Is','Are'],a:1,ex:'"Do you..." dùng cho chủ ngữ you.'},
+{lv:'A1',q:'This is ___ apple.',o:['a','an','the','-'],a:1,ex:'"an" đứng trước nguyên âm /æ/.'},
+{lv:'A1',q:'There ___ two cats in the garden.',o:['is','are','am','be'],a:1,ex:'"two cats" số nhiều nên dùng "are".'},
+{lv:'A1',q:'He ___ to school by bus.',o:['go','goes','going','went'],a:1,ex:'He + goes (thêm -es sau -o).'},
+{lv:'A1',q:'My sister ___ TV every evening.',o:['watch','watches','watching','watched'],a:1,ex:'Hiện tại đơn, she + watches.'},
+{lv:'A1',q:'___ is your birthday? — It is in May.',o:['What','When','Where','Who'],a:1,ex:'Hỏi thời gian dùng "When".'},
+{lv:'A1',q:'They ___ playing football now.',o:['is','am','are','be'],a:2,ex:'They + are + V-ing (hiện tại tiếp diễn).'},
+{lv:'A1',q:'I have ___ orange and a banana.',o:['a','an','the','some'],a:1,ex:'"an orange" vì orange bắt đầu bằng nguyên âm.'},
+{lv:'A1',q:'___ books are on the table.',o:['This','That','These','It'],a:2,ex:'"These" chỉ số nhiều, gần người nói.'},
+{lv:'A1',q:'She ___ got a new bike.',o:['have','has','is','are'],a:1,ex:'She has got = She has.'},
+/* ---- A2 ---- */
+{lv:'A2',q:'I ___ to Da Lat last year.',o:['go','went','goes','going'],a:1,ex:'"last year" → quá khứ đơn: went.'},
+{lv:'A2',q:'She is ___ than her brother.',o:['tall','taller','tallest','more tall'],a:1,ex:'So sánh hơn của tính từ ngắn: taller.'},
+{lv:'A2',q:'We ___ dinner when the phone rang.',o:['have','are having','were having','had have'],a:2,ex:'Hành động đang diễn ra trong quá khứ: were having.'},
+{lv:'A2',q:'You ___ wear a helmet when you ride a motorbike.',o:['must','mustn\'t','don\'t have','shouldn\'t'],a:0,ex:'"must" diễn tả bắt buộc (an toàn).'},
+{lv:'A2',q:'This is the ___ film I have ever seen.',o:['good','better','best','well'],a:2,ex:'So sánh nhất: the best.'},
+{lv:'A2',q:'If it rains tomorrow, we ___ at home.',o:['stay','will stay','stayed','staying'],a:1,ex:'Câu điều kiện loại 1: If + hiện tại, will + V.'},
+{lv:'A2',q:'I have lived here ___ 2019.',o:['for','since','from','in'],a:1,ex:'"since" + mốc thời gian (2019).'},
+{lv:'A2',q:'She ___ her homework before dinner yesterday.',o:['finish','finishes','finished','finishing'],a:2,ex:'"yesterday" → quá khứ đơn: finished.'},
+{lv:'A2',q:'There isn\'t ___ milk in the fridge.',o:['some','any','a','many'],a:1,ex:'Câu phủ định dùng "any".'},
+{lv:'A2',q:'He is interested ___ music.',o:['on','at','in','of'],a:2,ex:'Cụm cố định: interested in.'},
+{lv:'A2',q:'___ you ever been to Ha Long Bay?',o:['Did','Have','Are','Do'],a:1,ex:'"Have you ever..." hỏi kinh nghiệm (hiện tại hoàn thành).'},
+{lv:'A2',q:'The book is ___ the table.',o:['in','on','at','under to'],a:1,ex:'"on the table" = trên mặt bàn.'},
+/* ---- B1 ---- */
+{lv:'B1',q:'I wish I ___ speak English fluently.',o:['can','could','will','may'],a:1,ex:'"I wish" + quá khứ đơn (could) diễn tả ước muốn.'},
+{lv:'B1',q:'She has worked here ___ five years.',o:['since','for','from','during'],a:1,ex:'"for" + khoảng thời gian (five years).'},
+{lv:'B1',q:'The meeting ___ at 9 a.m. tomorrow.',o:['starts','is start','start','starting'],a:0,ex:'Lịch trình cố định dùng hiện tại đơn: starts.'},
+{lv:'B1',q:'If I ___ more money, I would travel the world.',o:['have','had','will have','has'],a:1,ex:'Câu điều kiện loại 2: If + quá khứ, would + V.'},
+{lv:'B1',q:'He asked me ___ I liked coffee.',o:['that','if','what','when'],a:1,ex:'Câu hỏi Yes/No trong lời nói gián tiếp dùng "if".'},
+{lv:'B1',q:'This problem is too difficult ___ solve alone.',o:['for','to','at','of'],a:1,ex:'Cấu trúc: too + adj + to + V.'},
+{lv:'B1',q:'By the time we arrived, the film ___.',o:['starts','had started','has started','is starting'],a:1,ex:'Hành động xảy ra trước trong quá khứ: quá khứ hoàn thành.'},
+{lv:'B1',q:'She is used ___ early every morning.',o:['to get up','to getting up','get up','getting up'],a:1,ex:'"be used to + V-ing" = quen với việc gì.'},
+{lv:'B1',q:'The house ___ in 1990.',o:['built','was built','is built','builds'],a:1,ex:'Câu bị động quá khứ: was built.'},
+{lv:'B1',q:'Neither the teacher nor the students ___ in the room.',o:['is','are','was','be'],a:1,ex:'"nor" gần "students" (số nhiều) nên dùng "are".'},
+{lv:'B1',q:'You\'d better ___ your homework now.',o:['do','to do','doing','did'],a:0,ex:'"had better + V" (dạng rút gọn: \'d better do).'},
+{lv:'B1',q:'Despite ___ tired, he finished the race.',o:['is','be','being','been'],a:2,ex:'"Despite + V-ing" = mặc dù.'},
+/* ---- B2 ---- */
+{lv:'B2',q:'Had I known about the traffic, I ___ earlier.',o:['leave','would leave','would have left','left'],a:2,ex:'Câu điều kiện hỗn hợp/đảo ngữ: would have left.'},
+{lv:'B2',q:'The report must ___ by Friday.',o:['submit','be submitted','submitting','submitted'],a:1,ex:'Bị động với must: must be submitted.'},
+{lv:'B2',q:'Not only ___ late, he also forgot the documents.',o:['he was','was he','he is','is he'],a:1,ex:'Đảo ngữ với "Not only": was he.'},
+{lv:'B2',q:'She speaks English ___ fluently that everyone understands her.',o:['so','such','too','very'],a:0,ex:'Cấu trúc: so + adj/adv + that.'},
+{lv:'B2',q:'I\'d rather you ___ smoking.',o:['stop','stopped','will stop','stopping'],a:1,ex:'"would rather + S + quá khứ" diễn tả mong muốn.'},
+{lv:'B2',q:'The more you practise, the ___ you become.',o:['good','better','best','well'],a:1,ex:'Cấu trúc so sánh kép: The more..., the better...'},
+{lv:'B2',q:'He was accused ___ stealing the money.',o:['of','for','with','about'],a:0,ex:'Cụm cố định: accused of + V-ing.'},
+{lv:'B2',q:'___ hard he tried, he couldn\'t pass the exam.',o:['However','Whatever','Although','No matter'],a:0,ex:'"However hard he tried" = dù cố gắng thế nào.'},
+{lv:'B2',q:'The new law will come ___ effect next month.',o:['to','into','in','on'],a:1,ex:'Cụm cố định: come into effect.'},
+{lv:'B2',q:'She denied ___ the letter.',o:['to write','writing','written','write'],a:1,ex:'"deny + V-ing" = phủ nhận đã làm gì.'},
+{lv:'B2',q:'It is essential that every student ___ the rules.',o:['follows','follow','following','followed'],a:1,ex:'Giả định (subjunctive) sau "essential that": follow.'},
+{lv:'B2',q:'By 2030, scientists ___ a cure for this disease.',o:['will find','will have found','find','have found'],a:1,ex:'Tương lai hoàn thành: will have found (trước 2030).'}
+];
+window.__V15_DATA.reading = [
+{lv:'A1',title:'My Family',text:'My name is Lan. I am ten years old. I live with my family in a small house. My father is a teacher. My mother is a nurse. I have a little brother. His name is Minh. He is six years old. We love to play in the garden every evening.',qs:[
+{q:'How old is Lan?',o:['Six','Ten','Twelve','Eight'],a:1},
+{q:'What does Lan\'s mother do?',o:['A teacher','A nurse','A farmer','A doctor'],a:1},
+{q:'Where do they play in the evening?',o:['In the park','At school','In the garden','In the kitchen'],a:2}]},
+{lv:'A1',title:'A Sunny Day',text:'Today is a sunny day. Anna and her friends go to the park. They bring sandwiches, juice and a red ball. Anna plays football with Tom. Mary reads a book under a big tree. At noon, they sit on the grass and eat lunch together. They are very happy.',qs:[
+{q:'Where do Anna and her friends go?',o:['To school','To the park','To the beach','To the zoo'],a:1},
+{q:'What does Mary do in the park?',o:['Plays football','Reads a book','Eats lunch','Swims'],a:1},
+{q:'What do they eat at noon?',o:['Rice','Noodles','Lunch on the grass','Ice cream'],a:2}]},
+{lv:'A1',title:'My Cat',text:'I have a cat. Her name is Mimi. She is white and very cute. Mimi likes to sleep in the sun. She drinks milk every morning. Sometimes she plays with a small ball. I love my cat very much.',qs:[
+{q:'What is the cat\'s name?',o:['Mimi','Lulu','Kiki','Bobo'],a:0},
+{q:'What colour is Mimi?',o:['Black','Brown','White','Grey'],a:2},
+{q:'What does Mimi drink every morning?',o:['Water','Juice','Milk','Tea'],a:2}]},
+{lv:'A2',title:'A Trip to the Beach',text:'Last summer, my family went to Nha Trang. We stayed in a small hotel near the beach. Every morning, we swam in the sea and walked on the sand. In the afternoon, my father took photos and my mother bought fresh seafood at the market. On the last day, we watched the sunset together. It was a wonderful trip, and I hope we can go back next year.',qs:[
+{q:'Where did the family go last summer?',o:['Da Lat','Ha Long','Nha Trang','Hue'],a:2},
+{q:'What did the mother do in the afternoon?',o:['Took photos','Bought seafood','Swam in the sea','Watched TV'],a:1},
+{q:'How did the writer feel about the trip?',o:['Bored','Tired','Wonderful','Sad'],a:2}]},
+{lv:'A2',title:'Learning to Cook',text:'Mai wants to learn to cook. Every Sunday, she helps her grandmother in the kitchen. First, they wash the vegetables. Then they cut the meat and cook the rice. Mai is learning to make pho, her favourite food. Sometimes the soup is too salty, but her grandmother always smiles and says, "Try again next week!" Mai is happy because cooking brings her family together.',qs:[
+{q:'When does Mai help her grandmother?',o:['Every day','Every Sunday','Every month','Every evening'],a:1},
+{q:'What is Mai learning to make?',o:['Banh mi','Pho','Spring rolls','Rice'],a:1},
+{q:'Why is Mai happy?',o:['Because the food is cheap','Because cooking brings her family together','Because she likes salt','Because she is tired'],a:1}]},
+{lv:'A2',title:'The New Library',text:'Our school has a new library. It is big and bright, with many books, computers and a quiet reading room. Students can borrow three books for two weeks. On Monday, the library is open from 7 a.m. to 5 p.m. Many students go there after class to read and do homework. The librarian, Mrs Hoa, is very kind and always helps us find the right book.',qs:[
+{q:'How many books can a student borrow?',o:['Two','Three','Four','Five'],a:1},
+{q:'When is the library open on Monday?',o:['7 a.m. to 5 p.m.','8 a.m. to 4 p.m.','9 a.m. to 6 p.m.','7 a.m. to 3 p.m.'],a:0},
+{q:'Who is Mrs Hoa?',o:['A teacher','A student','The librarian','The cook'],a:2}]},
+{lv:'B1',title:'Why We Should Read Every Day',text:'Reading is one of the best habits you can build. Just twenty minutes a day can improve your vocabulary, your grammar and your imagination. People who read often find it easier to write clearly and to understand new ideas. Reading also helps you relax after a busy day. It does not matter what you read — a novel, a newspaper or a blog — as long as you enjoy it. The most important thing is to make reading a daily habit, not a school task.',qs:[
+{q:'What is the main idea of the passage?',o:['Reading is only for students','Reading every day is a useful habit','Newspapers are better than novels','Reading is difficult'],a:1},
+{q:'How long does the writer suggest reading each day?',o:['Ten minutes','Twenty minutes','One hour','Two hours'],a:1},
+{q:'According to the passage, what matters most?',o:['Reading difficult books','Reading quickly','Enjoying reading and doing it daily','Reading at school'],a:2}]},
+{lv:'B1',title:'A Greener City',text:'Many cities today face a serious problem: too many cars and too little green space. To solve this, some cities are building more parks, planting trees along the streets and encouraging people to ride bicycles. Public transport is also becoming cleaner, with electric buses replacing old ones. These changes take time and money, but they make cities healthier and more pleasant to live in. If each of us walks or cycles for short trips, we can all help our city become greener.',qs:[
+{q:'What problem do many cities face?',o:['Too many parks','Too many cars and too little green space','Too many bicycles','Too much rain'],a:1},
+{q:'What are cities doing to solve the problem?',o:['Building more roads','Planting trees and encouraging cycling','Closing all parks','Banning public transport'],a:1},
+{q:'What can each person do to help?',o:['Drive more','Walk or cycle for short trips','Stay at home','Buy a new car'],a:1}]}
+];
+window.__V15_DATA.builder = [
+{lv:'A1',s:'I like apples.',vi:'Tôi thích táo.'},
+{lv:'A1',s:'She is my friend.',vi:'Cô ấy là bạn của tôi.'},
+{lv:'A1',s:'We go to school.',vi:'Chúng tôi đi học.'},
+{lv:'A1',s:'The cat is white.',vi:'Con mèo màu trắng.'},
+{lv:'A1',s:'I drink milk every day.',vi:'Tôi uống sữa mỗi ngày.'},
+{lv:'A1',s:'He plays football on Sunday.',vi:'Anh ấy chơi bóng đá vào Chủ nhật.'},
+{lv:'A1',s:'My mother cooks rice.',vi:'Mẹ tôi nấu cơm.'},
+{lv:'A1',s:'They are happy today.',vi:'Hôm nay họ rất vui.'},
+{lv:'A1',s:'This book is very interesting.',vi:'Cuốn sách này rất thú vị.'},
+{lv:'A1',s:'I have two brothers.',vi:'Tôi có hai anh trai.'},
+{lv:'A2',s:'She went to the market yesterday.',vi:'Hôm qua cô ấy đã đi chợ.'},
+{lv:'A2',s:'We are learning English now.',vi:'Bây giờ chúng tôi đang học tiếng Anh.'},
+{lv:'A2',s:'My father works in a hospital.',vi:'Bố tôi làm việc trong bệnh viện.'},
+{lv:'A2',s:'The children are playing in the garden.',vi:'Bọn trẻ đang chơi trong vườn.'},
+{lv:'A2',s:'I will visit my grandmother tomorrow.',vi:'Ngày mai tôi sẽ thăm bà tôi.'},
+{lv:'A2',s:'She is taller than her sister.',vi:'Cô ấy cao hơn em gái mình.'},
+{lv:'A2',s:'We have lived here since 2019.',vi:'Chúng tôi đã sống ở đây từ năm 2019.'},
+{lv:'A2',s:'If it rains, we will stay at home.',vi:'Nếu trời mưa, chúng tôi sẽ ở nhà.'},
+{lv:'A2',s:'He bought a new bicycle last week.',vi:'Tuần trước anh ấy đã mua một chiếc xe đạp mới.'},
+{lv:'A2',s:'Can you help me with my homework?',vi:'Bạn có thể giúp tôi làm bài tập không?'},
+{lv:'B1',s:'She has worked here for five years.',vi:'Cô ấy đã làm việc ở đây được năm năm.'},
+{lv:'B1',s:'If I had more time, I would learn French.',vi:'Nếu tôi có nhiều thời gian hơn, tôi sẽ học tiếng Pháp.'},
+{lv:'B1',s:'The house was built in 1990.',vi:'Ngôi nhà được xây vào năm 1990.'},
+{lv:'B1',s:'Despite being tired, he finished the race.',vi:'Mặc dù mệt, anh ấy vẫn hoàn thành cuộc đua.'},
+{lv:'B1',s:'I am used to getting up early.',vi:'Tôi đã quen dậy sớm.'},
+{lv:'B1',s:'She asked me if I liked coffee.',vi:'Cô ấy hỏi tôi có thích cà phê không.'},
+{lv:'B1',s:'This problem is too difficult to solve alone.',vi:'Vấn đề này quá khó để giải quyết một mình.'},
+{lv:'B1',s:'By the time we arrived, the film had started.',vi:'Khi chúng tôi đến, bộ phim đã bắt đầu.'},
+{lv:'B1',s:'You had better finish your homework now.',vi:'Bạn nên hoàn thành bài tập ngay bây giờ.'},
+{lv:'B1',s:'Neither the teacher nor the students were in the room.',vi:'Cả giáo viên lẫn học sinh đều không ở trong phòng.'},
+{lv:'B2',s:'Had I known about the traffic, I would have left earlier.',vi:'Nếu tôi biết về tình trạng kẹt xe, tôi đã rời đi sớm hơn.'},
+{lv:'B2',s:'Not only was he late, he also forgot the documents.',vi:'Anh ấy không chỉ đến muộn mà còn quên tài liệu.'},
+{lv:'B2',s:'The more you practise, the better you become.',vi:'Bạn càng luyện tập, bạn càng giỏi hơn.'},
+{lv:'B2',s:'She denied writing the letter.',vi:'Cô ấy phủ nhận đã viết bức thư.'},
+{lv:'B2',s:'It is essential that every student follow the rules.',vi:'Điều quan trọng là mọi học sinh đều tuân thủ nội quy.'},
+{lv:'B2',s:'By 2030, scientists will have found a cure for this disease.',vi:'Đến năm 2030, các nhà khoa học sẽ tìm ra cách chữa căn bệnh này.'},
+{lv:'B2',s:'He was accused of stealing the money.',vi:'Anh ấy bị buộc tội ăn cắp tiền.'},
+{lv:'B2',s:'However hard he tried, he could not pass the exam.',vi:'Dù anh ấy cố gắng thế nào, anh ấy cũng không thể đỗ kỳ thi.'},
+{lv:'B2',s:'The new law will come into effect next month.',vi:'Luật mới sẽ có hiệu lực vào tháng tới.'},
+{lv:'B2',s:'I would rather you stopped smoking.',vi:'Tôi mong bạn ngừng hút thuốc.'}
+];
+window.__V15_DATA.topics = [
+{id:'body',name:'Body',vi:'Cơ thể',icon:'health.png'},
+{id:'colors',name:'Colors',vi:'Màu sắc',icon:'weather.png'},
+{id:'numbers',name:'Numbers',vi:'Số đếm',icon:'book.png'},
+{id:'time',name:'Time',vi:'Thời gian',icon:'settings.png'},
+{id:'weather',name:'Weather',vi:'Thời tiết',icon:'weather.png'},
+{id:'sports',name:'Sports',vi:'Thể thao',icon:'energy.png'},
+{id:'feelings',name:'Feelings',vi:'Cảm xúc',icon:'health.png'},
+{id:'actions',name:'Actions',vi:'Hành động',icon:'quest.png'},
+{id:'places',name:'Places',vi:'Địa điểm',icon:'home.png'},
+{id:'travel',name:'Travel',vi:'Du lịch',icon:'energy.png'},
+{id:'shopping',name:'Shopping',vi:'Mua sắm',icon:'shop.png'},
+{id:'health',name:'Health',vi:'Sức khỏe',icon:'health.png'},
+{id:'technology',name:'Technology',vi:'Công nghệ',icon:'settings.png'},
+{id:'work',name:'Work',vi:'Công việc',icon:'settings.png'},
+{id:'education',name:'Education',vi:'Giáo dục',icon:'book.png'},
+{id:'environment',name:'Environment',vi:'Môi trường',icon:'weather.png'},
+{id:'society',name:'Society',vi:'Xã hội',icon:'quest.png'},
+{id:'money',name:'Money',vi:'Tiền bạc',icon:'coin.png'},
+{id:'communication',name:'Communication',vi:'Giao tiếp',icon:'bubble.png'},
+{id:'science',name:'Science',vi:'Khoa học',icon:'book.png'}
+];
