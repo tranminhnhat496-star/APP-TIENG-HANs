@@ -1,0 +1,52 @@
+[
+  {
+    "English": "apple",
+    "Vietnamese": "quả táo",
+    "IPA": "/ˈæpl/",
+    "POS": "n",
+    "Level": "A1",
+    "Topic": "food",
+    "Example": "I eat an apple every day.",
+    "Example Translation": "Tôi ăn một quả táo mỗi ngày."
+  },
+  {
+    "English": "run",
+    "Vietnamese": "chạy",
+    "IPA": "/rʌn/",
+    "POS": "v",
+    "Level": "A1",
+    "Topic": "daily",
+    "Example": "I run every morning.",
+    "Example Translation": "Tôi chạy mỗi buổi sáng."
+  },
+  {
+    "English": "beautiful",
+    "Vietnamese": "đẹp",
+    "IPA": "/ˈbjuːtɪfl/",
+    "POS": "adj",
+    "Level": "A2",
+    "Topic": "daily",
+    "Example": "She has a beautiful smile.",
+    "Example Translation": "Cô ấy có nụ cười đẹp."
+  },
+  {
+    "English": "library",
+    "Vietnamese": "thư viện",
+    "IPA": "/ˈlaɪbrəri/",
+    "POS": "n",
+    "Level": "A2",
+    "Topic": "school",
+    "Example": "I borrow books from the library.",
+    "Example Translation": "Tôi mượn sách từ thư viện."
+  },
+  {
+    "English": "environment",
+    "Vietnamese": "môi trường",
+    "IPA": "/ɪnˈvaɪrənmənt/",
+    "POS": "n",
+    "Level": "B1",
+    "Topic": "nature",
+    "Example": "We must protect the environment.",
+    "Example Translation": "Chúng ta phải bảo vệ môi trường."
+  }
+]
