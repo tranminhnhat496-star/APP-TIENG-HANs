@@ -85,3 +85,57 @@
   `v15.js` của V7), commit và push. Dữ liệu người chơi không bị ảnh hưởng vì
   V8 không đổi tên khóa lưu `hanvocab.v1`; các khóa mới `S.v7.en16` và
   `S.v7.ko16.levels` chỉ bị V7 bỏ qua.
+
+---
+
+# Hướng dẫn cập nhật lên V9 bằng GitHub Desktop
+
+Áp dụng khi repo GitHub Pages của bạn đang chạy bản V8.
+Repo: **APP-TIENG-HANS**.
+
+## Chuẩn bị
+1. Giải nén file ZIP V9 (`Korean_Vocab_Farm_V9_English_Library.zip`) ra một thư mục trên máy.
+2. Mở **GitHub Desktop**, mở repo **APP-TIENG-HANS**.
+3. **Sao lưu trước (khuyên dùng):** trong game đang chạy, mở English Hub →
+   tab **Sao lưu** → **Tải file sao lưu (.json)** và cất file đó ở nơi an toàn.
+   Dữ liệu người chơi nằm trong trình duyệt của từng người dùng, việc cập nhật
+   code trên GitHub **không xóa** dữ liệu đó.
+
+## Cập nhật
+1. Trong thư mục repo trên máy, **ghi đè / thêm** các file từ ZIP V9:
+   - `index.html` (mới — đây là file GitHub Pages sẽ chạy)
+   - `v17.js`, `v17.css`, `v17_a1a2.js`, `v17_oxford.js`
+   - `v17_a1a2.json`, `v17_oxford.json`, `v17_review.json`
+   - `v15.js` (đã sửa — tích hợp thư viện, khôi phục cấp độ V15, tab Thư viện)
+   - `build_v9.py`
+   - `README_V9_LIBRARY.md`, `CHANGELOG_V8_to_V9.md`, `REPORT_PDF_EXTRACTION.md`,
+     `SMOKE_TEST_V9_2026-11-17.md`, `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md`
+   - Giữ nguyên mọi file V6/V7/V8 và thư mục `assets/`, `vendor/`, `samples/`
+     (ZIP đã chứa đầy đủ).
+2. Trong GitHub Desktop, kiểm tra tab **Changes**: phải thấy `index.html` thay
+   đổi, `v15.js` thay đổi, `v17*.js`/`v17*.json`/`v17.css` mới.
+   Không nên thấy file nào bị xóa.
+3. Ghi commit message, ví dụ: `Upgrade to V9: Built-in Vocabulary Library (A1-A2 1000 words + Oxford 3000)`
+4. Bấm **Commit**, rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Mở **English Hub** → tab **📚 Thư viện**: phải thấy ngay 3 nhóm
+   (A1–A2 Vocabulary 1000 từ, Oxford 3000 3396 từ, Từ vựng của tôi) mà
+   **không cần upload** file nào.
+3. Bấm **Xem từ** ở bài 1 Oxford: 25 thẻ từ, từ đầu tiên là `a`, có phiên âm
+   và nghĩa tiếng Việt đúng dấu. Bấm **Nghe** để thử phát âm.
+4. Bấm **Học ngay** ở một chủ đề A1–A2 (vd EDUCATION): chọn Flashcards, lật
+   vài thẻ; trả lời đúng phải tăng XP.
+5. Kiểm tra dữ liệu cũ: chuyển sang Korean Farm, từ vựng và tiến trình tiếng
+   Hàn phải còn nguyên; mở tab Từ vựng, các từ bạn tự nhập trước đây (nếu có)
+   phải còn. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị để khôi phục.
+6. Thử nhận thưởng: học hết một bài Oxford nhỏ (trả lời đúng mỗi từ 1 lần),
+   nút **🎁 Nhận thưởng** phải hiện và chỉ nhận được 1 lần.
+
+## Quay lại V8 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước khi
+  nâng cấp V9 → **Revert this commit** (hoặc checkout lại `index.html` và
+  `v15.js` của V8), commit và push. Dữ liệu người chơi không bị ảnh hưởng vì
+  V9 không đổi tên khóa lưu `hanvocab.v1`; khóa mới `S.v7.en17` và trường
+  `scope` trong `S.v7.en15` chỉ bị V8 bỏ qua.
