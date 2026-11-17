@@ -1,0 +1,90 @@
+/* ===== V8 — Farm Scene Premium (Hay Day style) =====
+   Layer order (z): bg 0 · glow 1 · sun/clouds/birds 2 · hero 3 · rainbow 3
+   mill/pond/trees 4-5 · bushes 5 · fg/fence/grass 6 · butterflies/well 7 · dim 8 · rain 9 · weather btn 10
+   Only transform/opacity animations. No game logic touched. */
+.scene.v8{aspect-ratio:800/380;max-height:380px;background:none;border-bottom:4px solid #4E9C3F;border-radius:20px 20px 0 0}
+@media(max-width:640px){.scene.v8{aspect-ratio:800/520;max-height:340px}}
+.v8bg{position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:linear-gradient(180deg,#6FBFEF 0%,#9ADCF5 30%,#D6F0FA 44%,#D6F0FA 46%,#9BD66E 46%,#8FD36B 58%,#7BC043 58%,#69B34E 100%)}
+.v8bg::before{content:'';position:absolute;left:-6%;right:-6%;top:38%;height:22%;border-radius:50%;
+ background:radial-gradient(ellipse at 50% 100%,#A5DC7A 0%,#8FD36B 55%,transparent 72%);opacity:.9}
+.v8bg::after{content:'';position:absolute;left:0;right:0;bottom:0;height:36%;
+ background:url(assets/scene/grass_tile.png) 0 0/72px;opacity:.5;
+ -webkit-mask-image:linear-gradient(180deg,transparent,#000 45%);mask-image:linear-gradient(180deg,transparent,#000 45%)}
+.v8glow{position:absolute;right:-5%;top:-12%;width:36%;aspect-ratio:1;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.5s;
+ background:radial-gradient(circle,rgba(255,224,122,.9),rgba(255,224,122,0) 65%)}
+.scene[data-w=sun] .v8glow{opacity:1}
+.v8hero{position:absolute;left:50%;top:-12%;height:124%;aspect-ratio:394/358;transform:translateX(-50%);z-index:3;pointer-events:none;
+ filter:drop-shadow(0 14px 10px rgba(46,60,20,.28));transition:filter 1.2s}
+.v8hero img{width:100%;height:100%;object-fit:cover;display:block;
+ -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 13%,#000 87%,transparent 100%);
+ mask-image:linear-gradient(180deg,transparent 0,#000 13%,#000 87%,transparent 100%)}
+.scene[data-w=sun] .v8hero{filter:drop-shadow(0 18px 14px rgba(60,40,0,.38)) saturate(1.07) brightness(1.03)}
+.scene[data-w=rain] .v8hero{filter:drop-shadow(0 10px 8px rgba(20,30,20,.25)) saturate(.92) brightness(.97)}
+.scene[data-w=storm] .v8hero{filter:drop-shadow(0 10px 8px rgba(10,15,30,.35)) saturate(.88) brightness(.92)}
+.scene[data-w=rainbow] .v8hero{filter:saturate(1.06) drop-shadow(0 14px 10px rgba(46,60,20,.28))}
+.v8mill{position:absolute;left:55%;top:1%;width:11%;aspect-ratio:1;z-index:4;pointer-events:none;
+ animation:v8spin calc(16s/var(--wind,1)) linear infinite}
+.v8mill svg{width:100%;height:100%;display:block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+@keyframes v8spin{to{transform:rotate(360deg)}}
+.v8pond{position:absolute;left:42%;bottom:5%;width:22%;height:14%;z-index:4;pointer-events:none}
+.v8pond i{position:absolute;left:50%;top:50%;width:64%;height:64%;border:2px solid rgba(255,255,255,.9);border-radius:50%;
+ transform:translate(-50%,-50%);animation:v8rip 2.8s ease-out infinite}
+.v8pond i:nth-child(2){animation-delay:-1.4s}
+@keyframes v8rip{from{transform:translate(-50%,-50%) scale(.5);opacity:.9}to{transform:translate(-50%,-50%) scale(1.35);opacity:0}}
+.v8tree{position:absolute;z-index:4;pointer-events:none;transform-origin:50% 100%;animation:v8sway 5s ease-in-out infinite;will-change:transform}
+.v8tree img{width:100%;display:block;filter:drop-shadow(0 6px 4px rgba(0,0,0,.18)) saturate(.95) brightness(1.06)}
+.v8tree.l{left:0;bottom:16%;width:19%}
+.v8tree.r{right:0;bottom:18%;width:17%;animation-delay:-2.5s}
+.v8tree.l2{left:13%;bottom:5%;width:10%;z-index:5;animation-delay:-1.2s}
+.v8tree.r2{right:24%;bottom:4%;width:10%;z-index:5;animation-delay:-3.4s}
+@keyframes v8sway{50%{transform:rotate(2.4deg)}}
+.v8bush{position:absolute;z-index:5;width:15%;pointer-events:none;animation:v8sway 6.5s ease-in-out infinite;
+ -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 60%,transparent 98%);
+ mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 60%,transparent 98%)}
+.v8bush img{width:100%;display:block}
+.v8bush.l{left:1%;bottom:1%}
+.v8bush.r{right:1%;bottom:1%;animation-delay:-3.2s}
+.v8fg{position:absolute;left:0;right:0;bottom:0;height:46px;z-index:6;pointer-events:none;
+ background-image:radial-gradient(circle at 8% 32%,#fff 0 2px,transparent 3px),radial-gradient(circle at 22% 55%,#FFD6E8 0 2px,transparent 3px),radial-gradient(circle at 48% 28%,#fff 0 2px,transparent 3px),radial-gradient(circle at 71% 52%,#FFE9A8 0 2px,transparent 3px),radial-gradient(circle at 88% 30%,#fff 0 2px,transparent 3px),radial-gradient(circle at 95% 60%,#FFD6E8 0 2px,transparent 3px)}
+.v8fence{position:absolute;left:0;right:0;bottom:0;height:30px;z-index:6;pointer-events:none;
+ background:linear-gradient(180deg,transparent 3px,#8B5E3C 3px,#8B5E3C 7px,transparent 7px),
+ linear-gradient(180deg,transparent 17px,#8B5E3C 17px,#8B5E3C 21px,transparent 21px),
+ repeating-linear-gradient(90deg,transparent 0 22px,#A9713F 22px 29px,transparent 29px 54px)}
+.v8bfly{position:absolute;z-index:7;width:26px;pointer-events:none;animation:v8fly1 13s ease-in-out infinite}
+.v8bfly.b2{left:68%;bottom:36%;width:22px;animation:v8fly2 17s ease-in-out infinite;animation-delay:-6s}
+.v8bfly.b1{left:22%;bottom:30%}
+.v8bfly img{width:100%;display:block;animation:v8flutter .45s ease-in-out infinite alternate;transform-origin:50% 50%}
+@keyframes v8flutter{to{transform:scaleX(.55) rotate(-10deg)}}
+@keyframes v8fly1{0%,100%{transform:translate(0,0)}25%{transform:translate(90px,-36px)}50%{transform:translate(180px,-10px)}75%{transform:translate(80px,-48px)}}
+@keyframes v8fly2{0%,100%{transform:translate(0,0)}30%{transform:translate(-110px,-28px)}60%{transform:translate(-60px,-52px)}80%{transform:translate(-140px,-14px)}}
+/* --- existing V4/V5 elements, repositioned into the new layout --- */
+.scene.v8 .v4sun{right:3%;top:3%;width:15%;max-width:82px;z-index:2}
+.scene.v8 .v4cl{z-index:2}
+.scene.v8 .v4bd{z-index:2}
+.scene.v8 .v4bf{z-index:7}
+.scene.v8 .v4gr{z-index:6}
+.scene[data-w=rain] .v4sun,.scene[data-w=storm] .v4sun{opacity:.22}
+.scene.v8 .v5well{right:5%;bottom:11%;width:12%;max-width:112px;z-index:7;
+ -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 20%,#000 92%,transparent 100%);
+ mask-image:linear-gradient(180deg,transparent 0,#000 20%,#000 92%,transparent 100%);
+ filter:drop-shadow(0 8px 6px rgba(0,0,0,.25))}
+.scene.v8 .v5rb{left:50%;transform:translateX(-50%);top:-2%;width:52%;z-index:3}
+.scene.v8 .v5wx{z-index:9;background:repeating-linear-gradient(105deg,transparent 0 16px,rgba(255,255,255,.45) 16px 17px,transparent 17px 34px);background-size:70px 70px;animation-duration:.55s}
+.scene[data-w=rain] .v5wx{opacity:.36}
+.scene[data-w=storm] .v5wx{opacity:.55;animation-duration:.32s}
+.scene.v8 .v5dim{z-index:8}
+.scene[data-w=rain] .v5dim{opacity:.12}
+.scene[data-w=storm] .v5dim{opacity:.26}
+.scene.v8 .v5wbtn{left:10px;top:10px;z-index:10;display:flex;align-items:center;gap:6px;padding:6px 12px;
+ border:2px solid #fff;background:rgba(255,255,255,.93);border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.18);
+ font:700 12px 'Be Vietnam Pro',sans-serif;color:#3A2E22}
+.scene.v8 .v5wbtn svg{width:18px;height:18px;display:block}
+.scene.v8 .v5wbtn:hover{transform:translateY(-1px)}
+/* night (V7) dims the scene, sun fades */
+html[data-v7night="1"] .scene.v8 .v8bg{filter:brightness(.68) saturate(.85)}
+html[data-v7night="1"] .scene.v8 .v4sun{opacity:.12}
+html[data-v7night="1"] .scene.v8 .v8glow{opacity:0}
+/* performance + motion safety */
+.v4pause .scene.v8 .v8tree,.v4pause .scene.v8 .v8bush,.v4pause .scene.v8 .v8bfly,.v4pause .scene.v8 .v8mill,.v4pause .scene.v8 .v8pond i{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.scene.v8 .v8tree,.scene.v8 .v8bush,.scene.v8 .v8bfly,.scene.v8 .v8bfly img,.scene.v8 .v8mill,.scene.v8 .v8pond i{animation:none!important}}

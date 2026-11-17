@@ -1,0 +1,29 @@
+/* ===== V9 — Complete Icon Redesign (V6 Icon Edition) =====
+   New icons: assets/icons/v6/ (24 PNGs from the 6x4 sprite sheet + 7
+   sticker-style SVGs). V9 only re-skins: it never touches game logic,
+   data, XP, gems or boss rules. */
+/* --- new icons: soft shadow, hover/click feedback --- */
+.v9i{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));transition:transform .15s ease}
+.v9i.dim{filter:grayscale(1) opacity(.4) drop-shadow(0 1px 1px rgba(0,0,0,.2))}
+.tab:hover .v9i,.v7btn:hover .v9i,.it:hover .v9i,.v7plot:hover .v9i{transform:scale(1.12) rotate(-3deg)}
+.v7btn:active .v9i,.tab:active .v9i{transform:scale(.92)}
+.v7btn.gold .v9i{animation:v9bob 2.2s ease-in-out infinite}
+@keyframes v9bob{50%{transform:translateY(-2px) scale(1.06)}}
+/* --- sizes per context (base .ic rules from V3 still apply) --- */
+.v7ach .ic2 .ic{width:42px;height:42px}
+.v7ach .a:not(.done) .ic2 .v9i{opacity:.75}
+#v7hud .chip .ic{width:20px;height:20px}
+.v7btn .ic{width:20px;height:20px;vertical-align:-.3em}
+.bwwarn .ic{width:20px;height:20px}
+.mute .ic{width:18px;height:18px}
+.v7plot .ic{width:34px;height:34px}
+/* --- old SVG icons used as CSS backgrounds -> new PNGs --- */
+.card::before{background-image:url(assets/icons/v6/book.png)}
+.hp::before{background-image:url(assets/icons/v6/health.png)}
+.pp::before{background-image:url(assets/icons/v6/coin.png)}
+/* --- emoji in CSS pseudo content -> plain text / no emoji --- */
+[data-skin=farm] h1::before{content:''}
+.noart h1::before{content:''!important}
+.v7farm::before{content:'Nông trại V5 — chạm vào luống để tưới, cây chín thì thu hoạch'}
+html[data-v7night="1"] .v7farm::before{content:'Nông trại V5 — ban đêm, cây vẫn lớn khi bạn ôn từ'}
+@media(prefers-reduced-motion:reduce){.v9i{transition:none}.v7btn.gold .v9i{animation:none}}

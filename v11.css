@@ -1,0 +1,4 @@
+/* ===== V11 — New Decor =====
+   No CSS of its own: the new decor shop, preview modal, placement bar
+   and toast all reuse the V10 styles. This file exists so the build
+   can attach the v11 layer (v11.js) the same way as the other layers. */

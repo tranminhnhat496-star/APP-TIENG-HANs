@@ -1,0 +1,60 @@
+/* ===== V13 Boss World Map — 8 regions ===== */
+.v13mapwrap{max-width:1020px;margin:0 auto}
+.v13map{position:relative;aspect-ratio:1672/941;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px #0005}
+.v13mapimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.v13top{position:absolute;top:1.2%;left:1%;right:1%;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:3}
+.v13top>*{pointer-events:auto}
+.v13title{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(180deg,#F7E8C8,#E8D0A0);border:3px solid #B98A2F;border-radius:14px;padding:10px 16px 10px 10px;font:900 23px 'Jua','Be Vietnam Pro';color:#5A3A22;box-shadow:0 4px 0 #0003}
+.v13title img{width:26px;height:26px}
+.v13topbtns{display:flex;gap:8px}
+.v13tbtn{width:42px;height:42px;border-radius:50%;border:3px solid #B98A2F;background:linear-gradient(180deg,#F7E8C8,#E8D0A0);font:900 20px 'Jua','Be Vietnam Pro';color:#5A3A22;cursor:pointer;box-shadow:0 3px 0 #0003}
+.v13chips{position:absolute;inset:0;z-index:2}
+.v13chip{position:absolute;transform:translate(-50%,-50%);width:var(--cw,15.5%);min-width:118px;display:flex;flex-direction:column;align-items:center;gap:1px;background:linear-gradient(180deg,#FBF3DC,#EBD6A8);border:3px solid #B98A2F;border-radius:14px;padding:8px 4px 7px;cursor:pointer;box-shadow:0 4px 0 #0003,0 0 0 2px #fff6;transition:transform .15s;font-family:'Be Vietnam Pro';color:#5A3A22}
+.v13chip:hover{transform:translate(-50%,-50%) scale(1.07);z-index:4}
+.v13thumb{width:34px;height:34px;border-radius:50%;overflow:hidden;border:2px solid var(--rc);background:#fff8;flex:none}
+.v13thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.v13cname{font:900 13px 'Jua','Be Vietnam Pro';line-height:1.1;text-align:center}
+.v13cprog{font:700 11px 'Be Vietnam Pro';color:#8a6d1f}
+.v13chip.locked{filter:grayscale(.75) brightness(.72)}
+.v13chip.locked::after{content:'';position:absolute;inset:0;border-radius:11px;background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(180,190,220,.3));pointer-events:none}
+.v13chip.done{box-shadow:0 4px 0 #0003,0 0 18px 4px #FFD94D;animation:v13glow 2.2s ease-in-out infinite}
+@keyframes v13glow{50%{box-shadow:0 4px 0 #0003,0 0 26px 8px #FFD94D}}
+.v13cap{text-align:center;margin:8px 0 0}
+.v13acts{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+/* modal */
+.v13modal{position:fixed;inset:0;z-index:95;background:#000a;overflow:auto;padding:14px}
+.v13panel{max-width:760px;margin:24px auto;background:var(--bg,#FFF8EA);border-radius:20px;border-top:8px solid var(--rc,#C77DFF);padding:16px;box-shadow:0 12px 40px #0008}
+.v13phead{display:flex;gap:12px;align-items:flex-start}
+.v13phead h2{margin:0;font-size:22px}
+.v13phead p{margin:4px 0}
+.v13pimg{width:96px;height:96px;border-radius:16px;object-fit:cover;border:3px solid var(--rc);flex:none;background:#fff8}
+.v13x{margin-left:auto;flex:none;width:34px;height:34px;border-radius:50%;border:2px solid #B98A2F;background:#F7E8C8;font:900 15px 'Be Vietnam Pro';color:#5A3A22;cursor:pointer}
+.v13prog{height:12px;border-radius:8px;background:#0002;overflow:hidden;margin:10px 0}
+.v13prog i{display:block;height:100%;background:linear-gradient(90deg,#7BC043,#F2A93B);border-radius:8px}
+.v13bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.v13bosses .bwimg{width:96px;height:96px}
+.v13final{border-color:#F2A93B!important;box-shadow:0 0 18px #F2A93B88,0 5px 0 #0002}
+.v13finaltag{display:inline-block;margin-top:4px;background:#F2A93B;color:#fff;font:900 11px 'Be Vietnam Pro';border-radius:10px;padding:2px 10px}
+.v13rchip{display:inline-block;font:700 11px 'Be Vietnam Pro';color:#fff;background:var(--rc);border-radius:10px;padding:1px 8px;vertical-align:middle}
+.v13collh{margin:14px 0 6px;border-left:6px solid var(--rc);padding-left:8px}
+.v13coll{display:grid;gap:6px}
+.v13crow{display:flex;align-items:center;gap:10px;background:var(--sf,#fff);border-radius:12px;padding:6px 10px}
+.v13cthumb{width:40px;height:40px;flex:none;border-radius:10px;overflow:hidden;background:#fff8;display:flex;align-items:center;justify-content:center}
+.v13cthumb img{width:100%;height:100%;object-fit:cover}
+.v13cthumb img.sil{filter:brightness(0) opacity(.55)}
+.v13q{font:900 24px 'Jua';color:#555}
+.v13cname2{font-weight:700;flex:1;min-width:0}
+.v13ctag{font:700 11px 'Be Vietnam Pro';color:#fff;border-radius:10px;padding:2px 8px;white-space:nowrap}
+/* mobile: the map image becomes a banner, chips become a grid below it */
+@media (max-width:700px){
+  .v13map{aspect-ratio:auto;overflow:visible;box-shadow:none}
+  .v13mapimg{position:relative;height:190px;border-radius:18px;box-shadow:0 6px 18px #0004}
+  .v13top{top:8px;left:8px;right:8px}
+  .v13title{font-size:18px}
+  .v13tbtn{width:36px;height:36px;font-size:17px}
+  .v13chips{position:static;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .v13chip{position:static;transform:none;width:auto;min-width:0;padding:8px 6px}
+  .v13chip:hover{transform:scale(1.03)}
+  .v13pimg{width:72px;height:72px}
+  .v13bosses{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+}

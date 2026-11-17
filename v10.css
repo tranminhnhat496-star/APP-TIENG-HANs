@@ -1,0 +1,102 @@
+/* ===== V10 — Premium Decor Expansion (V6 Decor Expansion) =====
+   12 new decor items: assets/decor/*.png. Display-only layer on top of
+   V6/V7/V8/V9: it never edits base logic, old ITEMS, or S.cards/xp/dex.
+   New data lives only in S.v7.decor {own, placed, bonus}. */
+/* --- placed items on the farm scene --- */
+.v10layer{position:absolute;inset:0;z-index:7;pointer-events:none}
+.v10placed{position:absolute;transform:translate(-50%,-92%);pointer-events:auto;cursor:pointer;transition:left .18s ease,top .18s ease}
+.v10placed img{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 3px rgba(0,0,0,.28));-webkit-user-drag:none;user-select:none}
+.v10placed.w-big{width:16%}.v10placed.w-med{width:12%}.v10placed.w-small{width:10%}
+.v10placed.sel{outline:3px solid #F2B705;outline-offset:2px;border-radius:10px}
+.v10placed:hover img{filter:drop-shadow(0 3px 3px rgba(0,0,0,.28)) brightness(1.07)}
+.v10ghost{position:absolute;transform:translate(-50%,-92%);z-index:8;pointer-events:auto;cursor:grab;touch-action:none;opacity:.88;outline:3px dashed #F2B705;outline-offset:2px;border-radius:10px}
+.v10ghost:active{cursor:grabbing}
+.v10ghost img{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+.v10ghost.w-big{width:16%}.v10ghost.w-med{width:12%}.v10ghost.w-small{width:10%}
+.v10ghost.shake{animation:v10shake .3s ease}
+@keyframes v10shake{25%{margin-left:-5px}75%{margin-left:5px}}
+/* --- per-item effects (transform/opacity only) --- */
+.v10fx-sway{transform-origin:50% 100%;animation:v10sway 5s ease-in-out infinite alternate}
+@keyframes v10sway{from{transform:rotate(-1.3deg)}to{transform:rotate(1.3deg)}}
+.v10fx-glow{animation:v10glow 3s ease-in-out infinite}
+@keyframes v10glow{50%{filter:drop-shadow(0 0 10px rgba(255,170,40,.85)) brightness(1.12)}}
+.v10fx-swing{transform-origin:50% 0;animation:v10swing 4s ease-in-out infinite alternate}
+@keyframes v10swing{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+.v10fx-fly{animation:v10fly 7s ease-in-out infinite}
+@keyframes v10fly{0%,100%{transform:translate(0,0)}25%{transform:translate(10px,-9px)}50%{transform:translate(-7px,5px)}75%{transform:translate(6px,7px)}}
+.v10fx-nightglow{filter:drop-shadow(0 0 6px rgba(255,215,100,.55))}
+html[data-v7night="1"] .v10fx-nightglow{filter:drop-shadow(0 0 18px rgba(255,205,80,.95)) brightness(1.15)}
+.v10fx-engine{animation:v10engine 1.1s ease}
+@keyframes v10engine{20%{transform:translateY(-3px) rotate(-1deg)}40%{transform:translateY(0)}60%{transform:translateY(-2px)}}
+/* rising particles: smoke / steam / petals / leaves / snow */
+.v10pt{position:absolute;border-radius:50%;pointer-events:none;opacity:0}
+.v10pt.s1{left:56%;top:6%;width:9px;height:9px;background:rgba(255,255,255,.85);animation:v10rise 3s ease-in infinite}
+.v10pt.s2{left:66%;top:10%;width:7px;height:7px;background:rgba(255,255,255,.7);animation:v10rise 3s ease-in 1.2s infinite}
+.v10pt.st1{left:48%;top:2%;width:8px;height:8px;background:rgba(230,230,230,.8);animation:v10rise 2.6s ease-in infinite}
+.v10pt.st2{left:60%;top:6%;width:6px;height:6px;background:rgba(230,230,230,.65);animation:v10rise 2.6s ease-in 1s infinite}
+@keyframes v10rise{0%{transform:translateY(0) scale(.7);opacity:0}25%{opacity:.9}100%{transform:translateY(-34px) translateX(6px) scale(1.25);opacity:0}}
+.v10pt.p1{left:20%;top:12%;width:8px;height:8px;background:#FFB7D5;animation:v10fall 5s linear 0s infinite}
+.v10pt.p2{left:55%;top:4%;width:7px;height:7px;background:#FFC9DE;animation:v10fall 5.5s linear 1.6s infinite}
+.v10pt.p3{left:80%;top:16%;width:6px;height:6px;background:#FF9EC6;animation:v10fall 4.6s linear 3s infinite}
+.v10pt.l1{left:22%;top:10%;width:8px;height:8px;background:#F2B705;border-radius:2px;animation:v10fall 5.2s linear .4s infinite}
+.v10pt.l2{left:60%;top:2%;width:7px;height:7px;background:#E8821E;border-radius:2px;animation:v10fall 6s linear 2s infinite}
+.v10pt.l3{left:78%;top:14%;width:6px;height:6px;background:#FFD23F;border-radius:2px;animation:v10fall 4.8s linear 3.4s infinite}
+.v10pt.w1{left:24%;top:8%;width:7px;height:7px;background:#fff;animation:v10fall 6s linear 0s infinite}
+.v10pt.w2{left:58%;top:0%;width:6px;height:6px;background:#EAF2FF;animation:v10fall 6.5s linear 2.2s infinite}
+.v10pt.w3{left:76%;top:12%;width:5px;height:5px;background:#fff;animation:v10fall 5.6s linear 4s infinite}
+@keyframes v10fall{0%{transform:translateY(0) translateX(0) rotate(0);opacity:0}15%{opacity:.95}100%{transform:translateY(30px) translateX(-12px) rotate(140deg);opacity:0}}
+/* --- decor modal --- */
+.v10modal{position:fixed;inset:0;background:rgba(40,30,10,.55);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:4vh 12px;overflow:auto}
+.v10box{background:#FFF8E7;border:3px solid #E8C87A;border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);width:min(880px,96vw);padding:16px 16px 20px}
+.v10box h2{margin:2px 0 4px}
+.v10wallet{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.v10wallet .chip{background:#fff;border:2px solid #E8C87A;border-radius:999px;padding:3px 10px;font-weight:700;font-size:14px}
+.v10wallet .chip img{width:18px;height:18px;vertical-align:-.3em}
+.v10tabs{display:flex;gap:8px;margin:8px 0}
+.v10tab{flex:1;padding:9px;border-radius:12px;border:2px solid #E8C87A;background:#fff;font-weight:800;cursor:pointer}
+.v10tab.on{background:#5A3A22;color:#fff;border-color:#5A3A22}
+.v10filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.v10fchip{padding:6px 11px;border-radius:999px;border:2px solid #E8C87A;background:#fff;font-weight:700;font-size:13px;cursor:pointer}
+.v10fchip.on{background:#2E7D32;color:#fff;border-color:#2E7D32}
+.v10filters select{padding:7px 8px;border-radius:10px;border:2px solid #E8C87A;background:#fff;font-weight:700}
+.v10grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px;margin-top:10px}
+.v10card{background:#fff;border:2px solid #EFD9A7;border-radius:14px;padding:10px;text-align:center;transition:transform .15s ease,box-shadow .15s ease}
+.v10card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.16)}
+.v10card.inseason{border-color:#F2B705;box-shadow:0 0 0 2px #F2B70555}
+.v10card img.v10thumb{width:100%;height:118px;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.2))}
+.v10card b{display:block;margin-top:6px;font-size:15px}
+.v10card .d{font-size:12.5px;color:#6B5A3E;min-height:32px;margin:3px 0 6px}
+.v10badges{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:4px 0}
+.v10badge{font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;color:#fff}
+.v10badge.common{background:#4CAF50}.v10badge.rare{background:#3D8BFD}.v10badge.epic{background:#9B59D0}.v10badge.mythic{background:#E86A00}
+.v10badge.cat{background:#8D6E63}.v10badge.season{background:#2E7D32}.v10badge.inseason{background:#F2B705;color:#5A3A22}
+.v10price{display:flex;align-items:center;justify-content:center;gap:5px;font-weight:800;margin:6px 0}
+.v10price img{width:20px;height:20px}
+.v10own{font-size:12.5px;font-weight:800;color:#2E7D32}
+.v10invrow{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid #EFD9A7;border-radius:12px;padding:8px 10px;margin:8px 0}
+.v10invrow img{width:64px;height:64px;object-fit:contain}
+.v10invrow .grow{flex:1}
+.v10acts{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+/* --- toast --- */
+.v10toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);z-index:80;background:rgba(40,30,10,.92);color:#fff;padding:9px 16px;border-radius:999px;font-weight:700;font-size:14px;box-shadow:0 8px 22px rgba(0,0,0,.35);max-width:92vw;text-align:center}
+/* --- preview modal (V11) --- */
+.v11preview img{width:100%;max-height:280px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
+.v11preview p{text-align:center}
+/* --- placement hint bar + item menu --- */
+.v10bar{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:70;background:#2E3B2A;color:#fff;border-radius:14px;padding:10px 12px;display:flex;gap:8px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:94vw;flex-wrap:wrap;justify-content:center}
+.v10bar .nm{font-weight:800}
+.v10bar button{padding:8px 14px;border-radius:10px;border:0;font-weight:800;cursor:pointer}
+.v10bar .ok{background:#4CAF50;color:#fff}.v10bar .rot{background:#FFC93C;color:#5A3A22}.v10bar .cancel{background:#fff;color:#5A3A22}
+.v10menu{position:fixed;z-index:70;background:#fff;border:2px solid #E8C87A;border-radius:12px;padding:8px;box-shadow:0 10px 26px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:6px}
+.v10menu button{padding:8px 12px;border-radius:9px;border:2px solid #E8C87A;background:#FFF8E7;font-weight:800;cursor:pointer;text-align:left}
+.v10menu button:hover{background:#FFE9A8}
+.v10banner{background:linear-gradient(135deg,#FFF3C4,#FFE1A8);border:2px solid #E8C87A;border-radius:14px;padding:12px;margin:12px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.v10banner img{width:84px;height:84px;object-fit:contain}
+.v10banner .grow{flex:1;min-width:200px}
+@media(max-width:640px){
+ .v10placed.w-big{width:21%}.v10placed.w-med{width:17%}.v10placed.w-small{width:13%}
+ .v10ghost.w-big{width:21%}.v10ghost.w-med{width:17%}.v10ghost.w-small{width:13%}
+ .v10grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){.v10placed *,.v10ghost *{animation:none!important;transition:none!important}}
+html.v10pause .v10placed *,html.v10pause .v10ghost *{animation-play-state:paused}

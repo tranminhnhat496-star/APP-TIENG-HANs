@@ -1,0 +1,12 @@
+/* ===== V12 Fantasy Bosses — element presentation ===== */
+.v12card{--ec:#C77DFF;border-color:var(--ec)!important;box-shadow:0 0 18px color-mix(in srgb,var(--ec) 65%,transparent),0 5px 0 #0002}
+.v12chip{display:inline-flex;align-items:center;gap:3px;font:700 11px 'Be Vietnam Pro';color:#fff;background:var(--ec);border-radius:10px;padding:1px 8px 1px 3px;vertical-align:middle;white-space:nowrap}
+.v12chip img{width:16px;height:16px;vertical-align:middle}
+.v12skills{font:700 10px 'Be Vietnam Pro';color:#7a6a55;margin-top:2px;line-height:1.4}
+.v12title{font:700 11px 'Be Vietnam Pro';color:#8a6d1f;margin-top:3px}
+.v12lock{color:#8a6d1f;font-weight:700}
+.v12enrage{display:inline-block;margin:4px 0;padding:3px 12px;border-radius:12px;background:#E8445F;color:#fff;font:900 13px 'Be Vietnam Pro';animation:v12pulse .7s ease-in-out infinite}
+@keyframes v12pulse{50%{transform:scale(1.12)}}
+.v12ult .bwimg{filter:drop-shadow(0 0 18px var(--ec)) saturate(1.4)}
+.bwg .v12card .bwimg{width:96px;height:96px}
+@media (max-width:640px){.bwg .v12card .bwimg{width:84px;height:84px}}
