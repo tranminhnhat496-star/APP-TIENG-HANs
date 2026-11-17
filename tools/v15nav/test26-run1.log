@@ -1,0 +1,247 @@
+
+== §0 layer + §6 integrity ==
+  FAIL title V15.3 — "(20) Học từ vựng tiếng Hàn"
+  PASS v26js last script
+  PASS v25js present
+  PASS __v26 version 15.3.0
+  PASS __v25 version 15.2.0
+  PASS __v24 version 15.1.0
+  PASS __v23 version 15.0.0
+
+== §1 geometry — pet empty, all viewports ==
+-- 320x640 --
+  PASS [320] no doc overflowX
+  PASS [320] no wide elements
+  PASS [320] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [320] pet head children no overlap
+  PASS [320] pet tabs 1 row
+  PASS [320] pet tab count 7
+  PASS [320] pet tab min-h >=44
+  PASS [320] pet tabs no overlap
+  PASS [320] filter stacked (<=560)
+  PASS [320] exactly 1 visible empty message (pets tab, 0 pets)
+-- 360x740 --
+  PASS [360] no doc overflowX
+  PASS [360] no wide elements
+  PASS [360] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [360] pet head children no overlap
+  PASS [360] pet tabs 1 row
+  PASS [360] pet tab count 7
+  PASS [360] pet tab min-h >=44
+  PASS [360] pet tabs no overlap
+  PASS [360] filter stacked (<=560)
+  PASS [360] exactly 1 visible empty message (pets tab, 0 pets)
+-- 375x812 --
+  PASS [375] no doc overflowX
+  PASS [375] no wide elements
+  PASS [375] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [375] pet head children no overlap
+  PASS [375] pet tabs 1 row
+  PASS [375] pet tab count 7
+  PASS [375] pet tab min-h >=44
+  PASS [375] pet tabs no overlap
+  PASS [375] filter stacked (<=560)
+  PASS [375] exactly 1 visible empty message (pets tab, 0 pets)
+-- 390x844 --
+  PASS [390] no doc overflowX
+  PASS [390] no wide elements
+  PASS [390] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [390] pet head children no overlap
+  PASS [390] pet tabs 1 row
+  PASS [390] pet tab count 7
+  PASS [390] pet tab min-h >=44
+  PASS [390] pet tabs no overlap
+  PASS [390] filter stacked (<=560)
+  PASS [390] exactly 1 visible empty message (pets tab, 0 pets)
+-- 414x896 --
+  PASS [414] no doc overflowX
+  PASS [414] no wide elements
+  PASS [414] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [414] pet head children no overlap
+  PASS [414] pet tabs 1 row
+  PASS [414] pet tab count 7
+  PASS [414] pet tab min-h >=44
+  PASS [414] pet tabs no overlap
+  PASS [414] filter stacked (<=560)
+  PASS [414] exactly 1 visible empty message (pets tab, 0 pets)
+-- 430x932 --
+  PASS [430] no doc overflowX
+  PASS [430] no wide elements
+  PASS [430] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [430] pet head children no overlap
+  PASS [430] pet tabs 1 row
+  PASS [430] pet tab count 7
+  PASS [430] pet tab min-h >=44
+  PASS [430] pet tabs no overlap
+  PASS [430] filter stacked (<=560)
+  PASS [430] exactly 1 visible empty message (pets tab, 0 pets)
+-- 768x1024 --
+  PASS [768] no doc overflowX
+  PASS [768] no wide elements
+  PASS [768] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [768] pet head children no overlap
+  PASS [768] pet tabs 1 row
+  PASS [768] pet tab count 7
+  PASS [768] pet tab min-h >=44
+  PASS [768] pet tabs no overlap
+  PASS [768] filter stacked (<=560)
+  PASS [768] exactly 1 visible empty message (pets tab, 0 pets)
+-- 1366x768 --
+  PASS [1366] no doc overflowX
+  PASS [1366] no wide elements
+  PASS [1366] pet head h<=90 (<=430) / <=70 (>430)
+  PASS [1366] pet head children no overlap
+  PASS [1366] pet tabs 1 row
+  PASS [1366] pet tab count 7
+  PASS [1366] pet tab min-h >=44
+  PASS [1366] pet tabs no overlap
+  PASS [1366] filter stacked (<=560)
+  PASS [1366] exactly 1 visible empty message (pets tab, 0 pets)
+
+== §1b geometry — EN hub + Korean hub ==
+-- 320x640 --
+  FAIL [320] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":320,"h":92,"right":320,"bottom":92}
+  PASS [320] EN langbar children no overlap
+  PASS [320] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [320] EN hub head no overlap
+  PASS [320] EN tabs 1 row (<=760)
+  PASS [320] EN tab count 10
+  PASS [320] EN tabs no overlap
+  PASS [320] KO stage padBottom >= 118 (<=640)
+  PASS [320] KO bottom tabs no overlap
+  PASS [320] KO no doc overflowX
+-- 360x740 --
+  FAIL [360] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":360,"h":92,"right":360,"bottom":92}
+  PASS [360] EN langbar children no overlap
+  PASS [360] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [360] EN hub head no overlap
+  PASS [360] EN tabs 1 row (<=760)
+  PASS [360] EN tab count 10
+  PASS [360] EN tabs no overlap
+  PASS [360] KO stage padBottom >= 118 (<=640)
+  PASS [360] KO bottom tabs no overlap
+  PASS [360] KO no doc overflowX
+-- 375x812 --
+  FAIL [375] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":375,"h":92,"right":375,"bottom":92}
+  PASS [375] EN langbar children no overlap
+  PASS [375] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [375] EN hub head no overlap
+  PASS [375] EN tabs 1 row (<=760)
+  PASS [375] EN tab count 10
+  PASS [375] EN tabs no overlap
+  PASS [375] KO stage padBottom >= 118 (<=640)
+  PASS [375] KO bottom tabs no overlap
+  PASS [375] KO no doc overflowX
+-- 390x844 --
+  FAIL [390] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":390,"h":92,"right":390,"bottom":92}
+  PASS [390] EN langbar children no overlap
+  PASS [390] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [390] EN hub head no overlap
+  PASS [390] EN tabs 1 row (<=760)
+  PASS [390] EN tab count 10
+  PASS [390] EN tabs no overlap
+  PASS [390] KO stage padBottom >= 118 (<=640)
+  PASS [390] KO bottom tabs no overlap
+  PASS [390] KO no doc overflowX
+-- 414x896 --
+  FAIL [414] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":414,"h":92,"right":414,"bottom":92}
+  PASS [414] EN langbar children no overlap
+  PASS [414] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [414] EN hub head no overlap
+  PASS [414] EN tabs 1 row (<=760)
+  PASS [414] EN tab count 10
+  PASS [414] EN tabs no overlap
+  PASS [414] KO stage padBottom >= 118 (<=640)
+  PASS [414] KO bottom tabs no overlap
+  PASS [414] KO no doc overflowX
+-- 430x932 --
+  FAIL [430] EN langbar h<=60 (<=640) / <=96 (>640) — {"x":0,"y":0,"w":430,"h":92,"right":430,"bottom":92}
+  PASS [430] EN langbar children no overlap
+  PASS [430] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [430] EN hub head no overlap
+  PASS [430] EN tabs 1 row (<=760)
+  PASS [430] EN tab count 10
+  PASS [430] EN tabs no overlap
+  PASS [430] KO stage padBottom >= 118 (<=640)
+  PASS [430] KO bottom tabs no overlap
+  PASS [430] KO no doc overflowX
+-- 768x1024 --
+  PASS [768] EN langbar h<=60 (<=640) / <=96 (>640)
+  PASS [768] EN langbar children no overlap
+  PASS [768] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [768] EN hub head no overlap
+  PASS [768] EN tabs 1 row (<=760)
+  PASS [768] EN tab count 10
+  PASS [768] EN tabs no overlap
+  PASS [768] KO stage padBottom >= 118 (<=640)
+  PASS [768] KO bottom tabs no overlap
+  PASS [768] KO no doc overflowX
+-- 1366x768 --
+  PASS [1366] EN langbar h<=60 (<=640) / <=96 (>640)
+  PASS [1366] EN langbar children no overlap
+  PASS [1366] EN hub head h<=130 (<=430) / <=140 (else)
+  PASS [1366] EN hub head no overlap
+  PASS [1366] EN tabs 1 row (<=760)
+  PASS [1366] EN tab count 10
+  PASS [1366] EN tabs no overlap
+  PASS [1366] KO stage padBottom >= 118 (<=640)
+  PASS [1366] KO bottom tabs no overlap
+  PASS [1366] KO no doc overflowX
+
+== §2 stacking — pet hub over Korean farm ==
+  PASS pet head center point is inside #v23hub (not langbar)
+  PASS pet close button clickable (topmost at its center)
+  FAIL v23toast z-index >= 960 — "auto"
+
+== §3 decorator — empty state, filter mismatch, evo, team ==
+  PASS hero present, 0 pets
+  PASS hero title exact
+  PASS hero desc exact
+  PASS hero has egg img
+  PASS hero button = Đi ấp trứng
+  PASS hero button opens hatch tab
+  PASS no-match box present
+  PASS no-match text exact
+  PASS clear-filter button present
+  PASS clear filter restores pet cells
+  PASS evo 0-pets hero present with hatch button
+  PASS evo hero button opens hatch
+  PASS team 0-pets CTA present
+  PASS [320] team slots no overflow
+  PASS [320] team slots count 3
+  PASS [768] team slots no overflow
+  PASS [768] team slots count 3
+
+== §4 navigation — 7 tabs, tab memory, back, KO/EN, sticky tabs ==
+  PASS tab pets opens
+  PASS tab pets renders content
+  PASS tab hatch opens
+  PASS tab hatch renders content
+  PASS tab evo opens
+  PASS tab evo renders content
+  PASS tab team opens
+  PASS tab team renders content
+  PASS tab skills opens
+  PASS tab skills renders content
+  PASS tab collection opens
+  PASS tab collection renders content
+  PASS tab shop opens
+  PASS tab shop renders content
+  PASS bare openHub restores last tab (team)
+  PASS sessionStorage v26.petTab = team
+  PASS closeHub returns to EN hub
+  FAIL lang unchanged after pet hub (en) — "ko"
+  PASS choose ko works
+  PASS choose en works
+  PASS tabs stick under head after scroll (|top-bottom|<=2)
+  PASS --nav-head-h matches measured head height
+
+== §5 data integrity + no JS errors ==
+  PASS XP intact (12500)
+  PASS gems intact (42)
+  PASS 3 pets intact after navigation
+  PASS team of 3 intact
+  FAIL no JS errors collected
+
+==== RESULT: 204 passed, 10 failed ====
+failures: title V15.3 | [320] EN langbar h<=60 (<=640) / <=96 (>640) | [360] EN langbar h<=60 (<=640) / <=96 (>640) | [375] EN langbar h<=60 (<=640) / <=96 (>640) | [390] EN langbar h<=60 (<=640) / <=96 (>640) | [414] EN langbar h<=60 (<=640) / <=96 (>640) | [430] EN langbar h<=60 (<=640) / <=96 (>640) | v23toast z-index >= 960 | lang unchanged after pet hub (en) | no JS errors collected

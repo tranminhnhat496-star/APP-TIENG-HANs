@@ -1,0 +1,202 @@
+/* ===== V24 — UI/UX Readability Upgrade (V15.1) =====
+   Lớp cộng thêm, nạp SAU tất cả các lớp cũ nên rule cùng độ ưu tiên
+   sẽ thắng. KHÔNG sửa logic game, KHÔNG đổi khóa localStorage.
+   Mọi giá trị màu dưới đây đã kiểm chứng đạt WCAG AA (4.5:1 chữ
+   thường, 3:1 chữ lớn) trên nền thực tế của nó — xem SMOKE_TEST_V15_1.
+   Quy ước: chỉ override theo ngữ cảnh (scoped), không CSS toàn cục
+   tùy tiện. */
+
+/* ---- §0. Design tokens (theo bảng màu Anh đưa, đã chỉnh sắc độ để đạt AA) ---- */
+:root{
+  --ui-text-primary:#FFFFFF;
+  --ui-text-secondary:#E5DEF5;
+  --ui-text-dark:#29243A;
+  --ui-text-muted-dark:#C4B9E2;   /* chữ phụ trên nền tối — 7.3:1 trên #10182E */
+  --ui-text-muted-light:#6B5B4A;  /* chữ phụ trên nền sáng — 5.9:1 trên #FFFDF6 */
+  --ui-title-gold:#FFD76A;
+  --ui-bg-panel:#292044;
+  --ui-bg-content:#372B58;
+  --ui-border:#B99AF7;
+  --ui-border-gold:#F5C86A;
+  --ui-success:#70F5A0;
+  --ui-warning:#FFD166;
+  --ui-danger:#FF828F;
+  --ui-btn-green:#2E7D32;         /* trắng trên #2E7D32 = 5.13:1 */
+  --ui-btn-green-border:#1B5E20;
+  --ui-btn-danger-dark:#C1121F;   /* trắng trên #C1121F = 5.9:1 */
+  --ui-text-on-gold:#3A2500;
+  --ui-radius:16px;
+  --ui-btn-min-height:44px;
+}
+
+/* ---- §1. Base: không cuộn ngang ngoài ý muốn ---- */
+html,body{overflow-x:clip}
+
+/* ---- §2. Buttons (chuẩn hóa theo spec §5) ---- */
+/* Primary xanh lá: rule gốc `:root.btn.pri` (V6 line 156, #3FAE62, trắng 2.82:1)
+   thua rule này vì cùng độ ưu tiên nhưng v24.css nạp sau. */
+:root .btn.pri{background:var(--ui-btn-green);border-color:var(--ui-btn-green-border);color:#fff}
+:root .btn.ok{background:var(--ui-btn-green);border-color:var(--ui-btn-green-border);color:#fff}
+/* Nút nhỏ vẫn đủ 44px chạm — padding giữ gọn để không phá hàng nút dày. */
+:root .btn.sm{min-height:var(--ui-btn-min-height)}
+/* Nút đóng Account Center / Pet Hub: đỏ đậm thay vì #E63946 (trắng 4.17:1). */
+.v23x{background:var(--ui-btn-danger-dark)}
+.v21x{background:var(--ui-btn-danger-dark);color:#fff}
+
+/* ---- §3. Panels: tab bar dưới đáy luôn có nền đặc (không chữ đè lên nội dung cuộn) ---- */
+@media(max-width:640px){
+  :root .tabs{background:var(--sf);border:2px solid var(--line)}
+}
+
+/* ---- §4. Korean Hub header + tabs ---- */
+/* Gradient đầu trang: giữ xanh lá nông trại nhưng chữ trắng có bóng mềm để
+   không chìm ở đầu sáng của gradient. */
+:root h1{text-shadow:0 1px 4px rgba(0,0,0,.45)}
+:root h1 small{color:#fff;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.45)}
+/* Hai pill #sk/#sn: nền trắng 30% + chữ trắng ≈ 2.5:1 → nền xanh đậm bán trong suốt ≈ 5:1. */
+:root #sk,:root #sn{background:rgba(20,60,25,.55);border-color:rgba(255,255,255,.65)}
+/* Tab đang chọn: gradient cũ #58C16F (trắng 2.7:1) → xanh đậm đạt 4.6:1. */
+:root .tab.on{background:linear-gradient(#257A3C,#1F6B33)}
+/* Tab dưới đáy ở điện thoại: 10px + nowrap làm "Bản Đồ BossThú Cưng" dính nhau. */
+@media(max-width:480px){
+  :root .tab{font-size:12px;white-space:normal;line-height:1.15}
+}
+/* Chữ nhỏ trong thẻ thống kê: 11px → 12px (mức sàn nội dung). */
+.st span{font-size:12px}
+/* Ban đêm (mặc định của profile mới): body #10182E nhưng --mute vẫn là màu
+   sáng-scheme #7C6B58 (3.44:1). Chỉ chỉnh các chữ nằm TRỰC TIẾP trên body
+   tối — chữ trong thẻ sáng giữ nguyên. */
+html[data-v7night="1"] #stage>.mute{color:#C9BFE0}
+/* Nhãn "Bộ từ" bọc <select> (không phải leaf nên auditor bỏ qua):
+   màu --ink #3A2E22 trên body đêm #10182E ≈ 1.9:1 → sáng lên. */
+html[data-v7night="1"] #decks label{color:#E8ECF8}
+/* Nhãn checkbox "Chỉ từ cần ôn" (LABEL.chk bọc <input>, cũng bị auditor
+   bỏ qua): --mute #7C6B58 trên body đêm = 3.44:1 → #C4B9E2 ≈ 7.3:1. */
+html[data-v7night="1"] label.chk{color:#C4B9E2}
+/* Ghi chú trong nông trại ban đêm (.v7farm nền #2E5A34):
+   .mute #7C6B58 = 3.44:1 → xanh lá nhạt #D8E8D0 ≈ 5.9:1. */
+html[data-v7night="1"] .v7farm .mute{color:#D8E8D0}
+html[data-v7night="1"] .tab{color:var(--ui-text-muted-dark)}
+html[data-v7night="1"] .tab.v19kotab,
+html[data-v7night="1"] .tab.v23kotab{color:var(--ui-title-gold)}
+/* Thanh tab dưới đáy cũng phải tối theo khi ở ban đêm — nếu để nền sáng
+   #FFFDF6 thì nhãn vàng gold #FFD76A chỉ còn 1.36:1.
+   (Lưu ý: `html[...] :root .tabs` không bao giờ khớp vì :root CHÍNH LÀ
+   <html>, không phải con của nó — phải viết `html[...] .tabs`.) */
+html[data-v7night="1"] .tabs{background:#1F2B22;border-color:#34453A}
+/* Plot nông trại: tên + trạng thái 10–11px → 12px, chip tên đậm hơn.
+   (Selector gốc là descendant `.v7plot .nm`, không phải compound.) */
+.v7plot .nm{font-size:12px;background:rgba(0,0,0,.55)}
+.v7plot .st2{font-size:12px}
+
+/* ---- §5. English Hub ---- */
+/* Nút 🐾 Thú Cưng trong header hub: .btn.sm xám nhạt trông như bị vô hiệu
+   → vàng gold giống .v15lb-hub ở lang bar. */
+.v15hub-headbtns .btn{background:#FFC53D;border-color:#B98A00;color:#1F2A44;font-weight:700}
+/* Chip XP/gems: chữ trắng trên nền trắng 12% ≈ 3.5:1 → nền đen 28% ≈ 5.5:1. */
+.v15chip{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.35)}
+/* Tiêu đề phụ hub: 12px → 13px. */
+.v15hub-title span{font-size:13px}
+/* Tab hub: đủ 44px chạm. */
+.v15tab{min-height:var(--ui-btn-min-height);display:inline-flex;align-items:center}
+
+/* ---- §6. Flashcards / modes: IPA + đáp án đúng/sai (màu + biểu tượng) ---- */
+/* IPA trong flashcard (.mute trên nền thẻ sáng #FFFDF6): #7C6B58 5.4:1 → #6B5B4A 5.9:1. */
+.v15fc .mute{color:var(--ui-text-muted-light)}
+.v15qcard .mute{color:var(--ui-text-muted-light)}
+/* Đáp án: không chỉ dùng màu — thêm ✓ / ✗ bằng CSS (không sửa markup/logic). */
+.v15opt.right::after,.v18opt.right::after,.v19opt.right::after{content:" ✓";font-weight:800}
+.v15opt.wrong::after,.v18opt.wrong::after,.v19opt.wrong::after{content:" ✗";font-weight:800}
+
+/* ---- §7. Bosses: chip độ hiếm + chip nguyên tố ---- */
+/* .v18chip dùng --ec INLINE (v18.js) nên rule đổi --ec không có tác dụng —
+   phải override trực tiếp color. Mọi màu nguyên tố/độ hiếm đều < 4.5:1
+   trên thẻ sáng (Thiên nhiên #58B368 = 2.56:1, Sét #FFD23F ≈ 1.5:1…).
+   Chữ chip → #3A2E22 (6.0:1); viền vẫn giữ màu --ec nên mã màu nguyên tố
+   không mất. */
+.v18chip{color:#3A2E22}
+.v18chip.rar-common{color:#3A2E22}
+
+/* ---- §8. Boss Map (V19): chống chồng lấn node ở điện thoại ---- */
+/* Zone tops cách nhau 9% chiều cao map; ở 1300px = 117px trong khi island
+   cao ~130px → chồng ~10px. Tăng chiều cao map + thu nhỏ island. */
+@media(max-width:480px){
+  .v19map{height:1600px}
+  .v19zone{width:108px}
+  .v19zone.v19side-left{left:calc(22% - 54px)}
+  .v19zone.v19side-right{left:calc(78% - 54px)}
+  .v19zone.v19side-center{left:calc(50% - 54px)}
+  .v19zone-island{padding:8px 4px 6px}
+  .v19zone-island img{width:64px;height:64px}
+  .v19zone-name{font-size:13px}
+}
+.v19zone-meta{font-size:12px}
+
+/* ---- §9. Pet System (V23) ---- */
+/* Grid blowout ở điện thoại: `.v23pets` 1 cột `1fr` (= minmax(auto,1fr))
+   bị nội dung min-content của panel (hàng nút trong detail) đẩy rộng
+   tới 387px trong khi container chỉ 362px → tràn ngang 11px.
+   minmax(0,1fr) + min-width:0 cho phép panel co lại đúng khung. */
+@media(max-width:760px){
+  .v23pets,.v23evo,.v23team{grid-template-columns:minmax(0,1fr)}
+  .v23side,.v23detail{min-width:0;max-width:100%}
+  .v23grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .v23btns{flex-wrap:wrap}
+}
+/* Thanh pet trong trận đấu: .v23bar-fight không đặt màu chữ nên kế thừa
+   mực tối #3A2E22 của thẻ đấu sáng → 1.14:1 trên nền tím đậm. */
+.v23bar-fight{color:#FFF8E1}
+.v23bar-fight .v23bf-row b{color:#FFE66D}
+/* Tab pet không chọn: #D9C8FF → #E5DEF5 (sáng hơn, đạt AA rõ rệt). */
+.v23tab{color:var(--ui-text-secondary);min-height:var(--ui-btn-min-height)}
+/* Nút chính tím: gradient #8B5CF6→#6D28D9, đầu gradient trắng chỉ 3.4:1 → đậm hơn. */
+.v23btn.pri{background:linear-gradient(180deg,#7C3AED,#5B21B6);border-color:#C4B5FD}
+/* Nút tiến hóa tím sáng: #A855F7 trắng 3.3:1 → đậm hơn. */
+.v23btn.evo{background:linear-gradient(180deg,#9333EA,#6B21A8)}
+/* Nút xanh lá: #22C55E trắng 2.3:1 → #15803D/#14532D (≥4.5:1). */
+.v23btn.ok{background:linear-gradient(180deg,#15803D,#14532D)}
+.v23btn{min-height:var(--ui-btn-min-height)}
+/* Chữ phụ trong Pet Hub: #C9B8F0 → #E5DEF5, chữ 11px → 12px. */
+.v23note,.v23empty{color:var(--ui-text-secondary)}
+.v23cellm{font-size:12px;color:var(--ui-text-secondary)}
+.v23count{color:var(--ui-text-secondary)}
+.v23lv{color:var(--ui-text-secondary)}
+.v23rar{color:var(--ui-text-secondary)}
+.v23eggcard span{color:var(--ui-text-secondary)}
+.v23slot span{color:var(--ui-text-secondary)}
+.v23row span i{color:var(--ui-text-secondary)}
+.v23skill i{color:#B7A6E0}
+/* Thanh pet trong trận: chữ 11px → 12px. */
+.v23bf-pet{font-size:12px;color:var(--ui-text-secondary)}
+.v23bf-note{font-size:12px;color:var(--ui-text-secondary)}
+.v23bf-row{font-size:13px}
+
+/* ---- §10. Welcome / Login / Account (V21) ---- */
+/* Nhãn thống kê profile: #8A7A63 11.5px trên trắng = 4.16:1 → #6B5B4A 12px = 5.9:1. */
+.v21stat span{font-size:12px;color:var(--ui-text-muted-light)}
+/* Thanh tab Account Center ở điện thoại: v21.css để overflow-x:auto nên tab
+   cuối bị cắt (phải vuốt ngang mới thấy). Cho wrap thành 2 hàng để thấy
+   hết tab ngay — cùng breakpoint 560px của v21.css. */
+@media(max-width:560px){
+  .v21sidebar{flex-wrap:wrap;overflow-x:visible}
+  .v21side{white-space:normal}
+}
+/* Placeholder input: #9A9A9A → #6B5B4A (đậm hơn, vẫn nhận ra là placeholder).
+   Riêng ô tìm kiếm Pet Hub có nền TỐI (#1B1033) nên cần placeholder sáng. */
+input::placeholder,textarea::placeholder{color:var(--ui-text-muted-light);opacity:1}
+.v23filter input::placeholder{color:#B7A6E0}
+
+/* ---- §11. Modals — BUG FIX: class .ko va chạm ---- */
+/* V6 dùng .ko cho ảnh boss bị hạ (96px, grayscale, xoay 160°), nhưng nút
+   "Nông trại Hàn Quốc" trong chooser lại là <button class="v15big ko">
+   → nút bị thu nhỏ/xoay/chồng lên đoạn văn. Khôi phục kích thước nút. */
+.v15big.ko{width:auto;height:auto;margin:0;filter:none;animation:none;transform:none}
+/* Popup không tràn màn hình điện thoại. */
+.v15modal,.v21modal{max-width:94vw;box-sizing:border-box}
+
+/* ---- §12. Thư viện: chữ phụ trên nền sáng ---- */
+/* .mute trong thư viện (#7C6B58, 5.4:1) → #6B5B4A (5.9:1), vẫn trên nền sáng. */
+.v17lib .mute{color:var(--ui-text-muted-light)}
+
+/* ---- §13. Reduced motion: V24 không thêm animation nào mới; giữ nguyên
+   hành vi prefers-reduced-motion của các lớp cũ. ---- */

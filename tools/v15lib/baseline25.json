@@ -1,0 +1,269 @@
+{
+ "library": {
+  "checked": 128,
+  "violations": [],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 114/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "topic": {
+  "checked": 120,
+  "violations": [],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 114/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "lesson": {
+  "checked": 116,
+  "violations": [],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 114/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "btunit": {
+  "checked": 128,
+  "violations": [
+   {
+    "txt": "Từ đơn",
+    "fg": "rgb(46, 125, 50)",
+    "bg": "rgb(227,242,230)",
+    "size": 11,
+    "weight": 400,
+    "ratio": 4.42,
+    "need": 4.5,
+    "cls": "v22type wd",
+    "tag": "SPAN"
+   }
+  ],
+  "smallText": [
+   {
+    "txt": "Từ đơn",
+    "size": 11,
+    "cls": "v22type wd",
+    "tag": "SPAN"
+   }
+  ],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 5/4891 từ đã thuộc · 4891 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "quest": {
+  "checked": 116,
+  "violations": [],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 0/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "flash": {
+  "checked": 124,
+  "violations": [
+   {
+    "txt": "Chưa nhớ",
+    "fg": "rgb(217, 80, 63)",
+    "bg": "rgb(255,253,246)",
+    "size": 15,
+    "weight": 600,
+    "ratio": 3.99,
+    "need": 4.5,
+    "cls": "btn bad",
+    "tag": "BUTTON"
+   }
+  ],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 0/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ },
+ "vocab": {
+  "checked": 128,
+  "violations": [
+   {
+    "txt": "Xóa",
+    "fg": "rgb(217, 80, 63)",
+    "bg": "rgb(255,253,246)",
+    "size": 13,
+    "weight": 600,
+    "ratio": 3.99,
+    "need": 4.5,
+    "cls": "btn sm bad",
+    "tag": "BUTTON"
+   }
+  ],
+  "smallText": [],
+  "imageBg": [
+   {
+    "txt": "English Farm",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "Ollie's Farm · 0/4409 từ đã thuộc · 4409 từ cần ôn hôm nay",
+    "ratio": 1.07,
+    "cls": ""
+   },
+   {
+    "txt": "12500 XP",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   },
+   {
+    "txt": "42",
+    "ratio": 2.13,
+    "cls": "v15chip"
+   }
+  ],
+  "overflow": {
+   "docScrollW": 390,
+   "innerW": 390,
+   "wide": []
+  }
+ }
+}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V15 — Premium Pet System — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V15.3 — Mobile Navigation Fix — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -13066,6 +13066,1251 @@ W.__v23={
     forceHatchReady:function(){var e=en23();if(e&&e.hatch)e.hatch.endsAt=Date.now();save23()}
   }
 };
+})();
+
+</script>
+
+
+
+
+
+
+
+
+
+<style id="v24">
+/* ===== V24 — UI/UX Readability Upgrade (V15.1) =====
+   Lớp cộng thêm, nạp SAU tất cả các lớp cũ nên rule cùng độ ưu tiên
+   sẽ thắng. KHÔNG sửa logic game, KHÔNG đổi khóa localStorage.
+   Mọi giá trị màu dưới đây đã kiểm chứng đạt WCAG AA (4.5:1 chữ
+   thường, 3:1 chữ lớn) trên nền thực tế của nó — xem SMOKE_TEST_V15_1.
+   Quy ước: chỉ override theo ngữ cảnh (scoped), không CSS toàn cục
+   tùy tiện. */
+
+/* ---- §0. Design tokens (theo bảng màu Anh đưa, đã chỉnh sắc độ để đạt AA) ---- */
+:root{
+  --ui-text-primary:#FFFFFF;
+  --ui-text-secondary:#E5DEF5;
+  --ui-text-dark:#29243A;
+  --ui-text-muted-dark:#C4B9E2;   /* chữ phụ trên nền tối — 7.3:1 trên #10182E */
+  --ui-text-muted-light:#6B5B4A;  /* chữ phụ trên nền sáng — 5.9:1 trên #FFFDF6 */
+  --ui-title-gold:#FFD76A;
+  --ui-bg-panel:#292044;
+  --ui-bg-content:#372B58;
+  --ui-border:#B99AF7;
+  --ui-border-gold:#F5C86A;
+  --ui-success:#70F5A0;
+  --ui-warning:#FFD166;
+  --ui-danger:#FF828F;
+  --ui-btn-green:#2E7D32;         /* trắng trên #2E7D32 = 5.13:1 */
+  --ui-btn-green-border:#1B5E20;
+  --ui-btn-danger-dark:#C1121F;   /* trắng trên #C1121F = 5.9:1 */
+  --ui-text-on-gold:#3A2500;
+  --ui-radius:16px;
+  --ui-btn-min-height:44px;
+}
+
+/* ---- §1. Base: không cuộn ngang ngoài ý muốn ---- */
+html,body{overflow-x:clip}
+
+/* ---- §2. Buttons (chuẩn hóa theo spec §5) ---- */
+/* Primary xanh lá: rule gốc `:root.btn.pri` (V6 line 156, #3FAE62, trắng 2.82:1)
+   thua rule này vì cùng độ ưu tiên nhưng v24.css nạp sau. */
+:root .btn.pri{background:var(--ui-btn-green);border-color:var(--ui-btn-green-border);color:#fff}
+:root .btn.ok{background:var(--ui-btn-green);border-color:var(--ui-btn-green-border);color:#fff}
+/* Nút nhỏ vẫn đủ 44px chạm — padding giữ gọn để không phá hàng nút dày. */
+:root .btn.sm{min-height:var(--ui-btn-min-height)}
+/* Nút đóng Account Center / Pet Hub: đỏ đậm thay vì #E63946 (trắng 4.17:1). */
+.v23x{background:var(--ui-btn-danger-dark)}
+.v21x{background:var(--ui-btn-danger-dark);color:#fff}
+
+/* ---- §3. Panels: tab bar dưới đáy luôn có nền đặc (không chữ đè lên nội dung cuộn) ---- */
+@media(max-width:640px){
+  :root .tabs{background:var(--sf);border:2px solid var(--line)}
+}
+
+/* ---- §4. Korean Hub header + tabs ---- */
+/* Gradient đầu trang: giữ xanh lá nông trại nhưng chữ trắng có bóng mềm để
+   không chìm ở đầu sáng của gradient. */
+:root h1{text-shadow:0 1px 4px rgba(0,0,0,.45)}
+:root h1 small{color:#fff;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.45)}
+/* Hai pill #sk/#sn: nền trắng 30% + chữ trắng ≈ 2.5:1 → nền xanh đậm bán trong suốt ≈ 5:1. */
+:root #sk,:root #sn{background:rgba(20,60,25,.55);border-color:rgba(255,255,255,.65)}
+/* Tab đang chọn: gradient cũ #58C16F (trắng 2.7:1) → xanh đậm đạt 4.6:1. */
+:root .tab.on{background:linear-gradient(#257A3C,#1F6B33)}
+/* Tab dưới đáy ở điện thoại: 10px + nowrap làm "Bản Đồ BossThú Cưng" dính nhau. */
+@media(max-width:480px){
+  :root .tab{font-size:12px;white-space:normal;line-height:1.15}
+}
+/* Chữ nhỏ trong thẻ thống kê: 11px → 12px (mức sàn nội dung). */
+.st span{font-size:12px}
+/* Ban đêm (mặc định của profile mới): body #10182E nhưng --mute vẫn là màu
+   sáng-scheme #7C6B58 (3.44:1). Chỉ chỉnh các chữ nằm TRỰC TIẾP trên body
+   tối — chữ trong thẻ sáng giữ nguyên. */
+html[data-v7night="1"] #stage>.mute{color:#C9BFE0}
+/* Nhãn "Bộ từ" bọc <select> (không phải leaf nên auditor bỏ qua):
+   màu --ink #3A2E22 trên body đêm #10182E ≈ 1.9:1 → sáng lên. */
+html[data-v7night="1"] #decks label{color:#E8ECF8}
+/* Nhãn checkbox "Chỉ từ cần ôn" (LABEL.chk bọc <input>, cũng bị auditor
+   bỏ qua): --mute #7C6B58 trên body đêm = 3.44:1 → #C4B9E2 ≈ 7.3:1. */
+html[data-v7night="1"] label.chk{color:#C4B9E2}
+/* Ghi chú trong nông trại ban đêm (.v7farm nền #2E5A34):
+   .mute #7C6B58 = 3.44:1 → xanh lá nhạt #D8E8D0 ≈ 5.9:1. */
+html[data-v7night="1"] .v7farm .mute{color:#D8E8D0}
+html[data-v7night="1"] .tab{color:var(--ui-text-muted-dark)}
+html[data-v7night="1"] .tab.v19kotab,
+html[data-v7night="1"] .tab.v23kotab{color:var(--ui-title-gold)}
+/* Thanh tab dưới đáy cũng phải tối theo khi ở ban đêm — nếu để nền sáng
+   #FFFDF6 thì nhãn vàng gold #FFD76A chỉ còn 1.36:1.
+   (Lưu ý: `html[...] :root .tabs` không bao giờ khớp vì :root CHÍNH LÀ
+   <html>, không phải con của nó — phải viết `html[...] .tabs`.) */
+html[data-v7night="1"] .tabs{background:#1F2B22;border-color:#34453A}
+/* Plot nông trại: tên + trạng thái 10–11px → 12px, chip tên đậm hơn.
+   (Selector gốc là descendant `.v7plot .nm`, không phải compound.) */
+.v7plot .nm{font-size:12px;background:rgba(0,0,0,.55)}
+.v7plot .st2{font-size:12px}
+
+/* ---- §5. English Hub ---- */
+/* Nút 🐾 Thú Cưng trong header hub: .btn.sm xám nhạt trông như bị vô hiệu
+   → vàng gold giống .v15lb-hub ở lang bar. */
+.v15hub-headbtns .btn{background:#FFC53D;border-color:#B98A00;color:#1F2A44;font-weight:700}
+/* Chip XP/gems: chữ trắng trên nền trắng 12% ≈ 3.5:1 → nền đen 28% ≈ 5.5:1. */
+.v15chip{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.35)}
+/* Tiêu đề phụ hub: 12px → 13px. */
+.v15hub-title span{font-size:13px}
+/* Tab hub: đủ 44px chạm. */
+.v15tab{min-height:var(--ui-btn-min-height);display:inline-flex;align-items:center}
+
+/* ---- §6. Flashcards / modes: IPA + đáp án đúng/sai (màu + biểu tượng) ---- */
+/* IPA trong flashcard (.mute trên nền thẻ sáng #FFFDF6): #7C6B58 5.4:1 → #6B5B4A 5.9:1. */
+.v15fc .mute{color:var(--ui-text-muted-light)}
+.v15qcard .mute{color:var(--ui-text-muted-light)}
+/* Đáp án: không chỉ dùng màu — thêm ✓ / ✗ bằng CSS (không sửa markup/logic). */
+.v15opt.right::after,.v18opt.right::after,.v19opt.right::after{content:" ✓";font-weight:800}
+.v15opt.wrong::after,.v18opt.wrong::after,.v19opt.wrong::after{content:" ✗";font-weight:800}
+
+/* ---- §7. Bosses: chip độ hiếm + chip nguyên tố ---- */
+/* .v18chip dùng --ec INLINE (v18.js) nên rule đổi --ec không có tác dụng —
+   phải override trực tiếp color. Mọi màu nguyên tố/độ hiếm đều < 4.5:1
+   trên thẻ sáng (Thiên nhiên #58B368 = 2.56:1, Sét #FFD23F ≈ 1.5:1…).
+   Chữ chip → #3A2E22 (6.0:1); viền vẫn giữ màu --ec nên mã màu nguyên tố
+   không mất. */
+.v18chip{color:#3A2E22}
+.v18chip.rar-common{color:#3A2E22}
+
+/* ---- §8. Boss Map (V19): chống chồng lấn node ở điện thoại ---- */
+/* Zone tops cách nhau 9% chiều cao map; ở 1300px = 117px trong khi island
+   cao ~130px → chồng ~10px. Tăng chiều cao map + thu nhỏ island. */
+@media(max-width:480px){
+  .v19map{height:1600px}
+  .v19zone{width:108px}
+  .v19zone.v19side-left{left:calc(22% - 54px)}
+  .v19zone.v19side-right{left:calc(78% - 54px)}
+  .v19zone.v19side-center{left:calc(50% - 54px)}
+  .v19zone-island{padding:8px 4px 6px}
+  .v19zone-island img{width:64px;height:64px}
+  .v19zone-name{font-size:13px}
+}
+.v19zone-meta{font-size:12px}
+
+/* ---- §9. Pet System (V23) ---- */
+/* Grid blowout ở điện thoại: `.v23pets` 1 cột `1fr` (= minmax(auto,1fr))
+   bị nội dung min-content của panel (hàng nút trong detail) đẩy rộng
+   tới 387px trong khi container chỉ 362px → tràn ngang 11px.
+   minmax(0,1fr) + min-width:0 cho phép panel co lại đúng khung. */
+@media(max-width:760px){
+  .v23pets,.v23evo,.v23team{grid-template-columns:minmax(0,1fr)}
+  .v23side,.v23detail{min-width:0;max-width:100%}
+  .v23grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .v23btns{flex-wrap:wrap}
+}
+/* Thanh pet trong trận đấu: .v23bar-fight không đặt màu chữ nên kế thừa
+   mực tối #3A2E22 của thẻ đấu sáng → 1.14:1 trên nền tím đậm. */
+.v23bar-fight{color:#FFF8E1}
+.v23bar-fight .v23bf-row b{color:#FFE66D}
+/* Tab pet không chọn: #D9C8FF → #E5DEF5 (sáng hơn, đạt AA rõ rệt). */
+.v23tab{color:var(--ui-text-secondary);min-height:var(--ui-btn-min-height)}
+/* Nút chính tím: gradient #8B5CF6→#6D28D9, đầu gradient trắng chỉ 3.4:1 → đậm hơn. */
+.v23btn.pri{background:linear-gradient(180deg,#7C3AED,#5B21B6);border-color:#C4B5FD}
+/* Nút tiến hóa tím sáng: #A855F7 trắng 3.3:1 → đậm hơn. */
+.v23btn.evo{background:linear-gradient(180deg,#9333EA,#6B21A8)}
+/* Nút xanh lá: #22C55E trắng 2.3:1 → #15803D/#14532D (≥4.5:1). */
+.v23btn.ok{background:linear-gradient(180deg,#15803D,#14532D)}
+.v23btn{min-height:var(--ui-btn-min-height)}
+/* Chữ phụ trong Pet Hub: #C9B8F0 → #E5DEF5, chữ 11px → 12px. */
+.v23note,.v23empty{color:var(--ui-text-secondary)}
+.v23cellm{font-size:12px;color:var(--ui-text-secondary)}
+.v23count{color:var(--ui-text-secondary)}
+.v23lv{color:var(--ui-text-secondary)}
+.v23rar{color:var(--ui-text-secondary)}
+.v23eggcard span{color:var(--ui-text-secondary)}
+.v23slot span{color:var(--ui-text-secondary)}
+.v23row span i{color:var(--ui-text-secondary)}
+.v23skill i{color:#B7A6E0}
+/* Thanh pet trong trận: chữ 11px → 12px. */
+.v23bf-pet{font-size:12px;color:var(--ui-text-secondary)}
+.v23bf-note{font-size:12px;color:var(--ui-text-secondary)}
+.v23bf-row{font-size:13px}
+
+/* ---- §10. Welcome / Login / Account (V21) ---- */
+/* Nhãn thống kê profile: #8A7A63 11.5px trên trắng = 4.16:1 → #6B5B4A 12px = 5.9:1. */
+.v21stat span{font-size:12px;color:var(--ui-text-muted-light)}
+/* Thanh tab Account Center ở điện thoại: v21.css để overflow-x:auto nên tab
+   cuối bị cắt (phải vuốt ngang mới thấy). Cho wrap thành 2 hàng để thấy
+   hết tab ngay — cùng breakpoint 560px của v21.css. */
+@media(max-width:560px){
+  .v21sidebar{flex-wrap:wrap;overflow-x:visible}
+  .v21side{white-space:normal}
+}
+/* Placeholder input: #9A9A9A → #6B5B4A (đậm hơn, vẫn nhận ra là placeholder).
+   Riêng ô tìm kiếm Pet Hub có nền TỐI (#1B1033) nên cần placeholder sáng. */
+input::placeholder,textarea::placeholder{color:var(--ui-text-muted-light);opacity:1}
+.v23filter input::placeholder{color:#B7A6E0}
+
+/* ---- §11. Modals — BUG FIX: class .ko va chạm ---- */
+/* V6 dùng .ko cho ảnh boss bị hạ (96px, grayscale, xoay 160°), nhưng nút
+   "Nông trại Hàn Quốc" trong chooser lại là <button class="v15big ko">
+   → nút bị thu nhỏ/xoay/chồng lên đoạn văn. Khôi phục kích thước nút. */
+.v15big.ko{width:auto;height:auto;margin:0;filter:none;animation:none;transform:none}
+/* Popup không tràn màn hình điện thoại. */
+.v15modal,.v21modal{max-width:94vw;box-sizing:border-box}
+
+/* ---- §12. Thư viện: chữ phụ trên nền sáng ---- */
+/* .mute trong thư viện (#7C6B58, 5.4:1) → #6B5B4A (5.9:1), vẫn trên nền sáng. */
+.v17lib .mute{color:var(--ui-text-muted-light)}
+
+/* ---- §13. Reduced motion: V24 không thêm animation nào mới; giữ nguyên
+   hành vi prefers-reduced-motion của các lớp cũ. ---- */
+
+</style>
+<script id="v24js">
+/* ===== V24 — UI/UX Readability Upgrade (V15.1) — JS phụ trợ =====
+   Chỉ chứa hành vi UI, KHÔNG đổi logic game, KHÔNG chạm localStorage. */
+(function(){
+  'use strict';
+  var VERSION='15.1.0';
+  try{
+    /* BUG FIX: V18 fight render ở cuối trang arena (~5.500px dưới fold).
+       startFight/renderFight không cuộn, nên sau khi bấm "Khiêu chiến"
+       người chơi vẫn nhìn danh sách boss trong khi trận đấu chờ ở dưới.
+       #v18fight chỉ được v18.js tạo ra khi mở tab Bosses (không có sẵn
+       lúc tải trang) nên cần observer 2 tầng: tầng 1 chờ #v18fight xuất
+       hiện, tầng 2 cuộn chỉ khi nó chuyển từ rỗng → có nội dung (trận
+       mới bắt đầu); trong trận innerHTML không bao giờ rỗng nên các lần
+       render đáp án không cuộn lại. */
+    var fightHost = null, fightWasEmpty = true, fightObs = null;
+    function armFightScroll(host){
+      fightHost = host; fightWasEmpty = host.innerHTML.trim() === '';
+      if (fightObs) fightObs.disconnect();
+      fightObs = new MutationObserver(function(){
+        try{
+          var empty = fightHost.innerHTML.trim() === '';
+          if (fightWasEmpty && !empty) {
+            fightHost.scrollIntoView({behavior:'smooth',block:'start'});
+          }
+          fightWasEmpty = empty;
+        }catch(e){}
+      });
+      fightObs.observe(host, {childList:true, subtree:true});
+    }
+    try{
+      var existing = document.getElementById('v18fight');
+      if (existing) armFightScroll(existing);
+      else if (window.MutationObserver) {
+        var bodyObs = new MutationObserver(function(){
+          try{
+            var h = document.getElementById('v18fight');
+            if (h) { bodyObs.disconnect(); armFightScroll(h); }
+          }catch(e){}
+        });
+        bodyObs.observe(document.body, {childList:true, subtree:true});
+      }
+    }catch(e){}
+    /* BUG FIX (tìm thấy khi kiểm thử V15.1): en15() trong v15.js chỉ tạo
+       giá trị mặc định khi S.v7.en15 hoàn toàn chưa có; nếu bản lưu đã có
+       en15 nhưng thiếu modeBest (ví dụ bản lưu được tạo/xuất từ nguồn khác,
+       hoặc bị ghi đè một phần), English Hub crash ngay khi mở:
+       learnHTML đọc e.modeBest[m.id] → TypeError "reading 'flash'".
+       Các getter khác (en18/en19) đều backfill từng trường; en15 thì không.
+       V24 backfill các trường còn thiếu bằng đúng giá trị mặc định của
+       v15.js, rồi lưu lại — không sửa file cũ. */
+    var v15=window.__v15;
+    if(v15&&v15.en15){
+      var e=v15.en15();
+      if(e&&e!==null&&typeof e==='object'){
+        var need=false;
+        if(!e.modeBest){e.modeBest={};need=true;}
+        if(!e.due){e.due={};need=true;}
+        if(!e.intv){e.intv={};need=true;}
+        if(!e.hist){e.hist={};need=true;}
+        if(!e.daily){e.daily={d:'',correct:0,wrong:0,xp:0};need=true;}
+        if(!e.bosses){e.bosses={};need=true;}
+        if(!e.speakDone){e.speakDone={};need=true;}
+        if(e.weakOnly===undefined){e.weakOnly=false;need=true;}
+        if(!e.lang)e.lang='ko';
+        if(!e.level)e.level='A1';
+        if(e.topic===undefined)e.topic='';
+        if(need&&v15.save15)v15.save15();
+      }
+    }
+  }catch(e){}
+  try{ window.__v24={version:VERSION}; }catch(e){}
+})();
+
+</script>
+
+
+
+<style id="v25">
+/* ===== V25 — Vocabulary Library UI/UX Redesign (V15.2) =====
+   Lớp cộng thêm, nạp SAU tất cả các lớp cũ nên rule cùng độ ưu tiên
+   sẽ thắng. KHÔNG sửa logic game, KHÔNG đổi khóa localStorage, KHÔNG
+   đổi tên ID/class JS đang dùng — v25.js chỉ THÊM class/badge, không
+   sửa markup gốc. Mọi giá trị màu theo bảng màu Anh đưa (spec V15.2
+   §3), đã kiểm chứng đạt WCAG AA (4.5:1 chữ thường, 3:1 chữ lớn)
+   trên nền thực tế của nó — xem SMOKE_TEST_V15_2.
+   Phạm vi: Thư viện A1–A2, Oxford 3000, Basic Tactics 24 Units,
+   My Vocabulary (tab Từ vựng), Flashcards, tìm kiếm/lọc, popup
+   liên quan Thư viện. Các màn hình khác không chạm tới. */
+
+/* ---- §0. Tokens (bảng màu spec §3) ---- */
+:root{
+  --lib-frame:#FFF9EF;      /* nền khung sáng */
+  --lib-panel:#292044;      /* nền khung tối */
+  --lib-panel2:#372B58;     /* nền khung phụ */
+  --lib-ink:#29243A;        /* chữ chính trên nền sáng */
+  --lib-mute:#51485D;       /* chữ phụ trên nền sáng */
+  --lib-line:#B99AF7;       /* viền tím */
+  --lib-gold-line:#F5C86A;  /* viền vàng */
+  --lib-green:#247A46;      /* nút xanh (trắng trên #247A46 ≈ 5.5:1) */
+  --lib-green-dark:#14532D;
+  --lib-purple:#6845A8;     /* nút tím (trắng trên #6845A8 ≈ 6.5:1) */
+  --lib-purple-dark:#4C2E7A;
+  --lib-purple-ink:#4A2E8A; /* chữ tím đậm trên nền sáng (≈ 8:1) */
+  --lib-warn:#B45309;       /* cảnh báo (trên trắng ≈ 4.9:1) */
+  --lib-gold:#FFD76A;       /* tiêu đề trên nền tối */
+  --lib-ink-on-dark:#FFFFFF;/* chữ chính trên nền tối */
+  --lib-mute-on-dark:#E5DEF5;/* chữ phụ trên nền tối */
+  --lib-card:#FFFFFF;
+  --lib-track:#EDE6F8;      /* nền thanh tiến trình */
+  --lib-card-line:#D9C8F5;  /* viền thẻ trên nền #FFF9EF */
+  --lib-danger:#C1121F;     /* đỏ đậm (trắng 5.9:1) — dùng lại token V24 */
+  --lib-danger-dark:#7F0D18;
+  --lib-gold-bg:#F5C86A;    /* nền vàng cho trạng thái bật */
+  --lib-gold-ink:#3A2500;   /* chữ tối trên nền vàng (≈ 9:1) */
+}
+
+/* ---- §1. Tiêu đề Thư viện (§4: 24–28px) ---- */
+.v17lib .v17head h3,.v17lesson .v17head h3{font-size:24px;line-height:1.25;color:var(--lib-ink)}
+.v17lib .v17head p,.v17lesson .v17head p{font-size:14px;line-height:1.55;color:var(--lib-mute)}
+
+/* ---- §2. Thẻ bộ từ (§2: khung 12–18px, nền rõ, viền tím/vàng, bóng) ---- */
+/* Nhóm bộ từ: nền sáng #FFF9EF, viền tím, bo 18px, bóng vừa phải.
+   Tiêu đề nhóm thành dải nền tối #292044 + chữ vàng #FFD76A để mỗi bộ
+   từ dễ phân biệt nhưng vẫn đồng bộ. */
+.v17lib .v17group{
+  background:var(--lib-frame);
+  border:2px solid var(--lib-line);
+  border-radius:18px;
+  box-shadow:0 4px 16px rgba(41,32,68,.10);
+  padding:0;
+  overflow:hidden;
+}
+.v17lib .v17group-head{
+  background:var(--lib-panel);
+  border-bottom:2px solid var(--lib-gold-line);
+  margin:0;
+  padding:14px 16px 12px;
+}
+.v17lib .v17group-head b{font-size:20px;line-height:1.3;color:var(--lib-gold)}
+.v17lib .v17group-head .mute{font-size:13px;color:var(--lib-mute-on-dark)}
+.v25set-ic{font-size:22px;margin-right:8px;vertical-align:-2px}
+/* Con trực tiếp của nhóm giữ lề ngang 14px sau khi nhóm bỏ padding. */
+.v17lib .v17group>.acts,.v17lib .v17group>p,
+.v17lib .v17group>.v17grid,.v17lib .v17group>.v17ox-tools{margin-left:14px;margin-right:14px}
+.v17lib .v17group>.acts{margin-top:12px}
+.v17lib .v17group>:last-child{margin-bottom:14px}
+.v17lib .v17group>p{color:var(--lib-mute);font-size:14px;line-height:1.5}
+/* Thanh tiến trình cấp bộ từ (v25.js chèn sau .v17group-head). */
+.v25group-progress{margin:14px 14px 0}
+.v25group-progress .v25gp-line{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--lib-mute);margin-bottom:6px}
+.v25group-progress .v25gp-line b{color:var(--lib-ink)}
+.v25group-progress .v25gp-loading{font-size:13px;color:var(--lib-mute);font-style:italic}
+
+/* ---- §3. Thẻ chủ đề / bài học / Unit (§2, §6) ---- */
+.v17lib .v17grid{gap:12px}
+.v17lib .v17card{
+  background:var(--lib-card);
+  border:2px solid var(--lib-card-line);
+  border-radius:16px;
+  box-shadow:0 2px 8px rgba(41,32,68,.08);
+  padding:14px;
+  gap:8px;
+}
+.v17lib .v17card:hover{border-color:var(--lib-line)}
+/* Tên bài học 16–18px (§4), cho phép xuống dòng, số từ không bị tách. */
+.v17lib .v17card-t{flex-wrap:wrap}
+.v17lib .v17card-t b{font-size:17px;line-height:1.3;color:var(--lib-ink);min-width:0;overflow-wrap:break-word}
+.v17lib .v17card-t .mute{font-size:13px;color:var(--lib-mute);white-space:nowrap;flex-shrink:0}
+.v17lib .v17card>.mute{font-size:13px;color:var(--lib-mute)}
+/* Thanh tiến trình: dày hơn, nền tím nhạt, vẫn giữ dải màu gốc. */
+.v17lib .v17bar,.v17lesson .v17bar{height:12px;background:var(--lib-track)}
+.v17lib .v17bar.big,.v17lesson .v17bar.big{height:14px}
+/* Đã nhận thưởng: var(--ok) #2E9B52 trên nền sáng chỉ 3.3:1 → xanh đậm. */
+.v17claimed{color:#166534}
+
+/* ---- §4. Hàng từ vựng (§5) ---- */
+.v17lib .v17words,.v17lesson .v17words{gap:12px}
+.v17lib .v17rows{gap:10px}
+.v17lib .v17word,.v17lesson .v17word{
+  background:var(--lib-card);
+  border:2px solid var(--lib-card-line);
+  border-radius:16px;
+  box-shadow:0 2px 8px rgba(41,32,68,.06);
+  padding:14px;
+  gap:14px;
+}
+/* Từ tiếng Anh 18–22px (§4); nghĩa Việt 15–17px; IPA 15–16px. */
+.v17word-main b{font-size:19px;line-height:1.3;color:var(--lib-ink)}
+.v17word-main .mute{font-size:13px;color:var(--lib-mute)}
+.v17word-main>div:not([class]){font-size:16px;line-height:1.5;color:var(--lib-ink);margin-top:2px}
+.v17ipa{font-size:15px;color:var(--lib-mute)}
+.v17nodata{color:var(--lib-warn);font-style:italic}
+.v17extra,.v17ex{font-size:15px;line-height:1.5;color:var(--lib-ink)}
+.v17ex .mute{color:var(--lib-mute)}
+/* Loại từ thành pill tím nhạt, chữ tím đậm — thay cho chữ xám nhỏ. */
+.v17word-main>b+span.mute{
+  display:inline-block;background:#EDE6F8;color:var(--lib-purple-ink);
+  font-size:13px;font-weight:700;padding:2px 9px;border-radius:99px;
+  vertical-align:middle;
+}
+.v17word-main>span.mute:empty{display:none}
+/* Nhãn trạng thái ghi nhớ (v25.js chèn): biểu tượng + nhãn, không chỉ màu. */
+.v25status{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13px;font-weight:700;line-height:1.2;
+  padding:3px 9px;border-radius:99px;margin-left:8px;
+  vertical-align:middle;white-space:nowrap;
+}
+.v25status.st-new{background:#F1F5F9;color:#475569;border:1.5px solid #CBD5E1}
+.v25status.st-learning{background:#FEF3C7;color:#92400E;border:1.5px solid #F59E0B}
+.v25status.st-due{background:#FFEDD5;color:#9A3412;border:1.5px solid #FB923C}
+.v25status.st-mastered{background:#DCFCE7;color:#166534;border:1.5px solid #4ADE80}
+/* Hàng kết quả tìm kiếm Oxford. */
+.v17lib .v17row{
+  background:var(--lib-card);border:2px solid var(--lib-card-line);
+  border-radius:14px;padding:12px 14px;
+  box-shadow:0 2px 8px rgba(41,32,68,.06);
+}
+.v17lib .v17row b{font-size:17px;color:var(--lib-ink)}
+.v17lib .v17row .mute{font-size:13px;color:var(--lib-mute)}
+.v17lib .v17row>div>span:not(.mute){font-size:15px;color:var(--lib-ink)}
+/* Thông báo không tìm thấy: khung riêng thay cho một dòng chữ mờ.
+   (v25.js gắn class v25empty cho các thông báo có sẵn của Oxford/BT và
+   chèn thông báo khi danh sách bài học bị lọc về 0 — v17.js không có
+   thông báo này.) */
+.v17lib p.mute.v25empty,.v17lesson p.mute.v25empty{
+  background:var(--lib-frame);border:2px dashed var(--lib-line);
+  border-radius:12px;padding:14px;text-align:center;
+  font-size:15px;color:var(--lib-mute);
+}
+
+/* ---- §5. Nút bấm Thư viện (§9: Học ngay xanh, Ôn tập tím, Xem từ sáng) ---- */
+.v17lib .btn,.v17lesson .btn{font-size:15px}
+.v17lib .btn.pri,.v17lesson .btn.pri{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+.v17lib .btn.pri:hover,.v17lesson .btn.pri:hover{filter:brightness(1.07)}
+.v17lib .btn.pri:active,.v17lesson .btn.pri:active{transform:translateY(2px);box-shadow:none}
+.v17lib .btn.v25btn-review,.v17lesson .btn.v25btn-review{
+  background:var(--lib-purple);border-color:var(--lib-purple-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-purple-dark);
+}
+.v17lib .btn.v25btn-review:hover,.v17lesson .btn.v25btn-review:hover{filter:brightness(1.07)}
+.v17lib .btn.v25btn-review:active,.v17lesson .btn.v25btn-review:active{transform:translateY(2px);box-shadow:none}
+.v17lib .btn.v25btn-view,.v17lesson .btn.v25btn-view{
+  background:var(--lib-frame);border-color:var(--lib-purple);color:var(--lib-purple-ink);
+  box-shadow:0 3px 0 var(--lib-card-line);
+}
+.v17lib .btn.v25btn-view:hover,.v17lesson .btn.v25btn-view:hover{filter:brightness(1.03)}
+.v17lib .btn.v25btn-view:active,.v17lesson .btn.v25btn-view:active{transform:translateY(2px);box-shadow:none}
+/* Đã thuộc / Nhận thưởng trong Thư viện: xanh #247A46 thay #2E7D32 (V24). */
+.v17lib .btn.ok,.v17lesson .btn.ok{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+/* Yêu thích đang bật: nút .on trước đây KHÔNG có style riêng (chỉ đổi
+   ☆ → ★) — nay nền vàng gold, chữ tối, dễ nhận biết (màu + biểu tượng). */
+.v17lib .btn.on,.v17lesson .btn.on{
+  background:var(--lib-gold-bg);border-color:#B98A00;color:var(--lib-gold-ink);
+  box-shadow:0 3px 0 #B98A00;
+}
+/* Nút đỏ "Chưa nhớ" (flashcard) và "Xóa" (tab Từ vựng): chữ đỏ #D9503F
+   trên nền sáng chỉ 3.99:1 → nền đỏ đậm, chữ trắng 5.9:1. */
+#v15body .btn.bad{
+  background:var(--lib-danger);border-color:var(--lib-danger-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-danger-dark);
+}
+#v15body .btn.bad:active{transform:translateY(2px);box-shadow:none}
+/* Nút quay lại Thư viện: pill tím nhạt, vị trí thống nhất (đầu trang). */
+.v17lesson .v15back{
+  background:#EDE6F8;border:2px solid var(--lib-line);color:var(--lib-purple-ink);
+  border-radius:99px;padding:8px 16px;font-size:15px;font-weight:600;
+  min-height:44px;cursor:pointer;
+}
+.v17lesson .v15back:hover{filter:brightness(1.03)}
+/* Banner phạm vi học: chữ 15px, viền tím rõ hơn. */
+.v17scope{font-size:15px;background:#EDE6F8;border-color:var(--lib-line);color:var(--lib-ink)}
+.v17scope-x{color:var(--lib-purple-ink);min-height:44px;min-width:44px;font-size:15px}
+.v17pager .mute{font-size:14px;color:var(--lib-mute)}
+
+/* ---- §6. Tìm kiếm & bộ lọc (§8) ---- */
+/* Ô nhập: nền trắng, chữ tối, icon kính lúp, nút xóa native (type=search
+   do v25.js đặt — xem ::-webkit-search-cancel-button bên dưới). */
+.v17lib .v15input,.v17lesson .v15input{
+  background-color:#FFFFFF;border:2px solid var(--lib-line);color:var(--lib-ink);
+  font-size:16px;min-height:48px;border-radius:12px;
+  padding-left:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236845A8' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='16.5' y1='16.5' x2='21' y2='21'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:12px center;background-size:20px 20px;
+}
+.v17lib .v15input::placeholder,.v17lesson .v15input::placeholder{color:#6B5B4A;opacity:1}
+.v17lib input[type="search"]::-webkit-search-cancel-button,
+.v17lesson input[type="search"]::-webkit-search-cancel-button,
+#v15body>input[type="search"]::-webkit-search-cancel-button{
+  -webkit-appearance:none;appearance:none;width:20px;height:20px;cursor:pointer;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2351485D' stroke-width='2.5' stroke-linecap='round'%3E%3Cline x1='5' y1='5' x2='19' y2='19'/%3E%3Cline x1='19' y1='5' x2='5' y2='19'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.v17lib .v15sel,.v17lesson .v15sel{
+  font-size:15px;min-height:48px;background:#fff;
+  border-color:var(--lib-line);color:var(--lib-ink);
+}
+/* Ô tìm kiếm tab Từ vựng (nằm trực tiếp trong #v15body, không có wrapper
+   .v17lib/.v17lesson) — cùng kiểu ô nhập Thư viện. */
+#v15body>input.v15input{
+  background-color:#FFFFFF;border:2px solid var(--lib-line);color:var(--lib-ink);
+  font-size:16px;min-height:48px;border-radius:12px;padding-left:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236845A8' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='16.5' y1='16.5' x2='21' y2='21'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:12px center;background-size:20px 20px;
+}
+#v15body>input.v15input::placeholder{color:#6B5B4A;opacity:1}
+
+/* ---- §7. Basic Tactics (§6) ---- */
+.v22type{font-size:13px;font-weight:700;line-height:1.2;padding:4px 9px;border-radius:99px}
+.v22type.wd{background:#DCFCE7;color:#166534}
+.v22type.ph{background:#E0E7FF;color:#1E3A8A}
+.v22tabs .v15tab{font-size:15px;min-height:48px;line-height:1.25;text-align:center}
+.v22stars{color:var(--lib-warn)}
+.v22bscope{background:var(--lib-frame);border:2px solid var(--lib-line);border-radius:14px}
+.v22bscope b{color:var(--lib-ink)}
+.v22bscope .mute{color:var(--lib-mute);font-size:13px}
+.v22bscope .v15sel{font-size:15px;min-height:44px;background:#fff;border-color:var(--lib-line);color:var(--lib-ink)}
+
+/* ---- §8. Flashcards & thẻ câu hỏi (§7) ---- */
+.v15fc-f,.v15fc-b{
+  background:var(--lib-frame);
+  border:2px solid var(--lib-line);
+  border-radius:18px;
+  box-shadow:0 6px 20px rgba(41,32,68,.12);
+}
+.v15fc-b{background:#EDE6F8;border-color:var(--lib-line)}
+.v15fc-word{font-size:32px;color:var(--lib-ink)}
+.v15fc-word.vi{font-size:28px}
+.v15fc .mute{font-size:15px;color:var(--lib-mute)}
+.v15fc .v15ex{font-size:15px;color:var(--lib-ink)}
+.v15qcard{
+  background:var(--lib-frame);border:2px solid var(--lib-line);
+  border-radius:18px;box-shadow:0 4px 16px rgba(41,32,68,.10);
+}
+.v15qword{font-size:30px;color:var(--lib-ink)}
+.v15qcard .mute{font-size:15px;color:var(--lib-mute)}
+/* Nút Đã nhớ sau khi lật thẻ: xanh #247A46 (đồng bộ Học ngay). */
+.v15fc~.acts .btn.ok{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+@media(prefers-reduced-motion:reduce){
+  .v15fc-in{transition:none}
+}
+
+/* ---- §9. Tab Từ vựng — My Vocabulary (§1) ---- */
+#v15body .v15row{
+  background:#FFFFFF;border:2px solid var(--lib-card-line);border-radius:14px;
+  padding:12px 14px;gap:12px;box-shadow:0 2px 8px rgba(41,32,68,.06);
+}
+#v15body .v15row b{font-size:18px;color:var(--lib-ink)}
+#v15body .v15row .mute{font-size:13px;color:var(--lib-mute)}
+#v15body .v15row>div>span:not(.mute){font-size:16px;line-height:1.5;color:var(--lib-ink)}
+#v15body .v15rowst{font-size:13px;color:var(--lib-mute)}
+#v15body .v15row .btn{font-size:15px}
+#v15body .v15add input,#v15body .v15add select{
+  font-size:15px;min-height:44px;border-color:var(--lib-line);
+}
+
+/* ---- §10. Popup liên quan Thư viện (§1) ---- */
+/* Toast (pop15) dùng cho "Đã sao chép…", "Đã nhận thưởng…": chữ 15px,
+   không tràn màn hình hẹp. (.pp vàng của V6 không chạm — không phải
+   popup Thư viện.) */
+.v7toast{font-size:15px;max-width:90vw;text-align:center;padding:12px 18px}
+
+/* ---- §11. Responsive (§10) ---- */
+@media(max-width:640px){
+  /* Hàng từ chuyển dọc (v17.css đã có) — nút thành lưới 2 cột. */
+  .v17lib .v17word,.v17lesson .v17word{flex-direction:column}
+  .v17word-acts{flex-direction:row;flex-wrap:wrap}
+  .v17word-acts .btn{flex:1 1 40%;min-width:0}
+  /* Ô tìm kiếm chiếm trọn hàng, bộ lọc xuống hàng dưới. */
+  .v17filters .v15input{flex:1 1 100%}
+  .v17lib .v17group-head b{font-size:19px}
+  .v17lib .v17group-head{padding:12px 14px 10px}
+}
+@media(max-width:560px){
+  .v22tabs .v15tab{font-size:14px;min-width:0}
+  .v15fc-word{font-size:26px}
+  .v15fc-word.vi{font-size:24px}
+  .v15qword{font-size:24px}
+}
+
+</style>
+<script id="v25js">
+/* ===== V25 — Vocabulary Library UI/UX Redesign (V15.2) — JS phụ trợ =====
+   Chỉ thêm UI trình bày, KHÔNG đổi logic game, KHÔNG chạm localStorage,
+   KHÔNG đổi tên ID/class JS đang dùng. Mọi số liệu (tiến trình bộ từ,
+   nhãn trạng thái) đều đọc từ đúng kho dữ liệu của app (WORDS,
+   S.v7.en box/due) nên không bao giờ là số liệu giả.
+   - Nhãn trạng thái ghi nhớ (○ Chưa học / ◐ Đang học / ↻ Cần ôn /
+     ✓ Đã thuộc) trên từng hàng từ.
+   - Thanh tiến trình cấp bộ từ + icon cho từng nhóm trong Thư viện.
+   - Phân loại nút: Ôn tập → tím đậm, Xem từ → nền sáng chữ tím.
+   - Ô tìm kiếm Thư viện thành type=search (nút xóa native của Chrome).
+   Chạy qua MutationObserver: Thư viện vẽ lại sau mỗi lần tìm kiếm /
+   chuyển tab nên decorator phải chạy lại sau mỗi lần render. */
+(function(){
+'use strict';
+var VERSION='15.2.0';
+var V15=function(){return window.__v15||null};
+var V22=function(){return window.__v22||null};
+
+/* ---------- đọc tiến trình thật từ kho của app ---------- */
+function boxOf(id){
+  try{var v=V15();if(!v)return 0;var o=v.enOld();return (o.box||{})[id]||0}
+  catch(e){return 0}
+}
+function dueOf(id){
+  try{var v=V15();if(!v)return 0;var e=v.en15();return (e.due||{})[id]||0}
+  catch(e){return 0}
+}
+function statsOf(list){
+  var now=Date.now(),s={total:list.length,learned:0,mastered:0,due:0};
+  list.forEach(function(w){
+    var b=boxOf(w.id);
+    if(b>=1)s.learned++;
+    if(b>=5)s.mastered++;
+    if(dueOf(w.id)<=now)s.due++;
+  });
+  return s;
+}
+function statusOf(id){
+  var b=boxOf(id);
+  if(b>=5)return {cls:'st-mastered',label:'✓ Đã thuộc'};
+  if(b>=1)return dueOf(id)<=Date.now()
+    ?{cls:'st-due',label:'↻ Cần ôn'}
+    :{cls:'st-learning',label:'◐ Đang học'};
+  return {cls:'st-new',label:'○ Chưa học'};
+}
+function idFromRow(row){
+  var btns=row.querySelectorAll('button[onclick]');
+  for(var i=0;i<btns.length;i++){
+    var m=(btns[i].getAttribute('onclick')||'').match(/'([^']+)'/);
+    if(m&&m[1])return m[1];
+  }
+  return '';
+}
+
+/* ---------- §1. Nhãn trạng thái trên hàng từ ---------- */
+function decorateRows(root){
+  var rows=root.querySelectorAll('.v17word, .v17row');
+  for(var i=0;i<rows.length;i++){
+    var row=rows[i];
+    var id=idFromRow(row);
+    if(!id)continue;
+    var st=statusOf(id);
+    var main=row.querySelector('.v17word-main')||row.querySelector('div');
+    if(!main)continue;
+    var b=main.querySelector('b');
+    if(!b)continue;
+    var badge=main.querySelector(':scope > .v25status');
+    if(!badge){
+      badge=document.createElement('span');
+      /* đặt sau pill loại từ (nếu có), còn không thì ngay sau từ */
+      var anchor=main.querySelector('b + span.mute')||b;
+      anchor.parentNode.insertBefore(badge,anchor.nextSibling);
+    }
+    var cls='v25status '+st.cls;
+    if(badge.className!==cls)badge.className=cls;
+    if(badge.textContent!==st.label)badge.textContent=st.label;
+  }
+}
+
+/* ---------- §2. Thẻ bộ từ: icon + thanh tiến trình ---------- */
+function groupKey(head){
+  var t=head.textContent||'';
+  if(t.indexOf('A1')>=0)return 'a1a2';
+  if(t.indexOf('Oxford')>=0)return 'oxford';
+  if(t.indexOf('Basic Tactics')>=0)return 'bt';
+  return '';
+}
+function groupStats(key){
+  var v=V15();if(!v)return null;
+  var ws=v.words||[];
+  if(key==='a1a2'){
+    var total=(window.__V17_A1A2||[]).length||0;
+    var list=ws.filter(function(w){return (w.lib||[]).indexOf('a1a2')>=0});
+    var s=statsOf(list);s.total=total||list.length;return s;
+  }
+  if(key==='oxford'){
+    var total2=(window.__V17_OXFORD||[]).length||0;
+    var list2=ws.filter(function(w){return (w.lib||[]).indexOf('oxford')>=0});
+    var s2=statsOf(list2);s2.total=total2||list2.length;return s2;
+  }
+  if(key==='bt'){
+    var v22=V22();
+    if(!v22||!v22.data)return {loading:true,total:819,learned:0,mastered:0,due:0};
+    var list3=ws.filter(function(w){return (w.lib||[]).indexOf('bt')>=0});
+    var s3=statsOf(list3);
+    var tot=0;(v22.meta||[]).forEach(function(m){tot+=m.words+m.phrases});
+    s3.total=tot||819;return s3;
+  }
+  return null;
+}
+function decorateGroups(root){
+  var groups=root.querySelectorAll('.v17lib .v17group');
+  for(var i=0;i<groups.length;i++){
+    var g=groups[i];
+    var head=g.querySelector('.v17group-head b');
+    if(!head)continue;
+    var key=groupKey(head);
+    /* icon: A1–A2 và Oxford chưa có icon trong tiêu đề (BT 🎧 và
+       My Vocab 📁 đã có sẵn) — thêm một lần duy nhất. */
+    if(!head.querySelector('.v25set-ic')){
+      var t=head.textContent||'';
+      var ic=(t.indexOf('A1')===0)?'📖':((t.indexOf('Oxford')===0)?'📕':'');
+      if(ic){
+        var sp=document.createElement('span');
+        sp.className='v25set-ic';sp.textContent=ic;
+        head.insertBefore(sp,head.firstChild);
+      }
+    }
+    /* My Vocabulary không có "tổng số từ cần hoàn thành" nên không
+       có thanh tiến trình cấp nhóm — giữ nguyên như cũ. */
+    if(!key)continue;
+    var s=groupStats(key);
+    if(!s)continue;
+    var box=g.querySelector(':scope > .v25group-progress');
+    if(!box){
+      box=document.createElement('div');
+      box.className='v25group-progress';
+      var headEl=g.querySelector('.v17group-head');
+      headEl.parentNode.insertBefore(box,headEl.nextSibling);
+    }
+    var html;
+    if(s.loading){
+      html='<div class="v25gp-loading">Đang tải dữ liệu để tính tiến trình…</div>';
+    }else{
+      var pct=s.total?Math.round(s.learned/s.total*100):0;
+      html='<div class="v25gp-line"><span><b>'+s.learned+'</b> đã học · <b>'+s.mastered+'</b> đã thuộc · <b>'+s.due+'</b> cần ôn</span><span>'+s.learned+' / '+s.total+' từ</span></div>'
+        +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>';
+    }
+    /* Chỉ ghi innerHTML khi nội dung đổi — nếu không observer sẽ
+       kích hoạt chính decorator của mình vô hạn. */
+    if(box._v25html!==html){box.innerHTML=html;box._v25html=html;}
+  }
+}
+
+/* ---------- §3. Phân loại nút Học/Ôn/Xem ---------- */
+function classifyButtons(root){
+  var btns=root.querySelectorAll('.v17lib .acts .btn, .v17lesson .acts .btn');
+  for(var i=0;i<btns.length;i++){
+    var b=btns[i];
+    if(b.classList.contains('pri')||b.classList.contains('ok'))continue;
+    if(b.classList.contains('v25btn-review')||b.classList.contains('v25btn-view'))continue;
+    var t=(b.textContent||'').trim();
+    if(t.indexOf('Ôn tập')===0||t.indexOf('Ôn từ yếu')===0)b.classList.add('v25btn-review');
+    else if(t.indexOf('Xem từ')===0||t.indexOf('Xem tất cả từ')===0||t.indexOf('Xem bài')===0)b.classList.add('v25btn-view');
+  }
+}
+
+/* ---------- §4. Ô tìm kiếm: type=search để có nút xóa native ---------- */
+function decorateSearch(root){
+  var inputs=root.querySelectorAll('.v17lib .v15input, .v17lesson .v15input');
+  for(var i=0;i<inputs.length;i++){
+    if(inputs[i].getAttribute('type')!=='search')inputs[i].setAttribute('type','search');
+  }
+  var vq=document.querySelector('#v15body > input.v15input[placeholder*="Tìm từ"]');
+  if(vq&&vq.getAttribute('type')!=='search')vq.setAttribute('type','search');
+}
+
+/* ---------- §5. Thông báo khi không tìm thấy từ (§8) ---------- */
+function decorateEmpty(root){
+  /* v17.js không có thông báo khi danh sách bài học bị lọc về 0 —
+     chỉ còn dòng "Hiện 0/0 từ". Chèn thông báo rõ ràng vào .v17words
+     đang rỗng (renderTab sẽ thay thế nó khi bộ lọc đổi). */
+  var lists=root.querySelectorAll('.v17lesson .v17words');
+  for(var i=0;i<lists.length;i++){
+    var L=lists[i];
+    if(L.querySelector('.v25empty'))continue;
+    if(L.children.length===0){
+      var p=document.createElement('p');
+      p.className='mute v25empty';
+      p.textContent='Không tìm thấy từ nào khớp với tìm kiếm hoặc bộ lọc của bạn. Hãy thử từ khóa khác.';
+      L.appendChild(p);
+    }
+  }
+  /* Các thông báo có sẵn (tìm Oxford, Unit BT) cũng nhận kiểu khung. */
+  var ps=root.querySelectorAll('.v17lib p.mute, .v17lesson p.mute');
+  for(var j=0;j<ps.length;j++){
+    var t=(ps[j].textContent||'').trim();
+    if(t.indexOf('Không tìm thấy')===0&&!ps[j].classList.contains('v25empty'))ps[j].classList.add('v25empty');
+  }
+}
+
+/* ---------- chạy decorator ---------- */
+function decorate(){
+  try{
+    var body=document.getElementById('v15body');
+    if(!body)return;
+    decorateRows(body);
+    decorateGroups(body);
+    classifyButtons(body);
+    decorateSearch(body);
+    decorateEmpty(body);
+  }catch(e){}
+}
+var scheduled=false;
+function schedule(){
+  if(scheduled)return;
+  scheduled=true;
+  setTimeout(function(){scheduled=false;decorate();},0);
+}
+/* Hai tầng observer (theo mẫu V24): tầng body phát hiện #v15body xuất
+   hiện/biến mất khi mở/đóng hub; tầng hub theo dõi render bên trong. */
+var bodyObs=null,hubObs=null,hubNode=null;
+function armHub(){
+  try{
+    var b=document.getElementById('v15body');
+    if(!b){if(hubObs){hubObs.disconnect();hubObs=null;}hubNode=null;return;}
+    if(b===hubNode)return;
+    hubNode=b;
+    if(hubObs)hubObs.disconnect();
+    hubObs=new MutationObserver(function(){schedule()});
+    hubObs.observe(b,{childList:true,subtree:true});
+    decorate();
+  }catch(e){}
+}
+try{
+  armHub();
+  if(window.MutationObserver&&!bodyObs){
+    bodyObs=new MutationObserver(function(){armHub();schedule();});
+    bodyObs.observe(document.body,{childList:true,subtree:true});
+  }
+}catch(e){}
+try{window.__v25={version:VERSION,decorate:decorate,statusOf:statusOf,groupStats:groupStats,idFromRow:idFromRow};}
+catch(e){}
+})();
+
+</script>
+
+<style id="v26">
+/* ===== V26 — Mobile Responsive & Pet Navigation Fix (V15.3) =====
+   Lớp cộng thêm, nạp CUỐI CÙNG. Không sửa file cũ, không đổi logic game,
+   không đổi localStorage, không đổi dữ liệu thú cưng.
+   Sửa tận gốc các lỗi đo được ở baseline V15.2 (tools/v15nav/baseline26.json):
+   - NGUYÊN NHÂN GỐC 1 (z-index đảo ngược): #v23hub z-index:120 THẤP HƠN
+     #v15langbar (900) và .v15hub (950). Khi mở Pet Hub, thanh chuyển đổi
+     Korean/English nổi lên trên, che mất header Pet (tiêu đề, ví XP/gem,
+     nút đóng ✕). Người dùng không thấy nút đóng của Pet Hub.
+   - NGUYÊN NHÂN GỐC 2 (grid min-content): .v23slots dùng repeat(3,1fr) —
+     1fr = minmax(auto,1fr) nên mỗi slot không co dưới min-content của ảnh
+     (110px). Ở 320px slot thứ 3 tràn 38px; ở 768px tràn 12px.
+   - .v23tabs và .v15tabs dùng flex-wrap:wrap → 3-4 hàng nút trên điện thoại
+     (Pet Hub 3 hàng ở ≤390px; EN Hub 4 hàng, cao 198px ở 320px).
+   - Header EN Hub + langbar + tabs chiếm ~516px chiều cao ở 320px trước khi
+     tới nội dung; Pet Hub header 128px ở 320px.
+   - Thanh tab dưới của Korean Hub (position:fixed, bottom:8px) che nội dung
+     cuối trang vì #stage không có padding-bottom.
+   - Empty state kép: tab Thú cưng hiện cả "Chưa có thú cưng nào khớp bộ lọc."
+     (trong lưới) và "Chưa có thú cưng nào" (khung chi tiết) khi chưa có thú.
+   Bảng màu theo spec §9 (đã kiểm WCAG AA: trắng/#201535, #E4DDF1/#30204F,
+   #251A38/#F7BE38, trắng/#6845A8 đều ≥ 4.5:1). */
+:root{
+  --nav-bg:#201535; --nav-frame:#30204F; --nav-input:#1B1430;
+  --nav-text:#FFFFFF; --nav-text2:#E4DDF1; --nav-gold:#FFD76A;
+  --nav-line:#A78BFA; --nav-active:#F7BE38; --nav-active-ink:#251A38;
+  --nav-btn2:#6845A8;
+}
+
+/* ---------- §1. Sửa z-index: Pet Hub nổi trên langbar + EN Hub ---------- */
+#v23hub{z-index:960}
+/* toast của Pet Hub được append vào document.body (không nằm trong #v23hub),
+   phải nâng riêng — không thì nó chìm dưới Pet Hub. */
+#v23toast{z-index:970}
+
+/* ---------- §9. Palette Pet Hub ---------- */
+#v23hub{background:linear-gradient(180deg,#201535 0%,#1B1033 55%,#241640 100%);color:var(--nav-text)}
+#v23hub .v23head{background:linear-gradient(180deg,#30204F,#201535);border-bottom-color:var(--nav-gold)}
+#v23hub .v23title{color:var(--nav-gold)}
+#v23hub .v23chip{background:var(--nav-input);border-color:var(--nav-gold);color:var(--nav-gold)}
+#v23hub .v23tab{background:var(--nav-frame);color:var(--nav-text2);border-color:var(--nav-line)}
+#v23hub .v23tab.on{background:var(--nav-active);color:var(--nav-active-ink);border-color:var(--nav-gold)}
+#v23hub .v23side{background:var(--nav-frame);border-color:var(--nav-line)}
+#v23hub .v23detail{background:var(--nav-bg);border-color:var(--nav-gold)}
+#v23hub .v23filter select,#v23hub .v23filter input{background:var(--nav-input);color:var(--nav-text);border-color:var(--nav-line)}
+#v23hub .v23filter select::placeholder,#v23hub .v23filter input::placeholder{color:var(--nav-text2);opacity:1}
+#v23hub .v23cell{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23cellm,#v23hub .v23count,#v23hub .v23note,#v23hub .v23empty{color:var(--nav-text2)}
+#v23hub .v23row{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23row span i{color:var(--nav-text2)}
+#v23hub .v23btn{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23btn.pri{background:var(--nav-btn2);border-color:var(--nav-line);color:#FFFFFF}
+#v23hub .v23btn.gold{background:var(--nav-active);border-color:var(--nav-gold);color:var(--nav-active-ink)}
+#v23hub .v23btn.ok{background:#247A46;border-color:#86EFAC;color:#FFFFFF}
+#v23hub .v23skill,#v23hub .v23mat,#v23hub .v23reward,#v23hub .v23eggcard{background:var(--nav-frame);border-color:var(--nav-line)}
+#v23hub .v23skill span,#v23hub .v23eggcard span{color:var(--nav-text2)}
+#v23hub .v23skill i{color:var(--nav-text2)}
+#v23hub .v23slot{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23slot span{color:var(--nav-text2)}
+#v23hub .v23bar>span:last-child{color:var(--nav-text)}
+#v23hub .v23lv,#v23hub .v23rar{color:var(--nav-text2)}
+
+/* ---------- §6/§7. Empty state + filter-no-match ---------- */
+#v23hub .v23grid .v23empty{grid-column:1/-1}
+#v23hub .v26hero{text-align:center;padding:28px 16px 24px}
+#v23hub .v26hero img.v26hero-egg{width:120px;height:120px;object-fit:contain;margin:0 auto 8px;display:block}
+#v23hub .v26hero h3{font-size:20px;margin:6px 0 8px}
+#v23hub .v26hero p{color:var(--nav-text2);font-size:15px;line-height:1.5;margin:0 0 16px}
+#v23hub .v26hero .v23btn.big{width:100%;max-width:320px}
+#v23hub .v26nomatch{grid-column:1/-1;text-align:center;padding:20px 12px;color:var(--nav-text2)}
+#v23hub .v26nomatch p{margin:0 0 12px;font-size:15px}
+#v23hub .v26nomatch .v23btn{background:var(--nav-btn2);border-color:var(--nav-line);color:#FFFFFF}
+
+/* ---------- §8. Team slots: sửa min-content (nguyên nhân gốc 2) ---------- */
+#v23hub .v23slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+#v23hub .v23slot{min-width:0}
+#v23hub .v23grid .v23cell{min-width:0}
+#v23hub .v23celln{overflow-wrap:anywhere}
+
+/* ---------- Langbar: nút Tài khoản (v21) xuống hàng thứ 2 ----------
+   v21 gắn #v21hubbtn ("Tài khoản") vào cuối #v15langbar mỗi khi mở EN Hub;
+   langbar là display:block nên nút rơi xuống hàng riêng (51px + 40px = 92px)
+   ở MỌI chiều rộng. Cho langbar thành 1 hàng flex: hàng chuyển đổi co lại,
+   nút Tài khoản cố định ở cuối hàng. */
+#v15langbar{display:flex;align-items:center;justify-content:center;gap:8px}
+#v15langbar .v15lb-in{flex:1 1 auto;min-width:0;margin:0}
+#v15langbar #v21hubbtn{flex:none;align-self:center;white-space:nowrap}
+
+/* ================= MOBILE ================= */
+@media (max-width:760px){
+  /* Pet tabs: một hàng cuộn ngang, dính dưới header (top = chiều cao header
+     do JS đo và ghi vào --nav-head-h — tính chính xác, không đoán). */
+  #v23hub .v23tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;position:sticky;top:var(--nav-head-h,56px);z-index:6;
+    background:linear-gradient(180deg,#201535,#241640);border-bottom:2px solid var(--nav-line);
+    padding:10px 12px 8px}
+  #v23hub .v23tabs::-webkit-scrollbar{display:none}
+  #v23hub .v23tab{flex:none;white-space:nowrap;min-height:44px}
+  /* EN Hub tabs: một hàng cuộn ngang thay vì 3-4 hàng. */
+  #v15hub .v15tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #v15hub .v15tabs::-webkit-scrollbar{display:none}
+  #v15hub .v15tab{flex:none;white-space:nowrap;min-height:44px}
+  /* Korean Hub: bỏ sticky của .v7hud trên mobile — bảng điều khiển cuộn theo
+     trang thay vì chiếm 200px+ cố định trên màn hình. */
+  .v7hud{position:static}
+  /* Mascot: đẩy lên vùng đệm dưới trang để không đè nội dung. */
+  #mas{bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (max-width:640px){
+  /* Pet Hub header gọn: 1 hàng (tiêu đề ngắn + ví + nút đóng 44px),
+     cộng safe-area cho tai thỏ / Dynamic Island. */
+  #v23hub .v23head{flex-wrap:wrap;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px}
+  #v23hub .v23title{font-size:16px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #v23hub .v23chip{padding:4px 8px;font-size:12px}
+  #v23hub .v23x{width:44px;height:44px;flex:none}
+  #v23hub .v23body{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+  /* Langbar: một hàng cuộn ngang thay vì 2-3 hàng (133px → ~51px). */
+  #v15langbar .v15lb-in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:none}
+  #v15langbar .v15lb-in::-webkit-scrollbar{display:none}
+  #v15langbar .v15lb-btn,#v15langbar .v15lb-hub{flex:none;white-space:nowrap}
+  /* EN Hub head gọn: phụ đề 1 dòng (ellipsis), nút thành 1 hàng cuộn. */
+  #v15hub .v15hub-head{padding:10px 12px;gap:8px}
+  #v15hub .v15hub-title b{font-size:17px}
+  #v15hub .v15hub-title span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+  #v15hub .v15hub-headbtns{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  #v15hub .v15hub-headbtns::-webkit-scrollbar{display:none}
+  #v15hub .v15hub-headbtns>*{flex:none}
+  #v15hub .v15x{width:44px;height:44px;flex:none}
+  /* Korean Hub: đệm dưới cho thanh tab cố định (84-98px + bottom 8px). */
+  #stage{padding-bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (max-width:560px){
+  /* Filter + ô tìm kiếm xếp 2 hàng, mỗi ô ≥44px, đủ rộng. */
+  #v23hub .v23filter{flex-direction:column}
+  #v23hub .v23filter select,#v23hub .v23filter input{width:100%;min-height:44px}
+}
+
+@media (max-width:430px){
+  /* Team slots + ô thú: ảnh nhỏ lại để 3 cột vừa màn hình hẹp. */
+  #v23hub .v23slotimg{width:64px;height:64px}
+  #v23hub .v23slot{min-height:0;padding:10px 6px}
+  #v23hub .v23slot b{font-size:12px}
+  #v23hub .v23slot span{font-size:11px}
+  #v23hub .v23cellimg{width:64px;height:64px}
+  #v23hub .v23rowimg{width:44px;height:44px}
+  /* Egg Hatch: trứng + đồng hồ xếp dọc, không chen ngang. */
+  #v23hub .v23hatchmain{flex-direction:column;text-align:center}
+  #v23hub .v23hatchmain .v23big{width:120px;height:120px;margin:0 auto}
+  #v23hub .v23timer{font-size:30px}
+  /* Pet Hub: nút tab nhỏ hơn một chút để 7 tab cuộn mượt. */
+  #v23hub .v23tab{padding:9px 12px;font-size:13px}
+  /* EN Hub: nút Thú Cưng trong head không chiếm quá nhiều chỗ. */
+  #v15hub .v15hub-headbtns .btn.sm{padding:8px 10px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  #v23hub .v23tabs{scroll-behavior:auto}
+}
+
+</style>
+<script id="v26js">
+/* ===== V26 — Mobile Responsive & Pet Navigation Fix (V15.3) =====
+   Lớp cộng thêm, nạp CUỐI CÙNG. Chỉ trang trí + điều hướng — KHÔNG đổi logic
+   game, không đổi dữ liệu thú cưng, không đổi localStorage.
+   - Nhớ tab Pet đang mở (sessionStorage, không chạm save game): các nút mở
+     Pet Hub không tham số (nút 🐾 ở langbar / EN Hub / Korean Hub) sẽ mở lại
+     đúng tab lần trước thay vì luôn về tab Thú cưng.
+   - Tính chiều cao header Pet Hub thật (offsetHeight) và ghi vào
+     --nav-head-h để thanh tab dính (sticky) nằm chính xác dưới header.
+   - Cuộn tab đang chọn vào giữa thanh tab khi thanh tab tràn ngang.
+   - Gộp empty state: khi chưa có thú, chỉ còn MỘT thông báo chính (hero) —
+     ẩn thông báo trùng trong lưới; khi có thú nhưng lọc không khớp, hiện
+     "Không tìm thấy thú cưng phù hợp." + nút "Xóa bộ lọc" thật.
+   - Tiêu đề Pet Hub ngắn lại trên điện thoại (≤640px): "🐾 Thú Cưng".
+   Mọi thay đổi đều có guard idempotent — renderBody() của v23 thay toàn bộ
+   #v23body mỗi lần tương tác nên decorator chạy lại sau mỗi lần render. */
+(function () {
+  'use strict';
+  var W = window;
+  var VERSION = '15.3.0';
+  var TITLE_FULL = '🐾 Hệ Thống Thú Cưng';
+  var TITLE_SHORT = '🐾 Thú Cưng';
+  var HERO_TITLE = 'Bạn chưa có thú cưng';
+  var HERO_DESC = 'Ấp quả trứng đầu tiên để nhận người bạn đồng hành!';
+  var NOMATCH_TEXT = 'Không tìm thấy thú cưng phù hợp.';
+  var _busy = false, _scheduled = false, _wrapped = false, _memTab = null;
+
+  function $(s, r) { try { return (r || document).querySelector(s); } catch (e) { return null; } }
+  function $$(s, r) { try { return Array.prototype.slice.call((r || document).querySelectorAll(s)); } catch (e) { return []; } }
+  function storeGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return _memTab; } }
+  function storeSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) { _memTab = v; } }
+
+  function ownedCount() {
+    try {
+      var t = W.__v23 && W.__v23._test;
+      if (!t || !t.en23) return -1;
+      var e = t.en23();
+      return e && e.pets ? Object.keys(e.pets).length : 0;
+    } catch (err) { return -1; }
+  }
+  function currentTab() {
+    var on = $('.v23tab.on');
+    if (on) { var m = (on.getAttribute('onclick') || '').match(/openHub\('(\w+)'\)/); if (m) return m[1]; }
+    return null;
+  }
+
+  /* --- chiều cao header thật → --nav-head-h (tab sticky dính chính xác) --- */
+  function syncHeadH() {
+    try {
+      var hub = $('#v23hub'), head = hub && $('.v23head', hub);
+      if (!hub || !head) return;
+      var h = head.offsetHeight;
+      if (h > 0 && hub.style.getPropertyValue('--nav-head-h') !== h + 'px') {
+        hub.style.setProperty('--nav-head-h', h + 'px');
+      }
+    } catch (e) {}
+  }
+  /* --- cuộn tab đang chọn vào giữa thanh tab (chỉ khi thanh tràn ngang) --- */
+  function scrollActiveTab() {
+    try {
+      var tabs = $('#v23hub .v23tabs'), on = $('.v23tab.on');
+      if (!tabs || !on) return;
+      if (tabs.scrollWidth > tabs.clientWidth + 1) on.scrollIntoView({ block: 'nearest', inline: 'center' });
+    } catch (e) {}
+  }
+  /* --- tiêu đề ngắn trên điện thoại --- */
+  function syncTitle() {
+    try {
+      var t = $('#v23hub .v23title');
+      if (!t) return;
+      var txt = (t.textContent || '').trim();
+      if (W.innerWidth <= 640) { if (txt === TITLE_FULL) t.textContent = TITLE_SHORT; }
+      else if (txt === TITLE_SHORT) { t.textContent = TITLE_FULL; }
+    } catch (e) {}
+  }
+
+  /* --- hero empty state: nâng khung trống thành 1 thông báo chính --- */
+  function heroify(box, withButton) {
+    if (!box || box.getAttribute('data-v26hero')) return;
+    box.classList.add('v26hero');
+    box.setAttribute('data-v26hero', '1');
+    var h3 = box.querySelector('h3'), p = box.querySelector('p');
+    if (!box.querySelector('.v26hero-egg')) {
+      var img = document.createElement('img');
+      img.className = 'v26hero-egg';
+      img.src = 'assets/pets/v15/eggs/egg_fire.png';
+      img.alt = 'Trứng thú cưng';
+      img.setAttribute('onerror', "this.style.display='none'");
+      box.insertBefore(img, box.firstChild);
+    }
+    if (h3) h3.textContent = HERO_TITLE;
+    if (p) p.textContent = HERO_DESC;
+    var btn = box.querySelector('.v23btn');
+    if (btn) {
+      btn.classList.add('gold', 'big');
+      btn.classList.remove('pri');
+      btn.textContent = '🥚 Đi ấp trứng';
+    } else if (withButton) {
+      var b = document.createElement('button');
+      b.className = 'v23btn gold big';
+      b.textContent = '🥚 Đi ấp trứng';
+      b.setAttribute('onclick', "__v23.openHub('hatch')");
+      box.appendChild(b);
+    }
+  }
+
+  function decorate() {
+    if (_busy) return;
+    var hub = $('#v23hub');
+    if (!hub) return;
+    _busy = true;
+    try {
+      syncTitle();
+      syncHeadH();
+      var owned = ownedCount();
+      var tab = currentTab();
+      var body = $('#v23body');
+      if (!body) return;
+      /* --- tab Thú cưng --- */
+      if (tab === 'pets') {
+        var gridEmpty = $('.v23grid .v23empty', body);
+        var cells = $$('#v23hub .v23grid .v23cell');
+        var detail = $('.v23detail.v23emptybox', body);
+        if (owned === 0) {
+          /* Chưa có thú: ẩn thông báo trùng trong lưới — chỉ còn hero. */
+          if (gridEmpty) gridEmpty.style.display = 'none';
+          if (detail) heroify(detail, false);
+        } else if (owned > 0 && cells.length === 0) {
+          /* Có thú nhưng lọc không khớp: thông báo riêng + nút xóa lọc thật. */
+          if (gridEmpty && !gridEmpty.getAttribute('data-v26nomatch')) {
+            var wrap = document.createElement('div');
+            wrap.className = 'v26nomatch';
+            wrap.setAttribute('data-v26nomatch', '1');
+            wrap.innerHTML = '<p>' + NOMATCH_TEXT + '</p>'
+              + '<button class="v23btn" onclick="__v23.setFilter(\'all\');__v23.setSearch(\'\')">Xóa bộ lọc</button>';
+            gridEmpty.parentNode.replaceChild(wrap, gridEmpty);
+          }
+        }
+      }
+      /* --- tab Tiến hóa: 0 thú → gộp 2 khung trống thành 1 hero --- */
+      if (tab === 'evo' && owned === 0) {
+        var evoListEmpty = $('.v23evo .v23side .v23empty', body);
+        if (evoListEmpty) evoListEmpty.style.display = 'none';
+        var evoDetail = $('.v23evo .v23detail.v23emptybox', body);
+        if (evoDetail) heroify(evoDetail, true);
+      }
+      /* --- tab Đội hình: 0 thú → thêm nút Đi ấp trứng ở panel trái --- */
+      if (tab === 'team' && owned === 0) {
+        var side = $('.v23team .v23side', body);
+        if (side && !side.querySelector('[data-v26teamcta]')) {
+          var cta = document.createElement('button');
+          cta.className = 'v23btn gold big';
+          cta.setAttribute('data-v26teamcta', '1');
+          cta.textContent = '🥚 Đi ấp trứng';
+          cta.setAttribute('onclick', "__v23.openHub('hatch')");
+          side.appendChild(cta);
+        }
+      }
+    } catch (e) {}
+    _busy = false;
+  }
+  function scheduleDecorate() {
+    if (_scheduled) return;
+    _scheduled = true;
+    requestAnimationFrame(function () { _scheduled = false; decorate(); });
+  }
+
+  /* --- nhớ tab: bọc __v23.openHub (không sửa v23.js) --- */
+  function wrapOpenHub() {
+    try {
+      if (!W.__v23 || !W.__v23.openHub || W.__v23.__v26wrapped) return;
+      var _open = W.__v23.openHub;
+      W.__v23.openHub = function (tab) {
+        var t = tab || storeGet('v26.petTab') || 'pets';
+        storeSet('v26.petTab', t);
+        _open(t);
+        requestAnimationFrame(function () { syncTitle(); syncHeadH(); scrollActiveTab(); decorate(); });
+      };
+      W.__v23.__v26wrapped = true;
+      _wrapped = true;
+    } catch (e) {}
+  }
+
+  function init() {
+    wrapOpenHub();
+    try {
+      if (W.__v23 && !W.__v23.__v26wrapped) setTimeout(wrapOpenHub, 300);
+    } catch (e) {}
+    try {
+      if (!W.__v26observer) {
+        W.__v26observer = new MutationObserver(function () { scheduleDecorate(); });
+        W.__v26observer.observe(document.body, { childList: true, subtree: true });
+      }
+    } catch (e) {}
+    var _rt = null;
+    try {
+      W.addEventListener('resize', function () {
+        if (_rt) clearTimeout(_rt);
+        _rt = setTimeout(function () { syncTitle(); syncHeadH(); }, 150);
+      });
+    } catch (e) {}
+    decorate();
+  }
+
+  W.__v26 = {
+    version: VERSION,
+    decorate: decorate,
+    syncHeadH: syncHeadH,
+    scrollActiveTab: scrollActiveTab,
+    ownedCount: ownedCount,
+    lastTab: function () { try { return storeGet('v26.petTab'); } catch (e) { return _memTab; } },
+    wrapped: function () { return _wrapped; },
+    status: function () {
+      var hub = $('#v23hub');
+      return {
+        version: VERSION, hub: !!hub,
+        tab: currentTab(), owned: ownedCount(),
+        headH: hub && $('.v23head', hub) ? $('.v23head', hub).offsetHeight : null,
+        headVar: hub ? hub.style.getPropertyValue('--nav-head-h') : '',
+        hero: !!$('.v26hero'), nomatch: !!$('.v26nomatch'),
+        lastTab: storeGet('v26.petTab'), wrapped: _wrapped
+      };
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
 })();
 
 </script>

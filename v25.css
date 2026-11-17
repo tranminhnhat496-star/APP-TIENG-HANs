@@ -1,0 +1,309 @@
+/* ===== V25 — Vocabulary Library UI/UX Redesign (V15.2) =====
+   Lớp cộng thêm, nạp SAU tất cả các lớp cũ nên rule cùng độ ưu tiên
+   sẽ thắng. KHÔNG sửa logic game, KHÔNG đổi khóa localStorage, KHÔNG
+   đổi tên ID/class JS đang dùng — v25.js chỉ THÊM class/badge, không
+   sửa markup gốc. Mọi giá trị màu theo bảng màu Anh đưa (spec V15.2
+   §3), đã kiểm chứng đạt WCAG AA (4.5:1 chữ thường, 3:1 chữ lớn)
+   trên nền thực tế của nó — xem SMOKE_TEST_V15_2.
+   Phạm vi: Thư viện A1–A2, Oxford 3000, Basic Tactics 24 Units,
+   My Vocabulary (tab Từ vựng), Flashcards, tìm kiếm/lọc, popup
+   liên quan Thư viện. Các màn hình khác không chạm tới. */
+
+/* ---- §0. Tokens (bảng màu spec §3) ---- */
+:root{
+  --lib-frame:#FFF9EF;      /* nền khung sáng */
+  --lib-panel:#292044;      /* nền khung tối */
+  --lib-panel2:#372B58;     /* nền khung phụ */
+  --lib-ink:#29243A;        /* chữ chính trên nền sáng */
+  --lib-mute:#51485D;       /* chữ phụ trên nền sáng */
+  --lib-line:#B99AF7;       /* viền tím */
+  --lib-gold-line:#F5C86A;  /* viền vàng */
+  --lib-green:#247A46;      /* nút xanh (trắng trên #247A46 ≈ 5.5:1) */
+  --lib-green-dark:#14532D;
+  --lib-purple:#6845A8;     /* nút tím (trắng trên #6845A8 ≈ 6.5:1) */
+  --lib-purple-dark:#4C2E7A;
+  --lib-purple-ink:#4A2E8A; /* chữ tím đậm trên nền sáng (≈ 8:1) */
+  --lib-warn:#B45309;       /* cảnh báo (trên trắng ≈ 4.9:1) */
+  --lib-gold:#FFD76A;       /* tiêu đề trên nền tối */
+  --lib-ink-on-dark:#FFFFFF;/* chữ chính trên nền tối */
+  --lib-mute-on-dark:#E5DEF5;/* chữ phụ trên nền tối */
+  --lib-card:#FFFFFF;
+  --lib-track:#EDE6F8;      /* nền thanh tiến trình */
+  --lib-card-line:#D9C8F5;  /* viền thẻ trên nền #FFF9EF */
+  --lib-danger:#C1121F;     /* đỏ đậm (trắng 5.9:1) — dùng lại token V24 */
+  --lib-danger-dark:#7F0D18;
+  --lib-gold-bg:#F5C86A;    /* nền vàng cho trạng thái bật */
+  --lib-gold-ink:#3A2500;   /* chữ tối trên nền vàng (≈ 9:1) */
+}
+
+/* ---- §1. Tiêu đề Thư viện (§4: 24–28px) ---- */
+.v17lib .v17head h3,.v17lesson .v17head h3{font-size:24px;line-height:1.25;color:var(--lib-ink)}
+.v17lib .v17head p,.v17lesson .v17head p{font-size:14px;line-height:1.55;color:var(--lib-mute)}
+
+/* ---- §2. Thẻ bộ từ (§2: khung 12–18px, nền rõ, viền tím/vàng, bóng) ---- */
+/* Nhóm bộ từ: nền sáng #FFF9EF, viền tím, bo 18px, bóng vừa phải.
+   Tiêu đề nhóm thành dải nền tối #292044 + chữ vàng #FFD76A để mỗi bộ
+   từ dễ phân biệt nhưng vẫn đồng bộ. */
+.v17lib .v17group{
+  background:var(--lib-frame);
+  border:2px solid var(--lib-line);
+  border-radius:18px;
+  box-shadow:0 4px 16px rgba(41,32,68,.10);
+  padding:0;
+  overflow:hidden;
+}
+.v17lib .v17group-head{
+  background:var(--lib-panel);
+  border-bottom:2px solid var(--lib-gold-line);
+  margin:0;
+  padding:14px 16px 12px;
+}
+.v17lib .v17group-head b{font-size:20px;line-height:1.3;color:var(--lib-gold)}
+.v17lib .v17group-head .mute{font-size:13px;color:var(--lib-mute-on-dark)}
+.v25set-ic{font-size:22px;margin-right:8px;vertical-align:-2px}
+/* Con trực tiếp của nhóm giữ lề ngang 14px sau khi nhóm bỏ padding. */
+.v17lib .v17group>.acts,.v17lib .v17group>p,
+.v17lib .v17group>.v17grid,.v17lib .v17group>.v17ox-tools{margin-left:14px;margin-right:14px}
+.v17lib .v17group>.acts{margin-top:12px}
+.v17lib .v17group>:last-child{margin-bottom:14px}
+.v17lib .v17group>p{color:var(--lib-mute);font-size:14px;line-height:1.5}
+/* Thanh tiến trình cấp bộ từ (v25.js chèn sau .v17group-head). */
+.v25group-progress{margin:14px 14px 0}
+.v25group-progress .v25gp-line{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--lib-mute);margin-bottom:6px}
+.v25group-progress .v25gp-line b{color:var(--lib-ink)}
+.v25group-progress .v25gp-loading{font-size:13px;color:var(--lib-mute);font-style:italic}
+
+/* ---- §3. Thẻ chủ đề / bài học / Unit (§2, §6) ---- */
+.v17lib .v17grid{gap:12px}
+.v17lib .v17card{
+  background:var(--lib-card);
+  border:2px solid var(--lib-card-line);
+  border-radius:16px;
+  box-shadow:0 2px 8px rgba(41,32,68,.08);
+  padding:14px;
+  gap:8px;
+}
+.v17lib .v17card:hover{border-color:var(--lib-line)}
+/* Tên bài học 16–18px (§4), cho phép xuống dòng, số từ không bị tách. */
+.v17lib .v17card-t{flex-wrap:wrap}
+.v17lib .v17card-t b{font-size:17px;line-height:1.3;color:var(--lib-ink);min-width:0;overflow-wrap:break-word}
+.v17lib .v17card-t .mute{font-size:13px;color:var(--lib-mute);white-space:nowrap;flex-shrink:0}
+.v17lib .v17card>.mute{font-size:13px;color:var(--lib-mute)}
+/* Thanh tiến trình: dày hơn, nền tím nhạt, vẫn giữ dải màu gốc. */
+.v17lib .v17bar,.v17lesson .v17bar{height:12px;background:var(--lib-track)}
+.v17lib .v17bar.big,.v17lesson .v17bar.big{height:14px}
+/* Đã nhận thưởng: var(--ok) #2E9B52 trên nền sáng chỉ 3.3:1 → xanh đậm. */
+.v17claimed{color:#166534}
+
+/* ---- §4. Hàng từ vựng (§5) ---- */
+.v17lib .v17words,.v17lesson .v17words{gap:12px}
+.v17lib .v17rows{gap:10px}
+.v17lib .v17word,.v17lesson .v17word{
+  background:var(--lib-card);
+  border:2px solid var(--lib-card-line);
+  border-radius:16px;
+  box-shadow:0 2px 8px rgba(41,32,68,.06);
+  padding:14px;
+  gap:14px;
+}
+/* Từ tiếng Anh 18–22px (§4); nghĩa Việt 15–17px; IPA 15–16px. */
+.v17word-main b{font-size:19px;line-height:1.3;color:var(--lib-ink)}
+.v17word-main .mute{font-size:13px;color:var(--lib-mute)}
+.v17word-main>div:not([class]){font-size:16px;line-height:1.5;color:var(--lib-ink);margin-top:2px}
+.v17ipa{font-size:15px;color:var(--lib-mute)}
+.v17nodata{color:var(--lib-warn);font-style:italic}
+.v17extra,.v17ex{font-size:15px;line-height:1.5;color:var(--lib-ink)}
+.v17ex .mute{color:var(--lib-mute)}
+/* Loại từ thành pill tím nhạt, chữ tím đậm — thay cho chữ xám nhỏ. */
+.v17word-main>b+span.mute{
+  display:inline-block;background:#EDE6F8;color:var(--lib-purple-ink);
+  font-size:13px;font-weight:700;padding:2px 9px;border-radius:99px;
+  vertical-align:middle;
+}
+.v17word-main>span.mute:empty{display:none}
+/* Nhãn trạng thái ghi nhớ (v25.js chèn): biểu tượng + nhãn, không chỉ màu. */
+.v25status{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13px;font-weight:700;line-height:1.2;
+  padding:3px 9px;border-radius:99px;margin-left:8px;
+  vertical-align:middle;white-space:nowrap;
+}
+.v25status.st-new{background:#F1F5F9;color:#475569;border:1.5px solid #CBD5E1}
+.v25status.st-learning{background:#FEF3C7;color:#92400E;border:1.5px solid #F59E0B}
+.v25status.st-due{background:#FFEDD5;color:#9A3412;border:1.5px solid #FB923C}
+.v25status.st-mastered{background:#DCFCE7;color:#166534;border:1.5px solid #4ADE80}
+/* Hàng kết quả tìm kiếm Oxford. */
+.v17lib .v17row{
+  background:var(--lib-card);border:2px solid var(--lib-card-line);
+  border-radius:14px;padding:12px 14px;
+  box-shadow:0 2px 8px rgba(41,32,68,.06);
+}
+.v17lib .v17row b{font-size:17px;color:var(--lib-ink)}
+.v17lib .v17row .mute{font-size:13px;color:var(--lib-mute)}
+.v17lib .v17row>div>span:not(.mute){font-size:15px;color:var(--lib-ink)}
+/* Thông báo không tìm thấy: khung riêng thay cho một dòng chữ mờ.
+   (v25.js gắn class v25empty cho các thông báo có sẵn của Oxford/BT và
+   chèn thông báo khi danh sách bài học bị lọc về 0 — v17.js không có
+   thông báo này.) */
+.v17lib p.mute.v25empty,.v17lesson p.mute.v25empty{
+  background:var(--lib-frame);border:2px dashed var(--lib-line);
+  border-radius:12px;padding:14px;text-align:center;
+  font-size:15px;color:var(--lib-mute);
+}
+
+/* ---- §5. Nút bấm Thư viện (§9: Học ngay xanh, Ôn tập tím, Xem từ sáng) ---- */
+.v17lib .btn,.v17lesson .btn{font-size:15px}
+.v17lib .btn.pri,.v17lesson .btn.pri{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+.v17lib .btn.pri:hover,.v17lesson .btn.pri:hover{filter:brightness(1.07)}
+.v17lib .btn.pri:active,.v17lesson .btn.pri:active{transform:translateY(2px);box-shadow:none}
+.v17lib .btn.v25btn-review,.v17lesson .btn.v25btn-review{
+  background:var(--lib-purple);border-color:var(--lib-purple-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-purple-dark);
+}
+.v17lib .btn.v25btn-review:hover,.v17lesson .btn.v25btn-review:hover{filter:brightness(1.07)}
+.v17lib .btn.v25btn-review:active,.v17lesson .btn.v25btn-review:active{transform:translateY(2px);box-shadow:none}
+.v17lib .btn.v25btn-view,.v17lesson .btn.v25btn-view{
+  background:var(--lib-frame);border-color:var(--lib-purple);color:var(--lib-purple-ink);
+  box-shadow:0 3px 0 var(--lib-card-line);
+}
+.v17lib .btn.v25btn-view:hover,.v17lesson .btn.v25btn-view:hover{filter:brightness(1.03)}
+.v17lib .btn.v25btn-view:active,.v17lesson .btn.v25btn-view:active{transform:translateY(2px);box-shadow:none}
+/* Đã thuộc / Nhận thưởng trong Thư viện: xanh #247A46 thay #2E7D32 (V24). */
+.v17lib .btn.ok,.v17lesson .btn.ok{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+/* Yêu thích đang bật: nút .on trước đây KHÔNG có style riêng (chỉ đổi
+   ☆ → ★) — nay nền vàng gold, chữ tối, dễ nhận biết (màu + biểu tượng). */
+.v17lib .btn.on,.v17lesson .btn.on{
+  background:var(--lib-gold-bg);border-color:#B98A00;color:var(--lib-gold-ink);
+  box-shadow:0 3px 0 #B98A00;
+}
+/* Nút đỏ "Chưa nhớ" (flashcard) và "Xóa" (tab Từ vựng): chữ đỏ #D9503F
+   trên nền sáng chỉ 3.99:1 → nền đỏ đậm, chữ trắng 5.9:1. */
+#v15body .btn.bad{
+  background:var(--lib-danger);border-color:var(--lib-danger-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-danger-dark);
+}
+#v15body .btn.bad:active{transform:translateY(2px);box-shadow:none}
+/* Nút quay lại Thư viện: pill tím nhạt, vị trí thống nhất (đầu trang). */
+.v17lesson .v15back{
+  background:#EDE6F8;border:2px solid var(--lib-line);color:var(--lib-purple-ink);
+  border-radius:99px;padding:8px 16px;font-size:15px;font-weight:600;
+  min-height:44px;cursor:pointer;
+}
+.v17lesson .v15back:hover{filter:brightness(1.03)}
+/* Banner phạm vi học: chữ 15px, viền tím rõ hơn. */
+.v17scope{font-size:15px;background:#EDE6F8;border-color:var(--lib-line);color:var(--lib-ink)}
+.v17scope-x{color:var(--lib-purple-ink);min-height:44px;min-width:44px;font-size:15px}
+.v17pager .mute{font-size:14px;color:var(--lib-mute)}
+
+/* ---- §6. Tìm kiếm & bộ lọc (§8) ---- */
+/* Ô nhập: nền trắng, chữ tối, icon kính lúp, nút xóa native (type=search
+   do v25.js đặt — xem ::-webkit-search-cancel-button bên dưới). */
+.v17lib .v15input,.v17lesson .v15input{
+  background-color:#FFFFFF;border:2px solid var(--lib-line);color:var(--lib-ink);
+  font-size:16px;min-height:48px;border-radius:12px;
+  padding-left:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236845A8' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='16.5' y1='16.5' x2='21' y2='21'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:12px center;background-size:20px 20px;
+}
+.v17lib .v15input::placeholder,.v17lesson .v15input::placeholder{color:#6B5B4A;opacity:1}
+.v17lib input[type="search"]::-webkit-search-cancel-button,
+.v17lesson input[type="search"]::-webkit-search-cancel-button,
+#v15body>input[type="search"]::-webkit-search-cancel-button{
+  -webkit-appearance:none;appearance:none;width:20px;height:20px;cursor:pointer;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2351485D' stroke-width='2.5' stroke-linecap='round'%3E%3Cline x1='5' y1='5' x2='19' y2='19'/%3E%3Cline x1='19' y1='5' x2='5' y2='19'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.v17lib .v15sel,.v17lesson .v15sel{
+  font-size:15px;min-height:48px;background:#fff;
+  border-color:var(--lib-line);color:var(--lib-ink);
+}
+/* Ô tìm kiếm tab Từ vựng (nằm trực tiếp trong #v15body, không có wrapper
+   .v17lib/.v17lesson) — cùng kiểu ô nhập Thư viện. */
+#v15body>input.v15input{
+  background-color:#FFFFFF;border:2px solid var(--lib-line);color:var(--lib-ink);
+  font-size:16px;min-height:48px;border-radius:12px;padding-left:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236845A8' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='16.5' y1='16.5' x2='21' y2='21'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:12px center;background-size:20px 20px;
+}
+#v15body>input.v15input::placeholder{color:#6B5B4A;opacity:1}
+
+/* ---- §7. Basic Tactics (§6) ---- */
+.v22type{font-size:13px;font-weight:700;line-height:1.2;padding:4px 9px;border-radius:99px}
+.v22type.wd{background:#DCFCE7;color:#166534}
+.v22type.ph{background:#E0E7FF;color:#1E3A8A}
+.v22tabs .v15tab{font-size:15px;min-height:48px;line-height:1.25;text-align:center}
+.v22stars{color:var(--lib-warn)}
+.v22bscope{background:var(--lib-frame);border:2px solid var(--lib-line);border-radius:14px}
+.v22bscope b{color:var(--lib-ink)}
+.v22bscope .mute{color:var(--lib-mute);font-size:13px}
+.v22bscope .v15sel{font-size:15px;min-height:44px;background:#fff;border-color:var(--lib-line);color:var(--lib-ink)}
+
+/* ---- §8. Flashcards & thẻ câu hỏi (§7) ---- */
+.v15fc-f,.v15fc-b{
+  background:var(--lib-frame);
+  border:2px solid var(--lib-line);
+  border-radius:18px;
+  box-shadow:0 6px 20px rgba(41,32,68,.12);
+}
+.v15fc-b{background:#EDE6F8;border-color:var(--lib-line)}
+.v15fc-word{font-size:32px;color:var(--lib-ink)}
+.v15fc-word.vi{font-size:28px}
+.v15fc .mute{font-size:15px;color:var(--lib-mute)}
+.v15fc .v15ex{font-size:15px;color:var(--lib-ink)}
+.v15qcard{
+  background:var(--lib-frame);border:2px solid var(--lib-line);
+  border-radius:18px;box-shadow:0 4px 16px rgba(41,32,68,.10);
+}
+.v15qword{font-size:30px;color:var(--lib-ink)}
+.v15qcard .mute{font-size:15px;color:var(--lib-mute)}
+/* Nút Đã nhớ sau khi lật thẻ: xanh #247A46 (đồng bộ Học ngay). */
+.v15fc~.acts .btn.ok{
+  background:var(--lib-green);border-color:var(--lib-green-dark);color:#fff;
+  box-shadow:0 3px 0 var(--lib-green-dark);
+}
+@media(prefers-reduced-motion:reduce){
+  .v15fc-in{transition:none}
+}
+
+/* ---- §9. Tab Từ vựng — My Vocabulary (§1) ---- */
+#v15body .v15row{
+  background:#FFFFFF;border:2px solid var(--lib-card-line);border-radius:14px;
+  padding:12px 14px;gap:12px;box-shadow:0 2px 8px rgba(41,32,68,.06);
+}
+#v15body .v15row b{font-size:18px;color:var(--lib-ink)}
+#v15body .v15row .mute{font-size:13px;color:var(--lib-mute)}
+#v15body .v15row>div>span:not(.mute){font-size:16px;line-height:1.5;color:var(--lib-ink)}
+#v15body .v15rowst{font-size:13px;color:var(--lib-mute)}
+#v15body .v15row .btn{font-size:15px}
+#v15body .v15add input,#v15body .v15add select{
+  font-size:15px;min-height:44px;border-color:var(--lib-line);
+}
+
+/* ---- §10. Popup liên quan Thư viện (§1) ---- */
+/* Toast (pop15) dùng cho "Đã sao chép…", "Đã nhận thưởng…": chữ 15px,
+   không tràn màn hình hẹp. (.pp vàng của V6 không chạm — không phải
+   popup Thư viện.) */
+.v7toast{font-size:15px;max-width:90vw;text-align:center;padding:12px 18px}
+
+/* ---- §11. Responsive (§10) ---- */
+@media(max-width:640px){
+  /* Hàng từ chuyển dọc (v17.css đã có) — nút thành lưới 2 cột. */
+  .v17lib .v17word,.v17lesson .v17word{flex-direction:column}
+  .v17word-acts{flex-direction:row;flex-wrap:wrap}
+  .v17word-acts .btn{flex:1 1 40%;min-width:0}
+  /* Ô tìm kiếm chiếm trọn hàng, bộ lọc xuống hàng dưới. */
+  .v17filters .v15input{flex:1 1 100%}
+  .v17lib .v17group-head b{font-size:19px}
+  .v17lib .v17group-head{padding:12px 14px 10px}
+}
+@media(max-width:560px){
+  .v22tabs .v15tab{font-size:14px;min-width:0}
+  .v15fc-word{font-size:26px}
+  .v15fc-word.vi{font-size:24px}
+  .v15qword{font-size:24px}
+}

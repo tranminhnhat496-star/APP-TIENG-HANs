@@ -1,0 +1,4164 @@
+{
+ "320x640": {
+  "korean": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 558,
+     "w": 292,
+     "h": 246,
+     "right": 306,
+     "bottom": 804
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 534,
+     "w": 304,
+     "h": 98,
+     "right": 312,
+     "bottom": 632
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 55,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 57,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 97,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 99,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 138,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 140,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 180,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 182,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 221,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 223,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 263,
+       "bottom": 624
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 265,
+       "y": 542,
+       "w": 39,
+       "h": 82,
+       "right": 304,
+       "bottom": 624
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 238,
+     "y": 482,
+     "w": 72,
+     "h": 72,
+     "right": 310,
+     "bottom": 554
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2322,
+     "barTop": 534,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [
+    {
+     "tag": "DIV",
+     "cls": "v15filters",
+     "w": 372,
+     "x": 16
+    },
+    {
+     "tag": "SELECT",
+     "cls": "v15sel",
+     "w": 372,
+     "x": 16
+    }
+   ],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 133,
+     "right": 320,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 92,
+     "right": 320,
+     "bottom": 92
+    },
+    "langbarScrollW": 320,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 185,
+     "right": 320,
+     "bottom": 185
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 288,
+     "h": 72,
+     "right": 304,
+     "bottom": 173
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 4,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 198
+   }
+  },
+  "petEmpty": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 128,
+     "right": 320,
+     "bottom": 128
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 55,
+     "h": 105,
+     "right": 69,
+     "bottom": 115
+    },
+    "wallet": {
+     "x": 79,
+     "y": 45,
+     "w": 227,
+     "h": 36,
+     "right": 306,
+     "bottom": 81
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 128,
+     "w": 320,
+     "h": 154,
+     "right": 320,
+     "bottom": 282
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 308,
+      "w": 264,
+      "h": 40,
+      "right": 292,
+      "bottom": 348
+     },
+     "select": {
+      "x": 28,
+      "y": 308,
+      "w": 128,
+      "h": 40,
+      "right": 156,
+      "bottom": 348
+     },
+     "input": {
+      "x": 164,
+      "y": 308,
+      "w": 128,
+      "h": 40,
+      "right": 292,
+      "bottom": 348
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 128,
+     "right": 320,
+     "bottom": 128
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 55,
+     "h": 105,
+     "right": 69,
+     "bottom": 115
+    },
+    "wallet": {
+     "x": 79,
+     "y": 45,
+     "w": 227,
+     "h": 36,
+     "right": 306,
+     "bottom": 81
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 128,
+     "w": 320,
+     "h": 154,
+     "right": 320,
+     "bottom": 282
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 308,
+      "w": 264,
+      "h": 40,
+      "right": 292,
+      "bottom": 348
+     },
+     "select": {
+      "x": 28,
+      "y": 308,
+      "w": 128,
+      "h": 40,
+      "right": 156,
+      "bottom": 348
+     },
+     "input": {
+      "x": 164,
+      "y": 308,
+      "w": 128,
+      "h": 40,
+      "right": 292,
+      "bottom": 348
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 358,
+      "w": 83,
+      "h": 145,
+      "right": 111,
+      "bottom": 503
+     },
+     {
+      "x": 119,
+      "y": 358,
+      "w": 83,
+      "h": 145,
+      "right": 201,
+      "bottom": 503
+     },
+     {
+      "x": 209,
+      "y": 358,
+      "w": 83,
+      "h": 145,
+      "right": 292,
+      "bottom": 503
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 128,
+     "right": 320,
+     "bottom": 128
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 55,
+     "h": 105,
+     "right": 69,
+     "bottom": 115
+    },
+    "wallet": {
+     "x": 79,
+     "y": 45,
+     "w": 227,
+     "h": 36,
+     "right": 306,
+     "bottom": 81
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 128,
+     "w": 320,
+     "h": 154,
+     "right": 320,
+     "bottom": 282
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 713,
+      "w": 102,
+      "h": 156,
+      "right": 134,
+      "bottom": 869
+     },
+     {
+      "x": 144,
+      "y": 713,
+      "w": 102,
+      "h": 156,
+      "right": 246,
+      "bottom": 869
+     },
+     {
+      "x": 256,
+      "y": 713,
+      "w": 102,
+      "h": 156,
+      "right": 358,
+      "bottom": 869
+     }
+    ],
+    "slotsOverflow": true,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 415,
+      "w": 83,
+      "h": 145,
+      "right": 111,
+      "bottom": 560
+     },
+     {
+      "x": 119,
+      "y": 415,
+      "w": 83,
+      "h": 145,
+      "right": 201,
+      "bottom": 560
+     },
+     {
+      "x": 209,
+      "y": 415,
+      "w": 83,
+      "h": 145,
+      "right": 292,
+      "bottom": 560
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 320,
+   "docScrollW": 320,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 320,
+     "h": 128,
+     "right": 320,
+     "bottom": 128
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 55,
+     "h": 105,
+     "right": 69,
+     "bottom": 115
+    },
+    "wallet": {
+     "x": 79,
+     "y": 45,
+     "w": 227,
+     "h": 36,
+     "right": 306,
+     "bottom": 81
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 128,
+     "w": 320,
+     "h": 154,
+     "right": 320,
+     "bottom": 282
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 256,
+     "cw": 256,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "360x740": {
+  "korean": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 494,
+     "w": 332,
+     "h": 254,
+     "right": 346,
+     "bottom": 748
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 634,
+     "w": 344,
+     "h": 98,
+     "right": 352,
+     "bottom": 732
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 61,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 63,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 108,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 110,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 155,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 157,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 203,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 205,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 250,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 252,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 297,
+       "bottom": 724
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 299,
+       "y": 642,
+       "w": 45,
+       "h": 82,
+       "right": 344,
+       "bottom": 724
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 278,
+     "y": 582,
+     "w": 72,
+     "h": 72,
+     "right": 350,
+     "bottom": 654
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2192,
+     "barTop": 634,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [
+    {
+     "tag": "DIV",
+     "cls": "v15filters",
+     "w": 372,
+     "x": 16
+    },
+    {
+     "tag": "SELECT",
+     "cls": "v15sel",
+     "w": 372,
+     "x": 16
+    }
+   ],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 133,
+     "right": 360,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 92,
+     "right": 360,
+     "bottom": 92
+    },
+    "langbarScrollW": 360,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 165,
+     "right": 360,
+     "bottom": 165
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 328,
+     "h": 52,
+     "right": 344,
+     "bottom": 153
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 4,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 198
+   }
+  },
+  "petEmpty": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 102,
+     "right": 360,
+     "bottom": 102
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 95,
+     "h": 79,
+     "right": 109,
+     "bottom": 89
+    },
+    "wallet": {
+     "x": 119,
+     "y": 32,
+     "w": 227,
+     "h": 36,
+     "right": 346,
+     "bottom": 67
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 102,
+     "w": 360,
+     "h": 154,
+     "right": 360,
+     "bottom": 256
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 282,
+      "w": 304,
+      "h": 40,
+      "right": 332,
+      "bottom": 322
+     },
+     "select": {
+      "x": 28,
+      "y": 282,
+      "w": 148,
+      "h": 40,
+      "right": 176,
+      "bottom": 322
+     },
+     "input": {
+      "x": 184,
+      "y": 282,
+      "w": 148,
+      "h": 40,
+      "right": 332,
+      "bottom": 322
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 102,
+     "right": 360,
+     "bottom": 102
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 95,
+     "h": 79,
+     "right": 109,
+     "bottom": 89
+    },
+    "wallet": {
+     "x": 119,
+     "y": 32,
+     "w": 227,
+     "h": 36,
+     "right": 346,
+     "bottom": 67
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 102,
+     "w": 360,
+     "h": 154,
+     "right": 360,
+     "bottom": 256
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 282,
+      "w": 304,
+      "h": 40,
+      "right": 332,
+      "bottom": 322
+     },
+     "select": {
+      "x": 28,
+      "y": 282,
+      "w": 148,
+      "h": 40,
+      "right": 176,
+      "bottom": 322
+     },
+     "input": {
+      "x": 184,
+      "y": 282,
+      "w": 148,
+      "h": 40,
+      "right": 332,
+      "bottom": 322
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 332,
+      "w": 96,
+      "h": 145,
+      "right": 124,
+      "bottom": 477
+     },
+     {
+      "x": 132,
+      "y": 332,
+      "w": 96,
+      "h": 145,
+      "right": 228,
+      "bottom": 477
+     },
+     {
+      "x": 236,
+      "y": 332,
+      "w": 96,
+      "h": 145,
+      "right": 332,
+      "bottom": 477
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 102,
+     "right": 360,
+     "bottom": 102
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 95,
+     "h": 79,
+     "right": 109,
+     "bottom": 89
+    },
+    "wallet": {
+     "x": 119,
+     "y": 32,
+     "w": 227,
+     "h": 36,
+     "right": 346,
+     "bottom": 67
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 102,
+     "w": 360,
+     "h": 154,
+     "right": 360,
+     "bottom": 256
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 686,
+      "w": 102,
+      "h": 156,
+      "right": 134,
+      "bottom": 842
+     },
+     {
+      "x": 144,
+      "y": 686,
+      "w": 102,
+      "h": 156,
+      "right": 246,
+      "bottom": 842
+     },
+     {
+      "x": 256,
+      "y": 686,
+      "w": 102,
+      "h": 156,
+      "right": 358,
+      "bottom": 842
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 389,
+      "w": 96,
+      "h": 145,
+      "right": 124,
+      "bottom": 534
+     },
+     {
+      "x": 132,
+      "y": 389,
+      "w": 96,
+      "h": 145,
+      "right": 228,
+      "bottom": 534
+     },
+     {
+      "x": 236,
+      "y": 389,
+      "w": 96,
+      "h": 145,
+      "right": 332,
+      "bottom": 534
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 360,
+   "docScrollW": 360,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 360,
+     "h": 102,
+     "right": 360,
+     "bottom": 102
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 95,
+     "h": 79,
+     "right": 109,
+     "bottom": 89
+    },
+    "wallet": {
+     "x": 119,
+     "y": 32,
+     "w": 227,
+     "h": 36,
+     "right": 346,
+     "bottom": 67
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 102,
+     "w": 360,
+     "h": 154,
+     "right": 360,
+     "bottom": 256
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 296,
+     "cw": 296,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "375x812": {
+  "korean": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 480,
+     "w": 347,
+     "h": 204,
+     "right": 361,
+     "bottom": 684
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 720,
+     "w": 359,
+     "h": 84,
+     "right": 367,
+     "bottom": 804
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 63,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 65,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 113,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 115,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 162,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 164,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 211,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 213,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 260,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 262,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 310,
+       "bottom": 796
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 312,
+       "y": 728,
+       "w": 47,
+       "h": 68,
+       "right": 359,
+       "bottom": 796
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 293,
+     "y": 654,
+     "w": 72,
+     "h": 72,
+     "right": 365,
+     "bottom": 726
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2128,
+     "barTop": 720,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 133,
+     "right": 375,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 92,
+     "right": 375,
+     "bottom": 92
+    },
+    "langbarScrollW": 375,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 157,
+     "right": 375,
+     "bottom": 157
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 339,
+     "h": 44,
+     "right": 355,
+     "bottom": 145
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 4,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 198
+   }
+  },
+  "petEmpty": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 76,
+     "right": 375,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 110,
+     "h": 53,
+     "right": 124,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 134,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 361,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 375,
+     "h": 154,
+     "right": 375,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 256,
+      "w": 319,
+      "h": 40,
+      "right": 347,
+      "bottom": 296
+     },
+     "select": {
+      "x": 28,
+      "y": 256,
+      "w": 156,
+      "h": 40,
+      "right": 184,
+      "bottom": 296
+     },
+     "input": {
+      "x": 192,
+      "y": 256,
+      "w": 156,
+      "h": 40,
+      "right": 347,
+      "bottom": 296
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 76,
+     "right": 375,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 110,
+     "h": 53,
+     "right": 124,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 134,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 361,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 375,
+     "h": 154,
+     "right": 375,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 256,
+      "w": 319,
+      "h": 40,
+      "right": 347,
+      "bottom": 296
+     },
+     "select": {
+      "x": 28,
+      "y": 256,
+      "w": 156,
+      "h": 40,
+      "right": 184,
+      "bottom": 296
+     },
+     "input": {
+      "x": 192,
+      "y": 256,
+      "w": 156,
+      "h": 40,
+      "right": 347,
+      "bottom": 296
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 306,
+      "w": 101,
+      "h": 145,
+      "right": 129,
+      "bottom": 450
+     },
+     {
+      "x": 137,
+      "y": 306,
+      "w": 101,
+      "h": 145,
+      "right": 238,
+      "bottom": 450
+     },
+     {
+      "x": 246,
+      "y": 306,
+      "w": 101,
+      "h": 145,
+      "right": 347,
+      "bottom": 450
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 76,
+     "right": 375,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 110,
+     "h": 53,
+     "right": 124,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 134,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 361,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 375,
+     "h": 154,
+     "right": 375,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 134,
+      "bottom": 816
+     },
+     {
+      "x": 144,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 246,
+      "bottom": 816
+     },
+     {
+      "x": 256,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 358,
+      "bottom": 816
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 363,
+      "w": 101,
+      "h": 145,
+      "right": 129,
+      "bottom": 507
+     },
+     {
+      "x": 137,
+      "y": 363,
+      "w": 101,
+      "h": 145,
+      "right": 238,
+      "bottom": 507
+     },
+     {
+      "x": 246,
+      "y": 363,
+      "w": 101,
+      "h": 145,
+      "right": 347,
+      "bottom": 507
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 375,
+   "docScrollW": 375,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 375,
+     "h": 76,
+     "right": 375,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 110,
+     "h": 53,
+     "right": 124,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 134,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 361,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 375,
+     "h": 154,
+     "right": 375,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 311,
+     "cw": 311,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "390x844": {
+  "korean": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 480,
+     "w": 362,
+     "h": 204,
+     "right": 376,
+     "bottom": 684
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 752,
+     "w": 374,
+     "h": 84,
+     "right": 382,
+     "bottom": 836
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 65,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 67,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 117,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 119,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 168,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 170,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 220,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 222,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 271,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 273,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 323,
+       "bottom": 828
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 325,
+       "y": 760,
+       "w": 49,
+       "h": 68,
+       "right": 374,
+       "bottom": 828
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 308,
+     "y": 686,
+     "w": 72,
+     "h": 72,
+     "right": 380,
+     "bottom": 758
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2074,
+     "barTop": 752,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 133,
+     "right": 390,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 92,
+     "right": 390,
+     "bottom": 92
+    },
+    "langbarScrollW": 390,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 157,
+     "right": 390,
+     "bottom": 157
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 339,
+     "h": 44,
+     "right": 355,
+     "bottom": 145
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 3,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 150
+   }
+  },
+  "petEmpty": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 76,
+     "right": 390,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 125,
+     "h": 53,
+     "right": 139,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 149,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 376,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 390,
+     "h": 154,
+     "right": 390,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 256,
+      "w": 334,
+      "h": 40,
+      "right": 362,
+      "bottom": 296
+     },
+     "select": {
+      "x": 28,
+      "y": 256,
+      "w": 163,
+      "h": 40,
+      "right": 191,
+      "bottom": 296
+     },
+     "input": {
+      "x": 199,
+      "y": 256,
+      "w": 163,
+      "h": 40,
+      "right": 362,
+      "bottom": 296
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 76,
+     "right": 390,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 125,
+     "h": 53,
+     "right": 139,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 149,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 376,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 390,
+     "h": 154,
+     "right": 390,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 256,
+      "w": 334,
+      "h": 40,
+      "right": 362,
+      "bottom": 296
+     },
+     "select": {
+      "x": 28,
+      "y": 256,
+      "w": 163,
+      "h": 40,
+      "right": 191,
+      "bottom": 296
+     },
+     "input": {
+      "x": 199,
+      "y": 256,
+      "w": 163,
+      "h": 40,
+      "right": 362,
+      "bottom": 296
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 306,
+      "w": 106,
+      "h": 145,
+      "right": 134,
+      "bottom": 450
+     },
+     {
+      "x": 142,
+      "y": 306,
+      "w": 106,
+      "h": 145,
+      "right": 248,
+      "bottom": 450
+     },
+     {
+      "x": 256,
+      "y": 306,
+      "w": 106,
+      "h": 145,
+      "right": 362,
+      "bottom": 450
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 76,
+     "right": 390,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 125,
+     "h": 53,
+     "right": 139,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 149,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 376,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 390,
+     "h": 154,
+     "right": 390,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 134,
+      "bottom": 816
+     },
+     {
+      "x": 144,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 246,
+      "bottom": 816
+     },
+     {
+      "x": 256,
+      "y": 660,
+      "w": 102,
+      "h": 156,
+      "right": 358,
+      "bottom": 816
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 363,
+      "w": 106,
+      "h": 145,
+      "right": 134,
+      "bottom": 507
+     },
+     {
+      "x": 142,
+      "y": 363,
+      "w": 106,
+      "h": 145,
+      "right": 248,
+      "bottom": 507
+     },
+     {
+      "x": 256,
+      "y": 363,
+      "w": 106,
+      "h": 145,
+      "right": 362,
+      "bottom": 507
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 390,
+   "docScrollW": 390,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 390,
+     "h": 76,
+     "right": 390,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 125,
+     "h": 53,
+     "right": 139,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 149,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 376,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 390,
+     "h": 154,
+     "right": 390,
+     "bottom": 230
+    },
+    "tabRows": 3,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 326,
+     "cw": 326,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "414x896": {
+  "korean": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 474,
+     "w": 386,
+     "h": 204,
+     "right": 400,
+     "bottom": 678
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 804,
+     "w": 398,
+     "h": 84,
+     "right": 406,
+     "bottom": 888
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 69,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 71,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 124,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 126,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 179,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 181,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 233,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 235,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 288,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 290,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 343,
+       "bottom": 880
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 345,
+       "y": 812,
+       "w": 53,
+       "h": 68,
+       "right": 398,
+       "bottom": 880
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 332,
+     "y": 738,
+     "w": 72,
+     "h": 72,
+     "right": 404,
+     "bottom": 810
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2068,
+     "barTop": 804,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 133,
+     "right": 414,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 92,
+     "right": 414,
+     "bottom": 92
+    },
+    "langbarScrollW": 414,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 157,
+     "right": 414,
+     "bottom": 157
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 339,
+     "h": 44,
+     "right": 355,
+     "bottom": 145
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 3,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 150
+   }
+  },
+  "petEmpty": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 76,
+     "right": 414,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 149,
+     "h": 53,
+     "right": 163,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 173,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 400,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 414,
+     "h": 104,
+     "right": 414,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 206,
+      "w": 358,
+      "h": 40,
+      "right": 386,
+      "bottom": 246
+     },
+     "select": {
+      "x": 28,
+      "y": 206,
+      "w": 175,
+      "h": 40,
+      "right": 203,
+      "bottom": 246
+     },
+     "input": {
+      "x": 211,
+      "y": 206,
+      "w": 175,
+      "h": 40,
+      "right": 386,
+      "bottom": 246
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 76,
+     "right": 414,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 149,
+     "h": 53,
+     "right": 163,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 173,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 400,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 414,
+     "h": 104,
+     "right": 414,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 206,
+      "w": 358,
+      "h": 40,
+      "right": 386,
+      "bottom": 246
+     },
+     "select": {
+      "x": 28,
+      "y": 206,
+      "w": 175,
+      "h": 40,
+      "right": 203,
+      "bottom": 246
+     },
+     "input": {
+      "x": 211,
+      "y": 206,
+      "w": 175,
+      "h": 40,
+      "right": 386,
+      "bottom": 246
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 256,
+      "w": 114,
+      "h": 128,
+      "right": 142,
+      "bottom": 384
+     },
+     {
+      "x": 150,
+      "y": 256,
+      "w": 114,
+      "h": 128,
+      "right": 264,
+      "bottom": 384
+     },
+     {
+      "x": 272,
+      "y": 256,
+      "w": 114,
+      "h": 128,
+      "right": 386,
+      "bottom": 384
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 76,
+     "right": 414,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 149,
+     "h": 53,
+     "right": 163,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 173,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 400,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 414,
+     "h": 104,
+     "right": 414,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 594,
+      "w": 110,
+      "h": 156,
+      "right": 142,
+      "bottom": 750
+     },
+     {
+      "x": 152,
+      "y": 594,
+      "w": 110,
+      "h": 156,
+      "right": 262,
+      "bottom": 750
+     },
+     {
+      "x": 272,
+      "y": 594,
+      "w": 110,
+      "h": 156,
+      "right": 382,
+      "bottom": 750
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 313,
+      "w": 114,
+      "h": 128,
+      "right": 142,
+      "bottom": 441
+     },
+     {
+      "x": 150,
+      "y": 313,
+      "w": 114,
+      "h": 128,
+      "right": 264,
+      "bottom": 441
+     },
+     {
+      "x": 272,
+      "y": 313,
+      "w": 114,
+      "h": 128,
+      "right": 386,
+      "bottom": 441
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 414,
+   "docScrollW": 414,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 414,
+     "h": 76,
+     "right": 414,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 149,
+     "h": 53,
+     "right": 163,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 173,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 400,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 414,
+     "h": 104,
+     "right": 414,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 350,
+     "cw": 350,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "430x932": {
+  "korean": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 474,
+     "w": 402,
+     "h": 204,
+     "right": 416,
+     "bottom": 678
+    },
+    "tabsBar": {
+     "x": 8,
+     "y": 840,
+     "w": 414,
+     "h": 84,
+     "right": 422,
+     "bottom": 924
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 16,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 71,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 73,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 128,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 130,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 185,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 187,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 243,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 245,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 300,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 302,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 357,
+       "bottom": 916
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 359,
+       "y": 848,
+       "w": 55,
+       "h": 68,
+       "right": 414,
+       "bottom": 916
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 348,
+     "y": 774,
+     "w": 72,
+     "h": 72,
+     "right": 420,
+     "bottom": 846
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 2068,
+     "barTop": 840,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 133,
+     "right": 430,
+     "bottom": 133
+    },
+    "langbarIn": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 92,
+     "right": 430,
+     "bottom": 92
+    },
+    "langbarScrollW": 430,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 157,
+     "right": 430,
+     "bottom": 157
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 101,
+     "w": 339,
+     "h": 44,
+     "right": 355,
+     "bottom": 145
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 3,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 150
+   }
+  },
+  "petEmpty": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 76,
+     "right": 430,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 165,
+     "h": 53,
+     "right": 179,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 189,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 416,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 430,
+     "h": 104,
+     "right": 430,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 206,
+      "w": 374,
+      "h": 40,
+      "right": 402,
+      "bottom": 246
+     },
+     "select": {
+      "x": 28,
+      "y": 206,
+      "w": 183,
+      "h": 40,
+      "right": 211,
+      "bottom": 246
+     },
+     "input": {
+      "x": 219,
+      "y": 206,
+      "w": 183,
+      "h": 40,
+      "right": 402,
+      "bottom": 246
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 76,
+     "right": 430,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 165,
+     "h": 53,
+     "right": 179,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 189,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 416,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 430,
+     "h": 104,
+     "right": 430,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 206,
+      "w": 374,
+      "h": 40,
+      "right": 402,
+      "bottom": 246
+     },
+     "select": {
+      "x": 28,
+      "y": 206,
+      "w": 183,
+      "h": 40,
+      "right": 211,
+      "bottom": 246
+     },
+     "input": {
+      "x": 219,
+      "y": 206,
+      "w": 183,
+      "h": 40,
+      "right": 402,
+      "bottom": 246
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 256,
+      "w": 119,
+      "h": 128,
+      "right": 147,
+      "bottom": 384
+     },
+     {
+      "x": 155,
+      "y": 256,
+      "w": 119,
+      "h": 128,
+      "right": 275,
+      "bottom": 384
+     },
+     {
+      "x": 283,
+      "y": 256,
+      "w": 119,
+      "h": 128,
+      "right": 402,
+      "bottom": 384
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 76,
+     "right": 430,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 165,
+     "h": 53,
+     "right": 179,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 189,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 416,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 430,
+     "h": 104,
+     "right": 430,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 32,
+      "y": 594,
+      "w": 115,
+      "h": 156,
+      "right": 147,
+      "bottom": 750
+     },
+     {
+      "x": 157,
+      "y": 594,
+      "w": 115,
+      "h": 156,
+      "right": 273,
+      "bottom": 750
+     },
+     {
+      "x": 283,
+      "y": 594,
+      "w": 115,
+      "h": 156,
+      "right": 398,
+      "bottom": 750
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 313,
+      "w": 119,
+      "h": 128,
+      "right": 147,
+      "bottom": 441
+     },
+     {
+      "x": 155,
+      "y": 313,
+      "w": 119,
+      "h": 128,
+      "right": 275,
+      "bottom": 441
+     },
+     {
+      "x": 283,
+      "y": 313,
+      "w": 119,
+      "h": 128,
+      "right": 402,
+      "bottom": 441
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 430,
+   "docScrollW": 430,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 430,
+     "h": 76,
+     "right": 430,
+     "bottom": 76
+    },
+    "title": {
+     "x": 14,
+     "y": 10,
+     "w": 165,
+     "h": 53,
+     "right": 179,
+     "bottom": 63
+    },
+    "wallet": {
+     "x": 189,
+     "y": 19,
+     "w": 227,
+     "h": 36,
+     "right": 416,
+     "bottom": 54
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 76,
+     "w": 430,
+     "h": 104,
+     "right": 430,
+     "bottom": 180
+    },
+    "tabRows": 2,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 366,
+     "cw": 366,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "768x1024": {
+  "korean": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 14,
+     "y": 341,
+     "w": 725,
+     "h": 112,
+     "right": 739,
+     "bottom": 453
+    },
+    "tabsBar": {
+     "x": 14,
+     "y": 527,
+     "w": 725,
+     "h": 70,
+     "right": 739,
+     "bottom": 597
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 20,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 117,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 123,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 219,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 225,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 322,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 328,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 425,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 431,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 528,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 534,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 630,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 636,
+       "y": 533,
+       "w": 97,
+       "h": 58,
+       "right": 733,
+       "bottom": 591
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 639,
+     "y": 902,
+     "w": 104,
+     "h": 104,
+     "right": 743,
+     "bottom": 1006
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 1674,
+     "barTop": 527,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 753,
+     "h": 92,
+     "right": 753,
+     "bottom": 92
+    },
+    "langbarIn": {
+     "x": 17,
+     "y": 0,
+     "w": 720,
+     "h": 51,
+     "right": 737,
+     "bottom": 51
+    },
+    "langbarScrollW": 753,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 0,
+     "y": 0,
+     "w": 753,
+     "h": 132,
+     "right": 753,
+     "bottom": 132
+    },
+    "hubHeadBtns": {
+     "x": 16,
+     "y": 76,
+     "w": 339,
+     "h": 44,
+     "right": 355,
+     "bottom": 120
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 2,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 102
+   }
+  },
+  "petEmpty": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 753,
+     "h": 59,
+     "right": 753,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 512,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 739,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 753,
+     "h": 54,
+     "right": 753,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 139,
+      "w": 272,
+      "h": 40,
+      "right": 300,
+      "bottom": 179
+     },
+     "select": {
+      "x": 28,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 160,
+      "bottom": 179
+     },
+     "input": {
+      "x": 168,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 300,
+      "bottom": 179
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 738,
+     "h": 59,
+     "right": 738,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 497,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 724,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 738,
+     "h": 54,
+     "right": 738,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 28,
+      "y": 139,
+      "w": 272,
+      "h": 40,
+      "right": 300,
+      "bottom": 179
+     },
+     "select": {
+      "x": 28,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 160,
+      "bottom": 179
+     },
+     "input": {
+      "x": 168,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 300,
+      "bottom": 179
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 114,
+      "bottom": 333
+     },
+     {
+      "x": 122,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 208,
+      "bottom": 333
+     },
+     {
+      "x": 216,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 302,
+      "bottom": 333
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 738,
+     "h": 59,
+     "right": 738,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 497,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 724,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 738,
+     "h": 54,
+     "right": 738,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 346,
+      "y": 250,
+      "w": 138,
+      "h": 190,
+      "right": 484,
+      "bottom": 440
+     },
+     {
+      "x": 494,
+      "y": 250,
+      "w": 138,
+      "h": 190,
+      "right": 632,
+      "bottom": 440
+     },
+     {
+      "x": 642,
+      "y": 250,
+      "w": 138,
+      "h": 190,
+      "right": 780,
+      "bottom": 440
+     }
+    ],
+    "slotsOverflow": true,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 28,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 114,
+      "bottom": 390
+     },
+     {
+      "x": 122,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 208,
+      "bottom": 390
+     },
+     {
+      "x": 216,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 302,
+      "bottom": 390
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 768,
+   "docScrollW": 753,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 738,
+     "h": 59,
+     "right": 738,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 497,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 724,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 738,
+     "h": 54,
+     "right": 738,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 360,
+     "cw": 360,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ },
+ "1366x768": {
+  "korean": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "ko": {
+    "hud": {
+     "x": 260,
+     "y": 341,
+     "w": 832,
+     "h": 112,
+     "right": 1092,
+     "bottom": 453
+    },
+    "tabsBar": {
+     "x": 260,
+     "y": 527,
+     "w": 832,
+     "h": 70,
+     "right": 1092,
+     "bottom": 597
+    },
+    "tabBtns": [
+     {
+      "t": "Học",
+      "r": {
+       "x": 266,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 378,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Từ vựng",
+      "r": {
+       "x": 384,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 496,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Sổ sưu tầm",
+      "r": {
+       "x": 502,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 614,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Nhắc học",
+      "r": {
+       "x": 620,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 732,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "Dữ liệu",
+      "r": {
+       "x": 738,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 850,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "🗺️Bản Đồ Boss",
+      "r": {
+       "x": 856,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 968,
+       "bottom": 591
+      }
+     },
+     {
+      "t": "🐾Thú Cưng",
+      "r": {
+       "x": 974,
+       "y": 533,
+       "w": 112,
+       "h": 58,
+       "right": 1086,
+       "bottom": 591
+      }
+     }
+    ],
+    "tabsOverlap": [],
+    "mascot": {
+     "x": 1237,
+     "y": 646,
+     "w": 104,
+     "h": 104,
+     "right": 1341,
+     "bottom": 750
+    },
+    "stagePadBottom": "0px",
+    "contentCovered": {
+     "stageBottom": 1674,
+     "barTop": 527,
+     "covered": true
+    }
+   }
+  },
+  "enhub": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "en": {
+    "langbar": {
+     "x": 0,
+     "y": 0,
+     "w": 1351,
+     "h": 92,
+     "right": 1351,
+     "bottom": 92
+    },
+    "langbarIn": {
+     "x": 316,
+     "y": 0,
+     "w": 720,
+     "h": 51,
+     "right": 1036,
+     "bottom": 51
+    },
+    "langbarScrollW": 1351,
+    "langbarChildrenOverlap": [],
+    "hubHead": {
+     "x": 246,
+     "y": 0,
+     "w": 860,
+     "h": 78,
+     "right": 1106,
+     "bottom": 78
+    },
+    "hubHeadBtns": {
+     "x": 750,
+     "y": 17,
+     "w": 339,
+     "h": 44,
+     "right": 1090,
+     "bottom": 61
+    },
+    "hubHeadOverlap": [],
+    "tabRows": 2,
+    "tabCount": 10,
+    "tabOverlap": [],
+    "tabsH": 102
+   }
+  },
+  "petEmpty": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 1351,
+     "h": 59,
+     "right": 1351,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 1110,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 1337,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 1351,
+     "h": 54,
+     "right": 1351,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [
+     "Chưa có thú cưng nào khớp bộ lọc.",
+     "Chưa có thú cưng nàoẤp trứng để nhận thú cưng đầu tiên của b"
+    ],
+    "filter": {
+     "filterRect": {
+      "x": 114,
+      "y": 139,
+      "w": 272,
+      "h": 40,
+      "right": 386,
+      "bottom": 179
+     },
+     "select": {
+      "x": 114,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 246,
+      "bottom": 179
+     },
+     "input": {
+      "x": 254,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 386,
+      "bottom": 179
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": []
+   }
+  },
+  "petFull": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 1336,
+     "h": 59,
+     "right": 1336,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 1095,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 1322,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 1336,
+     "h": 54,
+     "right": 1336,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": {
+     "filterRect": {
+      "x": 106,
+      "y": 139,
+      "w": 272,
+      "h": 40,
+      "right": 378,
+      "bottom": 179
+     },
+     "select": {
+      "x": 106,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 238,
+      "bottom": 179
+     },
+     "input": {
+      "x": 246,
+      "y": 139,
+      "w": 132,
+      "h": 40,
+      "right": 378,
+      "bottom": 179
+     },
+     "stacked": false
+    },
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 106,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 192,
+      "bottom": 333
+     },
+     {
+      "x": 200,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 286,
+      "bottom": 333
+     },
+     {
+      "x": 294,
+      "y": 189,
+      "w": 86,
+      "h": 145,
+      "right": 380,
+      "bottom": 333
+     }
+    ]
+   }
+  },
+  "petTeam": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 1336,
+     "h": 59,
+     "right": 1336,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 1095,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 1322,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 1336,
+     "h": 54,
+     "right": 1336,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [
+     {
+      "x": 424,
+      "y": 230,
+      "w": 261,
+      "h": 190,
+      "right": 685,
+      "bottom": 420
+     },
+     {
+      "x": 695,
+      "y": 230,
+      "w": 261,
+      "h": 190,
+      "right": 955,
+      "bottom": 420
+     },
+     {
+      "x": 965,
+      "y": 230,
+      "w": 261,
+      "h": 190,
+      "right": 1226,
+      "bottom": 420
+     }
+    ],
+    "slotsOverflow": false,
+    "evoTable": null,
+    "eggCards": [],
+    "gridCells": [
+     {
+      "x": 106,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 192,
+      "bottom": 390
+     },
+     {
+      "x": 200,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 286,
+      "bottom": 390
+     },
+     {
+      "x": 294,
+      "y": 246,
+      "w": 86,
+      "h": 145,
+      "right": 380,
+      "bottom": 390
+     }
+    ]
+   }
+  },
+  "petEvo": {
+   "vw": 1366,
+   "docScrollW": 1351,
+   "overflowX": false,
+   "wide": [],
+   "pet": {
+    "hub": true,
+    "head": {
+     "x": 0,
+     "y": 0,
+     "w": 1336,
+     "h": 59,
+     "right": 1336,
+     "bottom": 59
+    },
+    "title": {
+     "x": 14,
+     "y": 11,
+     "w": 252,
+     "h": 34,
+     "right": 266,
+     "bottom": 45
+    },
+    "wallet": {
+     "x": 1095,
+     "y": 10,
+     "w": 227,
+     "h": 36,
+     "right": 1322,
+     "bottom": 46
+    },
+    "headChildrenOverlap": [],
+    "headOverflow": false,
+    "tabs": {
+     "x": 0,
+     "y": 59,
+     "w": 1336,
+     "h": 54,
+     "right": 1336,
+     "bottom": 113
+    },
+    "tabRows": 1,
+    "tabCount": 7,
+    "tabOverlap": [],
+    "tabMinH": 44,
+    "emptyBoxes": [],
+    "filter": null,
+    "slots": [],
+    "slotsOverflow": false,
+    "evoTable": {
+     "sw": 802,
+     "cw": 802,
+     "over": false
+    },
+    "eggCards": [],
+    "gridCells": []
+   }
+  }
+ }
+}

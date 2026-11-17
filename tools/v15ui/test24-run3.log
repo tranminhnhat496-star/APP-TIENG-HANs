@@ -1,0 +1,92 @@
+§5 layer integrity
+  PASS v24 style present
+  PASS v24 script present
+  PASS __v24 version 15.1.0
+  PASS v15 version unchanged 15.0.0
+  PASS v18 version unchanged 15.0.0
+  PASS v19 version unchanged 15.0.0
+  PASS v23 version unchanged 15.0.0
+  PASS served index.html title is V15.1 (app overwrites live title with due-count)
+  PASS v24 style loads LAST (wins cascade)
+  PASS --ui-btn-green token present
+§1 WCAG AA contrast (scroll-aware)
+  PASS welcome: 0 contrast violations
+  PASS welcome: 0 text < 12px
+  PASS welcome: no horizontal overflow
+  PASS chooser: 0 contrast violations
+  PASS chooser: 0 text < 12px
+  PASS chooser: no horizontal overflow
+  PASS korean: 0 contrast violations
+  PASS korean: 0 text < 12px
+  PASS korean: no horizontal overflow
+  PASS enhub: 0 contrast violations
+  PASS enhub: 0 text < 12px
+  PASS enhub: no horizontal overflow
+  PASS library: 0 contrast violations
+  PASS library: 0 text < 12px
+  PASS library: no horizontal overflow
+  PASS flash: 0 contrast violations
+  PASS flash: 0 text < 12px
+  PASS flash: no horizontal overflow
+  PASS pethub: 0 contrast violations
+  PASS pethub: 0 text < 12px
+  PASS pethub: no horizontal overflow
+  PASS hatch: 0 contrast violations
+  PASS hatch: 0 text < 12px
+  PASS hatch: no horizontal overflow
+  PASS evo: 0 contrast violations
+  PASS evo: 0 text < 12px
+  PASS evo: no horizontal overflow
+  PASS team: 0 contrast violations
+  PASS team: 0 text < 12px
+  PASS team: no horizontal overflow
+  PASS battle: 0 contrast violations
+  PASS battle: 0 text < 12px
+  PASS battle: no horizontal overflow
+  PASS bossmap: 0 contrast violations
+  PASS bossmap: 0 text < 12px
+  PASS bossmap: no horizontal overflow
+  PASS login: 0 contrast violations
+  PASS login: 0 text < 12px
+  PASS login: no horizontal overflow
+  PASS account: 0 contrast violations
+  PASS account: 0 text < 12px
+  PASS account: no horizontal overflow
+§1b specific computed values
+  PASS .btn.pri bg is #2E7D32 (white 5.13:1)
+  PASS .btn min-height >= 44px
+  PASS night mode is the default profile state
+  PASS tab bar dark in night mode
+  PASS .v23bar-fight text is #FFF8E1
+  PASS .v18chip text is #3A2E22 (border keeps element color)
+  PASS team-skill button renders in fight
+  PASS V18 fight renders
+§2 bug fixes
+  PASS chooser Korean button exists
+  PASS Korean button NOT rotated
+  PASS Korean button full width
+  PASS Korean button NOT grayscale
+  PASS fight starts (auto-scroll test)
+  PASS fight auto-scrolled into view
+  PASS bare en15 backfilled, hub opens without crash
+§3 functional regression
+  PASS EN hub opens
+  PASS 10 learning modes render
+  PASS flashcard mode starts
+  PASS flashcard shows IPA
+  PASS Pet Hub opens
+  PASS Pet Hub has 7 tabs
+  PASS Boss Map has 10 zones
+  PASS Boss Map renders
+  PASS save round-trip keeps XP 12500 + gems 42
+  PASS save round-trip keeps en15.modeBest
+  PASS KO Boss Map has 10 zones
+§4 responsive
+  PASS 360px Korean home: no horizontal overflow
+  PASS 360px chooser modal fits viewport
+  PASS 360px Pet Hub: no horizontal overflow
+  PASS 430px Korean home: no horizontal overflow
+  PASS 430px chooser modal fits viewport
+  PASS 430px Pet Hub: no horizontal overflow
+
+==== test24: 84 passed, 0 failed ====

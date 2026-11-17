@@ -518,3 +518,192 @@ Repo: **APP-TIENG-HANS**.
   `hanvocab.v1`; tiến trình thú cưng (`S.v7.en23`) nằm trong bản lưu và sẽ
   được dùng lại khi nâng cấp lên V15 lần nữa. Thư mục `assets/pets/v15/`
   thừa ra sau khi revert có thể xóa khỏi repo (nó không được V14 dùng đến).
+
+## V15.1 — UI Readability Upgrade (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V15.1 không đổi khóa lưu `hanvocab.v1` và không migration, nhưng có file
+  sao lưu ngoài máy thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V15_UI_Readability_Upgrade.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v24.js`, `v24.css`, `build_v15ui.py` và các file khác) vào thư mục
+  repository, ghi đè các file cũ. Chỉ có 2 file code mới thật sự
+  (`v24.css`, `v24.js`); mọi file cũ khác được ghi đè bằng bản giống hệt
+  V15 (chỉ khác title V15.1).
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V15.1: UI Readability Upgrade` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Màn hình chọn nông trại: nút **KOREAN FARM** phải là nút đầy đủ, không
+   bị xoay/thu nhỏ. (Đây là lỗi V24 sửa — nếu nút vẫn xoay thì file
+   `v24.css` chưa được deploy.)
+3. Màn hình chính tiếng Hàn: tiêu đề và 2 pill trên header phải đọc rõ;
+   thanh tab dưới đáy: 7 nhãn tách nhau, không dính ("Bản Đồ Boss" và
+   "Thú Cưng" riêng biệt, màu vàng).
+4. Bấm **English Hub**: nút 🐾 Thú Cưng trong header phải màu vàng gold;
+   các nút xanh lá ("Học ngay", "Khiêu chiến") phải là xanh đậm, chữ trắng
+   đọc rõ.
+5. Vào **Bosses → Khiêu chiến** một boss: sau khi bấm, trang phải **tự
+   cuộn xuống trận đấu** (trước đây trận đấu nằm cuối trang, phải tự cuộn).
+   Thanh thú trong trận ("Khiên đội", "Năng lượng") phải đọc rõ chữ trắng
+   trên nền tím.
+6. Mở **🗺️ Bản Đồ Boss** trên điện thoại: các zone không chồng lên nhau.
+7. Mở **🐾 Thú Cưng**: các tab đọc rõ; ô tìm kiếm placeholder sáng rõ;
+   không có thanh cuộn ngang.
+8. Đăng nhập / Account Center: nút "Đăng nhập" xanh đậm; nhãn thống kê
+   ("Tiền vàng", "Kim cương"...) đọc rõ; các tab trong Account Center
+   hiện đủ, không bị cắt ở mép phải.
+9. Chơi một ván rồi tải lại trang: XP, kim cương, thú, farm, boss phải còn
+   nguyên (V15.1 không đổi dữ liệu).
+10. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000/Basic Tactics, từ tự
+    nhập, XP, kim cương, farm, vật nuôi nông trại, boss và bản đồ phải còn
+    nguyên. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị để khôi
+    phục.
+11. Firebase: V15.1 không đổi code Firebase; nếu bạn chưa chạy checklist
+    FIREBASE_SETUP.md (mục 6 + V13.3) thì đăng nhập/đồng bộ thật vẫn chưa
+    được xác nhận — V15.1 không làm thay đổi trạng thái này.
+
+## Quay lại V15 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V15.1 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V15.1 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v24.css`/`v24.js` thừa ra sau khi revert có thể xóa
+  khỏi repo (nó không được V15 dùng đến).
+
+## V15.2 — Vocabulary Library UI/UX Redesign (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V15.2 không đổi khóa lưu `hanvocab.v1` và không migration, nhưng có file
+  sao lưu ngoài máy thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V15_Library_UI_Upgrade.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v25.js`, `v25.css`, `build_v15lib.py` và các file khác) vào thư mục
+  repository, ghi đè các file cũ. Chỉ có 2 file code mới thật sự
+  (`v25.css`, `v25.js`); mọi file cũ khác được ghi đè bằng bản giống hệt
+  V15.1 (chỉ khác title V15.2).
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V15.2: Vocabulary Library UI Redesign` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Bấm **English Hub → 📚 Thư viện**: mỗi nhóm bộ từ phải có dải tiêu đề
+   tối (tên vàng) + dòng tiến trình "đã học · đã thuộc · cần ôn" + thanh
+   tiến trình; 3 nút **Học ngay** (xanh lá), **Ôn tập** (tím), **Xem từ**
+   (nền sáng, chữ tím) phải khác nhau rõ ràng.
+3. Mở một chủ đề A1–A2 (vd Education): nút **← Thư viện** phải là pill tím
+   dễ thấy; tiêu đề 24px; các hàng từ phải có badge trạng thái (○ Chưa học /
+   ◐ Đang học / ✓ Đã thuộc / ↻ Cần ôn).
+4. Mở **Basic Tactics → Unit 1**: badge **Từ đơn** (xanh lá đậm) và **Cụm
+   từ** (xanh dương đậm) phải đọc rõ; hai tab Words | Phrases & Collocations
+   tách riêng.
+5. Mở **Flashcards** (Học tập → Flashcards): mặt trước từ lớn, mặt sau
+   nghĩa + ví dụ; nút **Chưa nhớ** (đỏ đậm) và **Đã nhớ** (xanh đậm) đọc rõ.
+6. Thử tìm kiếm một từ trong Thư viện (vd "accounting"): ô tìm kiếm có
+   icon kính lúp; gõ từ không có → phải hiện thông báo "Không tìm thấy từ
+   nào khớp...".
+7. Mở tab **Từ vựng** (My Vocabulary): nút **Xóa** phải là nút đỏ đậm, chữ
+   trắng; thêm/sửa một từ cá nhân rồi tải lại trang — từ phải còn nguyên.
+8. Đánh một boss bằng từ vựng (Bosses → Khiêu chiến): trận đấu phải khởi
+   động bình thường; XP, kim cương, thú, farm, boss phải còn nguyên sau
+   khi tải lại trang.
+9. Kiểm tra trên điện thoại (360–430px): không có thanh cuộn ngang trong
+   Thư viện; các nút bấm đủ lớn, không đè lên chữ.
+10. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000/Basic Tactics, từ tự
+    nhập, XP, kim cương, farm, vật nuôi nông trại, boss và bản đồ phải còn
+    nguyên. Nếu thiếu, dùng file sao lưu đã tải ở bước chuẩn bị để khôi
+    phục.
+11. Firebase: V15.2 không đổi code Firebase; nếu bạn chưa chạy checklist
+    FIREBASE_SETUP.md (mục 6 + V13.3) thì đăng nhập/đồng bộ thật vẫn chưa
+    được xác nhận — V15.2 không làm thay đổi trạng thái này.
+12. Lưu ý: nếu bạn đang dùng scope Basic Tactics (banner "Đang học: Basic
+    Tactics · Unit N") và mở Flashcards ngay sau khi tải lại trang mà chưa
+    mở Thư viện, flashcard có thể báo "Không có từ nào" — đây là hạn chế có
+    sẵn từ V14, không phải lỗi V15.2. Mở Thư viện một lần rồi học lại là
+    bình thường (xem README_V15_2_LIBRARY.md).
+
+## Quay lại V15.1 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V15.2 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V15.2 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v25.css`/`v25.js` thừa ra sau khi revert có thể xóa
+  khỏi repo (nó không được V15.1 dùng đến).
+
+## V15.3 — Mobile Responsive & Pet Navigation Fix (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V15.3 không đổi khóa lưu `hanvocab.v1` và không migration, nhưng có file
+  sao lưu ngoài máy thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V15_Mobile_Navigation_Fix.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v26.js`, `v26.css`, `build_v15nav.py` và các file khác) vào thư mục
+  repository, ghi đè các file cũ. Chỉ có 2 file code mới thật sự
+  (`v26.css`, `v26.js`); mọi file cũ khác được ghi đè bằng bản giống hệt
+  V15.2 (chỉ khác title V15.3).
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V15.3: Mobile Responsive & Pet Navigation Fix` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn trên điện thoại.
+2. Mở **🐾 Thú Cưng** từ Korean Farm: header Pet phải hiện đầy đủ (tiêu đề,
+   ví XP/gem, nút ✕) — thanh Korean/English **không được** nổi lên trên
+   che mất header; 7 tab Thú cưng / Ấp trứng / Tiến hóa / Đội hình / Kỹ
+   năng / Sưu tập / Cửa hàng Pet phải nằm trong **một hàng** có thể vuốt
+   ngang, tab đang chọn nền vàng.
+3. Vuốt xuống trong Pet Hub: thanh tab phải dính ngay dưới header (không
+   trôi đi, không đè lên nội dung).
+4. Mở tab **Đội hình** rồi đóng Pet Hub, mở lại 🐾 Thú Cưng (không bấm tab
+   nào): phải mở lại đúng tab Đội hình.
+5. Khi chưa có thú cưng: tab Thú cưng chỉ hiện **một** thông báo chính
+   "Bạn chưa có thú cưng" + ảnh trứng + nút lớn "🥚 Đi ấp trứng"; bấm nút
+   phải chuyển thẳng sang tab Ấp trứng.
+6. Khi đã có thú: chọn bộ lọc hệ không có thú (vd hệ Băng khi chỉ có Rồng
+   Lửa) → phải hiện "Không tìm thấy thú cưng phù hợp." + nút "Xóa bộ lọc";
+   bấm nút phải hiện lại danh sách thú.
+7. Mở tab **Đội hình** trên điện thoại 320px: 3 thẻ vị trí phải vừa màn
+   hình, không tràn, không có thanh cuộn ngang.
+8. Mở **English Hub**: thanh Korean/English và 10 tab phải gọn (mỗi cái một
+   hàng cuộn ngang, không xuống 3–4 hàng như trước).
+9. Cuộn xuống cuối Korean Farm: nội dung cuối trang (deck cuối / nút cuối)
+   phải xem được đầy đủ, không bị thanh tab dưới đáy che.
+10. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000/Basic Tactics, từ tự
+    nhập, XP, kim cương, farm, vật nuôi nông trại, boss, bản đồ, thú cưng
+    và đội hình phải còn nguyên. Nếu thiếu, dùng file sao lưu đã tải ở
+    bước chuẩn bị để khôi phục.
+11. Firebase: V15.3 không đổi code Firebase; nếu bạn chưa chạy checklist
+    FIREBASE_SETUP.md (mục 6 + V13.3) thì đăng nhập/đồng bộ thật vẫn chưa
+    được xác nhận — V15.3 không làm thay đổi trạng thái này.
+
+## Quay lại V15.2 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V15.3 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V15.3 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v26.css`/`v26.js` thừa ra sau khi revert có thể xóa
+  khỏi repo (nó không được V15.2 dùng đến).

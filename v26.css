@@ -1,0 +1,159 @@
+/* ===== V26 — Mobile Responsive & Pet Navigation Fix (V15.3) =====
+   Lớp cộng thêm, nạp CUỐI CÙNG. Không sửa file cũ, không đổi logic game,
+   không đổi localStorage, không đổi dữ liệu thú cưng.
+   Sửa tận gốc các lỗi đo được ở baseline V15.2 (tools/v15nav/baseline26.json):
+   - NGUYÊN NHÂN GỐC 1 (z-index đảo ngược): #v23hub z-index:120 THẤP HƠN
+     #v15langbar (900) và .v15hub (950). Khi mở Pet Hub, thanh chuyển đổi
+     Korean/English nổi lên trên, che mất header Pet (tiêu đề, ví XP/gem,
+     nút đóng ✕). Người dùng không thấy nút đóng của Pet Hub.
+   - NGUYÊN NHÂN GỐC 2 (grid min-content): .v23slots dùng repeat(3,1fr) —
+     1fr = minmax(auto,1fr) nên mỗi slot không co dưới min-content của ảnh
+     (110px). Ở 320px slot thứ 3 tràn 38px; ở 768px tràn 12px.
+   - .v23tabs và .v15tabs dùng flex-wrap:wrap → 3-4 hàng nút trên điện thoại
+     (Pet Hub 3 hàng ở ≤390px; EN Hub 4 hàng, cao 198px ở 320px).
+   - Header EN Hub + langbar + tabs chiếm ~516px chiều cao ở 320px trước khi
+     tới nội dung; Pet Hub header 128px ở 320px.
+   - Thanh tab dưới của Korean Hub (position:fixed, bottom:8px) che nội dung
+     cuối trang vì #stage không có padding-bottom.
+   - Empty state kép: tab Thú cưng hiện cả "Chưa có thú cưng nào khớp bộ lọc."
+     (trong lưới) và "Chưa có thú cưng nào" (khung chi tiết) khi chưa có thú.
+   Bảng màu theo spec §9 (đã kiểm WCAG AA: trắng/#201535, #E4DDF1/#30204F,
+   #251A38/#F7BE38, trắng/#6845A8 đều ≥ 4.5:1). */
+:root{
+  --nav-bg:#201535; --nav-frame:#30204F; --nav-input:#1B1430;
+  --nav-text:#FFFFFF; --nav-text2:#E4DDF1; --nav-gold:#FFD76A;
+  --nav-line:#A78BFA; --nav-active:#F7BE38; --nav-active-ink:#251A38;
+  --nav-btn2:#6845A8;
+}
+
+/* ---------- §1. Sửa z-index: Pet Hub nổi trên langbar + EN Hub ---------- */
+#v23hub{z-index:960}
+/* toast của Pet Hub được append vào document.body (không nằm trong #v23hub),
+   phải nâng riêng — không thì nó chìm dưới Pet Hub. */
+#v23toast{z-index:970}
+
+/* ---------- §9. Palette Pet Hub ---------- */
+#v23hub{background:linear-gradient(180deg,#201535 0%,#1B1033 55%,#241640 100%);color:var(--nav-text)}
+#v23hub .v23head{background:linear-gradient(180deg,#30204F,#201535);border-bottom-color:var(--nav-gold)}
+#v23hub .v23title{color:var(--nav-gold)}
+#v23hub .v23chip{background:var(--nav-input);border-color:var(--nav-gold);color:var(--nav-gold)}
+#v23hub .v23tab{background:var(--nav-frame);color:var(--nav-text2);border-color:var(--nav-line)}
+#v23hub .v23tab.on{background:var(--nav-active);color:var(--nav-active-ink);border-color:var(--nav-gold)}
+#v23hub .v23side{background:var(--nav-frame);border-color:var(--nav-line)}
+#v23hub .v23detail{background:var(--nav-bg);border-color:var(--nav-gold)}
+#v23hub .v23filter select,#v23hub .v23filter input{background:var(--nav-input);color:var(--nav-text);border-color:var(--nav-line)}
+#v23hub .v23filter select::placeholder,#v23hub .v23filter input::placeholder{color:var(--nav-text2);opacity:1}
+#v23hub .v23cell{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23cellm,#v23hub .v23count,#v23hub .v23note,#v23hub .v23empty{color:var(--nav-text2)}
+#v23hub .v23row{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23row span i{color:var(--nav-text2)}
+#v23hub .v23btn{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23btn.pri{background:var(--nav-btn2);border-color:var(--nav-line);color:#FFFFFF}
+#v23hub .v23btn.gold{background:var(--nav-active);border-color:var(--nav-gold);color:var(--nav-active-ink)}
+#v23hub .v23btn.ok{background:#247A46;border-color:#86EFAC;color:#FFFFFF}
+#v23hub .v23skill,#v23hub .v23mat,#v23hub .v23reward,#v23hub .v23eggcard{background:var(--nav-frame);border-color:var(--nav-line)}
+#v23hub .v23skill span,#v23hub .v23eggcard span{color:var(--nav-text2)}
+#v23hub .v23skill i{color:var(--nav-text2)}
+#v23hub .v23slot{background:var(--nav-frame);border-color:var(--nav-line);color:var(--nav-text)}
+#v23hub .v23slot span{color:var(--nav-text2)}
+#v23hub .v23bar>span:last-child{color:var(--nav-text)}
+#v23hub .v23lv,#v23hub .v23rar{color:var(--nav-text2)}
+
+/* ---------- §6/§7. Empty state + filter-no-match ---------- */
+#v23hub .v23grid .v23empty{grid-column:1/-1}
+#v23hub .v26hero{text-align:center;padding:28px 16px 24px}
+#v23hub .v26hero img.v26hero-egg{width:120px;height:120px;object-fit:contain;margin:0 auto 8px;display:block}
+#v23hub .v26hero h3{font-size:20px;margin:6px 0 8px}
+#v23hub .v26hero p{color:var(--nav-text2);font-size:15px;line-height:1.5;margin:0 0 16px}
+#v23hub .v26hero .v23btn.big{width:100%;max-width:320px}
+#v23hub .v26nomatch{grid-column:1/-1;text-align:center;padding:20px 12px;color:var(--nav-text2)}
+#v23hub .v26nomatch p{margin:0 0 12px;font-size:15px}
+#v23hub .v26nomatch .v23btn{background:var(--nav-btn2);border-color:var(--nav-line);color:#FFFFFF}
+
+/* ---------- §8. Team slots: sửa min-content (nguyên nhân gốc 2) ---------- */
+#v23hub .v23slots{grid-template-columns:repeat(3,minmax(0,1fr))}
+#v23hub .v23slot{min-width:0}
+#v23hub .v23grid .v23cell{min-width:0}
+#v23hub .v23celln{overflow-wrap:anywhere}
+
+/* ---------- Langbar: nút Tài khoản (v21) xuống hàng thứ 2 ----------
+   v21 gắn #v21hubbtn ("Tài khoản") vào cuối #v15langbar mỗi khi mở EN Hub;
+   langbar là display:block nên nút rơi xuống hàng riêng (51px + 40px = 92px)
+   ở MỌI chiều rộng. Cho langbar thành 1 hàng flex: hàng chuyển đổi co lại,
+   nút Tài khoản cố định ở cuối hàng. */
+#v15langbar{display:flex;align-items:center;justify-content:center;gap:8px}
+#v15langbar .v15lb-in{flex:1 1 auto;min-width:0;margin:0}
+#v15langbar #v21hubbtn{flex:none;align-self:center;white-space:nowrap}
+
+/* ================= MOBILE ================= */
+@media (max-width:760px){
+  /* Pet tabs: một hàng cuộn ngang, dính dưới header (top = chiều cao header
+     do JS đo và ghi vào --nav-head-h — tính chính xác, không đoán). */
+  #v23hub .v23tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;position:sticky;top:var(--nav-head-h,56px);z-index:6;
+    background:linear-gradient(180deg,#201535,#241640);border-bottom:2px solid var(--nav-line);
+    padding:10px 12px 8px}
+  #v23hub .v23tabs::-webkit-scrollbar{display:none}
+  #v23hub .v23tab{flex:none;white-space:nowrap;min-height:44px}
+  /* EN Hub tabs: một hàng cuộn ngang thay vì 3-4 hàng. */
+  #v15hub .v15tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #v15hub .v15tabs::-webkit-scrollbar{display:none}
+  #v15hub .v15tab{flex:none;white-space:nowrap;min-height:44px}
+  /* Korean Hub: bỏ sticky của .v7hud trên mobile — bảng điều khiển cuộn theo
+     trang thay vì chiếm 200px+ cố định trên màn hình. */
+  .v7hud{position:static}
+  /* Mascot: đẩy lên vùng đệm dưới trang để không đè nội dung. */
+  #mas{bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (max-width:640px){
+  /* Pet Hub header gọn: 1 hàng (tiêu đề ngắn + ví + nút đóng 44px),
+     cộng safe-area cho tai thỏ / Dynamic Island. */
+  #v23hub .v23head{flex-wrap:wrap;gap:8px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px}
+  #v23hub .v23title{font-size:16px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #v23hub .v23chip{padding:4px 8px;font-size:12px}
+  #v23hub .v23x{width:44px;height:44px;flex:none}
+  #v23hub .v23body{padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+  /* Langbar: một hàng cuộn ngang thay vì 2-3 hàng (133px → ~51px). */
+  #v15langbar .v15lb-in{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:none}
+  #v15langbar .v15lb-in::-webkit-scrollbar{display:none}
+  #v15langbar .v15lb-btn,#v15langbar .v15lb-hub{flex:none;white-space:nowrap}
+  /* EN Hub head gọn: phụ đề 1 dòng (ellipsis), nút thành 1 hàng cuộn. */
+  #v15hub .v15hub-head{padding:10px 12px;gap:8px}
+  #v15hub .v15hub-title b{font-size:17px}
+  #v15hub .v15hub-title span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+  #v15hub .v15hub-headbtns{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+  #v15hub .v15hub-headbtns::-webkit-scrollbar{display:none}
+  #v15hub .v15hub-headbtns>*{flex:none}
+  #v15hub .v15x{width:44px;height:44px;flex:none}
+  /* Korean Hub: đệm dưới cho thanh tab cố định (84-98px + bottom 8px). */
+  #stage{padding-bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (max-width:560px){
+  /* Filter + ô tìm kiếm xếp 2 hàng, mỗi ô ≥44px, đủ rộng. */
+  #v23hub .v23filter{flex-direction:column}
+  #v23hub .v23filter select,#v23hub .v23filter input{width:100%;min-height:44px}
+}
+
+@media (max-width:430px){
+  /* Team slots + ô thú: ảnh nhỏ lại để 3 cột vừa màn hình hẹp. */
+  #v23hub .v23slotimg{width:64px;height:64px}
+  #v23hub .v23slot{min-height:0;padding:10px 6px}
+  #v23hub .v23slot b{font-size:12px}
+  #v23hub .v23slot span{font-size:11px}
+  #v23hub .v23cellimg{width:64px;height:64px}
+  #v23hub .v23rowimg{width:44px;height:44px}
+  /* Egg Hatch: trứng + đồng hồ xếp dọc, không chen ngang. */
+  #v23hub .v23hatchmain{flex-direction:column;text-align:center}
+  #v23hub .v23hatchmain .v23big{width:120px;height:120px;margin:0 auto}
+  #v23hub .v23timer{font-size:30px}
+  /* Pet Hub: nút tab nhỏ hơn một chút để 7 tab cuộn mượt. */
+  #v23hub .v23tab{padding:9px 12px;font-size:13px}
+  /* EN Hub: nút Thú Cưng trong head không chiếm quá nhiều chỗ. */
+  #v15hub .v15hub-headbtns .btn.sm{padding:8px 10px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  #v23hub .v23tabs{scroll-behavior:auto}
+}

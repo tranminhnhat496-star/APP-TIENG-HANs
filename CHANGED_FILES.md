@@ -332,3 +332,107 @@
 - `S.v7.en23` nằm trong payload Firestore sẵn có (`players/{uid}`); không tạo project Firebase mới, không đổi `firestore.rules`.
 - Vật nuôi nông trại V6 (`S.own`) không bị chạm tới.
 - Save V14 mở bằng V15 chạy bình thường; không cần migration (cùng `hanvocab.v1`, `SAVE_VERSION` giữ 12).
+
+---
+
+## V15.1 — UI Readability Upgrade (2026-11-17)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `build_v15ui.py` | Script build V15.1: lấy bản V15 trong `out/` (hoặc chạy `build_v15.py` trước nếu chưa có), inject lớp V24 CUỐI CÙNG trước `</body>`, đổi title thành V15.1, kiểm tra tokens + `.ko` fix + fight scroll + en15 backfill + version các lớp cũ. Idempotent: chạy lại sẽ gỡ lớp V24 cũ rồi inject lại. |
+| `package_v15ui.py` | Script đóng gói ZIP V15.1 + kiểm tra V24 nạp sau V23, đủ 30+30 PNG boss, 41 PNG thú/trứng, đủ các lớp cũ. |
+| `src/v24.css`, `src/v24.js` | Lớp V24 (xem dưới). Cũng có trong `out/` (`v24.css`, `v24.js`). |
+| `README_V15_1_UI.md` | Hướng dẫn V15.1: design system, bảng lỗi tương phản trước/sau, 3 lỗi thật tìm thấy, lưu ý trung thực. |
+| `CHANGELOG_V15_to_V15_1.md` | Changelog đầy đủ V15 → V15.1. |
+| `SMOKE_TEST_V15_1_2026-11-17.md` | Báo cáo kiểm thử V15.1 (test24.js 84/84 × 3 lần chạy Chrome thật + audit tương phản 14 màn hình + sự cố môi trường). |
+| `tools/v15ui/` | Bộ kiểm thử V15.1: `test24.js` + harness CDP (`cdp.js`, `audit.js`, `shot.js`, `batch.js`, `setups/`) + log 2 lần chạy + 17 ảnh sau nâng cấp (`shots-after/`). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V15.1; thêm lớp V24 CUỐI: `<style id="v24">`, `<script id="v24js">`. Không sửa bất kỳ lớp cũ nào. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V15.1. |
+
+### Lớp V24 — tóm tắt nội dung (chi tiết trong README_V15_1_UI.md)
+- **Design tokens** `--ui-*` (màu chữ/nền/viền/trạng thái, nút xanh lá #2E7D32, min-height 44px).
+- **Tương phản WCAG AA:** nút chính #3FAE62 → #2E7D32; thanh thú trong trận đấu thêm màu chữ #FFF8E1; chip boss chữ #3A2E22; nhãn profile #6B5B4A 12px; chữ ban đêm (mute/label/farm) sáng lên; tab dưới đáy nền tối ban đêm; placeholder input tối #B7A6E0.
+- **Typography:** nội dung quan trọng ≥ 12px; đáp án đúng/sai thêm ✓/✗.
+- **Bố cục:** header Korean bóng mềm; tab dưới đáy wrap (hết dính nhãn); Boss Map cao 1600px ở ≤480px (hết chồng zone); Pet Hub hết tràn ngang 11px; tab Account Center wrap 2 hàng.
+- **3 bug fix:** (1) nút KOREAN FARM bị xoay do va chạm class `.ko`; (2) trận V18 tự cuộn tới khi bắt đầu (MutationObserver 2 tầng); (3) backfill `en15.modeBest` (EN Hub crash với bản lưu thiếu trường).
+
+### File giữ nguyên 100% (không sửa, không xóa)
+- Mọi lớp cũ V6–V23 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0), mọi dữ liệu từ vựng/thú/boss, `firebase-config.js`, `firestore.rules`.
+
+### Dữ liệu người chơi (localStorage) — không đổi
+- Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa. V24 chỉ đọc/ghi qua API sẵn có (`__v15.en15()`, `save15()`); backfill `en15` chỉ thêm các trường còn thiếu với đúng giá trị mặc định, không xóa/không ghi đè dữ liệu hiện có.
+
+## V15.2 — Vocabulary Library UI/UX Redesign (2026-11-17)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `build_v15lib.py` | Script build V15.2 (idempotent): gỡ lớp V25 cũ, inject V25 CUỐI CÙNG trước `</body>`, đổi title thành V15.2, kiểm tra version các lớp cũ (v24 dùng `var VERSION`, phải kiểm tra riêng). |
+| `package_v15lib.py` | Script đóng gói ZIP V15.2 + kiểm tra V25 nạp sau V24, đủ 30+30 PNG boss, 41 PNG thú/trứng, đủ các lớp cũ, 3 tài liệu V15.2. |
+| `src/v25.css`, `src/v25.js` | Lớp V25 (xem dưới). Cũng có trong `out/` (`v25.css`, `v25.js`). |
+| `README_V15_2_LIBRARY.md` | Hướng dẫn V15.2: design system `--lib-*`, thay đổi theo khu vực, bảng tương phản trước/sau, lưu ý trung thực. |
+| `CHANGELOG_V15_1_to_V15_2.md` | Changelog đầy đủ V15.1 → V15.2. |
+| `SMOKE_TEST_V15_2_2026-11-17.md` | Báo cáo kiểm thử V15.2 (test25.js 103/103 trên Chrome thật + audit tương phản 7 màn hình Thư viện + edge case V14). |
+| `tools/v15lib/` | Bộ kiểm thử V15.2: `test25.js` + harness CDP (`audit-lib.js`, `baseline25.js`, `shots25.js`, `setups/`, `dbg25*.js`) + log 4 lần chạy + ảnh trước/sau (`shots-before/`, `shots-after/`). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V15.2; thêm lớp V25 CUỐI: `<style id="v25">`, `<script id="v25js">`. Không sửa bất kỳ lớp cũ nào. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V15.2. |
+
+### Lớp V25 — tóm tắt nội dung (chi tiết trong README_V15_2_LIBRARY.md)
+- **Design tokens** `--lib-*` theo bảng màu của Anh (khung sáng #FFF9EF, khung tối #292044, xanh #247A46, tím #6845A8, vàng #FFD76A, viền #B99AF7/#F5C86A).
+- **Tương phản WCAG AA:** sửa 3 vi phạm baseline (badge BT "Từ đơn" 4.42:1 ở 11px → #166534 13px; nút "Chưa nhớ" và "Xóa" 3.99:1 → nền đỏ #C1121F chữ trắng) + 2 lỗi phát hiện bằng đọc code (`.v17claimed` 3.3:1, `.v17nodata` xám nhạt). Sau V25: **0 vi phạm + 0 chữ <12px trên cả 7 màn hình Thư viện**.
+- **Thẻ bộ từ:** dải tiêu đề tối + tên vàng, thẻ trắng viền tím, thanh tiến trình 12px; **tiến trình nhóm mới** (đã học · đã thuộc · cần ôn, số thật từ SRS; My Vocabulary không có thanh tiến trình vì không có tổng số hoàn thành).
+- **Hàng từ:** EN 19px, VI 16px, IPA 15px; POS thành pill; **badge trạng thái mới** (○ Chưa học / ◐ Đang học / ✓ Đã thuộc / ↻ Cần ôn) từ hộp SRS + lịch ôn thật.
+- **Nút chuẩn hóa:** Học ngay #247A46, Ôn tập #6845A8, Xem từ nền sáng + chữ tím đậm, yêu thích đang bật (`.btn.on`, mới) nền vàng #F5C86A; nút "← Thư viện" thành pill tím 44px.
+- **Tìm kiếm/lọc:** icon kính lúp, `type=search` (nút xóa gốc), 48px; thông báo trống rõ ràng trong lesson view; bộ lọc giữ nguyên khi chuyển màn hình (thiết kế sẵn có).
+- **Flashcard:** mặt trước #FFF9EF, mặt sau #EDE6F8, viền tím; Đã nhớ #247A46, Chưa nhớ #C1121F; tắt hiệu ứng lật khi `prefers-reduced-motion`.
+- **Không lỗi ứng dụng nào** được tìm thấy trong V15.2 (test25.js 103/103 trên Chrome thật). Edge case có sẵn từ V14 (scope BT + mở flash ngay sau khi tải lại trang mà chưa mở Thư viện → flash báo trống) được ghi trong README/Smoke Test, không sửa trong bản này.
+
+### File giữ nguyên 100% (không sửa, không xóa)
+- Mọi lớp cũ V6–V24 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0), mọi dữ liệu từ vựng/thú/boss, `firebase-config.js`, `firestore.rules`.
+
+### Dữ liệu người chơi (localStorage) — không đổi
+- Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa. V25 chỉ đọc SRS/hộp/lịch ôn qua API sẵn có (`__v15.enOld()`, `__v15.en15()`, `__v17`/`__v22`); decorator không ghi dữ liệu người chơi (chỉ thêm class/element hiển thị).
+
+## V15.3 — Mobile Responsive & Pet Navigation Fix (2026-11-17)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `build_v15nav.py` | Script build V15.3 (idempotent): gỡ lớp V26 cũ, inject V26 CUỐI CÙNG trước `</body>`, đổi title thành V15.3, kiểm tra version các lớp cũ (v24/v25 dùng `var VERSION`, phải kiểm tra riêng). |
+| `package_v15nav.py` | Script đóng gói ZIP V15.3 + kiểm tra V26 nạp sau V25, đủ 30+30 PNG boss, 41 PNG thú/trứng, đủ các lớp cũ, 3 tài liệu V15.3, `test26.js` có mặt. |
+| `src/v26.css`, `src/v26.js` | Lớp V26 (xem dưới). Cũng có trong `out/` (`v26.css`, `v26.js`). |
+| `README_V15_3_MOBILE_NAV.md` | Hướng dẫn V15.3: 6 nguyên nhân gốc + số đo baseline, thay đổi theo khu vực, lựa chọn thanh tab cuộn ngang thay vì menu "Thêm ▼", lưu ý trung thực. |
+| `CHANGELOG_V15_2_to_V15_3.md` | Changelog đầy đủ V15.2 → V15.3 (kèm sự cố môi trường trong quá trình làm). |
+| `SMOKE_TEST_V15_3_2026-11-17.md` | Báo cáo kiểm thử V15.3 (test26.js trên Chrome thật ở 8 viewport + chạy lại trên ZIP đã đóng gói). |
+| `tools/v15nav/` | Bộ kiểm thử V15.3: `test26.js` + harness đo bố cục (`audit-nav.js`, `baseline26.js`, `shots26.js`, `setups/pet-empty.js`, `setups/pet-full.js`) + `baseline26.json` + 5 ảnh trước (`shots-before/`) + ảnh sau (`shots-after/`) + `restore_index.py` + `pw/get-browser.mjs`. |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V15.3; thêm lớp V26 CUỐI: `<link id="v26css">`, `<script id="v26js">`. Không sửa bất kỳ lớp cũ nào. |
+| `tools/v15ui/cdp.js` | Hỗ trợ biến môi trường `HATCH_CHROME` / `HATCH_CHROME_NOPOLICY` để dùng Chromium dự phòng (headless-shell) khi Chrome hệ thống không chạy được. Hành vi mặc định không đổi. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V15.3. |
+
+### Lớp V26 — tóm tắt nội dung (chi tiết trong README_V15_3_MOBILE_NAV.md)
+- **Design tokens** `--nav-*` theo bảng màu spec §9 (nền tối #201535, khung #30204F, ô nhập #1B1430, chữ #FFFFFF/#E4DDF1, tiêu đề vàng #FFD76A, viền tím #A78BFA, nút đang chọn #F7BE38 + chữ #251A38, nút phụ #6845A8).
+- **Sửa gốc lỗi z-index:** `#v23hub` 120 → 960 (trên langbar 900 + EN Hub 950, dưới modal 1000); `#v23toast` 200 → 970. Trước đây langbar che hoàn toàn header Pet (tiêu đề, ví XP/gem, nút đóng ✕) khi mở Pet Hub từ Korean Farm.
+- **Tab một hàng cuộn ngang + sticky:** `.v23tabs` và `.v15tabs` ở ≤760px `flex-wrap:nowrap; overflow-x:auto`; tab Pet dính dưới header với `top` lấy từ biến `--nav-head-h` do JS đo chiều cao header thật; JS tự cuộn tab đang chọn vào giữa; **nhớ tab** qua `sessionStorage['v26.petTab']` (bọc `__v23.openHub`, không sửa `v23.js`).
+- **Header gọn mobile:** Pet head 128px → ~56px ở 320px (tiêu đề rút ngắn "🐾 Thú Cưng"); langbar 133px → ~48px; EN hub head 157–185px → ~112px; tổng chrome EN ở 320px ~355px → ~160px; `.v7hud` bỏ sticky trên mobile; `#stage` thêm `padding-bottom: calc(118px + safe-area)` để nội dung cuối không bị thanh tab cố định che; mascot đẩy lên vùng đệm.
+- **Trạng thái trống duy nhất:** chưa có thú → hero một thông báo ("Bạn chưa có thú cưng" + ảnh trứng + nút lớn "🥚 Đi ấp trứng" thật); có thú nhưng lọc không khớp → "Không tìm thấy thú cưng phù hợp." + nút "Xóa bộ lọc" thật. Áp dụng cho tab Thú cưng, Tiến hóa, Đội hình.
+- **Bộ lọc 2 hàng** ở ≤560px (mỗi ô ≥44px); **slot đội hình sửa gốc min-content** (`repeat(3,minmax(0,1fr))`): tràn 38px @320px và 12px @768px → 0.
+- **Không làm:** menu "Thêm ▼" (spec cho phép tab cuộn ngang HOẶC menu; chọn tab cuộn — giữ đủ 7 tab, không thêm trạng thái dropdown); không tạo header mobile mới; không đổi dữ liệu thú cưng / save / Firebase.
+
+### File giữ nguyên 100% (không sửa, không xóa)
+- Mọi lớp cũ V6–V25 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0), mọi dữ liệu từ vựng/thú/boss, `firebase-config.js`, `firestore.rules`.
+
+### Dữ liệu người chơi (localStorage) — không đổi
+- Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa. V26 chỉ đọc qua API sẵn có (`__v23._test.en23()`, `__v15.en15()`); tab nhớ trong `sessionStorage` (`v26.petTab`, mất khi đóng tab trình duyệt, không chạm save game). Decorator không ghi dữ liệu người chơi (chỉ thêm class/element hiển thị).

@@ -1,0 +1,112 @@
+§5 layer integrity
+  PASS v25 style present
+  PASS v25 script present
+  PASS __v25 version 15.2.0
+  PASS __v24 version unchanged 15.1.0
+  PASS v15 version unchanged 15.0.0
+  PASS v17 version unchanged 10.0.0
+  PASS v22 version unchanged 14.0.0
+  PASS v23 version unchanged 15.0.0
+  PASS v25 style loads LAST (wins cascade)
+  PASS v25 script loads LAST
+  PASS --lib-green token present
+  PASS served index.html title is V15.2
+§1 WCAG AA contrast (scroll-aware)
+  PASS library: 0 contrast violations
+  PASS library: 0 text < 12px
+  PASS library: no horizontal overflow
+  PASS topic: 0 contrast violations
+  PASS topic: 0 text < 12px
+  PASS topic: no horizontal overflow
+  PASS lesson: 0 contrast violations
+  PASS lesson: 0 text < 12px
+  PASS lesson: no horizontal overflow
+  PASS btunit: 0 contrast violations
+  PASS btunit: 0 text < 12px
+  PASS btunit: no horizontal overflow
+  PASS quest: 0 contrast violations
+  PASS quest: 0 text < 12px
+  PASS quest: no horizontal overflow
+  PASS flash: 0 contrast violations
+  PASS flash: 0 text < 12px
+  PASS flash: no horizontal overflow
+  PASS vocab: 0 contrast violations
+  PASS vocab: 0 text < 12px
+  PASS vocab: no horizontal overflow
+§2 V25 values + decorator
+  PASS 4 set groups render (A1-A2, Oxford, BT, My Vocab)
+  PASS group progress bars injected (>=3 sets)
+  PASS group progress shows real learned counts
+  PASS Học ngay button is spec green #247A46
+  PASS Ôn tập button is spec purple #6845A8
+  PASS Xem từ button is light #FFF9EF
+  PASS Xem từ text is dark purple #4A2E8A
+  PASS library search input is type=search (native clear button)
+  PASS search input has magnifier icon
+  PASS set header band is dark #292044
+  PASS set title is gold #FFD76A on dark band
+  PASS set title is 18-22px (spec)
+  PASS set meta is #E5DEF5 on dark band
+  PASS library title is 24px (spec 24-28px)
+  PASS set icons added (A1-A2, Oxford)
+  PASS status badges cover several states
+  PASS EN word is 19px (spec 18-22px)
+  PASS IPA is 15px (spec 15-16px)
+  PASS POS pill bg is #EDE6F8
+  PASS POS pill text is dark purple #4A2E8A
+  PASS .v22type.wd text is #166534 (was 4.42:1, now AA)
+  PASS .v22type badge is 13px (was 11px)
+  PASS .v17claimed is #166534 (was 3.3:1)
+  PASS .v7toast is 15px
+  PASS favorite toggle adds .on class
+  PASS favorited button is gold #F5C86A
+  PASS favorited text is dark #3A2500 on gold
+  PASS "Chưa nhớ" button is filled #C1121F (was 3.99:1 outline)
+  PASS "Chưa nhớ" text is white on dark red
+  PASS flashcard front is #FFF9EF
+  PASS flashcard back is #EDE6F8
+  PASS flashcard setup leaves the card flipped (back visible)
+§3 functional
+  PASS 1. all 4 set groups present
+  PASS 1. A1-A2 view-all shows 30 words/page
+  PASS 1. A1-A2 total is 1000
+  PASS 1. Oxford view-all shows 30 words/page
+  PASS 1. back to library home works
+  PASS 1. My Vocabulary tab lists words
+  PASS 3. A1-A2 search finds "assignment"
+  PASS 3. empty search shows clear message
+  PASS 3. Oxford search finds "apple"
+  PASS 3. Oxford empty search shows message
+  PASS 2. all 24 BT units open with entries
+  PASS 3. BT unit search finds "accounting"
+  PASS 6. BT Phrases tab shows phrase badges
+  FAIL 4. flashcard front shows word + IPA forgotten  · 
+  PASS 4. flashcard flips to Vietnamese meaning
+  PASS 4. flip reveals Đã nhớ / Chưa nhớ
+  PASS 5. speak (phát âm) runs without error
+  PASS 4. rating "Đã nhớ" raises the SRS box (memory kept)
+  PASS 6. lesson start shows 10 modes
+  PASS 6. MC mode starts with a question
+  PASS 7. review (SRS) starts with content
+  PASS 8. mastering a word flips its badge to ✓ Đã thuộc
+  PASS 8. group progress still shows after mastering
+  PASS 9. boss fight renders with BT scope
+  PASS 9. boss question uses a BT word
+  PASS 10. EN hub closes and reopens with library intact
+  PASS 13. save round-trip keeps XP/gems (XP grows only by legitimate gains: 12500 -> 12510 = +10 from the flash "Đã nhớ" rating per the mark15 rule)
+  PASS 13. vocabulary pool intact (>=4409 words)
+  PASS 13. library progress keys (en17, en22) intact
+  PASS 12. no JS errors during functional checks
+§4 responsive
+  PASS 360px library home: no horizontal overflow
+  PASS 360px BT unit: no horizontal overflow
+  PASS 430px library home: no horizontal overflow
+  PASS 430px BT unit: no horizontal overflow
+  PASS 768px library home: no horizontal overflow
+  PASS 768px BT unit: no horizontal overflow
+  PASS 1280px library home: no horizontal overflow
+  PASS 1280px BT unit: no horizontal overflow
+
+==== test25: 102 passed, 1 failed ====
+FAILURES:
+ - 4. flashcard front shows word + IPA — forgotten  · 
