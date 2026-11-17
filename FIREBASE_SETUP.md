@@ -126,3 +126,72 @@ Chạy từng mục trên GitHub Pages thật (không phải máy local):
 | Popup đăng nhập bị chặn | Trình duyệt chặn popup — cho phép popup cho domain game, thử lại. |
 | Đồng bộ báo "bản lưu quá lớn" | Bản lưu > 900 KB — xuất JSON, xóa bớt thẻ/bộ từ ít dùng, đồng bộ lại. |
 | Vẫn hiện "Chưa cấu hình" | `firebase-config.js` chưa có `apiKey`/`projectId`, hoặc trình duyệt đang cache file cũ — hard reload (Ctrl+Shift+R). |
+
+---
+
+# BỔ SUNG V13 — LOGIN & PLAYER ACCOUNT SYSTEM
+
+V13 dùng đúng project Firebase đã cấu hình ở trên — không cần tạo
+project mới, không đổi Rules (hồ sơ người chơi nằm trong bản lưu
+`players/{uid}`, không có document riêng). Chỉ cần kiểm tra thêm các
+mục dưới đây.
+
+## V13.1 — Bật Email/Password và xác minh email (nếu chưa bật)
+
+Bước 2 ở trên đã bật Google + Email/Password. Kiểm tra thêm:
+
+1. Firebase Console → **Authentication → Sign-in method → Email/
+   Password**: phải bật (Enabled).
+2. **Authentication → Templates → Email address verification**: mẫu
+   email xác minh mặc định của Firebase là đủ dùng. Nếu muốn đổi tên
+   người gửi / nội dung, sửa ở đây (không cần đổi code game — game
+   gọi `sendEmailVerification()` mặc định).
+3. **Authentication → Templates → Password reset**: mẫu đặt lại mật
+   khẩu mặc định là đủ dùng (game gọi `sendPasswordResetEmail()`).
+
+## V13.2 — Authorized Domains cho cả popup và redirect
+
+Đăng nhập Google bằng popup **và** bằng chuyển trang (redirect) đều
+cần domain nằm trong danh sách cho phép:
+
+1. Firebase Console → **Authentication → Settings → Authorized
+   domains**.
+2. Phải có: `localhost` (để kiểm thử ở máy) và domain GitHub Pages
+   của Anh, ví dụ `ten-nguoi-dung.github.io`.
+3. Nếu thiếu domain, đăng nhập Google báo `auth/unauthorized-domain`
+   — thêm domain rồi thử lại (không cần deploy lại game).
+
+## V13.3 — Checklist kiểm thử trực tiếp V13 (bắt buộc)
+
+Chạy trên GitHub Pages thật, với project Firebase đã cấu hình:
+
+| # | Kiểm tra | Đạt khi |
+|---|---|---|
+| 1 | Mở game lần đầu | Hiện màn hình chào mừng, đủ 4 nút, mascot và nền nông trại hiển thị đẹp trên điện thoại |
+| 2 | Chơi khách | Bấm "Chơi với tư cách khách" → vào game; tải lại trang → vào thẳng, không hỏi lại |
+| 3 | Tạo tài khoản email | Nhập tên + email + mật khẩu → tạo được tài khoản; nhận được email xác minh thật trong hộp thư |
+| 4 | Đăng nhập email | Đăng xuất → đăng nhập lại bằng email/mật khẩu → vào đúng tài khoản, tiến trình còn nguyên |
+| 5 | Đăng nhập Google (popup) | Bấm "Đăng nhập bằng Google" → popup mở → chọn tài khoản → vào game, tên hiển thị đúng |
+| 6 | Đăng nhập Google (redirect) | Chặn popup trong trình duyệt → bấm "Đăng nhập bằng chuyển trang" → sau khi quay lại, tài khoản được nhận diện |
+| 7 | Quên mật khẩu | Nhập email → nhận được email đặt lại mật khẩu thật; bấm liên kết → đặt được mật khẩu mới → đăng nhập được |
+| 8 | Hồ sơ | Level, XP, tiền vàng, kim cương, từ đã học, boss đã thắng, danh hiệu, chuỗi ngày học khớp với tiến trình thật |
+| 9 | Avatar | Chọn avatar đã mở khóa → tải lại trang → avatar còn; avatar chưa đủ boss thắng thì không chọn được |
+| 10 | Đổi tên | Đổi tên hiển thị → tải lại trang → tên còn; đăng nhập lại → tên vẫn là tên mới |
+| 11 | Khách → liên kết tài khoản | Chơi khách có tiến trình → liên kết tài khoản → chọn "Chuyển tiến trình" → tiến trình khách có trong tài khoản; chọn "Bắt đầu mới" → tài khoản bắt đầu mới, tiến trình khách vẫn còn khi đăng xuất |
+| 12 | Hai tài khoản, cùng trình duyệt | A đăng nhập, chơi, đăng xuất → B đăng nhập → B không thấy dữ liệu của A; A đăng nhập lại → dữ liệu của A còn nguyên |
+| 13 | Hai thiết bị | Đăng nhập trên thiết bị 2 → Đồng bộ ngay → tiến trình từ thiết bị 1 về đúng |
+| 14 | Mất mạng | Tắt mạng → đăng nhập báo mất mạng (không tạo phiên giả); chơi khách vẫn được; bật mạng lại → đăng nhập được |
+| 15 | Truy cập UID khác | (Nâng cao) Thử đọc document `players/<uid-của-người-khác>` bằng Rules Playground → phải bị từ chối |
+
+Chỉ sau khi checklist trên đạt hết mới nên nói với người chơi rằng
+đăng nhập và đồng bộ đã hoạt động.
+
+## V13.4 — Khắc phục sự cố thêm cho V13
+
+| Lỗi | Nguyên nhân / cách sửa |
+|---|---|
+| Vẫn hiện màn hình chào mừng dù đã đăng nhập | Trình duyệt chặn cookie/localStorage của bên thứ ba, hoặc Firebase SDK chưa tải xong — chờ vài giây, tải lại trang. |
+| `auth/popup-closed-by-user` | Người chơi đóng popup trước khi xong — bấm lại, hoặc dùng "Đăng nhập bằng chuyển trang". |
+| Không nhận được email xác minh / đặt lại mật khẩu | Kiểm tra mục thư rác; kiểm tra mẫu email trong Authentication → Templates; kiểm tra email đăng ký có đúng không. |
+| Avatar không hiện | Kiểm tra `assets/avatars/` đã được copy lên repo chưa (10 file PNG) và `assets/mascot-chick.png`. |
+| Đăng nhập xong nhưng tiến trình cũ biến mất | Tiến trình cũ vẫn nằm trong nhà khách (`hanvocab.v1.guest`) hoặc nhà tài khoản (`hanvocab.v1.acc.<uid>`) trên thiết bị — đăng xuất rồi đăng nhập lại đúng tài khoản để lấy về; xem README_V13 để biết vị trí các khóa. |

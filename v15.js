@@ -1506,7 +1506,7 @@ window.__v15={
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
   gain15:gain15,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'12.0.0'
+  version:'13.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);

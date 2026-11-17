@@ -232,3 +232,34 @@
 - Lần mở V12 đầu tiên: sao lưu toàn bộ bytes V11 vào `hanvocab.v11-backup` (chỉ ghi một lần), đóng dấu `S.v7.meta={saveVersion:12, migratedAt, prevVersion}`.
 - Meta vận hành (lần lưu/đồng bộ gần nhất, hash đồng bộ) nằm ở khóa riêng `hanvocab.v12.meta` để việc ghi meta không tự kích hoạt thêm lần lưu.
 - Save V11 mở bằng V12 chạy bình thường; có nút khôi phục bản trước khi chuyển đổi.
+
+## V13 — Premium Login & Player Account System (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `build_v13.py` | Script build V13 (từ `build_v12.py`): chèn lớp V21, kiểm tra version 13.0.0 + `__v21` + 10 avatar + mascot. |
+| `package_v13.py` | Script đóng gói ZIP V13 + kiểm tra lớp V21, avatar, tiêu đề V13. |
+| `v21.js`, `v21.css` | Lớp V21 (xem dưới). Cũng có trong `src/`. |
+| `assets/avatars/*.png` (10) | 10 avatar fantasy 256×256: chick, fox, panda, cat, rabbit, owl, wolf, dragon, unicorn, phoenix (~620 KB). |
+| `assets/mascot-chick.png` | Mascot gà con cho màn hình chào mừng 512×682 (~529 KB). |
+| `README_V13_LOGIN_ACCOUNT.md` | Hướng dẫn dùng hệ thống tài khoản, vị trí dữ liệu, giới hạn đã biết. |
+| `CHANGELOG_V12_to_V13.md` | Changelog đầy đủ V12 → V13 (gồm 4 lỗi tìm thấy khi kiểm thử). |
+| `SMOKE_TEST_V13_2026-11-17.md` | Báo cáo kiểm thử V13 (138/138 jsdom ×2 + hồi quy V12 108/108). |
+
+## File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V13; thêm lớp V21: `<style id="v21">`, `<script id="v21js">`. |
+| `v20_sync.js` | Thêm meta đồng bộ theo tài khoản (`metaKey`), đăng nhập Google bằng redirect (`signInGoogleRedirect`/`checkRedirectResult`/`completeRedirect`), `sendPasswordReset`, `sendVerification`, `updateDisplayName`, `setPersistence`, `emailVerified`, `currentUser`; version `12.0.0` → `13.0.0`. `SAVE_VERSION` giữ 12. |
+| `v15.js` | Chỉ đổi version `12.0.0` → `13.0.0`. |
+| `v19.js` | Chỉ đổi version `12.0.0` → `13.0.0`. |
+| `FIREBASE_SETUP.md` | Thêm mục V13: email xác minh, redirect, Authorized Domains cho popup + redirect, checklist kiểm thử trực tiếp V13. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 khác, V7/V8/V9/V10/V11/V11.1, `v20.js` (12.0.0), dữ liệu từ vựng, 60 PNG boss V10/V11, 10 boss cũ V15, luật thưởng, cơ chế học, farm, đấu trường boss tiếng Hàn cũ, hệ thống lưu V12.
+
+## Dữ liệu người chơi (localStorage) — không đổi khóa chính, thêm khóa phụ
+- Khóa `hanvocab.v1` **giữ nguyên** (ô lưu đang chơi); schema không đổi, chỉ thêm `S.v7.profile` (tên hiển thị + avatar).
+- Khóa mới V13: `hanvocab.v13.session` (phiên đang dùng: khách / tài khoản nào), `hanvocab.v1.guest` (bản lưu khách), `hanvocab.v1.acc.<uid>` (bản lưu của từng tài khoản), `hanvocab.v13.guestid` (ID khách), `hanvocab.v13.settings` (giảm chuyển động), `hanvocab.v12.meta.<uid>` (meta đồng bộ theo tài khoản).
+- Save V12 mở bằng V13 chạy bình thường; lần đăng nhập đầu tiên hỏi có chuyển tiến trình hiện tại vào tài khoản hay không (không tự chuyển).
