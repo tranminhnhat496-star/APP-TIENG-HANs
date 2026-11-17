@@ -68,3 +68,40 @@
 - Thêm trong cùng bản lưu: `S.v7.en16` (bộ từ tiếng Anh, ánh xạ từ→bộ, ghi đè cập nhật)
   và `S.v7.ko16.levels` (trình độ của thẻ tiếng Hàn).
 - Cập nhật từ giữ nguyên ID nên tiến trình SRS (box, đúng/sai, lịch ôn) không đổi.
+
+---
+
+# Danh sách file đã thay đổi — V8 → V9
+
+## File mới (lớp V17 — toàn bộ tính năng V9 nằm ở đây)
+| File | Nội dung |
+|---|---|
+| `v17.js` | Thư viện: 3 nhóm (A1–A2 / Oxford 3000 / Từ vựng của tôi), xem bài/chủ đề, tìm kiếm + lọc loại từ/trạng thái, yêu thích, sao chép để sửa, đánh dấu đã thuộc, nhận thưởng bài/chủ đề, phạm vi học (scope). |
+| `v17.css` | Theme Thư viện (thẻ chủ đề/bài, thanh tiến độ, thẻ từ, banner phạm vi). |
+| `v17_a1a2.js` | 1.000 từ A1–A2 (19 chủ đề) — dữ liệu nhúng sẵn, chạy đồng bộ. |
+| `v17_oxford.js` | 3.396 từ Oxford 3000 (136 bài × 25 từ, giữ nguyên thứ tự gốc). |
+| `v17_a1a2.json` | Bản JSON tương ứng của bộ A1–A2 (để đối chiếu). |
+| `v17_oxford.json` | Bản JSON tương ứng của bộ Oxford 3000. |
+| `v17_review.json` | Danh sách trùng, lỗi, sửa đổi, mục cần kiểm tra (đầy đủ). |
+| `build_v9.py` | Script build: V6 HTML + v15 + v16 + v17 → `index.html`. Kiểm tra đủ 1.000 từ A1–A2, 3.396 từ Oxford, 19 chủ đề, 136 bài. |
+| `README_V9_LIBRARY.md` | Hướng dẫn sử dụng Thư viện V9. |
+| `CHANGELOG_V8_to_V9.md` | Changelog đầy đủ V8 → V9. |
+| `REPORT_PDF_EXTRACTION.md` | Báo cáo trích xuất từng PDF: số lượng, cách xử lý, lỗi in đã sửa, mục cần kiểm tra. |
+| `SMOKE_TEST_V9_2026-11-17.md` | Báo cáo kiểm thử V9 (45/45 + 6/6 + hồi quy V8 80/80 + hồi quy V7 38/41). |
+
+## File sửa (chỉ sửa lớp V15 của V7/V8, không động vào code V6)
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V9; thêm `<style id="v17">`, `<script id="v17data">` (dữ liệu A1–A2 + Oxford nhúng sẵn), `<script id="v17js">`. |
+| `v15.js` | `buildWords` gắn thông tin thư viện (lib/chủ đề/bài/nghĩa phụ) + khôi phục cấp độ thật của 1.000 từ V15 (sửa lỗi V7: mọi từ bị gán A1); `pushV17IntoV14` đẩy dữ liệu thư viện vào ENWORDS/TOPICS; `wordsFiltered`/`reviewStart`/`reviewHTML` tôn trọng phạm vi Thư viện; Hub thêm tab 📚 Thư viện + banner phạm vi; `__v15` công khai thêm `setScope`, `clearScope`, `wordsFiltered`, `inScope`, `gain15`; sửa lỗi callback hiệu ứng boss (`B.hit` trên `null` sau khi đóng trận đấu); version `9.0.0`. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 như ở mục V7 (kể cả `Korean_Vocab_Farm_V6_Bilingual.html`, `v7.js`–`v14.js`, `assets/`).
+- Mọi file V7/V8: `v15_data.js`, `v15_words.json`, `v16.js`, `v16.css`, `vendor/`, `samples/`, `build_v7.py`, `build_v8.py`, `README_V7.md`, `README_V8_IMPORT.md`, `CHANGELOG_V6_to_V7.md`, `CHANGELOG_V7_to_V8.md`.
+- Smart Import V8 giữ nguyên: `vocabImport`, `parseTable`/`importNow` (KO), wizard V16.
+
+## Dữ liệu người chơi (localStorage) — bổ sung V9
+- Khóa `hanvocab.v1` **giữ nguyên**.
+- Thêm trong cùng bản lưu: `S.v7.en17` (`fav`: ID từ yêu thích, `claimed`: bài/chủ đề đã nhận thưởng).
+- `en15()` thêm `scope` (phạm vi Thư viện đang chọn; save cũ không có scope vẫn chạy, coi như không chọn).
+- Từ thư viện dùng chung bản ghi và hồ sơ SRS với từ V14/V15 (không tạo bản sao); từ bạn tự nhập giữ ID riêng.

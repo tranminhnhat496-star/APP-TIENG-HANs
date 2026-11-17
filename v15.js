@@ -32,7 +32,7 @@ function en15(){
   try{S.v7=S.v7||{}}catch(e){return {}}
   var e=S.v7.en15;
   if(!e){
-    e=S.v7.en15={lang:'ko',langChoice:false,level:'A1',topic:'',
+    e=S.v7.en15={lang:'ko',langChoice:false,level:'A1',topic:'',scope:null,
       due:{},intv:{},hist:{},daily:{d:'',correct:0,wrong:0,xp:0},
       farm:{plots:[],coins:0,harvests:0,pets:[],decor:[]},
       bosses:{},modeBest:{},speakDone:{},weakOnly:false,created:Date.now()};
@@ -81,6 +81,66 @@ function buildWords(){
     w={id:c.uid||('c'+ci),t:c.t||'daily',en:c.en,vi:c.vi,ipa:c.ipa||'',pos:c.pos||'n',ex:c.ex||'',exvi:c.exvi||'',lv:c.lv||'A1',custom:true};
     if(!BYID[w.id]){WORDS.push(w);BYID[w.id]=w}
   });
+  /* V17a: khôi phục cấp độ thật của từ V15. Vòng lặp V14 ở trên gán 'A1'
+     cho mọi từ (kể cả từ V15 đã đẩy vào ENWORDS), nên bộ lọc cấp độ
+     A2/B1/B2 của tab Học không hoạt động ở V7/V8. __V15_DATA.words có
+     level đúng (A1 300, A2 300, B1 250, B2 150). Không đổi id nên SRS
+     không bị ảnh hưởng; khối override V16 bên dưới vẫn thắng. */
+  try{
+    var lv15={};
+    ((window.__V15_DATA&&__V15_DATA.words)||[]).forEach(function(d){
+      var k=(d.en||'').toLowerCase();if(k&&d.level)lv15[k]=d.level;
+    });
+    WORDS.forEach(function(ww){var L=lv15[ww.en.toLowerCase()];if(L)ww.lv=L});
+  }catch(e){}
+  /* V17b: thư viện có sẵn (A1-A2 + Oxford 3000) — gắn thông tin bộ từ
+     vào bản ghi chuẩn. Từ đã có (V14/V15) chỉ được gắn thêm thư viện và
+     nghĩa phụ, KHÔNG tạo bản ghi mới, nên một từ chỉ có một hồ sơ SRS.
+     Từ chỉ có trong thư viện (đẩy vào ENWORDS ở chỉ số >=1096) nhận
+     cấp độ 'A1-A2' hoặc 'OX'. */
+  try{
+    var K2W={};WORDS.forEach(function(ww){if(!ww.custom)K2W[ww.en.toLowerCase()]=ww});
+    var a1lib=window.__V17_A1A2||[],oxlib=window.__V17_OXFORD||[];
+    var attachLib=function(a,lib){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W[key];if(!ww)return;
+      ww.lib=ww.lib||[];
+      if(ww.lib.indexOf(lib)<0)ww.lib.push(lib);
+      /* Từ chỉ có trong thư viện (không phải V14/V15) nhận cấp độ riêng.
+         V14 giữ 'A1', V15 giữ level thật từ khối V17a ở trên. */
+      var idx=parseInt((ww.id||'').slice(1),10);
+      var v17only=!isNaN(idx)&&idx>=96&&!(typeof lv15!=='undefined'&&lv15&&lv15[key]);
+      if(lib==='a1a2'){
+        /* Một từ có thể thuộc nhiều chủ đề (vd 'orange': quả cam ở
+           FRUIT AND VEGETABLES, màu cam ở COLORS AND SHAPES) — lưu mảng
+           để từ xuất hiện trong mọi chủ đề của nó, vẫn một bản ghi SRS. */
+        ww.a1a2Topics=ww.a1a2Topics||[];
+        if(ww.a1a2Topics.indexOf(a.t)<0)ww.a1a2Topics.push(a.t);
+        ww.a1a2Topic=ww.a1a2Topics[0];
+        if(!ww.a1a2TopicName)ww.a1a2TopicName=a.topic;
+        ww.a1a2NoMap=ww.a1a2NoMap||{};ww.a1a2NoMap[a.t]=a.no;
+        ww.a1a2No=ww.a1a2NoMap[ww.a1a2Topic];
+        if(v17only)ww.lv='A1-A2';
+      }else{
+        /* Tương tự: một từ có thể ở hai bài Oxford (vd 'may', 'side') */
+        ww.oxLessons=ww.oxLessons||[];
+        if(ww.oxLessons.indexOf(a.lesson)<0)ww.oxLessons.push(a.lesson);
+        ww.oxLesson=ww.oxLessons[0];
+        ww.oxOrdMap=ww.oxOrdMap||{};ww.oxOrdMap[a.lesson]=a.ord;
+        ww.oxOrd=ww.oxOrdMap[ww.oxLesson];
+        if(v17only)ww.lv='OX';
+      }
+      if(!ww.ipa&&a.ipa)ww.ipa=a.ipa;
+      /* nghĩa phụ khác POS/nghĩa — hiển thị thêm trong thẻ từ */
+      if((a.pos&&ww.pos&&a.pos!==ww.pos)||(a.vi&&ww.vi&&a.vi!==ww.vi)){
+        ww.extra=ww.extra||[];var dup=false;
+        for(var k=0;k<ww.extra.length;k++)if(ww.extra[k].vi===a.vi&&ww.extra[k].pos===a.pos){dup=true;break}
+        if(!dup)ww.extra.push({pos:a.pos,vi:a.vi,src:lib});
+      }
+    };
+    for(i=0;i<a1lib.length;i++)attachLib(a1lib[i],'a1a2');
+    for(i=0;i<oxlib.length;i++)attachLib(oxlib[i],'oxford');
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -119,15 +179,78 @@ function pushDataIntoV14(){
     });
     var thave={};__v14.TOPICS.forEach(function(t){thave[t.id]=1});
     (__V15_DATA.topics||[]).forEach(function(t){if(!thave[t.id]){__v14.TOPICS.push(t);thave[t.id]=1}});
+    pushV17IntoV14();
     buildWords();
     return added;
   }catch(e){buildWords();return 0}
 }
+/* V17: đẩy dữ liệu thư viện có sẵn (A1-A2 + Oxford 3000) vào ENWORDS,
+   cùng cơ chế với V15: từ trùng (V14/V15/A1-A2) chỉ giữ một bản ghi,
+   thứ tự gốc của Oxford được giữ (ord/lesson gắn ở buildWords). */
+function pushV17IntoV14(){
+  try{
+    if(!window.__v14||!__v14.ENWORDS)return 0;
+    var have={};
+    __v14.ENWORDS.forEach(function(r){have[(r[1]||'').toLowerCase()]=1});
+    var added=0;
+    var pushOne=function(a){
+      var k=(a.en||'').toLowerCase();
+      if(!k||have[k])return;have[k]=1;
+      __v14.ENWORDS.push([a.t||'oxford',a.en,a.vi,a.ipa||'',a.pos||'',a.ex||'',a.exvi||'']);
+      added++;
+    };
+    (window.__V17_A1A2||[]).forEach(pushOne);
+    (window.__V17_OXFORD||[]).forEach(pushOne);
+    /* chủ đề A1-A2 (19) + Oxford — để topicName() và bộ lọc chủ đề thấy */
+    var thave={};__v14.TOPICS.forEach(function(t){thave[t.id]=1});
+    var topics={};
+    (window.__V17_A1A2||[]).forEach(function(a){
+      if(a.t&&!topics[a.t]){
+        var nm=(a.topic||a.t).toLowerCase().replace(/(^|\s)\S/g,function(m){return m.toUpperCase()})
+          .replace(/\s(And|Of|The)\s/g,function(m){return m.toLowerCase()});
+        topics[a.t]={id:a.t,name:nm,vi:a.tv||a.topic||a.t};
+      }
+    });
+    Object.keys(topics).forEach(function(id){if(!thave[id]){__v14.TOPICS.push(topics[id]);thave[id]=1}});
+    if(!thave['oxford']){__v14.TOPICS.push({id:'oxford',name:'Oxford 3000',vi:'Từ vựng thông dụng'});thave['oxford']=1}
+    return added;
+  }catch(e){return 0}
+}
+function inScope15(w){
+  /* true khi từ thuộc phạm vi đang chọn trong Thư viện (hoặc không chọn) */
+  var sc=en15().scope;if(!sc||sc.kind!=='lib')return true;
+  if(!w.lib||w.lib.indexOf(sc.lib)<0)return false;
+  if(sc.topic){
+    var tt=w.a1a2Topics||[];
+    if(tt.indexOf(sc.topic)<0&&w.a1a2Topic!==sc.topic&&w.t!==sc.topic)return false;
+  }
+  if(sc.lesson){
+    var ll=w.oxLessons||[];
+    if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+  }
+  return true;
+}
+function setScope15(sc){en15().scope=sc||null;save15()}
+function clearScope15(){en15().scope=null;save15()}
 function wordsFiltered(o){
   o=o||{};var e=en15(),old=enOld();
+  var sc=o.scope||e.scope||null;
   var list=WORDS.filter(function(w){
-    if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
-    if(o.topic&&w.t!==o.topic)return false;
+    if(sc&&sc.kind==='lib'){
+      /* phạm vi Thư viện thắng bộ lọc cấp độ/chủ đề của tab Học */
+      if(!w.lib||w.lib.indexOf(sc.lib)<0)return false;
+      if(sc.topic){
+        var tt=w.a1a2Topics||[];
+        if(tt.indexOf(sc.topic)<0&&w.a1a2Topic!==sc.topic&&w.t!==sc.topic)return false;
+      }
+      if(sc.lesson){
+        var ll=w.oxLessons||[];
+        if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+      }
+    }else{
+      if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
+      if(o.topic&&w.t!==o.topic)return false;
+    }
     if(o.onlyDue){var due=e.due[w.id]||0;if(due>Date.now())return false}
     if(o.onlyWeak){if(!((old.wrong[w.id]||0)>(old.right[w.id]||0)))return false}
     if(o.onlyNew){if((old.box[w.id]||0)>0)return false}
@@ -281,7 +404,7 @@ function closeHub15(){
   renderLangBar();
 }
 function hubTabs(){
-  return [['learn','Học tập'],['farm','English Farm'],['bosses','Bosses'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','Sao lưu']];
+  return [['learn','Học tập'],['library','📚 Thư viện'],['farm','English Farm'],['bosses','Bosses'],['review','Ôn tập SRS'],['stats','Thống kê'],['vocab','Từ vựng'],['backup','Sao lưu']];
 }
 function renderHub(){
   var h=$('#v15hub');if(!h)return;
@@ -290,6 +413,7 @@ function renderHub(){
     +'<div class="v15hub-head"><div class="v15hub-title"><span class="v15ollie-sm">'+OLLIE_SVG+'</span><div><b>English Farm</b><span>Ollie\'s Farm · '+c.mastered+'/'+c.total+' từ đã thuộc · '+c.due+' từ cần ôn hôm nay</span></div></div>'
     +'<div class="v15hub-headbtns"><span class="v15chip">'+icon15('coin.png')+' '+coins15()+' XP</span><span class="v15chip">'+icon15('gem.png')+' '+(S.v7.gems||0)+' 💎</span><button class="v15x" onclick="__v15.closeHub()" aria-label="Đóng">✕</button></div></div>'
     +'<div class="v15tabs">'+hubTabs().map(function(t){return '<button class="v15tab '+(HUB.tab===t[0]?'on':'')+'" onclick="__v15.tab(\''+t[0]+'\')">'+t[1]+'</button>'}).join('')+'</div>'
+    +(window.__v17&&__v17.scopeBannerHTML?__v17.scopeBannerHTML():'')
     +'<div class="v15body" id="v15body"></div></div>';
   renderTab();
 }
@@ -297,6 +421,7 @@ function renderTab(){
   var b=$('#v15body');if(!b)return;
   if(HUB.mode){renderMode();return}
   if(HUB.tab==='learn')b.innerHTML=learnHTML();
+  else if(HUB.tab==='library')b.innerHTML=(window.__v17&&__v17.libraryHTML())||'<p class="mute">Đang tải thư viện từ vựng…</p>';
   else if(HUB.tab==='farm')b.innerHTML=farmHTML();
   else if(HUB.tab==='bosses')b.innerHTML=bossesHTML();
   else if(HUB.tab==='review')b.innerHTML=reviewHTML();
@@ -1001,7 +1126,7 @@ function renderBossFight(){
   }
   h+='</div>';
   host.innerHTML=h;
-  var img=host.querySelector('.v15boss-img');if(img&&B.hit){setTimeout(function(){B.hit=false;var hh=$('#v15bossfight');if(hh&&B)renderBossFight()},450)}
+  var img=host.querySelector('.v15boss-img');if(img&&B.hit){setTimeout(function(){if(!B)return;B.hit=false;var hh=$('#v15bossfight');if(hh)renderBossFight()},450)}
 }
 function bossQHTML(){
   var c=B.cur,mode=B.qmode;
@@ -1131,8 +1256,9 @@ function bossSpeak(){
 var R=null;
 function reviewHTML(){
   var e=en15(),now=Date.now();
-  var due=WORDS.filter(function(w){return (e.due[w.id]||0)<=now});
-  var weak=WORDS.filter(function(w){var o=enOld();return (o.wrong[w.id]||0)>(o.right[w.id]||0)}).slice(0,10);
+  /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ đếm/ôn từ trong bộ đó */
+  var due=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
+  var weak=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)}).slice(0,10);
   var h='<h3>Ôn tập thông minh (Spaced Repetition)</h3>'
   +'<p class="mute">Từ trả lời sai quay lại sau 10 phút. Từ đã thuộc được giãn dần: 1 → 3 → 7 → 14 → 30 ngày. Ôn tập ở đây dùng dữ liệu tiếng Anh riêng, không chạm tới từ tiếng Hàn.</p>'
   +'<div class="v15statgrid"><div class="v15stat"><b>'+due.length+'</b><span>từ cần ôn hôm nay</span></div><div class="v15stat"><b>'+weak.length+'</b><span>từ yếu (sai &gt; đúng)</span></div><div class="v15stat"><b>'+counts15().mastered+'</b><span>từ đã thuộc</span></div></div>'
@@ -1144,8 +1270,9 @@ function reviewHTML(){
 function reviewStart(weakOnly){
   var e=en15(),now=Date.now();
   var list;
-  if(weakOnly)list=WORDS.filter(function(w){var o=enOld();return (o.wrong[w.id]||0)>(o.right[w.id]||0)});
-  else list=WORDS.filter(function(w){return (e.due[w.id]||0)<=now});
+  /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ ôn từ trong bộ đó */
+  if(weakOnly)list=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)});
+  else list=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
   if(!list.length){pop15(weakOnly?'Không có từ yếu nào. Tuyệt vời!':'Không có từ nào cần ôn hôm nay.');return}
   R={list:shuffle(list).slice(0,10),idx:0,score:0,cur:null,answered:null,ok:null};
   reviewNextQ();
@@ -1372,8 +1499,11 @@ window.__v15={
      không chạm vào logic học/boss/farm. */
   buildWords:buildWords,enOld:enOld,en15:en15,save15:save15,dl:dl,esc:esc,pop15:pop15,
   renderTab:renderTab,topicName:topicName,counts15:counts15,
+  /* V17 (Thư viện có sẵn): phạm vi bài/chủ đề + bộ lọc từ + thưởng bài học */
+  setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
+  gain15:gain15,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'7.0.0'
+  version:'9.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);

@@ -1,0 +1,42 @@
+/* ===== V17 — Built-in Vocabulary Library ===== */
+.v17lib{display:flex;flex-direction:column;gap:18px}
+.v17head h3{margin:0 0 4px;font-size:20px}
+.v17head p{margin:0}
+.v17group{border:2px solid var(--line);border-radius:16px;padding:14px;background:var(--sf)}
+.v17group-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.v17group-head b{font-size:17px}
+.v17group .acts{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.v17grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.v17card{border:2px solid var(--line);border-radius:14px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.v17card-t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.v17card-t b{font-size:15px}
+.v17bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.v17bar i{display:block;height:100%;background:linear-gradient(90deg,#7C5CFF,#2FBF71)}
+.v17bar.big{height:14px;border-radius:7px;margin:8px 0}
+.v17scope{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#EDE7FF;border:2px solid #7C5CFF;border-radius:10px;padding:8px 12px;margin:0 12px;font-size:14px}
+.v17scope-x{background:none;border:0;color:#5B3FD4;font-weight:700;cursor:pointer;padding:0 4px}
+.v17ox-tools{display:flex;gap:8px;align-items:center;margin:8px 0}
+.v17ox-tools .v15input{margin:0;flex:1}
+.v17rows{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.v17row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+.v17row .acts{display:flex;gap:6px;flex-wrap:wrap}
+.v17filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.v17filters .v15input{flex:1;min-width:180px;margin:0}
+.v17words{display:flex;flex-direction:column;gap:10px}
+.v17word{display:flex;justify-content:space-between;gap:12px;border:2px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+.v17word-main{flex:1;min-width:0}
+.v17word-main b{font-size:17px}
+.v17ipa{color:var(--mute);font-size:14px;margin:2px 0}
+.v17nodata{color:#B3261E;font-style:italic}
+.v17extra{margin-top:4px;font-size:14px;color:#3D4A5C}
+.v17ex{margin-top:6px;font-size:14px;color:#3D4A5C}
+.v17word-acts{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.v17word-acts .btn{white-space:nowrap}
+.v17pager{display:flex;gap:10px;align-items:center;justify-content:center;margin:14px 0 4px}
+.v17claimed{color:var(--ok);font-weight:700}
+.v17lesson .v15back{margin-bottom:8px}
+@media (max-width:640px){
+  .v17word{flex-direction:column}
+  .v17word-acts{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
+  .v17ox-tools{flex-direction:column;align-items:stretch}
+}

@@ -1,0 +1,5496 @@
+{
+ "missing_ipa_oxford": [
+  {
+   "en": "a",
+   "ord": 1,
+   "pos": "det, pron",
+   "vi": "nhỏ, một ít"
+  },
+  {
+   "en": "advertising",
+   "ord": 64,
+   "pos": "n",
+   "vi": "sự quảng cáo, nghề quảng cáo"
+  },
+  {
+   "en": "airport",
+   "ord": 90,
+   "pos": "n",
+   "vi": "sân bay, phi trường"
+  },
+  {
+   "en": "alternatively",
+   "ord": 114,
+   "pos": "adv",
+   "vi": "như một sự lựa chọn"
+  },
+  {
+   "en": "anti",
+   "ord": 147,
+   "pos": "prefix",
+   "vi": "chống lại"
+  },
+  {
+   "en": "any",
+   "ord": 152,
+   "pos": "det, pron, adv",
+   "vi": "một người, vật nào đó; bất cứ; một chút nào, tí nào"
+  },
+  {
+   "en": "apart from, aside from",
+   "ord": 159,
+   "pos": "prep",
+   "vi": "ngoài ra"
+  },
+  {
+   "en": "apparently",
+   "ord": 163,
+   "pos": "adv",
+   "vi": "nhìn bên ngoài, hình như"
+  },
+  {
+   "en": "arms",
+   "ord": 187,
+   "pos": "n",
+   "vi": "vũ khí, binh giới, binh khí"
+  },
+  {
+   "en": "as well",
+   "ord": 203,
+   "pos": "",
+   "vi": "cũng, cũng như"
+  },
+  {
+   "en": "attached",
+   "ord": 219,
+   "pos": "adj",
+   "vi": "gắn bó"
+  },
+  {
+   "en": "automatically",
+   "ord": 236,
+   "pos": "adv",
+   "vi": "một cách tự động"
+  },
+  {
+   "en": "awfully",
+   "ord": 246,
+   "pos": "adv",
+   "vi": "tàn khốc, khủng khiếp"
+  },
+  {
+   "en": "awkwardly",
+   "ord": 248,
+   "pos": "adv",
+   "vi": "vụng về, lung túng"
+  },
+  {
+   "en": "bathroom",
+   "ord": 274,
+   "pos": "n",
+   "vi": "buồng tắm, nhà vệ sinh"
+  },
+  {
+   "en": "be sick",
+   "ord": 278,
+   "pos": "",
+   "vi": "bị ốm"
+  },
+  {
+   "en": "behalf, on sb’s behalf",
+   "ord": 297,
+   "pos": "",
+   "vi": "nhân danh cá nhân ai"
+  },
+  {
+   "en": "behaviour, behavior",
+   "ord": 299,
+   "pos": "n",
+   "vi": "thái độ, cách đối xử; cách cư xử, cách ăn ở; tư cách đạo đức"
+  },
+  {
+   "en": "bored",
+   "ord": 352,
+   "pos": "adj",
+   "vi": "buồn chán"
+  },
+  {
+   "en": "boyfriend",
+   "ord": 365,
+   "pos": "n",
+   "vi": "bạn trai"
+  },
+  {
+   "en": "businessman, businesswoman",
+   "ord": 406,
+   "pos": "n",
+   "vi": "thương nhân"
+  },
+  {
+   "en": "carelessly",
+   "ord": 446,
+   "pos": "adv",
+   "vi": "cẩu thả, bất cẩn"
+  },
+  {
+   "en": "CD",
+   "ord": 458,
+   "pos": "n",
+   "vi": "đĩa CD"
+  },
+  {
+   "en": "cellphone, cellular phone",
+   "ord": 464,
+   "pos": "n",
+   "vi": "điện thoại di động"
+  },
+  {
+   "en": "centimetre, centimeter",
+   "ord": 467,
+   "pos": "n",
+   "vi": "xen ti met"
+  },
+  {
+   "en": "cheaply",
+   "ord": 492,
+   "pos": "adv",
+   "vi": "rẻ, rẻ tiền"
+  },
+  {
+   "en": "cheerfully",
+   "ord": 497,
+   "pos": "adv",
+   "vi": "vui vẻ, phấn khởi"
+  },
+  {
+   "en": "chemist’s",
+   "ord": 501,
+   "pos": "n",
+   "vi": "nhà hóa học"
+  },
+  {
+   "en": "clear",
+   "ord": 529,
+   "pos": "adj, v",
+   "vi": "lau chùi, quét dọn"
+  },
+  {
+   "en": "confuse",
+   "ord": 619,
+   "pos": "v",
+   "vi": "làm lộn xộn, xáo trộn"
+  },
+  {
+   "en": "credit card",
+   "ord": 706,
+   "pos": "n",
+   "vi": "thẻ tín dụng"
+  },
+  {
+   "en": "dressed",
+   "ord": 920,
+   "pos": "adj",
+   "vi": "cách ăn mặc"
+  },
+  {
+   "en": "DVD",
+   "ord": 937,
+   "pos": "n",
+   "vi": "đĩa DVD"
+  },
+  {
+   "en": "e.g.",
+   "ord": 939,
+   "pos": "abbr",
+   "vi": "Viết tắt của cụm tư La tinh exempl gratia (for example)"
+  },
+  {
+   "en": "each other",
+   "ord": 941,
+   "pos": "n, pro",
+   "vi": "nhau, lẫn nhau"
+  },
+  {
+   "en": "each other",
+   "ord": 942,
+   "pos": "",
+   "vi": "nhau, lẫn nhau"
+  },
+  {
+   "en": "ex-",
+   "ord": 1061,
+   "pos": "prefix",
+   "vi": "tiền tố chỉ bên ngoài"
+  },
+  {
+   "en": "feel sick",
+   "ord": 1160,
+   "pos": "",
+   "vi": "buồn nôn"
+  },
+  {
+   "en": "finish",
+   "ord": 1184,
+   "pos": "v, n",
+   "vi": "kết thúc, hoàn thành; sự kết thúc, phần cuối"
+  },
+  {
+   "en": "fixed",
+   "ord": 1194,
+   "pos": "adj",
+   "vi": "đứng yên, bất động"
+  },
+  {
+   "en": "further, furthest",
+   "ord": 1273,
+   "pos": "adj",
+   "vi": "cấp so sánh của far"
+  },
+  {
+   "en": "give birth",
+   "ord": 1307,
+   "pos": "to",
+   "vi": "sinh ra"
+  },
+  {
+   "en": "glasses",
+   "ord": 1310,
+   "pos": "n",
+   "vi": "kính đeo mắt"
+  },
+  {
+   "en": "grey, usually gray",
+   "ord": 1349,
+   "pos": "adj, n",
+   "vi": "màu xám"
+  },
+  {
+   "en": "have to",
+   "ord": 1386,
+   "pos": "modal, v",
+   "vi": "phải (bắt buộc, có bổn phận phải)"
+  },
+  {
+   "en": "i.e.",
+   "ord": 1466,
+   "pos": "",
+   "vi": "nghĩa là, tức là ( Id est)"
+  },
+  {
+   "en": "ice cream",
+   "ord": 1468,
+   "pos": "n",
+   "vi": "kem"
+  },
+  {
+   "en": "import",
+   "ord": 1493,
+   "pos": "n, v",
+   "vi": "import sự nhập, sự nhập khẩu; nhập, nhập khẩu"
+  },
+  {
+   "en": "impressed",
+   "ord": 1500,
+   "pos": "adj",
+   "vi": "được ghi, khắc, in sâu vào"
+  },
+  {
+   "en": "in addition",
+   "ord": 1506,
+   "pos": "to",
+   "vi": "thêm vào"
+  },
+  {
+   "en": "in case of",
+   "ord": 1507,
+   "pos": "",
+   "vi": "nếu......"
+  },
+  {
+   "en": "in control of",
+   "ord": 1508,
+   "pos": "",
+   "vi": "trong sự điều khiển của. under control dưới sự điều khiển của"
+  },
+  {
+   "en": "in exchange for",
+   "ord": 1509,
+   "pos": "",
+   "vi": "trong việc trao đổi về"
+  },
+  {
+   "en": "infected",
+   "ord": 1535,
+   "pos": "adj",
+   "vi": "bị nhiễm, bị đầu độc"
+  },
+  {
+   "en": "interested",
+   "ord": 1572,
+   "pos": "adj",
+   "vi": "có thích thú, có quan tâm, có chú ý"
+  },
+  {
+   "en": "look after",
+   "ord": 1746,
+   "pos": "",
+   "vi": "trông nom, chăm sóc. look at: nhìn, ngắm, xem. look for tìm kiếm. look forward to: mong đợi cách hân hoan"
+  },
+  {
+   "en": "make friends with",
+   "ord": 1780,
+   "pos": "",
+   "vi": "kết bạn với"
+  },
+  {
+   "en": "mid-",
+   "ord": 1845,
+   "pos": "combiningform",
+   "vi": "tiền tố: một nửa"
+  },
+  {
+   "en": "mine",
+   "ord": 1857,
+   "pos": "pron, n",
+   "vi": "của tôi"
+  },
+  {
+   "en": "mobile phone (mobile)",
+   "ord": 1874,
+   "pos": "n",
+   "vi": "điện thoại đi động"
+  },
+  {
+   "en": "morally",
+   "ord": 1885,
+   "pos": "adv",
+   "vi": "có đạo đức"
+  },
+  {
+   "en": "movie theater",
+   "ord": 1902,
+   "pos": "n",
+   "vi": "rạp chiếu phim"
+  },
+  {
+   "en": "Mr",
+   "ord": 1904,
+   "pos": "",
+   "vi": "Ông, ngài"
+  },
+  {
+   "en": "Mrs",
+   "ord": 1905,
+   "pos": "",
+   "vi": "Cô"
+  },
+  {
+   "en": "Ms",
+   "ord": 1906,
+   "pos": "",
+   "vi": "Bà, Cô"
+  },
+  {
+   "en": "non-",
+   "ord": 1969,
+   "pos": "prefix",
+   "vi": "không"
+  },
+  {
+   "en": "old-fashioned",
+   "ord": 2024,
+   "pos": "adj",
+   "vi": "lỗi thời"
+  },
+  {
+   "en": "outer",
+   "ord": 2064,
+   "pos": "adj",
+   "vi": "ở phía ngoài, ở xa hơn"
+  },
+  {
+   "en": "pay attention to",
+   "ord": 2118,
+   "pos": "",
+   "vi": "chú ý tới"
+  },
+  {
+   "en": "per cent (percent)",
+   "ord": 2131,
+   "pos": "usn, adj, adv",
+   "vi": "phần trăm"
+  },
+  {
+   "en": "point",
+   "ord": 2199,
+   "pos": "n, v",
+   "vi": "mũi nhọn, điểm; vót, làm nhọn, chấm (câu..)"
+  },
+  {
+   "en": "promise",
+   "ord": 2305,
+   "pos": "v, n",
+   "vi": "hứa, lời hứa"
+  },
+  {
+   "en": "pub, publicyhouse",
+   "ord": 2328,
+   "pos": "n",
+   "vi": "quán rượu, tiệm rượu"
+  },
+  {
+   "en": "put sth on",
+   "ord": 2348,
+   "pos": "",
+   "vi": "mặc (áo), đội (mũ), đi (giày). put sth out tắt, dập tắt"
+  },
+  {
+   "en": "re-",
+   "ord": 2380,
+   "pos": "prefix",
+   "vi": "lại, nữa"
+  },
+  {
+   "en": "refer to",
+   "ord": 2413,
+   "pos": "v",
+   "vi": "xem, tham khảo; ám chỉ, nhắc đến"
+  },
+  {
+   "en": "self-",
+   "ord": 2618,
+   "pos": "combiningform",
+   "vi": "tự bản thân mình, cái tôi"
+  },
+  {
+   "en": "stick out, stick for",
+   "ord": 2843,
+   "pos": "",
+   "vi": "đòi, đạt được cái gì"
+  },
+  {
+   "en": "stress",
+   "ord": 2866,
+   "pos": "n, v",
+   "vi": "sự căng thẳng; căng thẳng, ép, làm căng"
+  },
+  {
+   "en": "swearing",
+   "ord": 2942,
+   "pos": "n",
+   "vi": "lời thề, lời nguyền rủa, lời thề hứa"
+  },
+  {
+   "en": "swimming pool",
+   "ord": 2951,
+   "pos": "n",
+   "vi": "bể nước"
+  },
+  {
+   "en": "take care of",
+   "ord": 2965,
+   "pos": "",
+   "vi": "sự giữ gìn. care for trông nom, chăm sóc"
+  },
+  {
+   "en": "take part in",
+   "ord": 2966,
+   "pos": "",
+   "vi": "tham gia (vào)"
+  },
+  {
+   "en": "take sth over",
+   "ord": 2967,
+   "pos": "",
+   "vi": "chở, chuyển cái gì; tiếp quản, kế tục cái gì"
+  },
+  {
+   "en": "thank you",
+   "ord": 3004,
+   "pos": "exclamation, n",
+   "vi": "cảm ơn bạn (ông bà, anh chị...)"
+  },
+  {
+   "en": "TV television",
+   "ord": 3128,
+   "pos": "",
+   "vi": "vô tuyến truyền hình"
+  },
+  {
+   "en": "upwards",
+   "ord": 3208,
+   "pos": "adv",
+   "vi": "lên, hướng lên, đi lên, về phía trên"
+  },
+  {
+   "en": "used to",
+   "ord": 3215,
+   "pos": "modal, v",
+   "vi": "đã quen dùng"
+  },
+  {
+   "en": "website",
+   "ord": 3290,
+   "pos": "n",
+   "vi": "không gian liên tới với Internet"
+  },
+  {
+   "en": "Yours sincerely",
+   "ord": 3391,
+   "pos": "",
+   "vi": "bạn chân thành của anh, chị.. (viết ở cuối thư)"
+  },
+  {
+   "en": "Yours Truly",
+   "ord": 3392,
+   "pos": "",
+   "vi": "lời kết thúc thư (bạn chân thành của...)"
+  }
+ ],
+ "missing_pos_oxford": [
+  {
+   "en": "as well",
+   "ord": 203,
+   "ipa": "",
+   "vi": "cũng, cũng như"
+  },
+  {
+   "en": "be sick",
+   "ord": 278,
+   "ipa": "",
+   "vi": "bị ốm"
+  },
+  {
+   "en": "behalf, on sb’s behalf",
+   "ord": 297,
+   "ipa": "",
+   "vi": "nhân danh cá nhân ai"
+  },
+  {
+   "en": "cent",
+   "ord": 465,
+   "ipa": "sent",
+   "vi": "đồng xu (bằng 1/100 đô la)"
+  },
+  {
+   "en": "each other",
+   "ord": 942,
+   "ipa": "",
+   "vi": "nhau, lẫn nhau"
+  },
+  {
+   "en": "etc., et cetera",
+   "ord": 1048,
+   "ipa": "et setərə",
+   "vi": "vân vân"
+  },
+  {
+   "en": "feel sick",
+   "ord": 1160,
+   "ipa": "",
+   "vi": "buồn nôn"
+  },
+  {
+   "en": "gray",
+   "ord": 1344,
+   "ipa": "grei",
+   "vi": "xám, hoa râm (tóc)"
+  },
+  {
+   "en": "i.e.",
+   "ord": 1466,
+   "ipa": "",
+   "vi": "nghĩa là, tức là ( Id est)"
+  },
+  {
+   "en": "in case of",
+   "ord": 1507,
+   "ipa": "",
+   "vi": "nếu......"
+  },
+  {
+   "en": "in control of",
+   "ord": 1508,
+   "ipa": "",
+   "vi": "trong sự điều khiển của. under control dưới sự điều khiển của"
+  },
+  {
+   "en": "in exchange for",
+   "ord": 1509,
+   "ipa": "",
+   "vi": "trong việc trao đổi về"
+  },
+  {
+   "en": "look after",
+   "ord": 1746,
+   "ipa": "",
+   "vi": "trông nom, chăm sóc. look at: nhìn, ngắm, xem. look for tìm kiếm. look forward to: mong đợi cách hân hoan"
+  },
+  {
+   "en": "make friends with",
+   "ord": 1780,
+   "ipa": "",
+   "vi": "kết bạn với"
+  },
+  {
+   "en": "Mr",
+   "ord": 1904,
+   "ipa": "",
+   "vi": "Ông, ngài"
+  },
+  {
+   "en": "Mrs",
+   "ord": 1905,
+   "ipa": "",
+   "vi": "Cô"
+  },
+  {
+   "en": "Ms",
+   "ord": 1906,
+   "ipa": "",
+   "vi": "Bà, Cô"
+  },
+  {
+   "en": "opposed to",
+   "ord": 2040,
+   "ipa": "əˈpouzd",
+   "vi": "chống lại, phản đối"
+  },
+  {
+   "en": "p.m. (PM)",
+   "ord": 2076,
+   "ipa": "pipˈemə",
+   "vi": "quá trưa, chiều, tối"
+  },
+  {
+   "en": "pay attention to",
+   "ord": 2118,
+   "ipa": "",
+   "vi": "chú ý tới"
+  },
+  {
+   "en": "put sth on",
+   "ord": 2348,
+   "ipa": "",
+   "vi": "mặc (áo), đội (mũ), đi (giày). put sth out tắt, dập tắt"
+  },
+  {
+   "en": "stick out, stick for",
+   "ord": 2843,
+   "ipa": "",
+   "vi": "đòi, đạt được cái gì"
+  },
+  {
+   "en": "take care of",
+   "ord": 2965,
+   "ipa": "",
+   "vi": "sự giữ gìn. care for trông nom, chăm sóc"
+  },
+  {
+   "en": "take part in",
+   "ord": 2966,
+   "ipa": "",
+   "vi": "tham gia (vào)"
+  },
+  {
+   "en": "take sth over",
+   "ord": 2967,
+   "ipa": "",
+   "vi": "chở, chuyển cái gì; tiếp quản, kế tục cái gì"
+  },
+  {
+   "en": "the",
+   "ord": 3007,
+   "ipa": "ði:ˌ ðiˌ ðə",
+   "vi": "cái, con, người, ấy này...."
+  },
+  {
+   "en": "till, until",
+   "ord": 3049,
+   "ipa": "til",
+   "vi": "cho đến khi, tới lúc mà"
+  },
+  {
+   "en": "TV television",
+   "ord": 3128,
+   "ipa": "",
+   "vi": "vô tuyến truyền hình"
+  },
+  {
+   "en": "unacceptable, acceptable",
+   "ord": 3143,
+   "ipa": "ˌʌnəkˈseptəbl",
+   "vi": "không thể chấp nhận"
+  },
+  {
+   "en": "uncertain, certain",
+   "ord": 3145,
+   "ipa": "ʌnˈsə:tn",
+   "vi": "không chắc chắn, khôn biết rõ ràng"
+  },
+  {
+   "en": "uncomfortable,comfortable",
+   "ord": 3148,
+   "ipa": "ʌŋˈkʌmfətəbl",
+   "vi": "bất tiện, không tiện lợi"
+  },
+  {
+   "en": "unconscious, conscious",
+   "ord": 3150,
+   "ipa": "ʌnˈkɔnʃəs",
+   "vi": "bất tỉnh, ngất đi"
+  },
+  {
+   "en": "uncontrolled, control",
+   "ord": 3152,
+   "ipa": "ʌnkənˈtrould",
+   "vi": "không bị kiềm chế, không bị kiểm tra"
+  },
+  {
+   "en": "Unfair, unfairly",
+   "ord": 3166,
+   "ipa": "ʌnˈfɛə",
+   "vi": "không đúng, không công bằng, gian lận"
+  },
+  {
+   "en": "Unusual",
+   "ord": 3196,
+   "ipa": "ʌnˈju:ʒuəl",
+   "vi": "hiếm, khác thường"
+  },
+  {
+   "en": "Unwilling",
+   "ord": 3198,
+   "ipa": "ʌnˈwiliŋ",
+   "vi": "không muốn, không có ý định"
+  },
+  {
+   "en": "worse, worst",
+   "ord": 3364,
+   "ipa": "bad",
+   "vi": "xấu"
+  },
+  {
+   "en": "Yours sincerely",
+   "ord": 3391,
+   "ipa": "",
+   "vi": "bạn chân thành của anh, chị.. (viết ở cuối thư)"
+  },
+  {
+   "en": "Yours Truly",
+   "ord": 3392,
+   "ipa": "",
+   "vi": "lời kết thúc thư (bạn chân thành của...)"
+  },
+  {
+   "en": "zero number",
+   "ord": 3395,
+   "ipa": "ziərou",
+   "vi": "số không"
+  }
+ ],
+ "ambiguous_splits": [
+  {
+   "token": "độchuyên",
+   "chosen": [
+    "độ",
+    "chuyên"
+   ],
+   "alternatives": [
+    [
+     "độc",
+     "huyên"
+    ]
+   ]
+  },
+  {
+   "token": "nhẹnhàng",
+   "chosen": [
+    "nhẹ",
+    "nhàng"
+   ],
+   "alternatives": [
+    [
+     "nhẹn",
+     "hàng"
+    ]
+   ]
+  },
+  {
+   "token": "bộcom",
+   "chosen": [
+    "bộ",
+    "com"
+   ],
+   "alternatives": [
+    [
+     "bộc",
+     "om"
+    ]
+   ]
+  },
+  {
+   "token": "hạcánh",
+   "chosen": [
+    "hạ",
+    "cánh"
+   ],
+   "alternatives": [
+    [
+     "hạc",
+     "ánh"
+    ]
+   ]
+  },
+  {
+   "token": "bốchồng",
+   "chosen": [
+    "bố",
+    "chồng"
+   ],
+   "alternatives": [
+    [
+     "bốc",
+     "hồng"
+    ]
+   ]
+  },
+  {
+   "token": "vịthành",
+   "chosen": [
+    "vị",
+    "thành"
+   ],
+   "alternatives": [
+    [
+     "vịt",
+     "hành"
+    ]
+   ]
+  }
+ ],
+ "glued_fixes": {
+  "nữđồng": "nữ đồng",
+  "đồán": "đồ án",
+  "từxa": "từ xa",
+  "sựđánh": "sự đánh",
+  "kỳthực": "kỳ thực",
+  "khảnăng": "khả năng",
+  "thểchất": "thể chất",
+  "giảthuyết": "giả thuyết",
+  "độchuyên": "độ chuyên",
+  "bỏtúi": "bỏ túi",
+  "đểbàn": "để bàn",
+  "quảđịa": "quả địa",
+  "cọtô": "cọ tô",
+  "sựtàn": "sự tàn",
+  "sựphun": "sự phun",
+  "bờsông": "bờ sông",
+  "rễcây": "rễ cây",
+  "sựgiết": "sự giết",
+  "mổthịt": "mổ thịt",
+  "bồcâu": "bồ câu",
+  "cổđỏ": "cổ đỏ",
+  "nghệthuật": "nghệ thuật",
+  "chợthương": "chợ thương",
+  "nghềthủcông": "nghề thủ công",
+  "cờtỷphú": "cờ tỷ phú",
+  "sựvui": "sự vui",
+  "vụđồuống": "vụ đồ uống",
+  "đốvui": "đố vui",
+  "nhẹnhàng": "nhẹ nhàng",
+  "sởthú": "sở thú",
+  "chỗở": "chỗ ở",
+  "ghếbành": "ghế bành",
+  "ghếcó": "ghế có",
+  "đểđồ": "để đồ",
+  "ghếdài": "ghế dài",
+  "kệbếp": "kệ bếp",
+  "đểxe": "để xe",
+  "đểlà": "để là",
+  "giỏđựng": "giỏ đựng",
+  "đểthức": "để thức",
+  "tủquần": "tủ quần",
+  "quảtáo": "quả táo",
+  "quảmơ": "quả mơ",
+  "quảbơ": "quả bơ",
+  "quảchuối": "quả chuối",
+  "củcải": "củ cải",
+  "củdền": "củ dền",
+  "củcà": "củ cà",
+  "quảanh": "quả anh",
+  "quảdừa": "quả dừa",
+  "quảmít": "quả mít",
+  "quảkiwi": "quả kiwi",
+  "quảquýt": "quả quýt",
+  "quảxoài": "quả xoài",
+  "quảdưa": "quả dưa",
+  "quảxuân": "quả xuân",
+  "củhành": "củ hành",
+  "quảcam": "quả cam",
+  "quảđu": "quả đu",
+  "quảđào": "quả đào",
+  "quảlê": "quả lê",
+  "quảdứa": "quả dứa",
+  "quảmận": "quả mận",
+  "quảlưu": "quả lưu",
+  "củkhoai": "củ khoai",
+  "quảmâm": "quả mâm",
+  "quảbí": "quả bí",
+  "quảkhế": "quả khế",
+  "quảdâu": "quả dâu",
+  "quảcà": "quả cà",
+  "tỉmỉ": "tỉ mỉ",
+  "kỷluật": "kỷ luật",
+  "tựlập": "tự lập",
+  "giảdối": "giả dối",
+  "uểoải": "uể oải",
+  "lờđờ": "lờ đờ",
+  "quỷquyệt": "quỷ quyệt",
+  "kỹlưỡng": "kỹ lưỡng",
+  "phụnữ": "phụ nữ",
+  "mỳdài": "mỳ dài",
+  "mỳque": "mỳ que",
+  "mỳkẹp": "mỳ kẹp",
+  "mỳổtròn": "mỳ ổ tròn",
+  "mỳnướng": "mỳ nướng",
+  "bẻgãy": "bẻ gãy",
+  "vỗtay": "vỗ tay",
+  "quỳgối": "quỳ gối",
+  "ngảlưng": "ngả lưng",
+  "mởra": "mở ra",
+  "xỏngón": "xỏ ngón",
+  "bộcom": "bộ com",
+  "đồtắm": "đồ tắm",
+  "đồbơi": "đồ bơi",
+  "đồlót": "đồ lót",
+  "sựngưỡng": "sự ngưỡng",
+  "bịlàm": "bị làm",
+  "sợsệt": "sợ sệt",
+  "nểsợ": "nể sợ",
+  "tẻnhạt": "tẻ nhạt",
+  "bịhớp": "bị hớp",
+  "quảquyết": "quả quyết",
+  "kỳquặc": "kỳ quặc",
+  "bịmê": "bị mê",
+  "độkỵ": "độ kỵ",
+  "bịbỏrơi": "bị bỏ rơi",
+  "bẽmặt": "bẽ mặt",
+  "dễbịkích": "dễ bị kích",
+  "vềmặt": "về mặt",
+  "bịxúc": "bị xúc",
+  "tựhào": "tự hào",
+  "nhẹnhõm": "nhẹ nhõm",
+  "dễtổn": "dễ tổn",
+  "hổthẹn": "hổ thẹn",
+  "tựmãn": "tự mãn",
+  "dễgắt": "dễ gắt",
+  "ủrũ": "ủ rũ",
+  "dễbảo": "dễ bảo",
+  "đềphòng": "đề phòng",
+  "vỉnướng": "vỉ nướng",
+  "đểnguội": "để nguội",
+  "nhỏlửa": "nhỏ lửa",
+  "kếtoán": "kế toán",
+  "nghệsỹ": "nghệ sỹ",
+  "thợnướng": "thợ nướng",
+  "thợcắt": "thợ cắt",
+  "thợmỏ": "thợ mỏ",
+  "thợống": "thợ ống",
+  "trịgia": "trị gia",
+  "lễtân": "lễ tân",
+  "thợmay": "thợ may",
+  "xếxe": "xế xe",
+  "sỹthú": "sỹ thú",
+  "đỏthẫm": "đỏ thẫm",
+  "đỏrượu": "đỏ rượu",
+  "đỏtía": "đỏ tía",
+  "chữthập": "chữ thập",
+  "quảcầu": "quả cầu",
+  "chữnhật": "chữ nhật",
+  "chữV": "chữ V",
+  "trẻcon": "trẻ con",
+  "tựđổ": "tự đổ",
+  "ởkhách": "ở khách",
+  "hạcánh": "hạ cánh",
+  "lộtrình": "lộ trình",
+  "tổtiên": "tổ tiên",
+  "mẹđẻ": "mẹ đẻ",
+  "hệmáu": "hệ máu",
+  "thịtộc": "thị tộc",
+  "hệvới": "hệ với",
+  "bốmẹ": "bố mẹ",
+  "đủtư": "đủ tư",
+  "sựhẹn": "sự hẹn",
+  "vợcũ": "vợ cũ",
+  "phảhệ": "phả hệ",
+  "bốvợ": "bố vợ",
+  "bốchồng": "bố chồng",
+  "vợchưa": "vợ chưa",
+  "họruột": "họ ruột",
+  "mẹnuôi": "mẹ nuôi",
+  "cụbà": "cụ bà",
+  "mẹkhác": "mẹ khác",
+  "sửgia": "sử gia",
+  "hộgia": "hộ gia",
+  "bếẵm": "bế ẵm",
+  "sựthừa": "sự thừa",
+  "vịthành": "vị thành",
+  "họhàng": "họ hàng",
+  "hyvọng": "hy vọng"
+ },
+ "typo_fixes": [
+  {
+   "en": "encounter",
+   "before": "chạm chán, bắt gặp; sự chạm trán, sự bắt gặp",
+   "after": "chạm trán, bắt gặp; sự chạm trán, sự bắt gặp"
+  },
+  {
+   "en": "encourage",
+   "before": "động viên, ủng hộ, giúp đỡ, làm cấn đảm, mạnh dạn",
+   "after": "động viên, ủng hộ, giúp đỡ, làm can đảm, mạnh dạn"
+  },
+  {
+   "en": "flood",
+   "before": "lụt, lũ lụtl; tràn đầy, tràn ngập",
+   "after": "lụt, lũ lụt; tràn đầy, tràn ngập"
+  },
+  {
+   "en": "function",
+   "before": "chức năng; họat động, chạy (máy)",
+   "after": "chức năng; hoạt động, chạy (máy)"
+  },
+  {
+   "en": "gradually",
+   "before": "dần dần, tư tư",
+   "after": "dần dần, từ từ"
+  },
+  {
+   "en": "politics",
+   "before": "họat động chính trị, đời sống chính trị, quan điểm chính trị",
+   "after": "hoạt động chính trị, đời sống chính trị, quan điểm chính trị"
+  },
+  {
+   "en": "slide",
+   "before": "trượtc, chuyển động nhẹ, lướt qua",
+   "after": "trượt, chuyển động nhẹ, lướt qua"
+  }
+ ],
+ "cross_source_dups": [
+  {
+   "en": "accommodation",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chỗ ở",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự thích nghi, sự điều tiết, sự làm cho phù hợp",
+    "ord": 23
+   }
+  },
+  {
+   "en": "active",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "năng nổ, lanh lợi",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "tích cực hoạt động, nhanh nhẹn",
+    "ord": 38
+   }
+  },
+  {
+   "en": "activity",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hoạt động",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự tích cực, sự hoạt động, sự nhanh nhẹn, sự linh lợi",
+    "ord": 40
+   }
+  },
+  {
+   "en": "admiration",
+   "a1a2": {
+    "pos": "n",
+    "vi": "sự ngưỡng mộ",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự khâm phục, thán phục",
+    "ord": 53
+   }
+  },
+  {
+   "en": "airport",
+   "a1a2": {
+    "pos": "n",
+    "vi": "sân bay",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sân bay, phi trường",
+    "ord": 90
+   }
+  },
+  {
+   "en": "ambulance",
+   "a1a2": {
+    "pos": "n",
+    "vi": "xe cứu thương",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "xe cứu thương, xe cấp cứu",
+    "ord": 122
+   }
+  },
+  {
+   "en": "animal",
+   "a1a2": {
+    "pos": "n",
+    "vi": "động vật, thú vật",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "động vật, thú vật",
+    "ord": 136
+   }
+  },
+  {
+   "en": "ankle",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mắt cá chân",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "mắt cá chân",
+    "ord": 137
+   }
+  },
+  {
+   "en": "annoyed",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "khó chịu, bực bội, bị làm phiền",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "bị khó chịu, bực mình, bị quấy rầy",
+    "ord": 141
+   }
+  },
+  {
+   "en": "anxious",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "lo âu, bồn chồn",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "lo âu, lo lắng, băn khoăn",
+    "ord": 150
+   }
+  },
+  {
+   "en": "apple",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quả táo",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "quả táo",
+    "ord": 167
+   }
+  },
+  {
+   "en": "arm",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cánh tay",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cánh tay; vũ trang, trang bị (vũ khí)",
+    "ord": 185
+   }
+  },
+  {
+   "en": "arrow",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình mũi tên",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tên, mũi tên",
+    "ord": 195
+   }
+  },
+  {
+   "en": "artist",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nghệ sỹ",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nghệ sĩ",
+    "ord": 200
+   }
+  },
+  {
+   "en": "atmosphere",
+   "a1a2": {
+    "pos": "n",
+    "vi": "khí quyển",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "khí quyển",
+    "ord": 216
+   }
+  },
+  {
+   "en": "aunt",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cô, dì",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cô, dì",
+    "ord": 232
+   }
+  },
+  {
+   "en": "bake",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nướng",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "nung, nướng bằng lò",
+    "ord": 259
+   }
+  },
+  {
+   "en": "bar",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quán rượu, quầy bán rượu",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "quán bán rượu",
+    "ord": 266
+   }
+  },
+  {
+   "en": "bathroom",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phòng tắm",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "buồng tắm, nhà vệ sinh",
+    "ord": 274
+   }
+  },
+  {
+   "en": "beach",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bãi biển",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bãi biển",
+    "ord": 279
+   }
+  },
+  {
+   "en": "beard",
+   "a1a2": {
+    "pos": "n",
+    "vi": "râu",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "râu",
+    "ord": 282
+   }
+  },
+  {
+   "en": "bedroom",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phòng ngủ",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "phòng ngủ",
+    "ord": 290
+   }
+  },
+  {
+   "en": "belt",
+   "a1a2": {
+    "pos": "n",
+    "vi": "thắt lưng",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "dây lưng, thắt lưng",
+    "ord": 306
+   }
+  },
+  {
+   "en": "bend",
+   "a1a2": {
+    "pos": "v",
+    "vi": "cúi, uốn cong",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "chỗ rẽ, chỗ uốn; khuỷu tay; cúi xuống, uốn cong",
+    "ord": 307
+   }
+  },
+  {
+   "en": "black",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu đen",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "đen; màu đen",
+    "ord": 331
+   }
+  },
+  {
+   "en": "blue",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu xanh lam, xanh nước biển",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "xanh, màu xanh",
+    "ord": 341
+   }
+  },
+  {
+   "en": "boat",
+   "a1a2": {
+    "pos": "n",
+    "vi": "tàu thuyền",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tàu, thuyền",
+    "ord": 343
+   }
+  },
+  {
+   "en": "boil",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đun sôi",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "sôi, luộc",
+    "ord": 345
+   }
+  },
+  {
+   "en": "book",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quyển sách",
+    "topic": "SCHOOL OBJECTS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sách; ghi chép",
+    "ord": 348
+   }
+  },
+  {
+   "en": "boot",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ủng, giày cao cổ",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "giày ống",
+    "ord": 349
+   }
+  },
+  {
+   "en": "bored",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "buồn chán, tẻ nhạt",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "buồn chán",
+    "ord": 352
+   }
+  },
+  {
+   "en": "brave",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "dũng cảm, gan dạ",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "gan dạ, can đảm",
+    "ord": 369
+   }
+  },
+  {
+   "en": "break",
+   "a1a2": {
+    "pos": "v",
+    "vi": "làm vỡ, bẻ gãy",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "bẻ gẫy, đập vỡ; sự gãy, sự vỡ",
+    "ord": 371
+   }
+  },
+  {
+   "en": "breast",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ngực, vú (phụ nữ)",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ngực, vú",
+    "ord": 373
+   }
+  },
+  {
+   "en": "brother",
+   "a1a2": {
+    "pos": "n",
+    "vi": "anh, em trai",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "anh, em trai",
+    "ord": 390
+   }
+  },
+  {
+   "en": "brown",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu nâu",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "nâu, màu nâu",
+    "ord": 391
+   }
+  },
+  {
+   "en": "bus",
+   "a1a2": {
+    "pos": "n",
+    "vi": "xe buýt",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "xe buýt",
+    "ord": 403
+   }
+  },
+  {
+   "en": "bush",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bụi cây, bụi rậm",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bụi cây, bụi rậm",
+    "ord": 404
+   }
+  },
+  {
+   "en": "calm",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "bình tĩnh",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj, v, n",
+    "vi": "yên lặng, làm dịu đi; sự yên lặng, sự êm ả",
+    "ord": 421
+   }
+  },
+  {
+   "en": "cap",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mũ lưỡi trai",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "mũ lưỡi trai, mũ vải",
+    "ord": 432
+   }
+  },
+  {
+   "en": "careful",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "cẩn thận, thận trọng",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "cẩn thận, cẩn trọng, biết giữ gìn",
+    "ord": 443
+   }
+  },
+  {
+   "en": "careless",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "bất cẩn, cẩu thả",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "sơ suất, cầu thả",
+    "ord": 445
+   }
+  },
+  {
+   "en": "carrot",
+   "a1a2": {
+    "pos": "n",
+    "vi": "củ cà rốt",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "củ cà rốt",
+    "ord": 448
+   }
+  },
+  {
+   "en": "carry",
+   "a1a2": {
+    "pos": "v",
+    "vi": "mang, vác",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "mang, vác, khuân chở",
+    "ord": 449
+   }
+  },
+  {
+   "en": "cat",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con mèo",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "con mèo",
+    "ord": 454
+   }
+  },
+  {
+   "en": "catch",
+   "a1a2": {
+    "pos": "v",
+    "vi": "bắt, đỡ",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "bắt lấy, nắm lấy, tóm lấy, chộp lấy",
+    "ord": 455
+   }
+  },
+  {
+   "en": "certain",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "quả quyết, chắc chắn",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj, pron",
+    "vi": "chắc chắn",
+    "ord": 472
+   }
+  },
+  {
+   "en": "chair",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ghế",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ghế",
+    "ord": 476
+   }
+  },
+  {
+   "en": "cheat",
+   "a1a2": {
+    "pos": "n, v",
+    "vi": "trò lừa đảo; gian lận, lừa đảo",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "lưa, lưa đảo; trò lưa đảo, trò gian lận",
+    "ord": 493
+   }
+  },
+  {
+   "en": "cheek",
+   "a1a2": {
+    "pos": "n",
+    "vi": "má",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "má",
+    "ord": 495
+   }
+  },
+  {
+   "en": "cheese",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phó mát",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "pho mát",
+    "ord": 498
+   }
+  },
+  {
+   "en": "chest",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ngực (chung)",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tủ, rương, hòm",
+    "ord": 504
+   }
+  },
+  {
+   "en": "chicken",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con gà",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "gà, gà con, thịt gà",
+    "ord": 506
+   }
+  },
+  {
+   "en": "child",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đứa bé, đứa trẻ",
+    "ord": 508
+   }
+  },
+  {
+   "en": "chin",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cằm",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cằm",
+    "ord": 509
+   }
+  },
+  {
+   "en": "chop",
+   "a1a2": {
+    "pos": "v",
+    "vi": "chặt, bổ",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "chặt, đốn, chẻ",
+    "ord": 514
+   }
+  },
+  {
+   "en": "cinema",
+   "a1a2": {
+    "pos": "n",
+    "vi": "rạp chiếu phim",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "rạp xi nê, rạp chiếu bóng",
+    "ord": 517
+   }
+  },
+  {
+   "en": "circle",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đường tròn",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đường tròn, hình tròn",
+    "ord": 518
+   }
+  },
+  {
+   "en": "clap",
+   "a1a2": {
+    "pos": "v",
+    "vi": "vỗ tay",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "vỗ, vỗ tay; tiếng nổ, tiếng vỗ tay",
+    "ord": 524
+   }
+  },
+  {
+   "en": "clock",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đồng hồ",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đồng hồ",
+    "ord": 538
+   }
+  },
+  {
+   "en": "closet",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phòng để đồ, phòng kho",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "buồng, phòng để đồ, phòng kho",
+    "ord": 542
+   }
+  },
+  {
+   "en": "cloth",
+   "a1a2": {
+    "pos": "n",
+    "vi": "miếng vải, mảnh vải",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "vải, khăn trải bàn, áo thầy tu",
+    "ord": 543
+   }
+  },
+  {
+   "en": "coal",
+   "a1a2": {
+    "pos": "n",
+    "vi": "than đá",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "than đá",
+    "ord": 549
+   }
+  },
+  {
+   "en": "coffee",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cà phê",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cà phê",
+    "ord": 553
+   }
+  },
+  {
+   "en": "cold",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "lạnh lùng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "lạnh, sự lạnh lẽo, lạnh nhạt",
+    "ord": 555
+   }
+  },
+  {
+   "en": "computer",
+   "a1a2": {
+    "pos": "n",
+    "vi": "máy tính để bàn",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "máy tính",
+    "ord": 597
+   }
+  },
+  {
+   "en": "concentrate",
+   "a1a2": {
+    "pos": "v",
+    "vi": "tập trung",
+    "topic": "EDUCATION"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "tập trung",
+    "ord": 598
+   }
+  },
+  {
+   "en": "concert",
+   "a1a2": {
+    "pos": "n",
+    "vi": "buổi hòa nhạc",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "buổi hòa nhạc",
+    "ord": 604
+   }
+  },
+  {
+   "en": "connection",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mối quan hệ",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự kết nối, sự giao kết",
+    "ord": 626
+   }
+  },
+  {
+   "en": "cool",
+   "a1a2": {
+    "pos": "v",
+    "vi": "để nguội",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "adj, v",
+    "vi": "mát mẻ, điềm tĩnh; làm mát,",
+    "ord": 669
+   }
+  },
+  {
+   "en": "cottage",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhà tranh",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhà tranh",
+    "ord": 677
+   }
+  },
+  {
+   "en": "counter",
+   "a1a2": {
+    "pos": "n",
+    "vi": "kệ bếp",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "quầy hàng, quầy thu tiền, máy đếm",
+    "ord": 684
+   }
+  },
+  {
+   "en": "cousin",
+   "a1a2": {
+    "pos": "n",
+    "vi": "anh em họ",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "anh em họ",
+    "ord": 692
+   }
+  },
+  {
+   "en": "cow",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con bò",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "con bò cái",
+    "ord": 696
+   }
+  },
+  {
+   "en": "cross",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình chữ thập",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cây Thánh Giá, nỗi thống khổ; sự băng qua; băng qua, vượt qua",
+    "ord": 716
+   }
+  },
+  {
+   "en": "cry",
+   "a1a2": {
+    "pos": "v",
+    "vi": "khóc lóc",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "khóc, kêu la; sự khóc, tiếng khóc, sự kêu la",
+    "ord": 723
+   }
+  },
+  {
+   "en": "curve",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đường cong",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "đường cong, đường vòng; cong, uốn cong, bẻ cong",
+    "ord": 737
+   }
+  },
+  {
+   "en": "dad",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bố",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bố, cha",
+    "ord": 745
+   }
+  },
+  {
+   "en": "dance",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nhảy múa, khiêu vũ",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sự nhảy múa, sự khiêu vũ; nhảy múa, khiêu vũ",
+    "ord": 749
+   }
+  },
+  {
+   "en": "daughter",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con gái (quan hệ với bố mẹ)",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "con gái",
+    "ord": 758
+   }
+  },
+  {
+   "en": "delighted",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "vui mừng, mừng rỡ",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "vui mừng, hài lòng",
+    "ord": 793
+   }
+  },
+  {
+   "en": "desert",
+   "a1a2": {
+    "pos": "n",
+    "vi": "sa mạc, hoang mạc",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sa mạc; công lao, giá trị; rời bỏ, bỏ trốn",
+    "ord": 811
+   }
+  },
+  {
+   "en": "desk",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bàn học",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bàn (học sinh, viết, làm việc)",
+    "ord": 816
+   }
+  },
+  {
+   "en": "desperate",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "tuyệt vọng, chán trường",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "liều mạng, liều lĩnh; tuyệt vọng",
+    "ord": 817
+   }
+  },
+  {
+   "en": "determined",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "quyết tâm",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "đã được xác định, đã được xác định rõ",
+    "ord": 826
+   }
+  },
+  {
+   "en": "devoted",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "hết lòng, tận tâm, tận tụy",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "hiến cho, dâng cho, dành cho; hết lòng, nhiệt tình",
+    "ord": 831
+   }
+  },
+  {
+   "en": "diamond",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình kim cương",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "kim cương",
+    "ord": 833
+   }
+  },
+  {
+   "en": "dishonest",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "bất lương, dối trá",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "bất lương, không thành thật",
+    "ord": 876
+   }
+  },
+  {
+   "en": "divorce",
+   "a1a2": {
+    "pos": "n, v",
+    "vi": "li dị",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sự ly dị",
+    "ord": 892
+   }
+  },
+  {
+   "en": "dog",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con chó",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "chó",
+    "ord": 897
+   }
+  },
+  {
+   "en": "down",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "nản lòng, chán nản",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adv, prep",
+    "vi": "xuống",
+    "ord": 905
+   }
+  },
+  {
+   "en": "drag",
+   "a1a2": {
+    "pos": "v",
+    "vi": "lôi, kéo",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "lôi kéo, kéo lê",
+    "ord": 911
+   }
+  },
+  {
+   "en": "drop",
+   "a1a2": {
+    "pos": "v",
+    "vi": "làm rơi",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "chảy nhỏ giọt, rơi, rớt; giọt (nước, máu...)",
+    "ord": 925
+   }
+  },
+  {
+   "en": "egg",
+   "a1a2": {
+    "pos": "n",
+    "vi": "trứng",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "trứng",
+    "ord": 967
+   }
+  },
+  {
+   "en": "elbow",
+   "a1a2": {
+    "pos": "n",
+    "vi": "khuỷu tay",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "khuỷu tay",
+    "ord": 969
+   }
+  },
+  {
+   "en": "embarrassed",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "xấu hổ, ngại ngùng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "lúng túng, bối rối, ngượng; mang nợ",
+    "ord": 984
+   }
+  },
+  {
+   "en": "emergency",
+   "a1a2": {
+    "pos": "n",
+    "vi": "thắng tay khẩn cấp",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tình trạng khẩn cấp",
+    "ord": 988
+   }
+  },
+  {
+   "en": "engaged",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "đính ước, hứa hôn",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "đã đính ước, đã hứa hôn; đã có người",
+    "ord": 1009
+   }
+  },
+  {
+   "en": "entrance",
+   "a1a2": {
+    "pos": "n",
+    "vi": "lối vào, cổng vào",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự đi vào, sự nhậm chức",
+    "ord": 1030
+   }
+  },
+  {
+   "en": "environment",
+   "a1a2": {
+    "pos": "n",
+    "vi": "môi trường",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "môi trường, hoàn cảnh xung quanh",
+    "ord": 1033
+   }
+  },
+  {
+   "en": "excited",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "hưng phấn, sôi nổi",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "bị kích thích, bị kích động",
+    "ord": 1075
+   }
+  },
+  {
+   "en": "exhibition",
+   "a1a2": {
+    "pos": "n",
+    "vi": "buổi triển lãm, trưng bày",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cuộc triển lãm, trưng bày",
+    "ord": 1084
+   }
+  },
+  {
+   "en": "face",
+   "a1a2": {
+    "pos": "n",
+    "vi": "gương mặt",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "mặt, thể diện; đương đầu, đối phó đối mặt",
+    "ord": 1116
+   }
+  },
+  {
+   "en": "fair",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "ngay thẳng",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "hợp lý, công bằng; thuận lợi",
+    "ord": 1125
+   }
+  },
+  {
+   "en": "faithful",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "trung thành, chung thủy",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "trung thành, chung thủy, trung thực",
+    "ord": 1128
+   }
+  },
+  {
+   "en": "family",
+   "a1a2": {
+    "pos": "n",
+    "vi": "gia đình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "gia đình, thuộc gia đình",
+    "ord": 1134
+   }
+  },
+  {
+   "en": "father",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bố, cha",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cha (bố)",
+    "ord": 1147
+   }
+  },
+  {
+   "en": "film",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phim, phim ảnh",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "phim, được dựng thành phim",
+    "ord": 1175
+   }
+  },
+  {
+   "en": "finger",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ngón tay",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ngón tay",
+    "ord": 1183
+   }
+  },
+  {
+   "en": "fish",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con cá",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cá, món cá; câu cá, bắt cá",
+    "ord": 1190
+   }
+  },
+  {
+   "en": "flood",
+   "a1a2": {
+    "pos": "n",
+    "vi": "lũ lụt",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "lụt, lũ lụt; tràn đầy, tràn ngập",
+    "ord": 1203
+   }
+  },
+  {
+   "en": "flower",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hoa",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hoa, bông, đóa, cây hoa",
+    "ord": 1207
+   }
+  },
+  {
+   "en": "fold",
+   "a1a2": {
+    "pos": "v",
+    "vi": "quấy, trộn",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "gấp, vén, xắn; nếp gấp",
+    "ord": 1212
+   }
+  },
+  {
+   "en": "friend",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bạn bè",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "người bạn",
+    "ord": 1250
+   }
+  },
+  {
+   "en": "garage",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ga ra, hầm để xe",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhà để ô tô",
+    "ord": 1281
+   }
+  },
+  {
+   "en": "glad",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "vui sướng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "vui lòng, sung sướng",
+    "ord": 1308
+   }
+  },
+  {
+   "en": "glasses",
+   "a1a2": {
+    "pos": "n",
+    "vi": "kính mắt",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "kính đeo mắt",
+    "ord": 1310
+   }
+  },
+  {
+   "en": "glue",
+   "a1a2": {
+    "pos": "n",
+    "vi": "keo hồ",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "keo, hồ; gắn lại, dán bằng keo, hồ",
+    "ord": 1313
+   }
+  },
+  {
+   "en": "grandchild",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cháu",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cháu (của ông bà)",
+    "ord": 1334
+   }
+  },
+  {
+   "en": "grandfather",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ông nội (ngoại)",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ông",
+    "ord": 1336
+   }
+  },
+  {
+   "en": "grandmother",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bà nội (ngoại)",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bà",
+    "ord": 1337
+   }
+  },
+  {
+   "en": "grandparent",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ông (bà)",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ông bà",
+    "ord": 1338
+   }
+  },
+  {
+   "en": "gray",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu xám",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "",
+    "vi": "xám, hoa râm (tóc)",
+    "ord": 1344
+   }
+  },
+  {
+   "en": "green",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "xanh dương, xanh lá cây",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "xanh lá cây",
+    "ord": 1347
+   }
+  },
+  {
+   "en": "guilty",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "mặc cảm, cảm thấy tội lỗi",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "có tội, phạm tội, tội lỗi",
+    "ord": 1361
+   }
+  },
+  {
+   "en": "hairdresser",
+   "a1a2": {
+    "pos": "n",
+    "vi": "thợ cắt tóc",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "thợ làm tóc",
+    "ord": 1366
+   }
+  },
+  {
+   "en": "heart",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình trái tim",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tim, trái tim",
+    "ord": 1395
+   }
+  },
+  {
+   "en": "heel",
+   "a1a2": {
+    "pos": "n",
+    "vi": "gót chân",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "gót chân",
+    "ord": 1401
+   }
+  },
+  {
+   "en": "hip",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hông",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hông",
+    "ord": 1423
+   }
+  },
+  {
+   "en": "history",
+   "a1a2": {
+    "pos": "n",
+    "vi": "lịch sử gia đình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "lịch sử, sử học",
+    "ord": 1427
+   }
+  },
+  {
+   "en": "hit",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đánh, va phải",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đánh, đấm, ném trúng; đòn, cú đấm",
+    "ord": 1428
+   }
+  },
+  {
+   "en": "hold",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nắm, giữ",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "cầm, nắm, giữ; sự cầm, sự nắm giữ",
+    "ord": 1430
+   }
+  },
+  {
+   "en": "hollow",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "trống rỗng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "rỗng, trống rỗng",
+    "ord": 1433
+   }
+  },
+  {
+   "en": "home",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhà, gia đình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, adv",
+    "vi": "nhà; ở tại nhà, nước mình",
+    "ord": 1435
+   }
+  },
+  {
+   "en": "honest",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "chân thật, trung thành",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "lương thiện, trung thực, chân thật",
+    "ord": 1437
+   }
+  },
+  {
+   "en": "horse",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con ngựa",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ngựa",
+    "ord": 1445
+   }
+  },
+  {
+   "en": "household",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hộ gia đình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "hộ, gia đình; (thuộc) gia đình",
+    "ord": 1452
+   }
+  },
+  {
+   "en": "husband",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chồng",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "người chồng",
+    "ord": 1465
+   }
+  },
+  {
+   "en": "ice cream",
+   "a1a2": {
+    "pos": "n",
+    "vi": "kem",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "kem",
+    "ord": 1468
+   }
+  },
+  {
+   "en": "independent",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "tự lập",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "độc lập",
+    "ord": 1520
+   }
+  },
+  {
+   "en": "insect",
+   "a1a2": {
+    "pos": "n",
+    "vi": "côn trùng, sâu bọ",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sâu bọ, côn trùng",
+    "ord": 1552
+   }
+  },
+  {
+   "en": "institution",
+   "a1a2": {
+    "pos": "n",
+    "vi": "viện, cơ quan",
+    "topic": "EDUCATION"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự thành lập, lập; cơ quan, trụ sở",
+    "ord": 1560
+   }
+  },
+  {
+   "en": "interested",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "hứng thú, thích thú",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "có thích thú, có quan tâm, có chú ý",
+    "ord": 1572
+   }
+  },
+  {
+   "en": "iron",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bàn là, máy ủi",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sắt; bọc sắt",
+    "ord": 1597
+   }
+  },
+  {
+   "en": "irritated",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "tức tối, khó chịu",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "tức giận, cáu tiết",
+    "ord": 1599
+   }
+  },
+  {
+   "en": "jacket",
+   "a1a2": {
+    "pos": "n",
+    "vi": "áo vét",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "áo vét",
+    "ord": 1607
+   }
+  },
+  {
+   "en": "jeans",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quần bò jeans",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "quần bò, quần zin",
+    "ord": 1611
+   }
+  },
+  {
+   "en": "journey",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hành trình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cuộc hành trình (đường bộ); quãng đường, chặng đường đi",
+    "ord": 1620
+   }
+  },
+  {
+   "en": "judge",
+   "a1a2": {
+    "pos": "n",
+    "vi": "thẩm phán",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "xét xử, phân xử; quan tòa, thẩm phán",
+    "ord": 1622
+   }
+  },
+  {
+   "en": "jump",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nhảy, giật mình",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "nhảy; sự nhảy, bước nhảy",
+    "ord": 1626
+   }
+  },
+  {
+   "en": "keen",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "say mê, ham thích",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "sắc, bén. keen on: say mê, ưa thích",
+    "ord": 1633
+   }
+  },
+  {
+   "en": "kick",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đá",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đá; cú đá",
+    "ord": 1637
+   }
+  },
+  {
+   "en": "kiss",
+   "a1a2": {
+    "pos": "v",
+    "vi": "hôn",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "hôn, cái hôn",
+    "ord": 1648
+   }
+  },
+  {
+   "en": "kitchen",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhà bếp",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bếp",
+    "ord": 1649
+   }
+  },
+  {
+   "en": "knee",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đầu gối",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đầu gối",
+    "ord": 1650
+   }
+  },
+  {
+   "en": "land",
+   "a1a2": {
+    "pos": "v",
+    "vi": "hạ cánh",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "đất, đất canh tác, đất đai",
+    "ord": 1667
+   }
+  },
+  {
+   "en": "laugh",
+   "a1a2": {
+    "pos": "v",
+    "vi": "cười lớn",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "cười; tiếng cười",
+    "ord": 1678
+   }
+  },
+  {
+   "en": "lawyer",
+   "a1a2": {
+    "pos": "n",
+    "vi": "luật sư",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "luật sư",
+    "ord": 1681
+   }
+  },
+  {
+   "en": "layer",
+   "a1a2": {
+    "pos": "v",
+    "vi": "xếp từng lớp",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "lớp",
+    "ord": 1683
+   }
+  },
+  {
+   "en": "lazy",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "lười biếng",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "lười biếng",
+    "ord": 1684
+   }
+  },
+  {
+   "en": "lean",
+   "a1a2": {
+    "pos": "v",
+    "vi": "dựa, tựa",
+    "topic": "BODY MOVEMENTS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "nghiêng, dựa, ỷ vào",
+    "ord": 1690
+   }
+  },
+  {
+   "en": "leave",
+   "a1a2": {
+    "pos": "v",
+    "vi": "rời đi",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "bỏ đi, rời đi, để lại. leave out bỏ quên, bỏ sót",
+    "ord": 1694
+   }
+  },
+  {
+   "en": "lecture",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bài giảng, bài diễn thuyết",
+    "topic": "EDUCATION"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bài diễn thuyết, bài thuyết trình, bài nói chuyện",
+    "ord": 1695
+   }
+  },
+  {
+   "en": "leg",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chân",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "chân (người, thú, bà(n)..)",
+    "ord": 1697
+   }
+  },
+  {
+   "en": "lemon",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chanh vàng",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "quả chanh",
+    "ord": 1700
+   }
+  },
+  {
+   "en": "lift",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nâng lên",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "giơ lên, nhấc lên; sự nâng, sự nhấc lên",
+    "ord": 1714
+   }
+  },
+  {
+   "en": "lip",
+   "a1a2": {
+    "pos": "n",
+    "vi": "môi",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "môi",
+    "ord": 1723
+   }
+  },
+  {
+   "en": "lonely",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "cô đơn",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "cô đơn, bơ vơ",
+    "ord": 1743
+   }
+  },
+  {
+   "en": "look",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nhìn, ngắm",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "nhìn; cái nhìn",
+    "ord": 1745
+   }
+  },
+  {
+   "en": "lost",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "lạc lõng, mất phương hướng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "thua, mất",
+    "ord": 1753
+   }
+  },
+  {
+   "en": "loyal",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "trung thành, trung kiên",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "trung thành, trung kiên",
+    "ord": 1761
+   }
+  },
+  {
+   "en": "lucky",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "may mắn",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "gặp may, gặp may mắn, hạnh phúc",
+    "ord": 1763
+   }
+  },
+  {
+   "en": "map",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bản đồ",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bản đồ",
+    "ord": 1793
+   }
+  },
+  {
+   "en": "material",
+   "a1a2": {
+    "pos": "n",
+    "vi": "học liệu",
+    "topic": "SCHOOL OBJECTS"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "nguyên vật liệu; vật chất, hữu hình",
+    "ord": 1807
+   }
+  },
+  {
+   "en": "measure",
+   "a1a2": {
+    "pos": "v",
+    "vi": "cân đếm",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đo, đo lường; sự đo lường, đơn vị đo lường",
+    "ord": 1821
+   }
+  },
+  {
+   "en": "melt",
+   "a1a2": {
+    "pos": "v",
+    "vi": "làm tan chảy",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "tan ra, chảy ra; làm tan chảy ra",
+    "ord": 1830
+   }
+  },
+  {
+   "en": "milk",
+   "a1a2": {
+    "pos": "n",
+    "vi": "sữa",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sữa",
+    "ord": 1853
+   }
+  },
+  {
+   "en": "motorcycle",
+   "a1a2": {
+    "pos": "n",
+    "vi": "xe mô tô",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "xe mô tô",
+    "ord": 1894
+   }
+  },
+  {
+   "en": "mountain",
+   "a1a2": {
+    "pos": "n",
+    "vi": "núi, dãy núi",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "núi",
+    "ord": 1896
+   }
+  },
+  {
+   "en": "mouse",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con chuột",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "chuột",
+    "ord": 1897
+   }
+  },
+  {
+   "en": "mouth",
+   "a1a2": {
+    "pos": "n",
+    "vi": "miệng",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "miệng",
+    "ord": 1898
+   }
+  },
+  {
+   "en": "mud",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bùn",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bùn",
+    "ord": 1908
+   }
+  },
+  {
+   "en": "museum",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bảo tàng",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bảo tàng",
+    "ord": 1913
+   }
+  },
+  {
+   "en": "musician",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhạc sĩ, nhà soạn nhạc",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhạc sĩ",
+    "ord": 1916
+   }
+  },
+  {
+   "en": "nervous",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "lo lắng, bồn chồn",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "hoảng sợ, dễ bị kích thích, hay lo lắng",
+    "ord": 1948
+   }
+  },
+  {
+   "en": "objective",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "khách quan",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "mục tiêu, mục đích; (thuộc) mục tiêu, khách quan",
+    "ord": 1994
+   }
+  },
+  {
+   "en": "onion",
+   "a1a2": {
+    "pos": "n",
+    "vi": "củ hành",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "củ hành",
+    "ord": 2028
+   }
+  },
+  {
+   "en": "open",
+   "a1a2": {
+    "pos": "v",
+    "vi": "mở ra",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "adj, v",
+    "vi": "mở, ngỏ; mở, bắt đầu, khai mạc",
+    "ord": 2031
+   }
+  },
+  {
+   "en": "orange",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quả cam",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "quả cam; có màu da cam",
+    "ord": 2045
+   }
+  },
+  {
+   "en": "organized",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "có trật tự, ngăn nắp",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "có trật tự, ngăn nắp, được sắp xếp, được tổ chức",
+    "ord": 2051
+   }
+  },
+  {
+   "en": "oven",
+   "a1a2": {
+    "pos": "n",
+    "vi": "lò nướng",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "lò (nướng)",
+    "ord": 2069
+   }
+  },
+  {
+   "en": "paper",
+   "a1a2": {
+    "pos": "n",
+    "vi": "giấy",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "giấy",
+    "ord": 2094
+   }
+  },
+  {
+   "en": "passenger",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hành khách",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hành khách",
+    "ord": 2108
+   }
+  },
+  {
+   "en": "peaceful",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "thanh thản, bình yên",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "hòa bình, thái bình, yên tĩnh",
+    "ord": 2121
+   }
+  },
+  {
+   "en": "pig",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con lợn, heo",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "con lợn",
+    "ord": 2164
+   }
+  },
+  {
+   "en": "pin",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đinh ghim",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "đinh ghim; ghim., kẹp",
+    "ord": 2168
+   }
+  },
+  {
+   "en": "planet",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hành tinh",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hành tinh",
+    "ord": 2178
+   }
+  },
+  {
+   "en": "play",
+   "a1a2": {
+    "pos": "n, v",
+    "vi": "sự vui đùa; vui chơi",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "chơi, đánh; sự vui chơi, trò chơi, trận đấu",
+    "ord": 2184
+   }
+  },
+  {
+   "en": "point",
+   "a1a2": {
+    "pos": "v",
+    "vi": "chỉ, trỏ",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "mũi nhọn, điểm; vót, làm nhọn, chấm (câu..)",
+    "ord": 2199
+   }
+  },
+  {
+   "en": "politician",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chính trị gia",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhà chính trị, chính khách",
+    "ord": 2211
+   }
+  },
+  {
+   "en": "pollution",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ô nhiễm",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự ô nhiễm",
+    "ord": 2213
+   }
+  },
+  {
+   "en": "positive",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "tích cực, lạc quan",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "khẳng định, xác thực, rõ ràng, tích cực, lạc quan",
+    "ord": 2222
+   }
+  },
+  {
+   "en": "potato",
+   "a1a2": {
+    "pos": "n",
+    "vi": "củ khoai tây",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "khoai tây",
+    "ord": 2231
+   }
+  },
+  {
+   "en": "pour",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đổ, rót",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "rót, đổ, giội",
+    "ord": 2235
+   }
+  },
+  {
+   "en": "powerful",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "quyền thế, quyền lực",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "hùng mạnh, hùng cường",
+    "ord": 2238
+   }
+  },
+  {
+   "en": "practical",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "thực tế, thực tiễn",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "thực hành; thực tế",
+    "ord": 2239
+   }
+  },
+  {
+   "en": "practice",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bài luyện tập",
+    "topic": "SCHOOL OBJECTS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "thực hành, thực tiễn",
+    "ord": 2241
+   }
+  },
+  {
+   "en": "prepare",
+   "a1a2": {
+    "pos": "v",
+    "vi": "sơ chế, chuẩn bị",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "sửa soạn, chuẩn bị",
+    "ord": 2253
+   }
+  },
+  {
+   "en": "press",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ấn, ép",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sự ép, sự nén, sự ấn; ép, nén, bóp, ấn",
+    "ord": 2260
+   }
+  },
+  {
+   "en": "proud",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "hãnh diện, tự hào",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "tự hào, kiêu hãnh",
+    "ord": 2323
+   }
+  },
+  {
+   "en": "pull",
+   "a1a2": {
+    "pos": "v",
+    "vi": "kéo",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "lôi, kéo, giật; sự lôi kéo, sự giật",
+    "ord": 2335
+   }
+  },
+  {
+   "en": "punch",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đấm, thọi",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đấm, thụi; quả đấm, cú thụi",
+    "ord": 2336
+   }
+  },
+  {
+   "en": "purple",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu tím",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "tía, có màu tía; màu tía",
+    "ord": 2343
+   }
+  },
+  {
+   "en": "push",
+   "a1a2": {
+    "pos": "v",
+    "vi": "xô đẩy",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "xô đẩy; sự xô đẩy",
+    "ord": 2346
+   }
+  },
+  {
+   "en": "qualification",
+   "a1a2": {
+    "pos": "n",
+    "vi": "năng lực, trình độ chuyên môn",
+    "topic": "SCHOOL OBJECTS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "phẩm chất, năng lực; khả năng chuyên môn",
+    "ord": 2349
+   }
+  },
+  {
+   "en": "quick",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "nhanh nhẹn",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "nhanh",
+    "ord": 2357
+   }
+  },
+  {
+   "en": "raw",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "sống",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "sống (# chín), thô, còn nguyên chất",
+    "ord": 2379
+   }
+  },
+  {
+   "en": "reasonable",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "biết điều",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "có lý, hợp lý",
+    "ord": 2395
+   }
+  },
+  {
+   "en": "red",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu đỏ",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "đỏ; màu đỏ",
+    "ord": 2410
+   }
+  },
+  {
+   "en": "relaxed",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "thư giãn, thoải mái",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "thanh thản, thoải mái",
+    "ord": 2437
+   }
+  },
+  {
+   "en": "responsible",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "có trách nhiệm",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "chịu trách nhiệm về, chịu trách nhiệm trước ai, gì",
+    "ord": 2486
+   }
+  },
+  {
+   "en": "restaurant",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhà hàng ăn uống",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhà hàng ăn, hiệu ăn",
+    "ord": 2488
+   }
+  },
+  {
+   "en": "river",
+   "a1a2": {
+    "pos": "n",
+    "vi": "dòng sông",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sông",
+    "ord": 2520
+   }
+  },
+  {
+   "en": "roll",
+   "a1a2": {
+    "pos": "v",
+    "vi": "cuộn",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cuốn, cuộn, sự lăn tròn; lăn, cuốn, quấn, cuộn",
+    "ord": 2525
+   }
+  },
+  {
+   "en": "roof",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mái nhà",
+    "topic": "HOUSE AND HOME"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "mái nhà, nóc",
+    "ord": 2527
+   }
+  },
+  {
+   "en": "root",
+   "a1a2": {
+    "pos": "n",
+    "vi": "gốc, rễ cây",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "gốc, rễ",
+    "ord": 2529
+   }
+  },
+  {
+   "en": "route",
+   "a1a2": {
+    "pos": "n",
+    "vi": "lộ trình, hành trình",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đường đi, lộ trình, tuyến đường",
+    "ord": 2535
+   }
+  },
+  {
+   "en": "rubbish",
+   "a1a2": {
+    "pos": "n",
+    "vi": "rác rưởi",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "vật vô giá trị, bỏ đi, rác rưởi",
+    "ord": 2541
+   }
+  },
+  {
+   "en": "run",
+   "a1a2": {
+    "pos": "v",
+    "vi": "chạy",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "chạy; sự chạy",
+    "ord": 2549
+   }
+  },
+  {
+   "en": "salad",
+   "a1a2": {
+    "pos": "n",
+    "vi": "rau trộn, nộm rau",
+    "topic": "FOOD AND DRINKS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sa lát (xà lách trộng dầu dấm); rau sống",
+    "ord": 2564
+   }
+  },
+  {
+   "en": "salt",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ướp gia vị, rắc muối",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "muối",
+    "ord": 2567
+   }
+  },
+  {
+   "en": "satisfied",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "thỏa mãn, hài lòng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "cảm thấy hài lòng, vưa ý, thoả mãn",
+    "ord": 2573
+   }
+  },
+  {
+   "en": "scissors",
+   "a1a2": {
+    "pos": "n",
+    "vi": "kéo",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cái kéo",
+    "ord": 2591
+   }
+  },
+  {
+   "en": "sea",
+   "a1a2": {
+    "pos": "n",
+    "vi": "biển",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "biển",
+    "ord": 2597
+   }
+  },
+  {
+   "en": "season",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mùa trong năm",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "mùa",
+    "ord": 2600
+   }
+  },
+  {
+   "en": "seed",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hạt giống",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hạt, hạt giống",
+    "ord": 2612
+   }
+  },
+  {
+   "en": "sensible",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "khôn ngoan, có óc phán xét",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "có óc xét đoán; hiểu, nhận biết được",
+    "ord": 2625
+   }
+  },
+  {
+   "en": "sensitive",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "nhạy cảm, dễ tổn thương",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "dễ bị thương, dễ bị hỏng; dễ bị xúc phạm",
+    "ord": 2626
+   }
+  },
+  {
+   "en": "shallow",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "nông cạn",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "nông, cạn",
+    "ord": 2654
+   }
+  },
+  {
+   "en": "sheep",
+   "a1a2": {
+    "pos": "n",
+    "vi": "con cừu",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "con cừu",
+    "ord": 2663
+   }
+  },
+  {
+   "en": "shell",
+   "a1a2": {
+    "pos": "v",
+    "vi": "bóc vỏ",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "vỏ, mai; vẻ bề ngoài",
+    "ord": 2666
+   }
+  },
+  {
+   "en": "shirt",
+   "a1a2": {
+    "pos": "n",
+    "vi": "áo sơ mi",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "áo sơ mi",
+    "ord": 2672
+   }
+  },
+  {
+   "en": "shock",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "bất ngờ, sốc",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sự đụng chạm, va chạm, sự kích động, sự choáng; chạm mạnh, va mạnh, gây sốc",
+    "ord": 2673
+   }
+  },
+  {
+   "en": "shower",
+   "a1a2": {
+    "pos": "n",
+    "vi": "vòi hoa sen",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "vòi hoa sen, sự tắm vòi hoa sen",
+    "ord": 2688
+   }
+  },
+  {
+   "en": "silver",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu bạc",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "n, adj",
+    "vi": "bạc, đồng bạc; làm bằng bạc, trắng như bạc",
+    "ord": 2705
+   }
+  },
+  {
+   "en": "sincere",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "chân thành",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "thật thà, thẳng thắng, chân thành",
+    "ord": 2711
+   }
+  },
+  {
+   "en": "sink",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bồn rửa, chậu rửa mặt",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "chìm, lún, đắm",
+    "ord": 2717
+   }
+  },
+  {
+   "en": "sit",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ngồi",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "ngồi. sit down: ngồi xuống",
+    "ord": 2720
+   }
+  },
+  {
+   "en": "slice",
+   "a1a2": {
+    "pos": "v",
+    "vi": "thái",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "miếng, lát mỏng; cắt ra thành miếng mỏng, lát mỏng",
+    "ord": 2732
+   }
+  },
+  {
+   "en": "slip",
+   "a1a2": {
+    "pos": "v",
+    "vi": "trượt, tuột",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "trượt, tuột, trôi qua, chạy qua",
+    "ord": 2736
+   }
+  },
+  {
+   "en": "slope",
+   "a1a2": {
+    "pos": "n",
+    "vi": "dốc",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "dốc, đường dốc, độ dốc; nghiêng, dốc",
+    "ord": 2737
+   }
+  },
+  {
+   "en": "slow",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "chậm chạp",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "chậm, chậm chạp",
+    "ord": 2738
+   }
+  },
+  {
+   "en": "soil",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đất trồng, đất dai",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "đất trồng; vết bẩn",
+    "ord": 2760
+   }
+  },
+  {
+   "en": "speaker",
+   "a1a2": {
+    "pos": "n",
+    "vi": "diễn giả",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "người nói, người diễn thuyết",
+    "ord": 2788
+   }
+  },
+  {
+   "en": "square",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình vuông",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "vuông, vuông vắn; dạng hình vuông, hình vuông",
+    "ord": 2815
+   }
+  },
+  {
+   "en": "stand",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đứng yên",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đứng, sự đứng. stand up: đứng đậy",
+    "ord": 2822
+   }
+  },
+  {
+   "en": "star",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình ngôi sao",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "ngôi sao, dán sao, trang trí hình sao, đánh dấu sao",
+    "ord": 2824
+   }
+  },
+  {
+   "en": "steam",
+   "a1a2": {
+    "pos": "v",
+    "vi": "hấp",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hơi nước",
+    "ord": 2836
+   }
+  },
+  {
+   "en": "steep",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ngâm vào nước",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "dốc, dốc đứng",
+    "ord": 2838
+   }
+  },
+  {
+   "en": "stir",
+   "a1a2": {
+    "pos": "v",
+    "vi": "xào, quấy",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "khuấy, đảo",
+    "ord": 2849
+   }
+  },
+  {
+   "en": "stove",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bếp lò",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "bếp lò, lò sưởi",
+    "ord": 2857
+   }
+  },
+  {
+   "en": "stressed",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "căng thẳng",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "bị căng thẳng, bị ép, bị căng",
+    "ord": 2867
+   }
+  },
+  {
+   "en": "stretch",
+   "a1a2": {
+    "pos": "v",
+    "vi": "vươn (vai..), ưỡn lưng",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "căng ra, duỗi ra, kéo dài ra",
+    "ord": 2868
+   }
+  },
+  {
+   "en": "strong",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "mạnh mẽ, đanh thép",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "khỏe, mạnh, bền, vững, chắc chắn",
+    "ord": 2878
+   }
+  },
+  {
+   "en": "suffering",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "đau đớn, đau khổ",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "sự đau đớn, sự đau khổ",
+    "ord": 2903
+   }
+  },
+  {
+   "en": "suit",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bộ com lê, Âu phục",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "bộ com lê, trang phục; thích hợp, quen, hợp với",
+    "ord": 2909
+   }
+  },
+  {
+   "en": "surprised",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "bất ngờ, ngạc nhiên",
+    "topic": "COOKING VERBS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "ngạc nhiên (+ at)",
+    "ord": 2929
+   }
+  },
+  {
+   "en": "swallow",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chim nhạn, én",
+    "topic": "LEISURE TIME"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "nuốt, nuốt chửng",
+    "ord": 2940
+   }
+  },
+  {
+   "en": "sweater",
+   "a1a2": {
+    "pos": "n",
+    "vi": "áo len dài tay",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "người ra mồ hôi, , kẻ bóc lột lấo động",
+    "ord": 2944
+   }
+  },
+  {
+   "en": "talk",
+   "a1a2": {
+    "pos": "v",
+    "vi": "nói chuyện, trò chuyện",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "nói chuyện, trò chuyện; cuộc trò chuyện, cuộc thảo luận",
+    "ord": 2968
+   }
+  },
+  {
+   "en": "taxi",
+   "a1a2": {
+    "pos": "n",
+    "vi": "xe taxi",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "xe tắc xi",
+    "ord": 2977
+   }
+  },
+  {
+   "en": "teacher",
+   "a1a2": {
+    "pos": "n",
+    "vi": "giáo viên",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "giáo viên",
+    "ord": 2980
+   }
+  },
+  {
+   "en": "temperature",
+   "a1a2": {
+    "pos": "n",
+    "vi": "nhiệt độ",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhiệt độ",
+    "ord": 2990
+   }
+  },
+  {
+   "en": "thorough",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "kỹ lưỡng, thấu đáo",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "cẩn thận, kỹ lưỡng",
+    "ord": 3029
+   }
+  },
+  {
+   "en": "throw",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ném, quăng, vứt",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "ném, vứt, quăng. throw sth away: ném đi, vứt đi, liệng đi",
+    "ord": 3040
+   }
+  },
+  {
+   "en": "tie",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cà vạt, nơ",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "buộc, cột, trói; dây buộc, dây trói, dây giày. tie sth up có quan hệ mật thiết, gắn chặt",
+    "ord": 3046
+   }
+  },
+  {
+   "en": "toilet",
+   "a1a2": {
+    "pos": "n",
+    "vi": "bồn cầu",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "nhà vệ sinh; sự trang điểm (rửa mặt, ăn mặc, chải tóc...)",
+    "ord": 3063
+   }
+  },
+  {
+   "en": "tomato",
+   "a1a2": {
+    "pos": "n",
+    "vi": "quả cà chua",
+    "topic": "CHARACTERISTICS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cà chua",
+    "ord": 3064
+   }
+  },
+  {
+   "en": "tough",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "cứng rắn",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "chắc, bền, dai",
+    "ord": 3079
+   }
+  },
+  {
+   "en": "tour",
+   "a1a2": {
+    "pos": "n",
+    "vi": "chuyến đi du lịch",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cuộc đo du lịch, cuộc đi dạo, chuyến du lịch; đi du lịch",
+    "ord": 3080
+   }
+  },
+  {
+   "en": "towel",
+   "a1a2": {
+    "pos": "n",
+    "vi": "khăn vải",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "khăn tắm, khăn lấu",
+    "ord": 3083
+   }
+  },
+  {
+   "en": "train",
+   "a1a2": {
+    "pos": "n",
+    "vi": "tàu hỏa",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "xe lửa, tàu hỏa; dạy, rèn luyện, đào tạo",
+    "ord": 3095
+   }
+  },
+  {
+   "en": "travel",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đi du lịch",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đi lại, đi du lịch, di chuyển; sự đi, những chuyến đi",
+    "ord": 3104
+   }
+  },
+  {
+   "en": "triangle",
+   "a1a2": {
+    "pos": "n",
+    "vi": "hình tam giác",
+    "topic": "VEHICLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "hình tam giác",
+    "ord": 3111
+   }
+  },
+  {
+   "en": "trip",
+   "a1a2": {
+    "pos": "v",
+    "vi": "ngáng chân, vấp ngã",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "cuộc dạo chơi, cuộc du ngoạn; đi dạo, du ngoạn",
+    "ord": 3113
+   }
+  },
+  {
+   "en": "umbrella",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ô",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "ô, dù",
+    "ord": 3140
+   }
+  },
+  {
+   "en": "unreasonable",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "vô lý, quá đáng",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "vô lý",
+    "ord": 3191
+   }
+  },
+  {
+   "en": "valley",
+   "a1a2": {
+    "pos": "n",
+    "vi": "thung lũng, châu thổ, lưu vực",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "thung lũng",
+    "ord": 3223
+   }
+  },
+  {
+   "en": "van",
+   "a1a2": {
+    "pos": "n",
+    "vi": "xe tải",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "tiền đội, quân tiên phong; xe tải",
+    "ord": 3226
+   }
+  },
+  {
+   "en": "vehicle",
+   "a1a2": {
+    "pos": "n",
+    "vi": "phương tiện giao thông",
+    "topic": "TRAVEL"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "xe cộ",
+    "ord": 3234
+   }
+  },
+  {
+   "en": "visit",
+   "a1a2": {
+    "pos": "v",
+    "vi": "thăm viếng",
+    "topic": "FAMILY"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đi thăm hỏi, đến chơi, tham quan; sự đi thăm, sự thăm viếng",
+    "ord": 3252
+   }
+  },
+  {
+   "en": "walk",
+   "a1a2": {
+    "pos": "v",
+    "vi": "đi bộ",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "đi, đi bộ; sự đi bộ, sự đi dạo",
+    "ord": 3264
+   }
+  },
+  {
+   "en": "wallet",
+   "a1a2": {
+    "pos": "n",
+    "vi": "ví, bóp",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cái ví",
+    "ord": 3267
+   }
+  },
+  {
+   "en": "wash",
+   "a1a2": {
+    "pos": "v",
+    "vi": "rửa",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "v",
+    "vi": "rửa, giặt",
+    "ord": 3275
+   }
+  },
+  {
+   "en": "watch",
+   "a1a2": {
+    "pos": "n",
+    "vi": "đồng hồ",
+    "topic": "EMOTIONS AND FEELINGS"
+   },
+   "oxford": {
+    "pos": "v, n",
+    "vi": "nhìn, theo dõi, quan sát; sự canh gác, sự canh phòng",
+    "ord": 3278
+   }
+  },
+  {
+   "en": "wave",
+   "a1a2": {
+    "pos": "v",
+    "vi": "vẫy tay",
+    "topic": "CLOTHES AND ACCESSORIES"
+   },
+   "oxford": {
+    "pos": "n, v",
+    "vi": "sóng, gợn nước; gợn sóng, uốn thành sóng",
+    "ord": 3280
+   }
+  },
+  {
+   "en": "weak",
+   "a1a2": {
+    "pos": "adj",
+    "vi": "yếu đuối",
+    "topic": "BODY PARTS"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "yếu, yếu ớt",
+    "ord": 3283
+   }
+  },
+  {
+   "en": "white",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu trắng",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "trắng; màu trắng",
+    "ord": 3318
+   }
+  },
+  {
+   "en": "wild",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "thiên nhiên hoang dại; hoang dại",
+    "topic": "NATURE"
+   },
+   "oxford": {
+    "pos": "adj",
+    "vi": "dại, hoang",
+    "ord": 3329
+   }
+  },
+  {
+   "en": "window",
+   "a1a2": {
+    "pos": "n",
+    "vi": "cửa sổ",
+    "topic": "FRUIT AND VEGETABLES"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "cửa sổ",
+    "ord": 3337
+   }
+  },
+  {
+   "en": "winter",
+   "a1a2": {
+    "pos": "n",
+    "vi": "mùa đông",
+    "topic": "ANIMALS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "mùa đông",
+    "ord": 3342
+   }
+  },
+  {
+   "en": "writer",
+   "a1a2": {
+    "pos": "n",
+    "vi": "người viết sách",
+    "topic": "JOBS AND OCCUPATIONS"
+   },
+   "oxford": {
+    "pos": "n",
+    "vi": "người viết",
+    "ord": 3374
+   }
+  },
+  {
+   "en": "yellow",
+   "a1a2": {
+    "pos": "n, adj",
+    "vi": "màu vàng",
+    "topic": "COLORS AND SHAPES"
+   },
+   "oxford": {
+    "pos": "adj, n",
+    "vi": "vàng; màu vàng",
+    "ord": 3383
+   }
+  }
+ ],
+ "in_source_dups_a1a2": [
+  {
+   "en": "sluggish",
+   "first": {
+    "pos": "adj",
+    "vi": "uể oải, lờ đờ",
+    "no": 403
+   },
+   "later": {
+    "pos": "adj",
+    "vi": "lờ đờ, chậm chạp",
+    "no": 680
+   }
+  },
+  {
+   "en": "orange",
+   "first": {
+    "pos": "n",
+    "vi": "quả cam",
+    "no": 313
+   },
+   "later": {
+    "pos": "n, adj",
+    "vi": "màu cam",
+    "no": 806
+   }
+  },
+  {
+   "en": "airplane",
+   "first": {
+    "pos": "n",
+    "vi": "máy bay",
+    "no": 863
+   },
+   "later": {
+    "pos": "n",
+    "vi": "máy bay",
+    "no": 864
+   }
+  },
+  {
+   "en": "trip",
+   "first": {
+    "pos": "v",
+    "vi": "ngáng chân, vấp ngã",
+    "no": 530
+   },
+   "later": {
+    "pos": "n",
+    "vi": "cuộc du ngoạn, dạo chơi",
+    "no": 912
+   }
+  },
+  {
+   "en": "devoted",
+   "first": {
+    "pos": "adj",
+    "vi": "hết lòng, tận tâm, tận tụy",
+    "no": 351
+   },
+   "later": {
+    "pos": "adj",
+    "vi": "tận tâm, tận tụy",
+    "no": 938
+   }
+  }
+ ],
+ "in_source_dups_oxford": [
+  {
+   "en": "each other",
+   "first": {
+    "pos": "n, pro",
+    "vi": "nhau, lẫn nhau",
+    "ord": 941
+   },
+   "later": {
+    "pos": "",
+    "vi": "nhau, lẫn nhau",
+    "ord": 942
+   }
+  },
+  {
+   "en": "may",
+   "first": {
+    "pos": "v, modal",
+    "vi": "có thể, có lẽ",
+    "ord": 1811
+   },
+   "later": {
+    "pos": "n",
+    "vi": "tháng 5",
+    "ord": 1812
+   }
+  },
+  {
+   "en": "side",
+   "first": {
+    "pos": "n",
+    "vi": "mặt, mặt phẳng",
+    "ord": 2692
+   },
+   "later": {
+    "pos": "n",
+    "vi": "chỗ, vị trí",
+    "ord": 2693
+   }
+  }
+ ],
+ "flagged_meanings": [
+  {
+   "en": "pomegranate",
+   "vi": "quả lưu",
+   "note": "Nguồn in 'quả lưu'; tiếng Việt chuẩn cho pomegranate là 'quả lựu'. Giữ nguyên theo nguồn, không tự sửa chữ."
+  },
+  {
+   "en": "encounter",
+   "vi": "chạm trán, bắt gặp; sự chạm trán, sự bắt gặp",
+   "note": "Đã sửa lỗi in 'chạm chán' -> 'chạm trán' (từ 'trán' có sẵn trong cùng mục từ)."
+  },
+  {
+   "en": "encourage",
+   "vi": "động viên, ủng hộ, giúp đỡ, làm can đảm, mạnh dạn",
+   "note": "Đã sửa lỗi in 'cấn đảm' -> 'can đảm' ('cấn đảm' không có nghĩa; 'can đảm' là từ chuẩn)."
+  },
+  {
+   "en": "gram, gramme (abbr g, gm)",
+   "vi": "ngữ pháp",
+   "note": "NGHI NGỜ LỖI NGUỒN — GIỮ NGUYÊN: 'gram, gramme' là đơn vị đo khối lượng (gam), nhưng nguồn ghi 'ngữ pháp' (nghĩa của 'grammar'). Hai mục kề trước/sau ('gram' = đậu xanh; 'grammar' = văn phạm) đều đúng nên đây không phải lỗi lệch dòng. Cần người biên soạn xác nhận; không tự sửa thành 'gam'."
+  },
+  {
+   "en": "function / politics",
+   "vi": "hoạt động",
+   "note": "Đã sửa lỗi in 'họat' -> 'hoạt' (dấu sắc đặt sai nguyên âm trong bản in; đã kiểm chứng bằng hình ảnh trang PDF)."
+  },
+  {
+   "en": "gradually",
+   "vi": "dần dần, từ từ",
+   "note": "Đã sửa lỗi in 'tư tư' -> 'từ từ' (bản in thiếu dấu huyền; đã kiểm chứng bằng hình ảnh trang PDF)."
+  },
+  {
+   "en": "anyone (anybody)",
+   "vi": "người nào, bất cứ ai",
+   "note": "Đã sửa lỗi in 'anybod' -> 'anybody' (bản in thiếu chữ 'y'; đã kiểm chứng bằng hình ảnh trang PDF)."
+  },
+  {
+   "en": "seem",
+   "vi": "có vẻ như, dường như",
+   "note": "Nguồn in 'seem linking' ở cột từ (ghi chú động từ nối). Đã tách thành từ 'seem', loại từ 'v (linking)' để từ học được."
+  }
+ ],
+ "en_fixes": [
+  {
+   "before_en": "preschool n,",
+   "after_en": "preschool",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "Arctic n,",
+   "after_en": "Arctic",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "fossil n,",
+   "after_en": "fossil",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "overcast v,",
+   "after_en": "overcast",
+   "before_pos": "adj",
+   "after_pos": "v, adj"
+  },
+  {
+   "before_en": "wild n,",
+   "after_en": "wild",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "accommodati on",
+   "after_en": "accommodation",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "courgette/ Zucchini",
+   "after_en": "courgette/Zucchini",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "actor/ actress",
+   "after_en": "actor/actress",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "yellow n,",
+   "after_en": "yellow",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "white n,",
+   "after_en": "white",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "wheat n,",
+   "after_en": "wheat",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "teal n,",
+   "after_en": "teal",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "silver n,",
+   "after_en": "silver",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "sanguine n,",
+   "after_en": "sanguine",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "red n,",
+   "after_en": "red",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "purple n,",
+   "after_en": "purple",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "orange n,",
+   "after_en": "orange",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "navy (blue) n,",
+   "after_en": "navy (blue)",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "maroon n,",
+   "after_en": "maroon",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "magenta n,",
+   "after_en": "magenta",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "ivory n,",
+   "after_en": "ivory",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "indigo n,",
+   "after_en": "indigo",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "green n,",
+   "after_en": "green",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "gray n,",
+   "after_en": "gray",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "fuchsia n,",
+   "after_en": "fuchsia",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "cyan n,",
+   "after_en": "cyan",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "crimson n,",
+   "after_en": "crimson",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "coral n,",
+   "after_en": "coral",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "charcoal n,",
+   "after_en": "charcoal",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "burgundy n,",
+   "after_en": "burgundy",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "brown n,",
+   "after_en": "brown",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "blue n,",
+   "after_en": "blue",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "blond n,",
+   "after_en": "blond",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "black n,",
+   "after_en": "black",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "beige n,",
+   "after_en": "beige",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "azure n,",
+   "after_en": "azure",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "aquamarine n,",
+   "after_en": "aquamarine",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "daughter-in-la w",
+   "after_en": "daughter-in-law",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "first born adj,",
+   "after_en": "first born",
+   "before_pos": "n",
+   "after_pos": "adj, n"
+  },
+  {
+   "before_en": "great-grandda ughter",
+   "after_en": "great-granddaughter",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "great-grandfat her",
+   "after_en": "great-grandfather",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "great-grandmo ther",
+   "after_en": "great-grandmother",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "great-grandpar ent",
+   "after_en": "great-grandparent",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "great-grandso n",
+   "after_en": "great-grandson",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "grown-up n,",
+   "after_en": "grown-up",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "infant n,",
+   "after_en": "infant",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "juvenile n,",
+   "after_en": "juvenile",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "kin n,",
+   "after_en": "kin",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "kindred n,",
+   "after_en": "kindred",
+   "before_pos": "adj",
+   "after_pos": "n, adj"
+  },
+  {
+   "before_en": "any",
+   "after_en": "any",
+   "before_pos": "detpron, adv",
+   "after_pos": "det, pron, adv"
+  },
+  {
+   "before_en": "anyone (anybod)",
+   "after_en": "anyone (anybody)",
+   "before_pos": "pron",
+   "after_pos": "pron"
+  },
+  {
+   "before_en": "January (abbrJan)",
+   "after_en": "January (abbr Jan)",
+   "before_pos": "n",
+   "after_pos": "n"
+  },
+  {
+   "before_en": "nobody (noone)",
+   "after_en": "nobody (no one)",
+   "before_pos": "pron",
+   "after_pos": "pron"
+  },
+  {
+   "before_en": "seem linking",
+   "after_en": "seem",
+   "before_pos": "v",
+   "after_pos": "v (linking)"
+  }
+ ]
+}
