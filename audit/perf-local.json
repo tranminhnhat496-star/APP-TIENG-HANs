@@ -1,0 +1,646 @@
+{
+  "label": "http://127.0.0.1:8940/index.html",
+  "measuredAt": "2026-11-17T19:28:13.231Z",
+  "settledAfterNavMs": 3020,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "chrome": "Muse Browser 157.0.8103.81 (via CDP)",
+  "network": {
+    "requestsSentHttp": 35,
+    "requestsFinished": 33,
+    "requestsFailed": 2,
+    "transferredBytes": 5555044,
+    "transferredMiB": 5.3,
+    "bytesByType": {
+      "Document": 1930347,
+      "Script": 883664,
+      "Image": 2740513,
+      "Other": 520
+    },
+    "failedRequests": [
+      {
+        "url": "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap",
+        "errorText": "net::ERR_TUNNEL_CONNECTION_FAILED",
+        "type": "Stylesheet",
+        "canceled": false
+      },
+      {
+        "url": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js",
+        "errorText": "net::ERR_TUNNEL_CONNECTION_FAILED",
+        "type": "Script",
+        "canceled": false
+      }
+    ],
+    "finishedRequests": [
+      {
+        "url": "http://127.0.0.1:8940/index.html",
+        "type": "Document",
+        "status": 200,
+        "bytes": 1930347
+      },
+      {
+        "url": "http://127.0.0.1:8940/firebase-config.js",
+        "type": "Script",
+        "status": 200,
+        "bytes": 1742
+      },
+      {
+        "url": "http://127.0.0.1:8940/vendor/xlsx-0.18.5.full.min.js",
+        "type": "Script",
+        "status": 200,
+        "bytes": 881922
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/idle.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 159372
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/book.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 75242
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/learn.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 8369
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/book.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 8340
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/trophy.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 8390
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/bell.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 8275
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/save.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 8322
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/hello.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 189522
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/fx/zzz.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 396
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/bell.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 962
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/defense.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 88872
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/gem.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 73629
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/listen.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 83374
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/jump.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 148211
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/moon.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 736
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/chest.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 89625
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/seeds.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 86583
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/sleep.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 196462
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/settings.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 89857
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/flame.svg",
+        "type": "Image",
+        "status": 200,
+        "bytes": 704
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/quest.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 92870
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/attack.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 93650
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/coin.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 81602
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/xp.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 91264
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/happy.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 157794
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot/sad.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 210426
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/icons/v6/water.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 90836
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/avatars/chick.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 55399
+      },
+      {
+        "url": "http://127.0.0.1:8940/assets/mascot-chick.png",
+        "type": "Image",
+        "status": 200,
+        "bytes": 541429
+      },
+      {
+        "url": "http://127.0.0.1:8940/favicon.ico",
+        "type": "Other",
+        "status": 404,
+        "bytes": 520
+      }
+    ]
+  },
+  "perf": {
+    "href": "http://127.0.0.1:8940/index.html",
+    "title": "(20) Học từ vựng tiếng Hàn",
+    "visibilityState": "visible",
+    "nav": {
+      "domContentLoaded": 697.7000000001863,
+      "load": 819.6000000005588,
+      "domInteractive": 614.6000000005588,
+      "responseEnd": 36.299999999813735,
+      "transferSize": 1930457,
+      "encodedBodySize": 1930157,
+      "decodedBodySize": 1930157,
+      "type": "navigate"
+    },
+    "lcp": null,
+    "lcpEntries": 0,
+    "cls": 0,
+    "paints": [
+      {
+        "name": "first-paint",
+        "startTime": 296
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 296
+      }
+    ],
+    "layoutShiftCount": 0,
+    "resourceCount": 34,
+    "resourceTransferTotal": 3628242,
+    "resources": [
+      {
+        "name": "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap",
+        "type": "link",
+        "transfer": 0,
+        "encoded": 0,
+        "decoded": 0,
+        "dur": 69
+      },
+      {
+        "name": "http://127.0.0.1:8940/vendor/xlsx-0.18.5.full.min.js",
+        "type": "script",
+        "transfer": 882027,
+        "encoded": 881727,
+        "decoded": 881727,
+        "dur": 33
+      },
+      {
+        "name": "http://127.0.0.1:8940/firebase-config.js",
+        "type": "script",
+        "transfer": 1849,
+        "encoded": 1549,
+        "decoded": 1549,
+        "dur": 7
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/idle.png",
+        "type": "css",
+        "transfer": 159483,
+        "encoded": 159183,
+        "decoded": 159183,
+        "dur": 17
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/book.png",
+        "type": "css",
+        "transfer": 75354,
+        "encoded": 75054,
+        "decoded": 75054,
+        "dur": 12
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/learn.svg",
+        "type": "img",
+        "transfer": 8478,
+        "encoded": 8178,
+        "decoded": 8178,
+        "dur": 6
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/book.svg",
+        "type": "img",
+        "transfer": 8449,
+        "encoded": 8149,
+        "decoded": 8149,
+        "dur": 17
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/trophy.svg",
+        "type": "img",
+        "transfer": 8499,
+        "encoded": 8199,
+        "decoded": 8199,
+        "dur": 18
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/bell.svg",
+        "type": "img",
+        "transfer": 8384,
+        "encoded": 8084,
+        "decoded": 8084,
+        "dur": 21
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/save.svg",
+        "type": "img",
+        "transfer": 8431,
+        "encoded": 8131,
+        "decoded": 8131,
+        "dur": 21
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/hello.png",
+        "type": "img",
+        "transfer": 189633,
+        "encoded": 189333,
+        "decoded": 189333,
+        "dur": 77
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/fx/zzz.svg",
+        "type": "img",
+        "transfer": 506,
+        "encoded": 206,
+        "decoded": 206,
+        "dur": 80
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/happy.png",
+        "type": "img",
+        "transfer": 157905,
+        "encoded": 157605,
+        "decoded": 157605,
+        "dur": 184
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/jump.png",
+        "type": "img",
+        "transfer": 148322,
+        "encoded": 148022,
+        "decoded": 148022,
+        "dur": 97
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/sad.png",
+        "type": "img",
+        "transfer": 210537,
+        "encoded": 210237,
+        "decoded": 210237,
+        "dur": 185
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot/sleep.png",
+        "type": "img",
+        "transfer": 196573,
+        "encoded": 196273,
+        "decoded": 196273,
+        "dur": 105
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/coin.png",
+        "type": "img",
+        "transfer": 81714,
+        "encoded": 81414,
+        "decoded": 81414,
+        "dur": 175
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/xp.png",
+        "type": "img",
+        "transfer": 91376,
+        "encoded": 91076,
+        "decoded": 91076,
+        "dur": 180
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/gem.png",
+        "type": "img",
+        "transfer": 73741,
+        "encoded": 73441,
+        "decoded": 73441,
+        "dur": 99
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/chest.png",
+        "type": "img",
+        "transfer": 89737,
+        "encoded": 89437,
+        "decoded": 89437,
+        "dur": 97
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/flame.svg",
+        "type": "img",
+        "transfer": 814,
+        "encoded": 514,
+        "decoded": 514,
+        "dur": 103
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/listen.png",
+        "type": "img",
+        "transfer": 83486,
+        "encoded": 83186,
+        "decoded": 83186,
+        "dur": 99
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/moon.svg",
+        "type": "img",
+        "transfer": 846,
+        "encoded": 546,
+        "decoded": 546,
+        "dur": 93
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/attack.png",
+        "type": "img",
+        "transfer": 93762,
+        "encoded": 93462,
+        "decoded": 93462,
+        "dur": 170
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/defense.png",
+        "type": "img",
+        "transfer": 88984,
+        "encoded": 88684,
+        "decoded": 88684,
+        "dur": 86
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/seeds.png",
+        "type": "img",
+        "transfer": 86695,
+        "encoded": 86395,
+        "decoded": 86395,
+        "dur": 103
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/water.png",
+        "type": "img",
+        "transfer": 90948,
+        "encoded": 90648,
+        "decoded": 90648,
+        "dur": 187
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/bell.svg",
+        "type": "img",
+        "transfer": 1072,
+        "encoded": 772,
+        "decoded": 772,
+        "dur": 80
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/settings.png",
+        "type": "img",
+        "transfer": 89969,
+        "encoded": 89669,
+        "decoded": 89669,
+        "dur": 103
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/icons/v6/quest.png",
+        "type": "img",
+        "transfer": 92982,
+        "encoded": 92682,
+        "decoded": 92682,
+        "dur": 179
+      },
+      {
+        "name": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js",
+        "type": "script",
+        "transfer": 0,
+        "encoded": 0,
+        "decoded": 0,
+        "dur": 84
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/avatars/chick.png",
+        "type": "img",
+        "transfer": 55511,
+        "encoded": 55211,
+        "decoded": 55211,
+        "dur": 31
+      },
+      {
+        "name": "http://127.0.0.1:8940/assets/mascot-chick.png",
+        "type": "img",
+        "transfer": 541540,
+        "encoded": 541240,
+        "decoded": 541240,
+        "dur": 74
+      },
+      {
+        "name": "http://127.0.0.1:8940/favicon.ico",
+        "type": "other",
+        "transfer": 635,
+        "encoded": 335,
+        "decoded": 335,
+        "dur": 60
+      }
+    ]
+  },
+  "perfObserverLog": {
+    "lcp": [
+      {
+        "startTime": 296,
+        "size": 4983,
+        "el": "SMALL"
+      },
+      {
+        "startTime": 492,
+        "size": 5400,
+        "el": "I"
+      },
+      {
+        "startTime": 696,
+        "size": 7980,
+        "el": "SPAN"
+      },
+      {
+        "startTime": 896,
+        "size": 13054,
+        "el": "SPAN"
+      },
+      {
+        "startTime": 928,
+        "size": 39600,
+        "el": "IMG"
+      }
+    ],
+    "cls": 0.0805573581147099,
+    "shifts": 1,
+    "supported": [
+      "element",
+      "event",
+      "first-input",
+      "interaction-contentful-paint",
+      "largest-contentful-paint",
+      "layout-shift",
+      "long-animation-frame",
+      "longtask",
+      "mark",
+      "measure",
+      "navigation",
+      "paint",
+      "resource",
+      "soft-navigation",
+      "visibility-state"
+    ]
+  },
+  "firebaseCheck": {
+    "firebaseGlobal": "undefined",
+    "firebaseApp": false,
+    "fontsStatus": "loaded",
+    "fontsLoaded": 0,
+    "bodyText": "🇰🇷 Korean Farm\n🇬🇧 English Farm\nEnglish Hub\n🐾 Thú Cưng\n단어장\nSổ từ vựng tiếng Hàn của bạn\nLv 1\n20 XP\n1\nngày học liên t"
+  },
+  "cdMetrics": {
+    "Timestamp": 7927.432147,
+    "AudioHandlers": 0,
+    "AudioWorkletProcessors": 0,
+    "Documents": 34,
+    "Frames": 25,
+    "JSEventListeners": 201,
+    "LayoutObjects": 871,
+    "MediaKeySessions": 0,
+    "MediaKeys": 0,
+    "Nodes": 1932,
+    "Resources": 74,
+    "ContextLifecycleStateObservers": 64,
+    "V8PerContextDatas": 2,
+    "WorkerGlobalScopes": 0,
+    "UACSSResources": 0,
+    "RTCPeerConnections": 0,
+    "ResourceFetchers": 34,
+    "AdSubframes": 0,
+    "DetachedScriptStates": 1,
+    "ArrayBufferContents": 18,
+    "LayoutCount": 16,
+    "RecalcStyleCount": 172,
+    "LayoutDuration": 0.010208,
+    "RecalcStyleDuration": 0.127189,
+    "DevToolsCommandDuration": 0.003044,
+    "ScriptDuration": 0.23059,
+    "V8CompileDuration": 0.000595,
+    "TaskDuration": 1.023071,
+    "TaskOtherDuration": 0.651445,
+    "ThreadTime": 0.524936,
+    "ProcessTime": 3.22,
+    "JSHeapUsedSize": 26794824,
+    "JSHeapTotalSize": 37912576,
+    "FirstMeaningfulPaint": 7924.208896,
+    "DomContentLoaded": 7924.529473,
+    "NavigationStart": 7923.91482
+  },
+  "cdMetricsDeltaAcrossReload": {
+    "ScriptDuration": 0.231,
+    "V8CompileDuration": 0.001,
+    "TaskDuration": 1.006,
+    "LayoutDuration": 0.01,
+    "RecalcStyleDuration": 0.119,
+    "LayoutCount": 16,
+    "RecalcStyleCount": 169
+  }
+}
