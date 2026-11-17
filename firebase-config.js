@@ -17,6 +17,7 @@
    their own document). NEVER paste a service-account private key or an
    Admin SDK credential here — those must never appear in frontend code.
 */
+
 window.__FIREBASE_CONFIG__ = {
   apiKey: "AIzaSyA-bBDITssSNOhuofX7H2YqY9oKkTo-9l8",
   authDomain: "korean-english-vocab-farm.firebaseapp.com",
