@@ -189,6 +189,8 @@ function zoneDetail(zid){
   +'</p>'
   +'<p><b>Thưởng hoàn thành vùng (mỗi ngôn ngữ, 1 lần):</b> +'+z.reward.xp+' XP, +'+z.reward.gems+' 💎, '+esc(z.reward.item)+'</p>'
   +'<p class="mute">⭐ Thắng trận · ⭐⭐ Thắng với độ chính xác ≥ 80% · ⭐⭐⭐ Độ chính xác ≥ 90% và còn ít nhất 3 tim.</p>'
+  /* V22: chọn bộ từ Basic Tactics trước khi đánh boss tiếng Anh */
+  +(lang==='en'&&window.__v22&&__v22.bossScopeHTML?__v22.bossScopeHTML():'')
   +'</div></div>';
   if(st!=='locked'){
     h+='<div class="v19zbosses">'+z.bosses.map(function(id){
@@ -218,10 +220,38 @@ function challenge(id){fight(id)}
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
   var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
+     trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
+     từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
+     loại, chỉ còn 1–2 ứng viên và từ ngoài phạm vi lọt vào đáp án.
+     Lấy toàn bộ từ trong phạm vi trước; đủ n thì dùng, không đủ mới
+     về lại lọc chủ đề/cấp độ. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.inScope){
+      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
+  /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng bộ lọc
+     mặc định của boss — trận đấu dùng đúng từ người chơi đã chọn. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.wordsFiltered){
+      var sl=v.wordsFiltered({level:'ALL'});
+      if(sl.length>=8)return shuffle(sl);
+      /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
+      if(sl2.length)return shuffle(sl2);
+      if(sl.length)return shuffle(sl);
+    }
+  }catch(e){}
   var list=words.filter(function(w){
     if(b.diff&&w.lv!==b.diff)return false;
     return true;
@@ -718,6 +748,6 @@ window.__v19={
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
     resolveUltimate:resolveUltimate},
-  version:'13.0.0'
+  version:'14.0.0'
 };
 })();

@@ -141,6 +141,39 @@ function buildWords(){
     for(i=0;i<a1lib.length;i++)attachLib(a1lib[i],'a1a2');
     for(i=0;i<oxlib.length;i++)attachLib(oxlib[i],'oxford');
   }catch(e){}
+  /* V22: Basic Tactics for Listening — gắn dữ liệu BT (tải lười qua
+     window.__V22_BT) vào bản ghi chuẩn. Từ đã có (V14/V15/A1-A2/Oxford)
+     chỉ được gắn thêm thư viện BT và nghĩa phụ nếu khác, KHÔNG tạo bản
+     ghi mới, nên một từ chỉ có một hồ sơ SRS. Từ chỉ có trong BT nhận
+     id ổn định 'bt<unit>_<seq>' và cấp độ 'BT' (không gán A1 giả). */
+  try{
+    var bt=(window.__V22_BT&&__V22_BT.units)||[];
+    var K2W2={};WORDS.forEach(function(ww){if(!ww.custom)K2W2[ww.en.toLowerCase()]=ww});
+    bt.forEach(function(u){
+      (u.words||[]).concat(u.phrases||[]).forEach(function(a){
+        var key=(a.en||'').toLowerCase();if(!key)return;
+        var ww=K2W2[key];
+        if(ww){
+          ww.lib=ww.lib||[];
+          if(ww.lib.indexOf('bt')<0)ww.lib.push('bt');
+          ww.btUnits=ww.btUnits||[];
+          if(ww.btUnits.indexOf(u.unit)<0)ww.btUnits.push(u.unit);
+          ww.btMap=ww.btMap||{};ww.btMap[u.unit]={id:a.id,type:a.type};
+          if(!ww.btUnit)ww.btUnit=u.unit;
+          if(a.vi&&ww.vi&&a.vi!==ww.vi){
+            ww.extra=ww.extra||[];var dup2=false;
+            for(var k=0;k<ww.extra.length;k++)if(ww.extra[k].vi===a.vi&&ww.extra[k].src==='bt'){dup2=true;break}
+            if(!dup2)ww.extra.push({pos:'',vi:a.vi,src:'bt'});
+          }
+        }else{
+          var nw={id:a.id,t:'bt',en:a.en,vi:a.vi,ipa:'',pos:'',ex:'',exvi:'',lv:'BT',custom:false,
+            lib:['bt'],btUnits:[u.unit],btMap:{},btUnit:u.unit};
+          nw.btMap[u.unit]={id:a.id,type:a.type};
+          WORDS.push(nw);BYID[nw.id]=nw;K2W2[key]=nw;LV[key]='BT';
+        }
+      });
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -216,6 +249,20 @@ function pushV17IntoV14(){
     return added;
   }catch(e){return 0}
 }
+/* V22: Basic Tactics — gắn dữ liệu BT (đã tải lười qua __V22_BT) vào
+   WORDS. Gọi từ __v22 sau khi tải xong basic_tactics_vocabulary.json.
+   Từ đã có chỉ được gắn thêm thư viện BT; từ chỉ có trong BT nhận id
+   ổn định 'bt<unit>_<seq>' và lv 'BT'. Trả về số bản ghi WORDS có BT. */
+function attachBT(){
+  try{
+    if(!window.__V22_BT||!window.__V22_BT.units)return 0;
+    if(window.__v14&&__v14.TOPICS&&!__v14.TOPICS.some(function(t){return t.id==='bt'}))
+      __v14.TOPICS.push({id:'bt',name:'Basic Tactics',vi:'Basic Tactics for Listening'});
+    buildWords();
+    var n=0;WORDS.forEach(function(w){if(w.lib&&w.lib.indexOf('bt')>=0)n++});
+    return n;
+  }catch(e){return 0}
+}
 function inScope15(w){
   /* true khi từ thuộc phạm vi đang chọn trong Thư viện (hoặc không chọn) */
   var sc=en15().scope;if(!sc||sc.kind!=='lib')return true;
@@ -227,6 +274,27 @@ function inScope15(w){
   if(sc.lesson){
     var ll=w.oxLessons||[];
     if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+  }
+  if(sc.lib==='bt'){
+    if(sc.unit){
+      var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+      var btus=w.btUnits||[];
+      if(!us.some(function(u){return btus.indexOf(u)>=0}))return false;
+      if(sc.type){
+        var okT=false;
+        us.forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)okT=true});
+        if(!okT)return false;
+      }
+    }else if(sc.type){
+      var anyT=false;
+      (w.btUnits||[]).forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)anyT=true});
+      if(!anyT)return false;
+    }
+    if(sc.status){
+      var old2=enOld(),e2=en15();
+      if(sc.status==='unlearned'&&(old2.box[w.id]||0)>0)return false;
+      if(sc.status==='due'&&(e2.due[w.id]||0)>Date.now())return false;
+    }
   }
   return true;
 }
@@ -246,6 +314,26 @@ function wordsFiltered(o){
       if(sc.lesson){
         var ll=w.oxLessons||[];
         if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+      }
+      if(sc.lib==='bt'){
+        /* Basic Tactics: lọc theo Unit(s), loại mục từ và trạng thái.
+           Phạm vi Thư viện thắng bộ lọc cấp độ/chủ đề của tab Học. */
+        if(sc.unit){
+          var us2=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+          var btus2=w.btUnits||[];
+          if(!us2.some(function(u){return btus2.indexOf(u)>=0}))return false;
+          if(sc.type){
+            var okT2=false;
+            us2.forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)okT2=true});
+            if(!okT2)return false;
+          }
+        }else if(sc.type){
+          var anyT2=false;
+          (w.btUnits||[]).forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)anyT2=true});
+          if(!anyT2)return false;
+        }
+        if(sc.status==='unlearned'&&(old.box[w.id]||0)>0)return false;
+        if(sc.status==='due'&&(e.due[w.id]||0)>Date.now())return false;
       }
     }else{
       if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
@@ -481,7 +569,7 @@ function renderMode(){
   var fn={flash:flashHTML,mc:mcHTML,type:typeHTML,listen:listenHTML,builder:builderHTML,grammar:grammarHTML,match:matchHTML,speed:speedHTML,read:readHTML,speak:speakHTML}[M.mode];
   b.innerHTML=fn?fn():learnHTML();
   if(M.mode==='type'){var inp=$('#v15-type-in');if(inp)setTimeout(function(){inp.focus()},0)}
-  if(M.mode==='listen'&&M.cur&&M.answered===null&&M.autoSpeak!==false){setTimeout(function(){speak15(M.cur.en)},250)}
+  if(M.mode==='listen'&&M.cur&&M.cur.w&&M.answered===null&&M.autoSpeak!==false){setTimeout(function(){speak15(M.cur.w.en)},250)}
 }
 function finishRound(title){
   var xp=M.score*2;
@@ -497,6 +585,16 @@ function pickPool(n,onlyDue){
 }
 function distractors(w,n){
   var pool=WORDS.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22: khi đang chọn phạm vi Thư viện (vd Basic Tactics), đáp án nhiễu
+     lấy trong cùng phạm vi — lọc chủ đề/cấp độ trước làm cạn nguồn vì
+     từ BT trùng với V14/V15 giữ t/lv cũ, còn từ BT-only có t='bt'. */
+  try{
+    var sc=en15().scope;
+    if(sc&&sc.kind==='lib'){
+      var inSc=WORDS.filter(function(x){return x.id!==w.id&&inScope15(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 
@@ -566,13 +664,36 @@ function startType(){
 }
 function nextType(){
   var w=M.list[M.q];M.cur={w:w};M.answered=null;M.ok=null;M.hint=0;
+  /* V22: cụm từ nhiều từ (vd Basic Tactics) thì sắp xếp các thành phần
+     thay vì gõ — gõ nguyên một câu dài dễ sai và không luyện thứ tự từ. */
+  if(w&&/\s/.test((w.en||'').replace(/[.!?]$/,''))){
+    var toks=w.en.replace(/([.!?])$/,'').split(' ');
+    M.cur.arr={tokens:shuffle(toks.map(function(t,i){return {t:t,i:i}})),built:[],used:{}};
+  }
 }
 function typeHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành English Typing!');
+  /* V14: bảo vệ khi danh sách rỗng (vd phạm vi BT "Cần ôn" mà chưa có
+     từ nào đến hạn) — trước đây M.cur.w là undefined và trang vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var w=M.cur.w;
   var hint=w.en.slice(0,M.hint);
   var h=modeHead('English Typing','Nhìn nghĩa tiếng Việt và gõ từ tiếng Anh');
   h+='<div class="v15qcard"><div class="v15qword vi">'+esc(w.vi)+'</div><div class="mute">'+esc(w.pos)+' · '+esc(topicName(w.t))+' · '+esc(w.lv)+'</div>'+(M.hint?'<div class="mute">Gợi ý: <b>'+esc(hint)+'…</b></div>':'')+'</div>';
+  if(M.cur.arr){
+    var a=M.cur.arr;
+    h+='<div class="v15built">'+(a.built.length?a.built.map(function(b){return esc(b.t)}).join(' '):'&nbsp;')+'</div>';
+    h+='<div class="v15tiles">'+a.tokens.map(function(tok,idx){
+      return '<button class="v15tile" '+(a.used[idx]?'disabled':'')+' onclick="__v15.typeArrTap('+idx+')">'+esc(tok.t)+'</button>';
+    }).join('')+'</div>';
+    if(M.answered===null){
+      h+='<div class="acts"><button class="btn pri" onclick="__v15.typeArrCheck()">Kiểm tra</button><button class="btn sm" onclick="__v15.typeArrClear()">Xóa</button><button class="btn sm" onclick="__v15.typeArrHint()">Gợi ý từ đầu</button></div>';
+    }else{
+      h+='<div class="v15explain" style="color:var(--'+(M.ok?'ok':'bad')+')">'+(M.ok?'Chính xác! +XP':'Chưa đúng. Cụm đúng: <b>'+esc(w.en)+'</b>')+'</div>';
+      h+='<div class="acts"><button class="btn pri" onclick="__v15.typeNext()">Câu tiếp →</button></div>';
+    }
+    return h;
+  }
   if(M.answered===null){
     h+='<input id="v15-type-in" class="v15input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ từ tiếng Anh…" onkeydown="if(event.key===\'Enter\')__v15.typeSubmit()">'
     +'<div class="acts"><button class="btn pri" onclick="__v15.typeSubmit()">Kiểm tra</button><button class="btn sm" onclick="__v15.typeHint()">Gợi ý chữ cái</button><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe</button></div>';
@@ -592,6 +713,26 @@ function typeSubmit(){
 }
 function typeHint(){M.hint=Math.min(M.cur.w.en.length,M.hint+1);renderMode()}
 function typeNext(){M.q++;if(M.q<M.total)nextType();renderMode()}
+/* V22: sắp xếp thành phần cụm từ trong English Typing (xem nextType) */
+function typeArrTap(idx){
+  var a=M.cur&&M.cur.arr;if(!a||M.answered!==null||a.used[idx])return;
+  a.used[idx]=1;a.built.push(a.tokens[idx]);renderMode();
+}
+function typeArrClear(){var a=M.cur&&M.cur.arr;if(!a)return;a.built=[];a.used={};renderMode()}
+function typeArrHint(){
+  var a=M.cur&&M.cur.arr,w=M.cur&&M.cur.w;if(!a||!w)return;
+  var first=w.en.replace(/([.!?])$/,'').split(' ')[0];
+  for(var i=0;i<a.tokens.length;i++){if(a.tokens[i].t===first&&!a.used[i]){typeArrTap(i);return}}
+  renderMode();
+}
+function typeArrCheck(){
+  var a=M.cur&&M.cur.arr,w=M.cur&&M.cur.w;if(!a||!w||M.answered!==null)return;
+  var built=a.built.map(function(b){return b.t}).join(' ');
+  var target=w.en.replace(/([.!?])$/,'');
+  M.answered=built;M.ok=(norm(built)===norm(target));
+  mark15(M.ok,w,'type');if(M.ok)M.score++;
+  renderMode();
+}
 
 /* ---------- Mode 4: Listening ---------- */
 function startListen(){
@@ -603,6 +744,8 @@ function nextListen(){
 }
 function listenHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành Listening!');
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var c=M.cur,w=c.w;
   var h=modeHead('Listening Challenge','Nghe phát âm và chọn / gõ từ nghe được');
   h+='<div class="v15qcard"><div class="v15qword">Nghe</div><div class="mute">Bấm nút Nghe, rồi '+(M.lmode==='choice'?'chọn từ đúng':'gõ từ bạn nghe được')+'</div><div class="acts"><button class="btn pri" onclick="__v15.speakWord(\''+w.id+'\')">Nghe phát âm</button>'
@@ -798,6 +941,8 @@ function speedHTML(){
     save15();
     return '<div class="v15done"><div class="v15done-big">Hết 60 giây!</div><p>Bạn trả lời đúng <b>'+M.score+'</b> từ · kỷ lục: <b>'+(e.modeBest.speed?e.modeBest.speed.best:0)+'</b> · +'+xp+' XP.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\'speed\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
   }
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var c=M.cur,w=c.w;
   var h=modeHead('Speed Vocabulary','Trả lời càng nhanh càng tốt · còn <span id="v15-speed-t">'+M.left+'s</span> · combo x'+(M.combo||0));
   h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+'</div></div>';
@@ -864,6 +1009,8 @@ function startSpeak(){
 }
 function speakHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành Speaking Practice!');
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.list||!M.list.length||!M.list[M.q])return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var w=M.list[M.q];
   var h=modeHead('Speaking Practice','Nghe mẫu, đọc to từ / câu, rồi kiểm tra');
   h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.vi)+'</div>'
@@ -1488,6 +1635,7 @@ window.__v15={
   setLevel:setLevel,setTopic:setTopic,startMode:startMode,backToLearn:backToLearn,
   fcFlip:fcFlip,fcPrev:fcPrev,fcNext:fcNext,fcRate:fcRate,speakWord:speakWord,
   mcPick:mcPick,mcNext:mcNext,typeSubmit:typeSubmit,typeHint:typeHint,typeNext:typeNext,
+  typeArrTap:typeArrTap,typeArrClear:typeArrClear,typeArrHint:typeArrHint,typeArrCheck:typeArrCheck,
   listenMode:listenMode,listenPick:listenPick,listenTypeSubmit:listenTypeSubmit,listenNext:listenNext,
   builderTap:builderTap,builderClear:builderClear,builderHint:builderHint,builderCheck:builderCheck,builderNext:builderNext,
   grammarPick:grammarPick,grammarNext:grammarNext,matchClick:matchClick,speedPick:speedPick,
@@ -1504,9 +1652,11 @@ window.__v15={
   renderTab:renderTab,topicName:topicName,counts15:counts15,
   /* V17 (Thư viện có sẵn): phạm vi bài/chủ đề + bộ lọc từ + thưởng bài học */
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
-  gain15:gain15,
+  gain15:gain15,mark15:mark15,
+  /* V22 (Basic Tactics): gắn dữ liệu BT đã tải lười vào WORDS */
+  attachBT:attachBT,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'13.0.0'
+  version:'14.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);

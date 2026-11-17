@@ -116,6 +116,8 @@ function openArena(a){
   +'<p class="mute">'+esc(meta.need)+' · Đã thắng '+arenaWins(a)+'/10</p>';
   if(a==='el')h+='<p class="mute">Mỗi trận: chọn học 🇬🇧 tiếng Anh hoặc 🇰🇷 tiếng Hàn trước khi đánh. Câu hỏi tiếng Hàn lấy từ chính bộ thẻ tiếng Hàn của bạn.</p>';
   if(a==='leg')h+='<p class="mute">Mỗi boss có 3 giai đoạn: P1 khởi đầu, P2 cường hóa khi HP còn 50%, P3 tuyệt kỹ khi HP còn 20%. Độ khó câu hỏi tăng theo số từ bạn đã thuộc.</p>';
+  /* V22: chọn bộ từ Basic Tactics trước khi đánh boss tiếng Anh */
+  h+=(window.__v22&&__v22.bossScopeHTML?__v22.bossScopeHTML():'');
   h+='<div class="v18bosses">'+list.map(bossCardHTML).join('')+'</div><div id="v18fight"></div></div>';
   host.innerHTML=h;
   var f=$('#v18fight');if(f)f.scrollIntoView&&f.scrollIntoView();
@@ -222,11 +224,39 @@ function challenge(id){
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
   var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
+     trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
+     từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
+     loại, chỉ còn 1–2 ứng viên và từ ngoài phạm vi lọt vào đáp án.
+     Lấy toàn bộ từ trong phạm vi trước; đủ n thì dùng, không đủ mới
+     về lại lọc chủ đề/cấp độ. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.inScope){
+      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 function legDiff(){var m=0;try{m=V15().counts().mastered}catch(e){}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
+  /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng mọi bộ lọc
+     mặc định của boss — trận đấu dùng đúng từ người chơi đã chọn. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.wordsFiltered){
+      var sl=v.wordsFiltered({level:'ALL'});
+      if(sl.length>=8)return shuffle(sl);
+      /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
+      if(sl2.length)return shuffle(sl2);
+      if(sl.length)return shuffle(sl);
+    }
+  }catch(e){}
   var list=words.filter(function(w){
     if(b.lib==='a1a2'&&(!w.lib||w.lib.indexOf('a1a2')<0))return false;
     if(b.lib==='oxford'&&(!w.lib||w.lib.indexOf('oxford')<0))return false;
@@ -623,6 +653,6 @@ window.__v18={
   get bosses(){return B18()},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en18:en18,legDiff:legDiff},
-  version:'10.0.1'
+  version:'14.0.0'
 };
 })();

@@ -1,0 +1,746 @@
+{
+ "duplicates": [
+  {
+   "en": "glasses",
+   "first": {
+    "unit": 2,
+    "id": "bt2_010",
+    "type": "word"
+   },
+   "again": {
+    "unit": 3,
+    "id": "bt3_008",
+    "type": "word"
+   }
+  },
+  {
+   "en": "short",
+   "first": {
+    "unit": 2,
+    "id": "bt2_016",
+    "type": "word"
+   },
+   "again": {
+    "unit": 3,
+    "id": "bt3_021",
+    "type": "word"
+   }
+  },
+  {
+   "en": "long (dress)",
+   "first": {
+    "unit": 2,
+    "id": "bt2_013",
+    "type": "word"
+   },
+   "again": {
+    "unit": 3,
+    "id": "bt3_032",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "book (a flight)",
+   "first": {
+    "unit": 5,
+    "id": "bt5_005",
+    "type": "word"
+   },
+   "again": {
+    "unit": 5,
+    "id": "bt5_025",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "on the right/left",
+   "first": {
+    "unit": 9,
+    "id": "bt9_036",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 10,
+    "id": "bt10_029",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "appointment",
+   "first": {
+    "unit": 5,
+    "id": "bt5_002",
+    "type": "word"
+   },
+   "again": {
+    "unit": 11,
+    "id": "bt11_002",
+    "type": "word"
+   }
+  },
+  {
+   "en": "gym",
+   "first": {
+    "unit": 1,
+    "id": "bt1_005",
+    "type": "word"
+   },
+   "again": {
+    "unit": 11,
+    "id": "bt11_008",
+    "type": "word"
+   }
+  },
+  {
+   "en": "Are you free?",
+   "first": {
+    "unit": 5,
+    "id": "bt5_024",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 11,
+    "id": "bt11_014",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "earrings",
+   "first": {
+    "unit": 3,
+    "id": "bt3_006",
+    "type": "word"
+   },
+   "again": {
+    "unit": 12,
+    "id": "bt12_006",
+    "type": "word"
+   }
+  },
+  {
+   "en": "newspaper",
+   "first": {
+    "unit": 4,
+    "id": "bt4_003",
+    "type": "word"
+   },
+   "again": {
+    "unit": 12,
+    "id": "bt12_010",
+    "type": "word"
+   }
+  },
+  {
+   "en": "rent (v.)",
+   "first": {
+    "unit": 11,
+    "id": "bt11_011",
+    "type": "word"
+   },
+   "again": {
+    "unit": 12,
+    "id": "bt12_014",
+    "type": "word"
+   }
+  },
+  {
+   "en": "(a pair of) sneakers",
+   "first": {
+    "unit": 3,
+    "id": "bt3_024",
+    "type": "word"
+   },
+   "again": {
+    "unit": 12,
+    "id": "bt12_035",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "try (something) on",
+   "first": {
+    "unit": 3,
+    "id": "bt3_034",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 12,
+    "id": "bt12_038",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "get together",
+   "first": {
+    "unit": 1,
+    "id": "bt1_015",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 14,
+    "id": "bt14_010",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "awful",
+   "first": {
+    "unit": 13,
+    "id": "bt13_002",
+    "type": "word"
+   },
+   "again": {
+    "unit": 15,
+    "id": "bt15_001",
+    "type": "word"
+   }
+  },
+  {
+   "en": "bed",
+   "first": {
+    "unit": 9,
+    "id": "bt9_002",
+    "type": "word"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_004",
+    "type": "word"
+   }
+  },
+  {
+   "en": "bookshelf",
+   "first": {
+    "unit": 9,
+    "id": "bt9_010",
+    "type": "word"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_006",
+    "type": "word"
+   }
+  },
+  {
+   "en": "comfortable",
+   "first": {
+    "unit": 3,
+    "id": "bt3_004",
+    "type": "word"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_008",
+    "type": "word"
+   }
+  },
+  {
+   "en": "sofa",
+   "first": {
+    "unit": 9,
+    "id": "bt9_025",
+    "type": "word"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_019",
+    "type": "word"
+   }
+  },
+  {
+   "en": "coffee table",
+   "first": {
+    "unit": 9,
+    "id": "bt9_030",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_024",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "dinner table",
+   "first": {
+    "unit": 9,
+    "id": "bt9_031",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 16,
+    "id": "bt16_025",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "actor",
+   "first": {
+    "unit": 7,
+    "id": "bt7_001",
+    "type": "word"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_001",
+    "type": "word"
+   }
+  },
+  {
+   "en": "doctor",
+   "first": {
+    "unit": 6,
+    "id": "bt6_008",
+    "type": "word"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_006",
+    "type": "word"
+   }
+  },
+  {
+   "en": "pool",
+   "first": {
+    "unit": 8,
+    "id": "bt8_007",
+    "type": "word"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_016",
+    "type": "word"
+   }
+  },
+  {
+   "en": "singer",
+   "first": {
+    "unit": 7,
+    "id": "bt7_020",
+    "type": "word"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_019",
+    "type": "word"
+   }
+  },
+  {
+   "en": "travel",
+   "first": {
+    "unit": 6,
+    "id": "bt6_025",
+    "type": "word"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_022",
+    "type": "word"
+   }
+  },
+  {
+   "en": "hang out (with someone)",
+   "first": {
+    "unit": 4,
+    "id": "bt4_013",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 17,
+    "id": "bt17_029",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "dry",
+   "first": {
+    "unit": 13,
+    "id": "bt13_014",
+    "type": "word"
+   },
+   "again": {
+    "unit": 18,
+    "id": "bt18_005",
+    "type": "word"
+   }
+  },
+  {
+   "en": "pool",
+   "first": {
+    "unit": 8,
+    "id": "bt8_007",
+    "type": "word"
+   },
+   "again": {
+    "unit": 18,
+    "id": "bt18_010",
+    "type": "word"
+   }
+  },
+  {
+   "en": "swim",
+   "first": {
+    "unit": 8,
+    "id": "bt8_011",
+    "type": "word"
+   },
+   "again": {
+    "unit": 18,
+    "id": "bt18_017",
+    "type": "word"
+   }
+  },
+  {
+   "en": "(watch) band",
+   "first": {
+    "unit": 7,
+    "id": "bt7_003",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_001",
+    "type": "word"
+   }
+  },
+  {
+   "en": "bookstore",
+   "first": {
+    "unit": 6,
+    "id": "bt6_003",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_003",
+    "type": "word"
+   }
+  },
+  {
+   "en": "fresh",
+   "first": {
+    "unit": 13,
+    "id": "bt13_016",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_011",
+    "type": "word"
+   }
+  },
+  {
+   "en": "necklace",
+   "first": {
+    "unit": 3,
+    "id": "bt3_014",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_016",
+    "type": "word"
+   }
+  },
+  {
+   "en": "shampoo",
+   "first": {
+    "unit": 12,
+    "id": "bt12_016",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_020",
+    "type": "word"
+   }
+  },
+  {
+   "en": "tie",
+   "first": {
+    "unit": 3,
+    "id": "bt3_026",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_024",
+    "type": "word"
+   }
+  },
+  {
+   "en": "vegetables",
+   "first": {
+    "unit": 13,
+    "id": "bt13_040",
+    "type": "word"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_025",
+    "type": "word"
+   }
+  },
+  {
+   "en": "clothing store",
+   "first": {
+    "unit": 17,
+    "id": "bt17_028",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_030",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "on sale",
+   "first": {
+    "unit": 12,
+    "id": "bt12_031",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 19,
+    "id": "bt19_038",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "case",
+   "first": {
+    "unit": 9,
+    "id": "bt9_012",
+    "type": "word"
+   },
+   "again": {
+    "unit": 20,
+    "id": "bt20_004",
+    "type": "word"
+   }
+  },
+  {
+   "en": "design",
+   "first": {
+    "unit": 19,
+    "id": "bt19_006",
+    "type": "word"
+   },
+   "again": {
+    "unit": 20,
+    "id": "bt20_007",
+    "type": "word"
+   }
+  },
+  {
+   "en": "keys",
+   "first": {
+    "unit": 9,
+    "id": "bt9_022",
+    "type": "word"
+   },
+   "again": {
+    "unit": 20,
+    "id": "bt20_014",
+    "type": "word"
+   }
+  },
+  {
+   "en": "subway",
+   "first": {
+    "unit": 4,
+    "id": "bt4_004",
+    "type": "word"
+   },
+   "again": {
+    "unit": 20,
+    "id": "bt20_025",
+    "type": "word"
+   }
+  },
+  {
+   "en": "running shoes",
+   "first": {
+    "unit": 19,
+    "id": "bt19_042",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 20,
+    "id": "bt20_039",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "corner",
+   "first": {
+    "unit": 9,
+    "id": "bt9_014",
+    "type": "word"
+   },
+   "again": {
+    "unit": 21,
+    "id": "bt21_003",
+    "type": "word"
+   }
+  },
+  {
+   "en": "on the right/left",
+   "first": {
+    "unit": 9,
+    "id": "bt9_036",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 21,
+    "id": "bt21_021",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "pick up",
+   "first": {
+    "unit": 16,
+    "id": "bt16_029",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 21,
+    "id": "bt21_022",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "tennis racket",
+   "first": {
+    "unit": 9,
+    "id": "bt9_041",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 21,
+    "id": "bt21_024",
+    "type": "phrase"
+   }
+  },
+  {
+   "en": "comfortable",
+   "first": {
+    "unit": 3,
+    "id": "bt3_004",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_004",
+    "type": "word"
+   }
+  },
+  {
+   "en": "crowded",
+   "first": {
+    "unit": 15,
+    "id": "bt15_003",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_005",
+    "type": "word"
+   }
+  },
+  {
+   "en": "dangerous",
+   "first": {
+    "unit": 17,
+    "id": "bt17_005",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_006",
+    "type": "word"
+   }
+  },
+  {
+   "en": "fantastic",
+   "first": {
+    "unit": 15,
+    "id": "bt15_004",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_007",
+    "type": "word"
+   }
+  },
+  {
+   "en": "fresh (air)",
+   "first": {
+    "unit": 13,
+    "id": "bt13_016",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_008",
+    "type": "word"
+   }
+  },
+  {
+   "en": "popular",
+   "first": {
+    "unit": 7,
+    "id": "bt7_013",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_017",
+    "type": "word"
+   }
+  },
+  {
+   "en": "reasonable (price)",
+   "first": {
+    "unit": 12,
+    "id": "bt12_013",
+    "type": "word"
+   },
+   "again": {
+    "unit": 23,
+    "id": "bt23_018",
+    "type": "word"
+   }
+  },
+  {
+   "en": "drugstore",
+   "first": {
+    "unit": 19,
+    "id": "bt19_007",
+    "type": "word"
+   },
+   "again": {
+    "unit": 24,
+    "id": "bt24_007",
+    "type": "word"
+   }
+  },
+  {
+   "en": "fall asleep",
+   "first": {
+    "unit": 4,
+    "id": "bt4_010",
+    "type": "phrase"
+   },
+   "again": {
+    "unit": 24,
+    "id": "bt24_038",
+    "type": "phrase"
+   }
+  }
+ ],
+ "flags": []
+}

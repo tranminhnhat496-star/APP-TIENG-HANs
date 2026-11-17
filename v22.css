@@ -1,0 +1,19 @@
+/* ===== V22 — Basic Tactics for Listening =====
+   Hầu hết giao diện dùng lại class của V15/V17 (v17group, v17card,
+   v17bar, v15tab, v15qcard, v15opts, v15opt, v15pill). File này chỉ
+   thêm những gì riêng của BT: tab Words/Phrases, huy hiệu loại mục,
+   sao quest, hộp chọn bộ từ boss và lưới chip Unit. */
+.v22tabs{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.v22tabs .v15tab{flex:1;min-width:140px}
+.v22type{display:inline-block;font-size:11px;line-height:1;padding:3px 7px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.v22type.wd{background:#e3f2e6;color:#2e7d32}
+.v22type.ph{background:#e8eaf6;color:#3949ab}
+.v22stars{font-size:32px;letter-spacing:4px;color:#f9a825;margin:6px 0}
+.v22bscope{border:2px solid #a5d6a7;background:#f1f8e9;border-radius:12px;padding:10px 12px;margin:10px 0}
+.v22bscope .acts{margin-top:8px}
+.v22chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.v22chips .v15pill{cursor:pointer}
+@media (max-width:560px){
+  .v22stars{font-size:26px}
+  .v22tabs .v15tab{min-width:0;font-size:13px}
+}

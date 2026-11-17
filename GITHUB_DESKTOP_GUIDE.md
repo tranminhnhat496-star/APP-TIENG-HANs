@@ -384,3 +384,68 @@ Repo: **APP-TIENG-HANS**.
   `hanvocab.v1`; các bản lưu theo tài khoản (`hanvocab.v1.acc.*`) và
   bản lưu khách (`hanvocab.v1.guest`) vẫn nằm trong trình duyệt và sẽ
   được dùng lại khi nâng cấp lên V13 lần nữa.
+
+## V14 — Basic Tactics for Listening (2026-11-17)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V14 không đổi khóa lưu `hanvocab.v1`, nhưng có file sao lưu ngoài máy
+  thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V14_Basic_Tactics.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v22.js`, `v22.css`, `basic_tactics_vocabulary.json` và các file khác)
+  vào thư mục repository, ghi đè các file cũ. **Lưu ý:** file
+  `basic_tactics_vocabulary.json` phải nằm cùng thư mục với `index.html`
+  (thư mục gốc của repo) — game tải file này qua mạng khi mở nhóm Basic
+  Tactics, thiếu file thì nhóm này báo lỗi tải dữ liệu.
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V14: Basic Tactics Listening Vocabulary` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn.
+2. Mở English Hub → Thư viện từ vựng: phải thấy nhóm **Basic Tactics
+   for Listening – Vocabulary** (24 Units | Words, Phrases &
+   Collocations) với 24 thẻ Unit. Mở Unit 1 → bấm **Học ngay**: học
+   được ngay, không cần upload file.
+3. Trong Unit 13, chuyển 2 tab **Words | Phrases & Collocations**: số
+   lượng phải là 40 | 12. Tìm kiếm, đánh dấu đã thuộc, yêu thích phải
+   hoạt động; dòng từ ghi "Chưa có phiên âm" là đúng (sách gốc không
+   có IPA, game không bịa).
+4. Bấm **Listening Quest** (trong nhóm Basic Tactics): mở được 24
+   nhiệm vụ; chơi Mission 1 đến cuối phải nhận sao và XP.
+5. Bấm **Kiểm tra** ở một Unit rồi trả lời vài câu: chế độ gõ từ (English
+   Typing) gặp cụm từ dài sẽ hiện các ô từ để sắp xếp thay vì ô gõ.
+6. Mở Boss Map (English Hub → Bản Đồ Boss hoặc đấu trường): trong đấu
+   trường tiếng Anh và chi tiết vùng phải có hộp **Bộ từ đánh boss** để
+   chọn Unit Basic Tactics; đánh boss với Unit đã chọn thì câu hỏi phải
+   là từ Unit đó.
+7. Chơi một ván rồi tải lại trang: tiến trình (sao Quest, từ đã thuộc,
+   XP) phải còn nguyên.
+8. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000, từ tự nhập, XP, kim
+   cương, farm, boss và bản đồ phải còn nguyên. Nếu thiếu, dùng file sao
+   lưu đã tải ở bước chuẩn bị để khôi phục.
+9. **Không mở `index.html` trực tiếp bằng file:// để kiểm tra bộ từ
+   Basic Tactics:** trình duyệt chặn `fetch` từ file local nên nhóm
+   Basic Tactics sẽ báo không tải được dữ liệu — đây là giới hạn kỹ thuật
+   của trình duyệt, không phải lỗi game. Luôn kiểm tra qua GitHub Pages
+   (hoặc máy chủ web local).
+10. Firebase: V14 không đổi code Firebase; nếu bạn chưa chạy checklist
+    FIREBASE_SETUP.md (mục 6 + V13.3) thì đăng nhập/đồng bộ thật vẫn chưa
+    được xác nhận — V14 không làm thay đổi trạng thái này.
+
+## Quay lại V13 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V14 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V14 không đổi tên khóa lưu
+  `hanvocab.v1`; tiến trình Quest Basic Tactics (`S.v7.en22`) nằm trong
+  bản lưu và sẽ được dùng lại khi nâng cấp lên V14 lần nữa. File
+  `basic_tactics_vocabulary.json` thừa ra sau khi revert có thể xóa
+  khỏi repo (nó không được V13 dùng đến).

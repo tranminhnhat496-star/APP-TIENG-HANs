@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V13 — Login &amp; Account System — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V14 — Basic Tactics Listening Vocabulary — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -4058,6 +4058,39 @@ function buildWords(){
     for(i=0;i<a1lib.length;i++)attachLib(a1lib[i],'a1a2');
     for(i=0;i<oxlib.length;i++)attachLib(oxlib[i],'oxford');
   }catch(e){}
+  /* V22: Basic Tactics for Listening — gắn dữ liệu BT (tải lười qua
+     window.__V22_BT) vào bản ghi chuẩn. Từ đã có (V14/V15/A1-A2/Oxford)
+     chỉ được gắn thêm thư viện BT và nghĩa phụ nếu khác, KHÔNG tạo bản
+     ghi mới, nên một từ chỉ có một hồ sơ SRS. Từ chỉ có trong BT nhận
+     id ổn định 'bt<unit>_<seq>' và cấp độ 'BT' (không gán A1 giả). */
+  try{
+    var bt=(window.__V22_BT&&__V22_BT.units)||[];
+    var K2W2={};WORDS.forEach(function(ww){if(!ww.custom)K2W2[ww.en.toLowerCase()]=ww});
+    bt.forEach(function(u){
+      (u.words||[]).concat(u.phrases||[]).forEach(function(a){
+        var key=(a.en||'').toLowerCase();if(!key)return;
+        var ww=K2W2[key];
+        if(ww){
+          ww.lib=ww.lib||[];
+          if(ww.lib.indexOf('bt')<0)ww.lib.push('bt');
+          ww.btUnits=ww.btUnits||[];
+          if(ww.btUnits.indexOf(u.unit)<0)ww.btUnits.push(u.unit);
+          ww.btMap=ww.btMap||{};ww.btMap[u.unit]={id:a.id,type:a.type};
+          if(!ww.btUnit)ww.btUnit=u.unit;
+          if(a.vi&&ww.vi&&a.vi!==ww.vi){
+            ww.extra=ww.extra||[];var dup2=false;
+            for(var k=0;k<ww.extra.length;k++)if(ww.extra[k].vi===a.vi&&ww.extra[k].src==='bt'){dup2=true;break}
+            if(!dup2)ww.extra.push({pos:'',vi:a.vi,src:'bt'});
+          }
+        }else{
+          var nw={id:a.id,t:'bt',en:a.en,vi:a.vi,ipa:'',pos:'',ex:'',exvi:'',lv:'BT',custom:false,
+            lib:['bt'],btUnits:[u.unit],btMap:{},btUnit:u.unit};
+          nw.btMap[u.unit]={id:a.id,type:a.type};
+          WORDS.push(nw);BYID[nw.id]=nw;K2W2[key]=nw;LV[key]='BT';
+        }
+      });
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -4133,6 +4166,20 @@ function pushV17IntoV14(){
     return added;
   }catch(e){return 0}
 }
+/* V22: Basic Tactics — gắn dữ liệu BT (đã tải lười qua __V22_BT) vào
+   WORDS. Gọi từ __v22 sau khi tải xong basic_tactics_vocabulary.json.
+   Từ đã có chỉ được gắn thêm thư viện BT; từ chỉ có trong BT nhận id
+   ổn định 'bt<unit>_<seq>' và lv 'BT'. Trả về số bản ghi WORDS có BT. */
+function attachBT(){
+  try{
+    if(!window.__V22_BT||!window.__V22_BT.units)return 0;
+    if(window.__v14&&__v14.TOPICS&&!__v14.TOPICS.some(function(t){return t.id==='bt'}))
+      __v14.TOPICS.push({id:'bt',name:'Basic Tactics',vi:'Basic Tactics for Listening'});
+    buildWords();
+    var n=0;WORDS.forEach(function(w){if(w.lib&&w.lib.indexOf('bt')>=0)n++});
+    return n;
+  }catch(e){return 0}
+}
 function inScope15(w){
   /* true khi từ thuộc phạm vi đang chọn trong Thư viện (hoặc không chọn) */
   var sc=en15().scope;if(!sc||sc.kind!=='lib')return true;
@@ -4144,6 +4191,27 @@ function inScope15(w){
   if(sc.lesson){
     var ll=w.oxLessons||[];
     if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+  }
+  if(sc.lib==='bt'){
+    if(sc.unit){
+      var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+      var btus=w.btUnits||[];
+      if(!us.some(function(u){return btus.indexOf(u)>=0}))return false;
+      if(sc.type){
+        var okT=false;
+        us.forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)okT=true});
+        if(!okT)return false;
+      }
+    }else if(sc.type){
+      var anyT=false;
+      (w.btUnits||[]).forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)anyT=true});
+      if(!anyT)return false;
+    }
+    if(sc.status){
+      var old2=enOld(),e2=en15();
+      if(sc.status==='unlearned'&&(old2.box[w.id]||0)>0)return false;
+      if(sc.status==='due'&&(e2.due[w.id]||0)>Date.now())return false;
+    }
   }
   return true;
 }
@@ -4163,6 +4231,26 @@ function wordsFiltered(o){
       if(sc.lesson){
         var ll=w.oxLessons||[];
         if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+      }
+      if(sc.lib==='bt'){
+        /* Basic Tactics: lọc theo Unit(s), loại mục từ và trạng thái.
+           Phạm vi Thư viện thắng bộ lọc cấp độ/chủ đề của tab Học. */
+        if(sc.unit){
+          var us2=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+          var btus2=w.btUnits||[];
+          if(!us2.some(function(u){return btus2.indexOf(u)>=0}))return false;
+          if(sc.type){
+            var okT2=false;
+            us2.forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)okT2=true});
+            if(!okT2)return false;
+          }
+        }else if(sc.type){
+          var anyT2=false;
+          (w.btUnits||[]).forEach(function(u){var m=(w.btMap||{})[u];if(m&&m.type===sc.type)anyT2=true});
+          if(!anyT2)return false;
+        }
+        if(sc.status==='unlearned'&&(old.box[w.id]||0)>0)return false;
+        if(sc.status==='due'&&(e.due[w.id]||0)>Date.now())return false;
       }
     }else{
       if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
@@ -4398,7 +4486,7 @@ function renderMode(){
   var fn={flash:flashHTML,mc:mcHTML,type:typeHTML,listen:listenHTML,builder:builderHTML,grammar:grammarHTML,match:matchHTML,speed:speedHTML,read:readHTML,speak:speakHTML}[M.mode];
   b.innerHTML=fn?fn():learnHTML();
   if(M.mode==='type'){var inp=$('#v15-type-in');if(inp)setTimeout(function(){inp.focus()},0)}
-  if(M.mode==='listen'&&M.cur&&M.answered===null&&M.autoSpeak!==false){setTimeout(function(){speak15(M.cur.en)},250)}
+  if(M.mode==='listen'&&M.cur&&M.cur.w&&M.answered===null&&M.autoSpeak!==false){setTimeout(function(){speak15(M.cur.w.en)},250)}
 }
 function finishRound(title){
   var xp=M.score*2;
@@ -4414,6 +4502,16 @@ function pickPool(n,onlyDue){
 }
 function distractors(w,n){
   var pool=WORDS.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22: khi đang chọn phạm vi Thư viện (vd Basic Tactics), đáp án nhiễu
+     lấy trong cùng phạm vi — lọc chủ đề/cấp độ trước làm cạn nguồn vì
+     từ BT trùng với V14/V15 giữ t/lv cũ, còn từ BT-only có t='bt'. */
+  try{
+    var sc=en15().scope;
+    if(sc&&sc.kind==='lib'){
+      var inSc=WORDS.filter(function(x){return x.id!==w.id&&inScope15(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 
@@ -4483,13 +4581,36 @@ function startType(){
 }
 function nextType(){
   var w=M.list[M.q];M.cur={w:w};M.answered=null;M.ok=null;M.hint=0;
+  /* V22: cụm từ nhiều từ (vd Basic Tactics) thì sắp xếp các thành phần
+     thay vì gõ — gõ nguyên một câu dài dễ sai và không luyện thứ tự từ. */
+  if(w&&/\s/.test((w.en||'').replace(/[.!?]$/,''))){
+    var toks=w.en.replace(/([.!?])$/,'').split(' ');
+    M.cur.arr={tokens:shuffle(toks.map(function(t,i){return {t:t,i:i}})),built:[],used:{}};
+  }
 }
 function typeHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành English Typing!');
+  /* V14: bảo vệ khi danh sách rỗng (vd phạm vi BT "Cần ôn" mà chưa có
+     từ nào đến hạn) — trước đây M.cur.w là undefined và trang vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var w=M.cur.w;
   var hint=w.en.slice(0,M.hint);
   var h=modeHead('English Typing','Nhìn nghĩa tiếng Việt và gõ từ tiếng Anh');
   h+='<div class="v15qcard"><div class="v15qword vi">'+esc(w.vi)+'</div><div class="mute">'+esc(w.pos)+' · '+esc(topicName(w.t))+' · '+esc(w.lv)+'</div>'+(M.hint?'<div class="mute">Gợi ý: <b>'+esc(hint)+'…</b></div>':'')+'</div>';
+  if(M.cur.arr){
+    var a=M.cur.arr;
+    h+='<div class="v15built">'+(a.built.length?a.built.map(function(b){return esc(b.t)}).join(' '):'&nbsp;')+'</div>';
+    h+='<div class="v15tiles">'+a.tokens.map(function(tok,idx){
+      return '<button class="v15tile" '+(a.used[idx]?'disabled':'')+' onclick="__v15.typeArrTap('+idx+')">'+esc(tok.t)+'</button>';
+    }).join('')+'</div>';
+    if(M.answered===null){
+      h+='<div class="acts"><button class="btn pri" onclick="__v15.typeArrCheck()">Kiểm tra</button><button class="btn sm" onclick="__v15.typeArrClear()">Xóa</button><button class="btn sm" onclick="__v15.typeArrHint()">Gợi ý từ đầu</button></div>';
+    }else{
+      h+='<div class="v15explain" style="color:var(--'+(M.ok?'ok':'bad')+')">'+(M.ok?'Chính xác! +XP':'Chưa đúng. Cụm đúng: <b>'+esc(w.en)+'</b>')+'</div>';
+      h+='<div class="acts"><button class="btn pri" onclick="__v15.typeNext()">Câu tiếp →</button></div>';
+    }
+    return h;
+  }
   if(M.answered===null){
     h+='<input id="v15-type-in" class="v15input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ từ tiếng Anh…" onkeydown="if(event.key===\'Enter\')__v15.typeSubmit()">'
     +'<div class="acts"><button class="btn pri" onclick="__v15.typeSubmit()">Kiểm tra</button><button class="btn sm" onclick="__v15.typeHint()">Gợi ý chữ cái</button><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe</button></div>';
@@ -4509,6 +4630,26 @@ function typeSubmit(){
 }
 function typeHint(){M.hint=Math.min(M.cur.w.en.length,M.hint+1);renderMode()}
 function typeNext(){M.q++;if(M.q<M.total)nextType();renderMode()}
+/* V22: sắp xếp thành phần cụm từ trong English Typing (xem nextType) */
+function typeArrTap(idx){
+  var a=M.cur&&M.cur.arr;if(!a||M.answered!==null||a.used[idx])return;
+  a.used[idx]=1;a.built.push(a.tokens[idx]);renderMode();
+}
+function typeArrClear(){var a=M.cur&&M.cur.arr;if(!a)return;a.built=[];a.used={};renderMode()}
+function typeArrHint(){
+  var a=M.cur&&M.cur.arr,w=M.cur&&M.cur.w;if(!a||!w)return;
+  var first=w.en.replace(/([.!?])$/,'').split(' ')[0];
+  for(var i=0;i<a.tokens.length;i++){if(a.tokens[i].t===first&&!a.used[i]){typeArrTap(i);return}}
+  renderMode();
+}
+function typeArrCheck(){
+  var a=M.cur&&M.cur.arr,w=M.cur&&M.cur.w;if(!a||!w||M.answered!==null)return;
+  var built=a.built.map(function(b){return b.t}).join(' ');
+  var target=w.en.replace(/([.!?])$/,'');
+  M.answered=built;M.ok=(norm(built)===norm(target));
+  mark15(M.ok,w,'type');if(M.ok)M.score++;
+  renderMode();
+}
 
 /* ---------- Mode 4: Listening ---------- */
 function startListen(){
@@ -4520,6 +4661,8 @@ function nextListen(){
 }
 function listenHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành Listening!');
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var c=M.cur,w=c.w;
   var h=modeHead('Listening Challenge','Nghe phát âm và chọn / gõ từ nghe được');
   h+='<div class="v15qcard"><div class="v15qword">Nghe</div><div class="mute">Bấm nút Nghe, rồi '+(M.lmode==='choice'?'chọn từ đúng':'gõ từ bạn nghe được')+'</div><div class="acts"><button class="btn pri" onclick="__v15.speakWord(\''+w.id+'\')">Nghe phát âm</button>'
@@ -4715,6 +4858,8 @@ function speedHTML(){
     save15();
     return '<div class="v15done"><div class="v15done-big">Hết 60 giây!</div><p>Bạn trả lời đúng <b>'+M.score+'</b> từ · kỷ lục: <b>'+(e.modeBest.speed?e.modeBest.speed.best:0)+'</b> · +'+xp+' XP.</p><div class="acts"><button class="btn pri" onclick="__v15.startMode(\'speed\')">Chơi lại</button><button class="btn" onclick="__v15.backToLearn()">Chế độ khác</button></div></div>';
   }
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var c=M.cur,w=c.w;
   var h=modeHead('Speed Vocabulary','Trả lời càng nhanh càng tốt · còn <span id="v15-speed-t">'+M.left+'s</span> · combo x'+(M.combo||0));
   h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+'</div></div>';
@@ -4781,6 +4926,8 @@ function startSpeak(){
 }
 function speakHTML(){
   if(M.q>=M.total)return finishRound('Hoàn thành Speaking Practice!');
+  /* V14: như typeHTML — danh sách rỗng thì hiện thông báo thay vì vỡ. */
+  if(!M.list||!M.list.length||!M.list[M.q])return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var w=M.list[M.q];
   var h=modeHead('Speaking Practice','Nghe mẫu, đọc to từ / câu, rồi kiểm tra');
   h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.vi)+'</div>'
@@ -5405,6 +5552,7 @@ window.__v15={
   setLevel:setLevel,setTopic:setTopic,startMode:startMode,backToLearn:backToLearn,
   fcFlip:fcFlip,fcPrev:fcPrev,fcNext:fcNext,fcRate:fcRate,speakWord:speakWord,
   mcPick:mcPick,mcNext:mcNext,typeSubmit:typeSubmit,typeHint:typeHint,typeNext:typeNext,
+  typeArrTap:typeArrTap,typeArrClear:typeArrClear,typeArrHint:typeArrHint,typeArrCheck:typeArrCheck,
   listenMode:listenMode,listenPick:listenPick,listenTypeSubmit:listenTypeSubmit,listenNext:listenNext,
   builderTap:builderTap,builderClear:builderClear,builderHint:builderHint,builderCheck:builderCheck,builderNext:builderNext,
   grammarPick:grammarPick,grammarNext:grammarNext,matchClick:matchClick,speedPick:speedPick,
@@ -5421,9 +5569,11 @@ window.__v15={
   renderTab:renderTab,topicName:topicName,counts15:counts15,
   /* V17 (Thư viện có sẵn): phạm vi bài/chủ đề + bộ lọc từ + thưởng bài học */
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
-  gain15:gain15,
+  gain15:gain15,mark15:mark15,
+  /* V22 (Basic Tactics): gắn dữ liệu BT đã tải lười vào WORDS */
+  attachBT:attachBT,
   get words(){return WORDS},get state(){return en15()},get counts(){return counts15()},
-  version:'13.0.0'
+  version:'14.0.0'
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init15);
 else setTimeout(init15,0);
@@ -6707,6 +6857,14 @@ function currentScope(){
 }
 function scopeName(sc){
   if(!sc||sc.kind!=='lib')return '';
+  if(sc.lib==='bt'){
+    var u='';
+    if(sc.unit){var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+      u=us.length===1?' · Unit '+us[0]:' · '+us.length+' Units';}
+    var t=sc.type?(sc.type==='word'?' · Từ đơn':' · Cụm từ'):'';
+    var s=sc.status?(sc.status==='unlearned'?' · Chưa thuộc':' · Cần ôn'):'';
+    return 'Basic Tactics'+u+t+s;
+  }
   if(sc.lib==='a1a2'){
     if(sc.topic)return 'A1–A2 · '+topicName(sc.topic);
     return 'A1–A2 Vocabulary';
@@ -6734,6 +6892,9 @@ function scopeBannerHTML(){
 
 /* ---------- trang chính Thư viện ---------- */
 function libraryHTML(){
+  /* V22: khi đang xem một Unit Basic Tactics hoặc Listening Quest,
+     V22 vẽ toàn bộ nội dung thay cho trang chính của Thư viện. */
+  if(window.__v22){var v22=__v22.viewHTML();if(v22)return v22}
   if(V.view==='lesson')return lessonHTML();
   var h='<div class="v17lib"><div class="v17head"><h3>📚 Thư viện từ vựng</h3>'
     +'<p class="mute">Từ vựng có sẵn — mở ra là học ngay, không cần upload. Tiến trình học lưu riêng cho từng từ, không trộn với từ của bạn.</p></div>';
@@ -6751,7 +6912,9 @@ function libraryHTML(){
     +'<div class="v17ox-tools"><input class="v15input" placeholder="Tìm từ trong Oxford 3000…" value="'+esc(V.oxQ)+'" oninput="__v17.oxSearch(this.value)">'
     +posSelect('oxPos',V.oxPos)+'</div>'
     +lessonGrid()+'</div>';
-  /* Nhóm 3 — Từ vựng của tôi */
+  /* Nhóm 3 — Basic Tactics for Listening (V22, dữ liệu tải lười) */
+  h+=(window.__v22&&__v22.groupHTML?__v22.groupHTML():'');
+  /* Nhóm 4 — Từ vựng của tôi */
   h+=myGroupHTML();
   return h+'</div>';
 }
@@ -6886,7 +7049,8 @@ function wordCard(w){
   if(V.lib==='a1a2'&&!V.topic)where=topicName(w.a1a2Topic||w.t);
   if(V.lib==='oxford'&&!V.lesson)where='Bài '+w.oxLesson;
   var extra=(w.extra||[]).map(function(x){
-    return '<div class="v17extra">+ '+esc(x.pos||'')+' — '+esc(x.vi)+' <span class="mute">('+(x.src==='oxford'?'Oxford 3000':'A1–A2')+')</span></div>';
+    var src=x.src==='oxford'?'Oxford 3000':(x.src==='bt'?'Basic Tactics':'A1–A2');
+    return '<div class="v17extra">+ '+esc(x.pos||'')+' — '+esc(x.vi)+' <span class="mute">('+src+')</span></div>';
   }).join('');
   var lvLabel=w.lv==='OX'?'Oxford 3000':(w.lv||'');
   return '<div class="v17word">'
@@ -7005,7 +7169,7 @@ window.__v17={
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,
   speak:speak,toggleMastered:toggleMastered,toggleFav:toggleFav,copyToPersonal:copyToPersonal,claim:claim,
   get state(){return V},
-  version:'9.0.0'
+  version:'10.0.0'
 };
 })();
 
@@ -7321,6 +7485,8 @@ function openArena(a){
   +'<p class="mute">'+esc(meta.need)+' · Đã thắng '+arenaWins(a)+'/10</p>';
   if(a==='el')h+='<p class="mute">Mỗi trận: chọn học 🇬🇧 tiếng Anh hoặc 🇰🇷 tiếng Hàn trước khi đánh. Câu hỏi tiếng Hàn lấy từ chính bộ thẻ tiếng Hàn của bạn.</p>';
   if(a==='leg')h+='<p class="mute">Mỗi boss có 3 giai đoạn: P1 khởi đầu, P2 cường hóa khi HP còn 50%, P3 tuyệt kỹ khi HP còn 20%. Độ khó câu hỏi tăng theo số từ bạn đã thuộc.</p>';
+  /* V22: chọn bộ từ Basic Tactics trước khi đánh boss tiếng Anh */
+  h+=(window.__v22&&__v22.bossScopeHTML?__v22.bossScopeHTML():'');
   h+='<div class="v18bosses">'+list.map(bossCardHTML).join('')+'</div><div id="v18fight"></div></div>';
   host.innerHTML=h;
   var f=$('#v18fight');if(f)f.scrollIntoView&&f.scrollIntoView();
@@ -7427,11 +7593,39 @@ function challenge(id){
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
   var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
+     trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
+     từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
+     loại, chỉ còn 1–2 ứng viên và từ ngoài phạm vi lọt vào đáp án.
+     Lấy toàn bộ từ trong phạm vi trước; đủ n thì dùng, không đủ mới
+     về lại lọc chủ đề/cấp độ. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.inScope){
+      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 function legDiff(){var m=0;try{m=V15().counts().mastered}catch(e){}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
+  /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng mọi bộ lọc
+     mặc định của boss — trận đấu dùng đúng từ người chơi đã chọn. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.wordsFiltered){
+      var sl=v.wordsFiltered({level:'ALL'});
+      if(sl.length>=8)return shuffle(sl);
+      /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
+      if(sl2.length)return shuffle(sl2);
+      if(sl.length)return shuffle(sl);
+    }
+  }catch(e){}
   var list=words.filter(function(w){
     if(b.lib==='a1a2'&&(!w.lib||w.lib.indexOf('a1a2')<0))return false;
     if(b.lib==='oxford'&&(!w.lib||w.lib.indexOf('oxford')<0))return false;
@@ -7828,7 +8022,7 @@ window.__v18={
   get bosses(){return B18()},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en18:en18,legDiff:legDiff},
-  version:'10.0.1'
+  version:'14.0.0'
 };
 })();
 
@@ -8282,6 +8476,8 @@ function zoneDetail(zid){
   +'</p>'
   +'<p><b>Thưởng hoàn thành vùng (mỗi ngôn ngữ, 1 lần):</b> +'+z.reward.xp+' XP, +'+z.reward.gems+' 💎, '+esc(z.reward.item)+'</p>'
   +'<p class="mute">⭐ Thắng trận · ⭐⭐ Thắng với độ chính xác ≥ 80% · ⭐⭐⭐ Độ chính xác ≥ 90% và còn ít nhất 3 tim.</p>'
+  /* V22: chọn bộ từ Basic Tactics trước khi đánh boss tiếng Anh */
+  +(lang==='en'&&window.__v22&&__v22.bossScopeHTML?__v22.bossScopeHTML():'')
   +'</div></div>';
   if(st!=='locked'){
     h+='<div class="v19zbosses">'+z.bosses.map(function(id){
@@ -8311,10 +8507,38 @@ function challenge(id){fight(id)}
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
   var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
+     trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
+     từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
+     loại, chỉ còn 1–2 ứng viên và từ ngoài phạm vi lọt vào đáp án.
+     Lấy toàn bộ từ trong phạm vi trước; đủ n thì dùng, không đủ mới
+     về lại lọc chủ đề/cấp độ. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.inScope){
+      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      if(inSc.length>=n)pool=inSc;
+    }
+  }catch(e){}
   return shuffle(pool).slice(0,n);
 }
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
+  /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng bộ lọc
+     mặc định của boss — trận đấu dùng đúng từ người chơi đã chọn. */
+  try{
+    var sc=v&&v.en15().scope;
+    if(sc&&sc.kind==='lib'&&v.wordsFiltered){
+      var sl=v.wordsFiltered({level:'ALL'});
+      if(sl.length>=8)return shuffle(sl);
+      /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
+      if(sl2.length)return shuffle(sl2);
+      if(sl.length)return shuffle(sl);
+    }
+  }catch(e){}
   var list=words.filter(function(w){
     if(b.diff&&w.lv!==b.diff)return false;
     return true;
@@ -8811,7 +9035,7 @@ window.__v19={
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
     resolveUltimate:resolveUltimate},
-  version:'13.0.0'
+  version:'14.0.0'
 };
 })();
 
@@ -11002,6 +11226,646 @@ window.__v21={
     reloadCalled:function(){ return _reloadCalled; }, resetReload:function(){ _reloadCalled=false; },
     pendingLink:function(){ return pendingLink; }, AVATARS:AVATARS
   }
+};
+})();
+
+</script>
+
+<style id="v22">
+/* ===== V22 — Basic Tactics for Listening =====
+   Hầu hết giao diện dùng lại class của V15/V17 (v17group, v17card,
+   v17bar, v15tab, v15qcard, v15opts, v15opt, v15pill). File này chỉ
+   thêm những gì riêng của BT: tab Words/Phrases, huy hiệu loại mục,
+   sao quest, hộp chọn bộ từ boss và lưới chip Unit. */
+.v22tabs{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.v22tabs .v15tab{flex:1;min-width:140px}
+.v22type{display:inline-block;font-size:11px;line-height:1;padding:3px 7px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.v22type.wd{background:#e3f2e6;color:#2e7d32}
+.v22type.ph{background:#e8eaf6;color:#3949ab}
+.v22stars{font-size:32px;letter-spacing:4px;color:#f9a825;margin:6px 0}
+.v22bscope{border:2px solid #a5d6a7;background:#f1f8e9;border-radius:12px;padding:10px 12px;margin:10px 0}
+.v22bscope .acts{margin-top:8px}
+.v22chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.v22chips .v15pill{cursor:pointer}
+@media (max-width:560px){
+  .v22stars{font-size:26px}
+  .v22tabs .v15tab{min-width:0;font-size:13px}
+}
+
+</style>
+<script id="v22js">
+/* ===== V22 — Basic Tactics for Listening (English Hub Library) =====
+   Bộ từ vựng sách Basic Tactics for Listening: 24 Units, 819 mục từ
+   (513 từ đơn + 306 cụm từ), trích từ file Word do Anh cung cấp.
+   - Dữ liệu: basic_tactics_vocabulary.json (tải lười khi cần, KHÔNG
+     nằm trong localStorage, KHÔNG sao chép vào Firestore).
+   - Sau khi tải, __v15.attachBT() gắn BT vào WORDS chung (từ đã có
+     chỉ được gắn thêm thư viện, từ chỉ có trong BT nhận id ổn định
+     'bt<unit>_<seq>' và lv 'BT') — mọi chế độ học, ôn tập SRS và boss
+     đều dùng được qua phạm vi (scope) {kind:'lib', lib:'bt', ...}.
+   - Không có IPA trong tài liệu gốc nên KHÔNG tự tạo IPA: giao diện
+     hiện 'Chưa có phiên âm' thay vì bịa số liệu.
+   - Tiến trình: S.v7.en22 = {quest:{unit:{stars,best,attempts,lastAt,
+     claimed1,claimed3}}, created} — hộp SRS dùng chung S.v7.en (như
+     A1–A2/Oxford), chỉ lưu ID nên đồng bộ đám mây nhẹ. */
+(function(){
+'use strict';
+var V15=function(){return window.__v15||null};
+var V17=function(){return window.__v17||null};
+var esc=function(s){var v=V15();return v?v.esc(s):String(s==null?'':s)};
+var pop22=function(t){var v=V15();if(v&&v.pop15)v.pop15(t)};
+/* Static unit metadata (no fetch needed for the library cards). */
+var BT_META=[{"n": 1, "en": "Introductions and Names", "vi": "Giới thiệu và tên", "words": 12, "phrases": 10}, {"n": 2, "en": "Describing People", "vi": "Miêu tả con người", "words": 22, "phrases": 8}, {"n": 3, "en": "Clothes", "vi": "Quần áo", "words": 30, "phrases": 4}, {"n": 4, "en": "Routines", "vi": "Thói quen hằng ngày", "words": 5, "phrases": 17}, {"n": 5, "en": "Dates", "vi": "Ngày tháng", "words": 22, "phrases": 14}, {"n": 6, "en": "Jobs", "vi": "Nghề nghiệp", "words": 28, "phrases": 15}, {"n": 7, "en": "Favorites", "vi": "Những điều yêu thích", "words": 23, "phrases": 14}, {"n": 8, "en": "Sports and Exercise", "vi": "Thể thao và tập thể dục", "words": 13, "phrases": 16}, {"n": 9, "en": "Locations", "vi": "Vị trí", "words": 27, "phrases": 15}, {"n": 10, "en": "The Family", "vi": "Gia đình", "words": 21, "phrases": 8}, {"n": 11, "en": "Entertainment", "vi": "Giải trí", "words": 13, "phrases": 8}, {"n": 12, "en": "Prices", "vi": "Giá cả", "words": 19, "phrases": 21}, {"n": 13, "en": "Restaurants", "vi": "Nhà hàng", "words": 40, "phrases": 12}, {"n": 14, "en": "Small Talk", "vi": "Trò chuyện xã giao", "words": 7, "phrases": 16}, {"n": 15, "en": "Vacations", "vi": "Kỳ nghỉ", "words": 18, "phrases": 14}, {"n": 16, "en": "Apartment Living", "vi": "Cuộc sống căn hộ", "words": 21, "phrases": 9}, {"n": 17, "en": "Hopes and Plans", "vi": "Hy vọng và kế hoạch", "words": 24, "phrases": 11}, {"n": 18, "en": "The Weather", "vi": "Thời tiết", "words": 20, "phrases": 11}, {"n": 19, "en": "Shopping", "vi": "Mua sắm", "words": 26, "phrases": 20}, {"n": 20, "en": "Describing Things", "vi": "Miêu tả đồ vật", "words": 29, "phrases": 12}, {"n": 21, "en": "Directions", "vi": "Chỉ đường", "words": 11, "phrases": 14}, {"n": 22, "en": "People We Know", "vi": "Những người chúng ta biết", "words": 23, "phrases": 16}, {"n": 23, "en": "Places", "vi": "Địa điểm", "words": 25, "phrases": 7}, {"n": 24, "en": "Health", "vi": "Sức khỏe", "words": 34, "phrases": 14}];
+var DATA=null,DATA_P=null,DATA_ERR='';
+var SPOKEN_LOG=[];
+var ST={view:null,unit:0,tab:'words',q:'',status:'all',page:0,quest:null,_dataRendered:false};
+
+/* ---------- tiến trình (chỉ lưu ID + sao quest) ---------- */
+function en22(){
+  try{S.v7=S.v7||{};var e=S.v7.en22;
+    if(!e)e=S.v7.en22={quest:{},created:Date.now()};
+    e.quest=e.quest||{};
+    return e;
+  }catch(err){return {quest:{}}}
+}
+function save22(){var v=V15();if(v)v.save15()}
+function rerenderLibrary(){var v=V15();if(v)v.renderTab()}
+
+/* ---------- tải lười dữ liệu ---------- */
+function dataURL(){return 'basic_tactics_vocabulary.json'}
+function ensureData(){
+  if(DATA)return Promise.resolve(DATA);
+  if(DATA_P)return DATA_P;
+  DATA_P=new Promise(function(resolve,reject){
+    var done=function(ok,err){
+      if(ok){try{var v=V15();if(v)v.attachBT()}catch(e){}DATA_P=null;resolve(DATA)}
+      else{DATA_P=null;DATA_ERR=err||'Không tải được dữ liệu.';reject(new Error(DATA_ERR))}
+    };
+    var onText=function(txt){
+      try{
+        var d=JSON.parse(txt);
+        if(!d||!Array.isArray(d.units)||d.units.length!==24)throw new Error('bad data');
+        DATA=d;
+        /* V14 BUGFIX (phát hiện khi chạy test22): DATA chỉ sống trong
+           closure của v22.js, nhưng buildWords()/attachBT() trong v15.js
+           đọc dữ liệu BT qua window.__V22_BT — biến này không bao giờ
+           được gán nên WORDS không bao giờ có từ Basic Tactics (mọi
+           chế độ học + boss với phạm vi BT đều nhận danh sách rỗng).
+           Gán global ở đây để hai module thấy cùng một dữ liệu. */
+        window.__V22_BT=d;
+        done(true);
+      }catch(e){done(false,'Dữ liệu Basic Tactics không hợp lệ.')}
+    };
+    var failMsg='Không tải được dữ liệu Basic Tactics. Mở game qua GitHub Pages hoặc máy chủ web (không mở file index.html trực tiếp).';
+    if(typeof fetch==='function'){
+      fetch(dataURL()).then(function(r){
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        return r.text();
+      }).then(onText).catch(function(){xhrLoad(onText,done,failMsg)});
+    }else xhrLoad(onText,done,failMsg);
+  });
+  return DATA_P;
+}
+function xhrLoad(onText,done,failMsg){
+  try{
+    var x=new XMLHttpRequest();
+    x.open('GET',dataURL(),true);
+    x.onreadystatechange=function(){
+      if(x.readyState!==4)return;
+      if((x.status===200||x.status===0)&&x.responseText)onText(x.responseText);
+      else done(false,failMsg);
+    };
+    x.send();
+  }catch(e){done(false,failMsg)}
+}
+
+/* ---------- giọng đọc (Speech Synthesis của trình duyệt) ---------- */
+function ttsAvailable(){
+  try{return typeof speechSynthesis!=='undefined'&&typeof SpeechSynthesisUtterance!=='undefined'}catch(e){return false}
+}
+function speak22(text){
+  SPOKEN_LOG.push(text);
+  try{
+    speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang='en-US';u.rate=.85;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ---------- tra cứu WORDS ---------- */
+function enMap(){
+  var v=V15(),m={};
+  (v?v.words:[]).forEach(function(w){var k=(w.en||'').toLowerCase();if(k&&!m[k])m[k]=w});
+  return m;
+}
+function boxOfId(id){var v=V15();if(!v)return 0;var o=v.enOld();return (o.box||{})[id]||0}
+function favIds(){
+  try{return (S.v7&&S.v7.en17&&S.v7.en17.fav)||[]}catch(e){return []}
+}
+function unitStats(n,map){
+  var m=BT_META[n-1];if(!m)return {total:0,learned:0,mastered:0,due:0};
+  map=map||enMap();
+  var v=V15(),now=Date.now(),s={total:m.words+m.phrases,learned:0,mastered:0,due:0};
+  if(!DATA||!v)return s;
+  var u=DATA.units[n-1];if(!u)return s;
+  (u.words||[]).concat(u.phrases||[]).forEach(function(en){
+    var w=map[(en.en||'').toLowerCase()];if(!w)return;
+    var b=boxOfId(w.id);
+    if(b>=1)s.learned++;
+    if(b>=5)s.mastered++;
+    if(((v.en15().due)||{})[w.id]<=now)s.due++;
+  });
+  return s;
+}
+function starStr(n){return '★'.repeat(n)+'☆'.repeat(Math.max(0,3-n))}
+function scopeName22(sc){
+  if(!sc||sc.kind!=='lib')return 'Tất cả từ vựng';
+  if(sc.lib!=='bt')return 'Bộ từ khác';
+  var u='';
+  if(sc.unit){var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+    u=us.length===1?' · Unit '+us[0]:' · '+us.length+' Units';}
+  var t=sc.type?(sc.type==='word'?' · Từ đơn':' · Cụm từ'):'';
+  var s=sc.status?(sc.status==='unlearned'?' · Chưa thuộc':' · Cần ôn'):'';
+  return 'Basic Tactics'+u+t+s;
+}
+
+/* ---------- nhóm trong Thư viện ---------- */
+function unitCard(m,map){
+  var s=unitStats(m.n,map);
+  var tot=m.words+m.phrases;
+  var pct=tot?Math.round(s.learned/tot*100):0;
+  var q=en22().quest[m.n]||{};
+  return '<div class="v17card v22card"><div class="v17card-t"><b>Unit '+m.n+' · '+esc(m.en)+'</b><span class="mute">'+tot+' mục từ</span></div>'
+    +'<div class="mute">'+esc(m.vi)+' · '+m.words+' từ đơn · '+m.phrases+' cụm từ</div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="mute">'+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn'+(q.stars?' · Quest: '+starStr(q.stars):'')+'</div>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v22.learnUnit('+m.n+')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v22.reviewUnit('+m.n+')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v22.quizUnit('+m.n+')">Kiểm tra</button>'
+    +'<button class="btn sm" onclick="__v22.openUnit('+m.n+')">Xem từ</button></div></div>';
+}
+function groupHTML(){
+  var map=enMap();
+  var h='<div class="v17group v22group"><div class="v17group-head"><b>🎧 Basic Tactics for Listening – Vocabulary</b><span class="mute">24 Units · 819 mục từ · 513 từ đơn · 306 cụm từ</span></div>'
+    +'<p class="mute">Từ vựng sách Basic Tactics for Listening — mở ra là học ngay, không cần upload. Cụm từ giữ nguyên cả câu, không cắt nhỏ. Tài liệu gốc không có IPA nên giao diện không tự bịa phiên âm.</p>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v22.learnAll()">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v22.reviewAll()">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v22.openQuest()">🎧 Listening Quest — 24 Missions</button></div>'
+    +'<div class="v17grid">'+BT_META.map(function(m){return unitCard(m,map)}).join('')+'</div></div>';
+  /* tải dữ liệu ngầm để thanh tiến độ các Unit hiện số đã học */
+  if(!DATA){
+    ensureData().then(function(){
+      if(!ST._dataRendered&&document.querySelector('.v22group')){ST._dataRendered=true;rerenderLibrary()}
+    }).catch(function(){});
+  }
+  return h;
+}
+
+/* ---------- phạm vi học + các chế độ ---------- */
+function setScopeAndTab(sc,tab){
+  var v=V15();if(!v)return;
+  ensureData().then(function(){
+    v.setScope(sc);
+    if(tab==='review'){v.tab('review');setTimeout(function(){v.reviewStart(false)},0)}
+    else if(tab==='mc'){v.tab('learn');v.startMode('mc')}
+    else if(tab==='flash'){v.tab('learn');v.startMode('flash')}
+    else v.tab(tab||'learn');
+  }).catch(function(){pop22(DATA_ERR||'Không tải được dữ liệu Basic Tactics.')});
+}
+function learnAll(){setScopeAndTab({kind:'lib',lib:'bt'},'flash')}
+function reviewAll(){setScopeAndTab({kind:'lib',lib:'bt'},'review')}
+function learnUnit(n){setScopeAndTab({kind:'lib',lib:'bt',unit:n},'flash')}
+function reviewUnit(n){setScopeAndTab({kind:'lib',lib:'bt',unit:n},'review')}
+function quizUnit(n){setScopeAndTab({kind:'lib',lib:'bt',unit:n},'mc')}
+function bossUnit(n){setScopeAndTab({kind:'lib',lib:'bt',unit:n},'bosses')}
+
+/* ---------- xem một Unit ---------- */
+function goLibrary(){ST.view=null;ST.quest=null;rerenderLibrary()}
+function openUnit(n){
+  ST.view='unit';ST.unit=n;ST.tab='words';ST.q='';ST.status='all';ST.page=0;
+  /* V14: như openQuest — ép về tab Thư viện để giao diện Unit luôn vẽ. */
+  var v=V15();if(v&&v.tab)v.tab('library');else rerenderLibrary();
+  ensureData().then(function(){rerenderLibrary()}).catch(function(){rerenderLibrary()});
+}
+function setUnitTab(t){ST.tab=t;ST.page=0;rerenderLibrary()}
+function unitSearch(q){ST.q=q;ST.page=0;rerenderLibrary();refocus22('.v17filters .v15input')}
+function setUnitStatus(val){ST.status=val;ST.page=0;rerenderLibrary()}
+function setUnitPage(p){ST.page=p;rerenderLibrary()}
+function refocus22(sel){
+  setTimeout(function(){
+    var inp=document.querySelector('#v15body '+sel);
+    if(inp){inp.focus();try{inp.setSelectionRange(inp.value.length,inp.value.length)}catch(e){}}
+  },0);
+}
+function filterEntries(list,map){
+  var q=ST.q.toLowerCase(),favs=favIds(),now=Date.now(),v=V15();
+  var dueMap=v?(v.en15().due||{}):{};
+  return list.filter(function(e){
+    if(q&&(e.en||'').toLowerCase().indexOf(q)<0&&(e.vi||'').toLowerCase().indexOf(q)<0)return false;
+    var w=map[(e.en||'').toLowerCase()];
+    var b=w?boxOfId(w.id):0;
+    if(ST.status==='new'&&b!==0)return false;
+    if(ST.status==='learning'&&(b<1||b>=5))return false;
+    if(ST.status==='mastered'&&b<5)return false;
+    if(ST.status==='due'&&w&&(dueMap[w.id]||0)>now)return false;
+    if(ST.status==='fav'&&(!w||favs.indexOf(w.id)<0))return false;
+    return true;
+  });
+}
+function pager22(pg,pages){
+  if(pages<=1)return '';
+  var h='<div class="v17pager">';
+  if(pg>0)h+='<button class="btn sm" onclick="__v22.setUnitPage('+(pg-1)+')">← Trước</button>';
+  h+='<span class="mute">Trang '+(pg+1)+'/'+pages+'</span>';
+  if(pg<pages-1)h+='<button class="btn sm" onclick="__v22.setUnitPage('+(pg+1)+')">Sau →</button>';
+  return h+'</div>';
+}
+function entryRow(e,map){
+  var w=map[(e.en||'').toLowerCase()];
+  var id=w?w.id:'';
+  var b=id?boxOfId(id):0;
+  var fav=id&&favIds().indexOf(id)>=0;
+  return '<div class="v17word">'
+    +'<div class="v17word-main"><b>'+esc(e.en)+'</b> <span class="v22type '+(e.type==='phrase'?'ph':'wd')+'">'+(e.type==='phrase'?'Cụm từ':'Từ đơn')+'</span>'
+    +'<div class="v17ipa"><span class="v17nodata">Chưa có phiên âm</span></div>'
+    +'<div>'+esc(e.vi)+'</div>'
+    +'<div class="mute">Unit '+e.unit+' · hộp '+b+'/5</div></div>'
+    +'<div class="v17word-acts">'
+    +(id?'<button class="btn sm" onclick="__v22.speakEntry(\''+id+'\')">🔊 Nghe</button>'
+      +'<button class="btn sm '+(b>=5?'ok':'')+'" onclick="__v22.toggleMastered(\''+id+'\')">'+(b>=5?'✓ Đã thuộc':'Đánh dấu đã thuộc')+'</button>'
+      +'<button class="btn sm '+(fav?'on':'')+'" onclick="__v22.toggleFav(\''+id+'\')">'+(fav?'★ Yêu thích':'☆ Yêu thích')+'</button>'
+      +'<button class="btn sm" onclick="__v17.copyToPersonal(\''+id+'\')">Sao chép để sửa</button>'
+      :'<span class="mute">Đang tải…</span>')
+    +'</div></div>';
+}
+function speakEntry(id){
+  var v=V15();
+  if(v&&v.speakWord)v.speakWord(id);
+}
+function toggleMastered(id){
+  var v=V15();if(!v)return;
+  var o=v.enOld();o.box=o.box||{};
+  var e=v.en15();e.due=e.due||{};
+  var cur=o.box[id]||0;
+  if(cur>=5){o.box[id]=0;e.due[id]=0}
+  else{o.box[id]=5;e.due[id]=Date.now()+30*864e5}
+  v.save15();rerenderLibrary();
+}
+function toggleFav(id){
+  var v17=V17();
+  if(v17&&v17.toggleFav){v17.toggleFav(id);return}
+  var e=en22();/* dự phòng: không có V17 thì không làm gì thêm */
+  void e;
+}
+function unitViewHTML(){
+  var m=BT_META[ST.unit-1];
+  if(!m)return '<p class="mute">Không tìm thấy Unit này.</p><div class="acts"><button class="btn" onclick="__v22.goLibrary()">← Thư viện</button></div>';
+  var head='<div class="v17lesson"><button class="v15back" onclick="__v22.goLibrary()">← Thư viện</button>'
+    +'<div class="v17head"><h3>Unit '+m.n+' · '+esc(m.en)+'</h3><p class="mute">'+esc(m.vi)+'</p></div>';
+  if(!DATA){
+    return head+'<p class="mute">'+(DATA_ERR?esc(DATA_ERR):'Đang tải dữ liệu Basic Tactics…')+'</p></div>';
+  }
+  var u=DATA.units[ST.unit-1];
+  var map=enMap();
+  var s=unitStats(ST.unit,map);
+  var tot=m.words+m.phrases;
+  var pct=tot?Math.round(s.learned/tot*100):0;
+  var list=(ST.tab==='words'?u.words:u.phrases);
+  var f=filterEntries(list,map);
+  var per=30,pages=Math.max(1,Math.ceil(f.length/per));
+  var pg=Math.max(0,Math.min(ST.page,pages-1));
+  var slice=f.slice(pg*per,(pg+1)*per);
+  var q=en22().quest[ST.unit]||{};
+  var h=head
+    +'<p class="mute">'+tot+' mục từ · '+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn'+(q.stars?' · Quest: '+starStr(q.stars):'')+'</p>'
+    +'<div class="v17bar big"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="acts"><button class="btn pri" onclick="__v22.learnUnit('+m.n+')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v22.reviewUnit('+m.n+')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v22.quizUnit('+m.n+')">Kiểm tra</button>'
+    +'<button class="btn sm" onclick="__v22.bossUnit('+m.n+')">Đánh boss</button>'
+    +'<button class="btn sm" onclick="__v22.openQuest('+m.n+')">🎧 Quest Unit '+m.n+'</button></div>'
+    +'<div class="v22tabs"><button class="v15tab '+(ST.tab==='words'?'on':'')+'" onclick="__v22.setUnitTab(\'words\')">Words · '+u.words.length+'</button>'
+    +'<button class="v15tab '+(ST.tab==='phrases'?'on':'')+'" onclick="__v22.setUnitTab(\'phrases\')">Phrases &amp; Collocations · '+u.phrases.length+'</button></div>'
+    +'<div class="v17filters"><input class="v15input" placeholder="Tìm trong Unit '+m.n+'…" value="'+esc(ST.q)+'" oninput="__v22.unitSearch(this.value)">'
+    +'<select class="v15sel" onchange="__v22.setUnitStatus(this.value)">'
+    +[['all','Tất cả'],['new','Chưa học'],['learning','Đang học'],['mastered','Đã thuộc'],['due','Cần ôn'],['fav','Yêu thích']].map(function(o){return '<option value="'+o[0]+'"'+(ST.status===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')
+    +'</select></div>'
+    +'<div class="v17words">'+(slice.length?slice.map(function(e){return entryRow(e,map)}).join(''):'<p class="mute">Không tìm thấy mục nào khớp.</p>')+'</div>'
+    +pager22(pg,pages)
+    +'<p class="mute">Hiện '+slice.length+'/'+f.length+' mục'+(f.length!==list.length?' (đã lọc từ '+list.length+' mục)':'')+'.</p></div>';
+  return h;
+}
+
+/* ---------- Listening Quest — 24 Missions ---------- */
+function openQuest(n){
+  ST.view='quest';
+  ST.quest={unit:n||0,stage:-1,idx:0,right:0,total:0,wrong:[],list:[],cur:null,
+    answered:null,ok:null,revealed:false,skippedListen:false,done:false};
+  /* V14: ép về tab Thư viện trước khi vẽ — nếu đang ở tab khác (vd Ôn
+     tập), renderTab vẽ tab đó và giao diện Quest không bao giờ hiện. */
+  var v=V15();if(v&&v.tab)v.tab('library');else rerenderLibrary();
+  ensureData().then(function(){rerenderLibrary()}).catch(function(){rerenderLibrary()});
+}
+function questHubHTML(){
+  var e=en22(),tot=0,done=0;
+  BT_META.forEach(function(m){var q=e.quest[m.n]||{};tot+=q.stars||0;if(q.stars)done++});
+  var h='<div class="v17lesson"><button class="v15back" onclick="__v22.goLibrary()">← Thư viện</button>'
+    +'<div class="v17head"><h3>🎧 Listening Quest — 24 Missions</h3><p class="mute">Mỗi Unit là một nhiệm vụ: học từ đơn → học cụm từ → nhận diện nghĩa → luyện nghe bằng giọng đọc → kiểm tra tổng hợp. Nhận sao theo độ chính xác. Chế độ này luyện nghe từ vựng bằng giọng đọc của trình duyệt — không phải bài nghe hội thoại gốc của sách.</p></div>'
+    +'<p class="mute">'+done+'/24 nhiệm vụ đã hoàn thành · '+tot+'/72 sao</p>'
+    +'<div class="v17grid">'+BT_META.map(function(m){
+      var q=e.quest[m.n]||{};
+      return '<div class="v17card v22card"><div class="v17card-t"><b>Mission '+m.n+' · '+esc(m.en)+'</b><span class="mute">'+(m.words+m.phrases)+' mục từ</span></div>'
+        +'<div class="mute">'+esc(m.vi)+'</div>'
+        +'<div class="mute">'+(q.stars?starStr(q.stars)+' · đúng nhất '+Math.round((q.best||0)*100)+'% · đã chơi '+q.attempts+' lần':'Chưa chơi')+'</div>'
+        +'<div class="acts"><button class="btn sm pri" onclick="__v22.openQuest('+m.n+')">'+(q.stars?'Chơi lại':'Bắt đầu')+'</button></div></div>';
+    }).join('')+'</div></div>';
+  return h;
+}
+function questEntries(unit){
+  var u=DATA.units[unit-1];if(!u)return [];
+  return (u.words||[]).concat(u.phrases||[]);
+}
+function questDistractors(entry,pool,n,byVI){
+  var cands=pool.filter(function(x){return x.id!==entry.id});
+  /* xáo trộn bằng Math.random (đã cố định 0.99 trong kiểm thử) */
+  var arr=cands.slice();
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t}
+  var out=[],seen={};
+  if(byVI)seen[(entry.vi||'').toLowerCase()]=1;
+  for(var k=0;k<arr.length&&out.length<n;k++){
+    var key=byVI?(arr[k].vi||'').toLowerCase():(arr[k].en||'').toLowerCase();
+    if(seen[key])continue;seen[key]=1;out.push(arr[k]);
+  }
+  return out;
+}
+function questStartStage(stage){
+  var Q=ST.quest,pool=questEntries(Q.unit);
+  Q.stage=stage;Q.idx=0;Q.answered=null;Q.ok=null;Q.revealed=false;Q.cur=null;
+  if(stage===0){Q.list=DATA.units[Q.unit-1].words||[]}
+  else if(stage===1){Q.list=DATA.units[Q.unit-1].phrases||[]}
+  else if(stage===2){
+    var qs=pool.slice();
+    for(var i=qs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=qs[i];qs[i]=qs[j];qs[j]=t}
+    Q.list=qs.slice(0,8).map(function(en){
+      return {entry:en,mode:'meaning',opts:shuffleOpts([en].concat(questDistractors(en,pool,3,true)))};
+    });
+  }else if(stage===3){
+    if(!ttsAvailable()){Q.skippedListen=true;questStartStage(4);return}
+    var qs2=pool.slice();
+    for(var i2=qs2.length-1;i2>0;i2--){var j2=Math.floor(Math.random()*(i2+1));var t2=qs2[i2];qs2[i2]=qs2[j2];qs2[j2]=t2}
+    Q.list=qs2.slice(0,8).map(function(en){
+      return {entry:en,mode:'listen',opts:shuffleOpts([en].concat(questDistractors(en,pool,3,false)))};
+    });
+  }else if(stage===4){
+    var qs3=pool.slice();
+    for(var i3=qs3.length-1;i3>0;i3--){var j3=Math.floor(Math.random()*(i3+1));var t3=qs3[i3];qs3[i3]=qs3[j3];qs3[j3]=t3}
+    Q.list=qs3.slice(0,10).map(function(en,ix){
+      var mode=ix%2===0?'meaning':'listen';
+      /* V14: không có giọng đọc thì câu nghe không thể làm bằng tai —
+         đổi thành câu chọn nghĩa, chấm trên số câu còn lại. */
+      if(!ttsAvailable())mode='meaning';
+      return {entry:en,mode:mode,opts:shuffleOpts([en].concat(questDistractors(en,pool,3,mode==='meaning')))};
+    });
+  }
+  Q.cur=Q.list[0]||null;
+  if(Q.cur&&Q.cur.mode==='listen')setTimeout(function(){speak22(Q.cur.entry.en)},250);
+  rerenderLibrary();
+}
+function shuffleOpts(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+  return a;
+}
+function questStartMission(){
+  var Q=ST.quest;Q.right=0;Q.total=0;Q.wrong=[];Q.done=false;Q.skippedListen=false;
+  questStartStage(0);
+}
+function questReveal(){var Q=ST.quest;Q.revealed=true;rerenderLibrary()}
+function questLearnNext(){
+  var Q=ST.quest;Q.idx++;Q.revealed=false;
+  if(Q.idx>=Q.list.length){questStartStage(Q.stage+1);return}
+  Q.cur=Q.list[Q.idx];rerenderLibrary();
+}
+function questSkipLearn(){var Q=ST.quest;questStartStage(Q.stage+1)}
+function questSpeak(){var Q=ST.quest;if(Q.cur)speak22(Q.cur.entry.en)}
+function questPick(i){
+  var Q=ST.quest;if(!Q.cur||Q.answered!==null)return;
+  var pick=Q.cur.opts[i];if(!pick)return;
+  Q.answered=i;Q.ok=(pick.id===Q.cur.entry.id);
+  Q.total++;
+  if(Q.ok)Q.right++;
+  else if(Q.wrong.indexOf(Q.cur.entry.id)<0)Q.wrong.push(Q.cur.entry.id);
+  var v=V15(),map=enMap(),w=map[(Q.cur.entry.en||'').toLowerCase()];
+  try{if(v&&v.mark15&&w)v.mark15(Q.ok,w,'quest')}catch(e){}
+  rerenderLibrary();
+}
+function questNext(){
+  var Q=ST.quest;Q.idx++;Q.answered=null;Q.ok=null;
+  if(Q.idx>=Q.list.length){
+    if(Q.stage>=4){finishQuest();return}
+    questStartStage(Q.stage+1);return;
+  }
+  Q.cur=Q.list[Q.idx];
+  if(Q.cur&&Q.cur.mode==='listen')setTimeout(function(){speak22(Q.cur.entry.en)},250);
+  rerenderLibrary();
+}
+function finishQuest(){
+  var Q=ST.quest,e=en22(),unit=Q.unit;
+  var acc=Q.total?Q.right/Q.total:0;
+  var stars=acc>=0.9?3:(acc>=0.8?2:1);
+  var prev=e.quest[unit]||{};
+  var rec={stars:Math.max(stars,prev.stars||0),best:Math.max(acc,prev.best||0),
+    attempts:(prev.attempts||0)+1,lastAt:Date.now(),
+    claimed1:!!prev.claimed1,claimed3:!!prev.claimed3};
+  var v=V15();
+  if(!prev.claimed1){
+    rec.claimed1=true;
+    if(v&&v.gain15)v.gain15(25);
+    try{S.v7.gems=(S.v7.gems||0)+1}catch(err){}
+  }
+  if(stars>=3&&!prev.claimed3){
+    rec.claimed3=true;
+    if(v&&v.gain15)v.gain15(25);
+    try{S.v7.gems=(S.v7.gems||0)+1}catch(err){}
+  }
+  e.quest[unit]=rec;save22();
+  Q.done=true;Q.stars=stars;Q.acc=acc;
+  rerenderLibrary();
+}
+function questStageName(s){
+  return ['1 · Học từ đơn','2 · Học cụm từ','3 · Nhận diện nghĩa','4 · Luyện nghe','5 · Kiểm tra tổng hợp'][s]||'';
+}
+function questViewHTML(){
+  var Q=ST.quest;
+  if(!DATA){
+    return '<div class="v17lesson"><button class="v15back" onclick="__v22.goLibrary()">← Thư viện</button>'
+      +'<div class="v17head"><h3>🎧 Listening Quest</h3></div>'
+      +'<p class="mute">'+(DATA_ERR?esc(DATA_ERR):'Đang tải dữ liệu Basic Tactics…')+'</p></div>';
+  }
+  if(!Q.unit)return questHubHTML();
+  if(Q.done)return questResultHTML();
+  if(Q.stage<0){
+    var m=BT_META[Q.unit-1];
+    return '<div class="v17lesson"><button class="v15back" onclick="__v22.openQuest()">← Tất cả nhiệm vụ</button>'
+      +'<div class="v17head"><h3>Mission '+Q.unit+' · '+esc(m.en)+'</h3><p class="mute">'+esc(m.vi)+' · '+(m.words+m.phrases)+' mục từ</p></div>'
+      +'<p>Nhiệm vụ gồm 5 phần: học từ đơn, học cụm từ, nhận diện nghĩa, luyện nghe bằng giọng đọc, kiểm tra tổng hợp. Nhận sao theo độ chính xác: ★★★ ≥ 90%, ★★ ≥ 80%, ★ hoàn thành.</p>'
+      +'<p class="mute">Phần nghe dùng giọng đọc của trình duyệt (Speech Synthesis). Nếu trình duyệt không hỗ trợ giọng đọc, phần nghe sẽ được bỏ qua và sao tính theo các phần còn lại.</p>'
+      +'<div class="acts"><button class="btn pri" onclick="__v22.questStartMission()">Bắt đầu nhiệm vụ</button></div></div>';
+  }
+  return questStageHTML();
+}
+function questStageHTML(){
+  var Q=ST.quest,m=BT_META[Q.unit-1];
+  var h='<div class="v17lesson"><button class="v15back" onclick="__v22.openQuest()">← Tất cả nhiệm vụ</button>'
+    +'<div class="v17head"><h3>Mission '+Q.unit+' · '+esc(m.en)+'</h3><p class="mute">'+questStageName(Q.stage)+' · Đúng '+Q.right+'/'+Q.total+' câu đã chấm</p></div>';
+  if(Q.stage===0||Q.stage===1){
+    var e=Q.list[Q.idx];
+    if(!e)return h+'<p class="mute">Hết phần này.</p></div>';
+    h+='<div class="v15qcard"><div class="v15qword">'+esc(e.en)+'</div><div class="mute">'+(Q.stage===0?'Từ đơn':'Cụm từ')+' '+(Q.idx+1)+'/'+Q.list.length+'</div>'
+      +(Q.revealed?'<div>'+esc(e.vi)+'</div>':'')
+      +'</div><div class="acts">'
+      +(Q.revealed
+        ?'<button class="btn pri" onclick="__v22.questLearnNext()">Tiếp →</button>'
+        :'<button class="btn pri" onclick="__v22.questReveal()">Hiện nghĩa</button>')
+      +'<button class="btn sm" onclick="__v22.speakEntryByText('+Q.unit+','+Q.idx+','+Q.stage+')">🔊 Nghe</button>'
+      +'<button class="btn sm" onclick="__v22.questSkipLearn()">Bỏ qua phần học →</button></div>';
+    return h+'</div>';
+  }
+  var c=Q.cur;
+  if(!c)return h+'<p class="mute">Hết phần này.</p></div>';
+  var en=c.entry;
+  if(c.mode==='meaning'){
+    h+='<div class="v15qcard"><div class="v15qword">'+esc(en.en)+'</div><div class="mute">Chọn nghĩa đúng · Câu '+(Q.idx+1)+'/'+Q.list.length+'</div></div>';
+  }else{
+    h+='<div class="v15qcard"><div class="v15qword">Nghe</div><div class="mute">Nghe phát âm và chọn từ/cụm từ bạn nghe được · Câu '+(Q.idx+1)+'/'+Q.list.length+'</div><div class="acts"><button class="btn pri" onclick="__v22.questSpeak()">🔊 Nghe lại</button></div></div>';
+  }
+  h+='<div class="v15opts">'+c.opts.map(function(o,i){
+    var label=c.mode==='meaning'?o.vi:o.en;
+    var cl='';if(Q.answered!==null)cl=(o.id===en.id?'right':(i===Q.answered?'wrong':''));
+    return '<button class="v15opt '+cl+'" '+(Q.answered!==null?'disabled':'')+' onclick="__v22.questPick('+i+')">'+(i+1)+'. '+esc(label)+'</button>';
+  }).join('')+'</div>';
+  if(Q.answered!==null){
+    h+='<div class="v15explain" style="color:var(--'+(Q.ok?'ok':'bad')+')">'+(Q.ok?'Chính xác!':'Chưa đúng. Đáp án: <b>'+esc(en.en)+'</b> — '+esc(en.vi))+'</div>'
+      +'<div class="acts"><button class="btn pri" onclick="__v22.questNext()">Câu tiếp →</button></div>';
+  }
+  return h+'</div>';
+}
+function questResultHTML(){
+  var Q=ST.quest,m=BT_META[Q.unit-1];
+  var map=enMap();
+  var wrongList=Q.wrong.map(function(id){
+    var en=null;
+    questEntries(Q.unit).forEach(function(x){if(x.id===id)en=x});
+    return en?'<div class="v17row"><div><b>'+esc(en.en)+'</b><br><span>'+esc(en.vi)+'</span></div></div>':'';
+  }).join('');
+  var h='<div class="v17lesson"><button class="v15back" onclick="__v22.openQuest()">← Tất cả nhiệm vụ</button>'
+    +'<div class="v17head"><h3>Kết quả Mission '+Q.unit+' · '+esc(m.en)+'</h3></div>'
+    +'<div class="v22stars">'+starStr(Q.stars)+'</div>'
+    +'<p>Độ chính xác: <b>'+Q.right+'/'+Q.total+'</b> ('+Math.round(Q.acc*100)+'%)'+(Q.skippedListen?' · <span class="mute">Phần nghe đã được bỏ qua vì trình duyệt không hỗ trợ giọng đọc.</span>':'')+'</p>'
+    +'<p class="mute">Hoàn thành nhiệm vụ lần đầu: +25 XP, +1 💎. Đạt 3 sao lần đầu: +25 XP, +1 💎.</p>'
+    +(Q.wrong.length
+      ?'<h4>Cần ôn lại ('+Q.wrong.length+' mục)</h4><div class="v17rows">'+wrongList+'</div>'
+        +'<div class="acts"><button class="btn pri" onclick="__v22.reviewUnit('+Q.unit+')">Ôn tập Unit '+Q.unit+' ngay</button></div>'
+      :'<p>🎉 Không có mục nào sai — xuất sắc!</p>')
+    +'<div class="acts"><button class="btn pri" onclick="__v22.openQuest('+Q.unit+')">Chơi lại</button>'
+    +'<button class="btn sm" onclick="__v22.goLibrary()">← Thư viện</button></div></div>';
+  return h;
+}
+function speakEntryByText(unit,idx,stage){
+  var list=stage===0?DATA.units[unit-1].words:DATA.units[unit-1].phrases;
+  var e=list&&list[idx];if(e)speak22(e.en);
+}
+
+/* ---------- chọn bộ từ trước khi đánh boss ---------- */
+function bossScopeHTML(){
+  var v=V15();if(!v)return '';
+  var sc=null;try{sc=v.en15().scope}catch(e){}
+  var isBT=sc&&sc.kind==='lib'&&sc.lib==='bt';
+  var units=isBT&&sc.unit?(Array.isArray(sc.unit)?sc.unit.slice():[sc.unit]):null;
+  var h='<div class="v22bscope"><b>🎧 Bộ từ đánh boss</b> <span class="mute">Chỉ áp dụng cho trận tiếng Anh — câu hỏi tiếng Hàn không đổi. <span id="v22bs-current">Đang chọn: <b>'+esc(scopeName22(sc))+'</b></span></span>'
+    +'<div class="acts">'
+    +'<select class="v15sel" id="v22bs-lib">'
+    +'<option value="">Tất cả từ vựng</option>'
+    +'<option value="all"'+(isBT&&!sc.unit?' selected':'')+'>Basic Tactics — Toàn bộ 24 Units</option>'
+    +'<option value="units"'+(isBT&&sc.unit?' selected':'')+'>Basic Tactics — Chọn Units…</option>'
+    +'</select>'
+    +'<select class="v15sel" id="v22bs-type">'
+    +'<option value="">Từ đơn + Cụm từ</option>'
+    +'<option value="word"'+(isBT&&sc.type==='word'?' selected':'')+'>Chỉ từ đơn</option>'
+    +'<option value="phrase"'+(isBT&&sc.type==='phrase'?' selected':'')+'>Chỉ cụm từ</option>'
+    +'</select>'
+    +'<select class="v15sel" id="v22bs-status">'
+    +'<option value="">Mọi trạng thái</option>'
+    +'<option value="unlearned"'+(isBT&&sc.status==='unlearned'?' selected':'')+'>Chỉ mục chưa thuộc</option>'
+    +'<option value="due"'+(isBT&&sc.status==='due'?' selected':'')+'>Chỉ mục cần ôn</option>'
+    +'</select>'
+    +'<button class="btn sm pri" onclick="__v22.applyBossScope()">Áp dụng</button></div>'
+    +'<div class="v22chips" id="v22bs-chips">'+BT_META.map(function(m){
+      var on=!isBT||!units||units.indexOf(m.n)>=0;
+      return '<button class="v15pill '+(on?'on':'')+'" data-u="'+m.n+'" onclick="this.classList.toggle(\'on\')">Unit '+m.n+'</button>';
+    }).join('')+'</div>'
+    +'<div class="acts"><button class="btn sm" onclick="__v22.bossPickAll(true)">Chọn tất cả Units</button><button class="btn sm" onclick="__v22.bossPickAll(false)">Bỏ chọn tất cả</button></div>'
+    +'</div>';
+  return h;
+}
+function bossPickAll(on){
+  var chips=document.querySelectorAll('#v22bs-chips .v15pill');
+  for(var i=0;i<chips.length;i++){if(on)chips[i].classList.add('on');else chips[i].classList.remove('on')}
+}
+function applyBossScope(){
+  var lib=(document.querySelector('#v22bs-lib')||{}).value||'';
+  var type=(document.querySelector('#v22bs-type')||{}).value||'';
+  var status=(document.querySelector('#v22bs-status')||{}).value||'';
+  var units=[];
+  var chips=document.querySelectorAll('#v22bs-chips .v15pill.on');
+  for(var i=0;i<chips.length;i++){var n=parseInt(chips[i].getAttribute('data-u'),10);if(n)units.push(n)}
+  ensureData().then(function(){
+    var v=V15();if(!v)return;
+    if(!lib){v.clearScope()}
+    else{
+      var sc={kind:'lib',lib:'bt'};
+      if(lib==='units'&&units.length&&units.length<24)sc.unit=units.length===1?units[0]:units;
+      if(type)sc.type=type;
+      if(status)sc.status=status;
+      v.setScope(sc);
+    }
+    var cur=document.querySelector('#v22bs-current');
+    if(cur)cur.innerHTML='Đang chọn: <b>'+esc(scopeName22(v.en15().scope))+'</b>';
+    pop22('Đã chọn bộ từ đánh boss: '+scopeName22(v.en15().scope));
+  }).catch(function(){pop22(DATA_ERR||'Không tải được dữ liệu Basic Tactics.')});
+}
+function clearBossScope(){
+  var v=V15();if(!v)return;
+  v.clearScope();
+  var cur=document.querySelector('#v22bs-current');
+  if(cur)cur.innerHTML='Đang chọn: <b>Tất cả từ vựng</b>';
+  pop22('Đã bỏ chọn bộ từ — boss dùng tất cả từ vựng.');
+}
+
+/* ---------- view hook cho Thư viện (V17 gọi) ---------- */
+function viewHTML(){
+  if(ST.view==='unit')return unitViewHTML();
+  if(ST.view==='quest')return questViewHTML();
+  return null;
+}
+
+window.__v22={
+  groupHTML:groupHTML,viewHTML:viewHTML,
+  learnAll:learnAll,reviewAll:reviewAll,learnUnit:learnUnit,reviewUnit:reviewUnit,
+  quizUnit:quizUnit,bossUnit:bossUnit,openUnit:openUnit,goLibrary:goLibrary,
+  setUnitTab:setUnitTab,unitSearch:unitSearch,setUnitStatus:setUnitStatus,setUnitPage:setUnitPage,
+  speakEntry:speakEntry,toggleMastered:toggleMastered,toggleFav:toggleFav,
+  openQuest:openQuest,questStartMission:questStartMission,questReveal:questReveal,
+  questLearnNext:questLearnNext,questSkipLearn:questSkipLearn,questSpeak:questSpeak,
+  questPick:questPick,questNext:questNext,speakEntryByText:speakEntryByText,
+  bossScopeHTML:bossScopeHTML,bossPickAll:bossPickAll,applyBossScope:applyBossScope,clearBossScope:clearBossScope,
+  ensureData:ensureData,attachBT:function(){var v=V15();return v?v.attachBT():0},
+  get data(){return DATA},get meta(){return BT_META},
+  get state(){return ST},get en22(){return en22()},
+  _test:{spoken:function(){return SPOKEN_LOG.slice()},tts:function(){return ttsAvailable()},
+    quest:function(){return ST.quest},reset:function(){DATA=null;DATA_P=null;DATA_ERR='';window.__V22_BT=null;SPOKEN_LOG.length=0;ST.view=null;ST.quest=null}},
+  version:'14.0.0'
 };
 })();
 

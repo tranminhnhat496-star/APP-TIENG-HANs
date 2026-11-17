@@ -88,6 +88,14 @@ function currentScope(){
 }
 function scopeName(sc){
   if(!sc||sc.kind!=='lib')return '';
+  if(sc.lib==='bt'){
+    var u='';
+    if(sc.unit){var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
+      u=us.length===1?' · Unit '+us[0]:' · '+us.length+' Units';}
+    var t=sc.type?(sc.type==='word'?' · Từ đơn':' · Cụm từ'):'';
+    var s=sc.status?(sc.status==='unlearned'?' · Chưa thuộc':' · Cần ôn'):'';
+    return 'Basic Tactics'+u+t+s;
+  }
   if(sc.lib==='a1a2'){
     if(sc.topic)return 'A1–A2 · '+topicName(sc.topic);
     return 'A1–A2 Vocabulary';
@@ -115,6 +123,9 @@ function scopeBannerHTML(){
 
 /* ---------- trang chính Thư viện ---------- */
 function libraryHTML(){
+  /* V22: khi đang xem một Unit Basic Tactics hoặc Listening Quest,
+     V22 vẽ toàn bộ nội dung thay cho trang chính của Thư viện. */
+  if(window.__v22){var v22=__v22.viewHTML();if(v22)return v22}
   if(V.view==='lesson')return lessonHTML();
   var h='<div class="v17lib"><div class="v17head"><h3>📚 Thư viện từ vựng</h3>'
     +'<p class="mute">Từ vựng có sẵn — mở ra là học ngay, không cần upload. Tiến trình học lưu riêng cho từng từ, không trộn với từ của bạn.</p></div>';
@@ -132,7 +143,9 @@ function libraryHTML(){
     +'<div class="v17ox-tools"><input class="v15input" placeholder="Tìm từ trong Oxford 3000…" value="'+esc(V.oxQ)+'" oninput="__v17.oxSearch(this.value)">'
     +posSelect('oxPos',V.oxPos)+'</div>'
     +lessonGrid()+'</div>';
-  /* Nhóm 3 — Từ vựng của tôi */
+  /* Nhóm 3 — Basic Tactics for Listening (V22, dữ liệu tải lười) */
+  h+=(window.__v22&&__v22.groupHTML?__v22.groupHTML():'');
+  /* Nhóm 4 — Từ vựng của tôi */
   h+=myGroupHTML();
   return h+'</div>';
 }
@@ -267,7 +280,8 @@ function wordCard(w){
   if(V.lib==='a1a2'&&!V.topic)where=topicName(w.a1a2Topic||w.t);
   if(V.lib==='oxford'&&!V.lesson)where='Bài '+w.oxLesson;
   var extra=(w.extra||[]).map(function(x){
-    return '<div class="v17extra">+ '+esc(x.pos||'')+' — '+esc(x.vi)+' <span class="mute">('+(x.src==='oxford'?'Oxford 3000':'A1–A2')+')</span></div>';
+    var src=x.src==='oxford'?'Oxford 3000':(x.src==='bt'?'Basic Tactics':'A1–A2');
+    return '<div class="v17extra">+ '+esc(x.pos||'')+' — '+esc(x.vi)+' <span class="mute">('+src+')</span></div>';
   }).join('');
   var lvLabel=w.lv==='OX'?'Oxford 3000':(w.lv||'');
   return '<div class="v17word">'
@@ -386,6 +400,6 @@ window.__v17={
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,
   speak:speak,toggleMastered:toggleMastered,toggleFav:toggleFav,copyToPersonal:copyToPersonal,claim:claim,
   get state(){return V},
-  version:'9.0.0'
+  version:'10.0.0'
 };
 })();

@@ -263,3 +263,38 @@
 - Khóa `hanvocab.v1` **giữ nguyên** (ô lưu đang chơi); schema không đổi, chỉ thêm `S.v7.profile` (tên hiển thị + avatar).
 - Khóa mới V13: `hanvocab.v13.session` (phiên đang dùng: khách / tài khoản nào), `hanvocab.v1.guest` (bản lưu khách), `hanvocab.v1.acc.<uid>` (bản lưu của từng tài khoản), `hanvocab.v13.guestid` (ID khách), `hanvocab.v13.settings` (giảm chuyển động), `hanvocab.v12.meta.<uid>` (meta đồng bộ theo tài khoản).
 - Save V12 mở bằng V13 chạy bình thường; lần đăng nhập đầu tiên hỏi có chuyển tiến trình hiện tại vào tài khoản hay không (không tự chuyển).
+
+## V14 — Basic Tactics for Listening (2026-11-17)
+
+## File mới
+| File | Nội dung |
+|---|---|
+| `build_v14.py` | Script build V14 (từ `build_v13.py`): chèn lớp V22, kiểm tra 24 Units / 819 mục / ID duy nhất + kiểm tra bắt buộc mọi lớp `v15js`…`v22js` phải có trong HTML đã build. |
+| `package_v14.py` | Script đóng gói ZIP V14 + kiểm tra lớp V22, dữ liệu BT, tiêu đề V14. |
+| `v22.js`, `v22.css` | Lớp V22 (xem dưới). Cũng có trong `src/`. |
+| `basic_tactics_vocabulary.json` | Dữ liệu Basic Tactics trích từ file Word: 24 Units, 513 từ + 306 cụm = 819 mục (74 KB, ở thư mục gốc, tải lười qua `fetch`). |
+| `v22_basictactics.json`, `v22_basictactics_report.json` | Dữ liệu BT đầy đủ + báo cáo trùng/cờ (bản sao lưu trữ trong ZIP để đối chiếu). |
+| `tools/extract_basictactics.py` | Script trích file Word (python-docx) + báo cáo trùng/cờ. |
+| `data/v22_basictactics.json`, `data/v22_basictactics_report.json`, `data/bt_meta.js` | Dữ liệu BT + metadata 24 Units dùng lúc build. |
+| `README_V14_BASIC_TACTICS.md` | Hướng dẫn dùng bộ từ Basic Tactics, Quest, hộp chọn bộ từ đánh boss, giới hạn đã biết (không IPA, file:// không tải được dữ liệu). |
+| `CHANGELOG_V13_to_V14.md` | Changelog đầy đủ V13 → V14 (gồm 6 lỗi tìm thấy khi kiểm thử + 2 lỗi trích xuất). |
+| `REPORT_BASIC_TACTICS.md` | Báo cáo số lượng mục từ theo Unit, phân tích trùng (45 từ trùng, 5 từ khác nghĩa giữa các Unit). |
+| `REVIEW_LIST_V14.md` | Danh sách mục cần Anh rà soát (5 từ khác nghĩa giữa các Unit + 2 mục V9 chưa sửa). |
+| `SMOKE_TEST_V14_2026-11-17.md` | Báo cáo kiểm thử V14 (106/106 jsdom ×2 + hồi quy rút gọn V13/V12 19/19). |
+
+## File sửa
+| File | Thay đổi |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V14; thêm lớp V22: `<style id="v22">`, `<script id="v22js">`. |
+| `v15.js` | Gắn dữ liệu BT vào WORDS (`attachBT`, khối V22 trong `buildWords`), phạm vi BT trong `wordsFiltered`/`inScope15`, sắp xếp cụm từ trong English Typing (`typeArr*`), sửa lỗi tự đọc "undefined" ở chế độ Listening (`speak15(M.cur.w.en)`), đáp án nhiễu theo phạm vi, bảo vệ danh sách rỗng ở Typing/Listening/Speed/Speaking; version `13.0.0` → `14.0.0`. |
+| `v17.js` | Nhóm Basic Tactics trong Thư viện (hook sang `__v22.viewHTML()`), tên phạm vi BT trong `scopeName`, nhãn nguồn 'bt' → 'Basic Tactics'; version `9.0.0` → `10.0.0`. |
+| `v18.js` | `wordPool` + `distractorsEN` theo phạm vi (đáp án nhiễu trong phạm vi trước), hộp chọn bộ từ Basic Tactics trong `openArena`; version `10.0.1` → `14.0.0`. |
+| `v19.js` | Như v18.js (wordPool, distractorsEN), hộp chọn bộ từ trong `zoneDetail` (chỉ tiếng Anh); version `13.0.0` → `14.0.0`. |
+
+## File giữ nguyên 100% (không sửa, không xóa)
+- Mọi file V6 khác, V7/V8/V9/V10/V11/V11.1/V12/V13, `v20.js` (12.0.0), `v20_sync.js` (13.0.0), `v21.js` (13.0.0), `firebase-config.js`, `firestore.rules`, dữ liệu từ vựng A1–A2/Oxford 3000, 60 PNG boss V10/V11, 10 boss cũ V15, luật thưởng, cơ chế học, farm, đấu trường boss tiếng Hàn cũ, hệ thống lưu V12, hệ thống tài khoản V13.
+
+## Dữ liệu người chơi (localStorage) — không đổi khóa chính, thêm khóa phụ
+- Khóa `hanvocab.v1` **giữ nguyên** (ô lưu đang chơi); schema không đổi, chỉ thêm `S.v7.en22` (tiến trình Quest Basic Tactics: sao/best/lần chơi/lần nhận thưởng theo Unit; SRS box/due của từ BT dùng chung kho `S.v7.en`/`en15` như mọi từ tiếng Anh khác).
+- Dữ liệu Basic Tactics (819 mục) **không** lưu vào localStorage và **không** đưa vào payload Firestore — nó là dữ liệu cài sẵn như thư viện V17; chỉ tiến trình (ID + sao + box/due) được lưu/đồng bộ.
+- Save V13 mở bằng V14 chạy bình thường; không cần migration (cùng `hanvocab.v1`, `SAVE_VERSION` giữ 12).
