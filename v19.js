@@ -85,7 +85,8 @@ function zoneNeedText(zid,lang){
 }
 function bossUnlocked19(id,lang){
   lang=lang||lang19();
-  var b=D19().byId(id);if(!b)return false;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return false;
+  if(b.zone==='chrono'&&window.__v33&&__v33.bossUnlocked)return __v33.bossUnlocked(id,lang);
   if(!zoneOpen(b.zone,lang))return false;
   var list=zoneBosses(b.zone),i=list.indexOf(id);
   if(i<=0)return true;
@@ -340,7 +341,7 @@ function markKO19(ok){
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
 function fight(id){
-  var b=D19().byId(id);if(!b)return;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
   if(!document.querySelector('#v19fight'))openMap();
   startFight(b,lang19());
@@ -348,7 +349,7 @@ function fight(id){
 function startFight(b,lang){
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
     combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
-    shield:(b.skills.elem.id==='shield'?30:0),cleansed:false,
+    shield:(b.id==='v17_geargolem'?90:(b.skills.elem.id==='shield'?30:0)),cleansed:false,
     over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
     timer:null,left:0,lastDmg:0,crit:false,
@@ -456,8 +457,9 @@ function checkPhase(){
     F.phase=2;F.anim='special';
     F.banner='⚡ AWAKENING — '+b.vi+' thức tỉnh! Giai đoạn 2: phòng thủ và kỹ năng mạnh hơn!';
   }
-  if(F.phase===2&&F.hp<=F.maxHp*0.2){
+  if(F.phase===2&&F.hp<=F.maxHp*0.2&&F.boss.id!=='v17_geargolem'){
     /* Berserk begins with the Ultimate: Knowledge Counterattack */
+    /* V33: GEAR GOLEM has no P3 Knowledge Counterattack (2 phases only). */
     F.ultActive=true;F.caQ=0;F.caRight=0;F.anim='special';
     F.banner='⚠️ BOSS ĐANG CHUẨN BỊ TUYỆT KỸ: '+b.skills.ult.n+'! Trả lời đúng 3 câu liên tiếp để phản công!';
   }
@@ -537,6 +539,8 @@ function answer(ok,timeout){
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
     if(b.skills.pass.id==='vampiric')healBoss(4,'🧛 Hút Sinh Lực: boss hồi 4 HP!');
+    /* V33: GEAR GOLEM time-reversal — wrong answer in P2 heals +10 HP. */
+    if(b.id==='v17_geargolem'&&F.phase===2)healBoss(10,'⏳ Đảo ngược thời gian: GEAR GOLEM hồi 10 HP!');
   }
   var qc=F.qCount;
   if(b.skills.elem.id==='heal'&&qc>0&&qc%4===0)healBoss(6,'🌸 Hồi Phục: boss hồi 6 HP!');
@@ -645,7 +649,7 @@ function renderFight(){
   var host=$('#v19fight');if(!host)return;
   if(!F){host.innerHTML='';return}
   var b=F.boss;
-  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/3'+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
+  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/'+(F.boss.id==='v17_geargolem'?'2':'3')+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
   var sk=b.skills;
   var h='<div class="v19fight '+(F.over==='win'?'win':'')+'">'
   +'<div class="v19fight-top"><img class="v19boss-img anim-'+F.anim+'" src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'

@@ -540,3 +540,48 @@
 
 ### Ngoài phạm vi (không làm trong V16.4)
 - Claude #3 (daily-start + review boss), #4 (review-debt cap + welcome-back), #5 (bulk Korean import) — follow-up, chưa làm. V17-1/V17-2/V17-3, F-04/F-05/F-07/F-09/F-10, V17-4 typo, M1/M2, V9 word fixes, V14.1, PR #7 follow-ups, F-12 full-wipe (vẫn chờ Anh) — chưa sửa.
+
+## V17.0 — CHRONO KINGDOM (2026-11-19)
+
+**17.0.0 lấy từ bản nháp V30 Vocabulary World chưa phát hành** (file
+thiết kế `v17-design.md`, giữ lại làm tham chiếu — KHÔNG xóa). Bản
+này lấy số 17.0.0 cho CHRONO KINGDOM.
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `src/v33.js`, `src/v33.css`, `src/v33_data.js` | Lớp V33 mới, version 17.0.0, nạp CUỐI (sau V32): cổng 70-win, 8 boss Chrono (UCE V19), 6 nhiệm vụ cốt truyện (V27), Time Echo, Chrono Rift, 240 từ B2, 3 loài pet mới, overlay z-index 1500, token `--ui-*`, 44 px. |
+| `build_v33.py` | Script build V17.0: kiểm tra base là V16.4 nguyên vẹn (sha256 `c3639bc7…`), áp dụng đúng 13 replacement (V19 ×6, V18 ×2, V21/V27/V20 ×2, V15 ×1), thêm nút KO `v33kotab`, đổi title, chèn lớp V33 cuối cùng, assert marker/thứ tự/version/KO không đổi/không có marker ngoài phạm vi, `node --check` 8 file. Chạy đúng 1 lần, không chạy lại trên bản đã xong. (Ghi lại 2 bản sửa B-33-1/B-33-2 sau build đầu.) |
+| `package_v33.py` | Script đóng gói ZIP V17.0 + kiểm tra `index.html`, `v33.js`, `v33.css`, `v33_data.js`, `build_v33.py`, `package_v33.py`, `tools/v33/test33.js` trong ZIP; marker V33 cuối cùng; fragment V31 + V33 còn đủ (kèm 2 dòng sửa B-33-1/B-33-2); PNG V10 30 / V11 30 / V17 8 / pet v15 53; không có `assets/pets/v17/`; KO 1× v33kotab; `firebase-config.js` trong ZIP là placeholder. |
+| `data/v33_words.json` | 240 từ Chrono (4 set × 60: time / space / machines / change) kèm IPA + ví dụ; `tools/v33/validate_words.py` kiểm tra 0 trùng / 0 thiếu. |
+| `assets/bosses/v17/v17_{sandwisp,pendulum,specter,mantis,hound,oracle,titan,geargolem}.png` | 8 ảnh boss Chrono (RGBA 512×512, nền trong suốt). |
+| `assets/pets/v15/chrono/{stardeer,gearbeetle,cosmicunicorn}_s{1,2,3}.png` + `assets/pets/v15/eggs/chrono_egg_{star,gear,cosmic}.png` | 12 ảnh pet Chrono (9 form + 3 trứng) — nằm dưới cây `v15` theo quyết định MOVE (xem dưới), KHÔNG có `assets/pets/v17/`. |
+| `README_V17_0_CHRONO_KINGDOM.md` | Hướng dẫn V17.0: cổng 70-win, 8 boss, 6 nhiệm vụ, Time Echo, Chrono Rift, 3 loài pet, giới hạn (Firebase live chưa kiểm thử). |
+| `CHANGELOG_V16_4_to_V17_0.md` | Changelog đầy đủ V16.4 → V17.0 (kèm 2 bản sửa B-33-1/B-33-2 và 2 anchor BRIEF sai trong source). |
+| `SMOKE_TEST_V17_0_2026-11-19.md` | Báo cáo kiểm thử V17.0 (build gates đầy đủ; test33 204/0/8 ×3; Chrome driver). |
+| `tools/v33/` | Bộ kiểm thử V17.0: `BRIEF_V33.md` (brief binding), `gen_v33_data.py`, `validate_words.py`, `fix_v17_transparency.py`, `test33.js`, `verify-v33c.js`. |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v19.js` | 6 replacement V33: fight/unlock fall-through sang `__V33_DATA.byId` (boss Chrono + delegate zone `chrono` cho `__v33.bossUnlocked`); khiên Golem 90 HP; bỏ P3 cho Golem; hồi +10 HP khi trả lời sai ở P2; chữ giai đoạn `/2` cho Golem. |
+| `v18.js` | 2 replacement V33: `allBosses()` thêm `__V33_DATA.bosses`; `challenge()` + `collDetail()` fall-through sang `__V33_DATA.byId`. |
+| `v21.js` | `TOTAL_BOSSES` 70 → 78. |
+| `v27.js` | Export `startSession` trên `__v27` (1 replacement, guarded). |
+| `v20_sync.js` | `hasProgress` nhận tiến trình en33; thêm nhánh merge `en33` (quest union MAX, rift best MAX + claimed union theo ngày mới hơn, regionClaimed MAX từng ngôn ngữ — sửa B-33-2, created MIN, pending bỏ). |
+| `v15.js` | Khối V33 trong `buildWords()` hợp nhất `__V33_WORDS` vào `WORDS` (theo tiền lệ BT). |
+| `index.html` (inlined) | Cùng 13 replacement trên + nút KO `v33kotab` sau `v27kotab` + title V17.0 + lớp V33 chèn cuối cùng. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V17.0. |
+
+### Lớp V33 — tóm tắt nội dung (chi tiết trong README_V17_0_CHRONO_KINGDOM.md)
+- **Cổng 70-win:** đếm V33-local (10 boss cũ + 30 V10 flat + 30 V11); mở đúng 70; khóa hiện `x/70` thật + breakdown. Boss mở lần lượt theo ngôn ngữ. Vào từ English Hub (decorator MutationObserver, 2 nút) + tab KO `v33kotab`.
+- **8 boss Chrono** dùng UCE V19 (không engine mới), lv 61–68, hp 620–750, def 7–8, hệ + kỹ năng chỉ từ palette V19; Golem Bánh Răng: khiên 90 HP, 2 giai đoạn (không P3), hồi +10 HP khi trả lời sai ở P2. Thắng ghi vào `en19`; hoàn thành vùng +150 XP/+5 💎/danh hiệu “Chúa Tể Thời Gian” mỗi ngôn ngữ 1 lần.
+- **240 từ B2** (4 set × 60) vào `WORDS` qua `buildWords()`; từ trùng (`alarm clock`) giữ id cũ + thêm tag `chrono`. Chưa có nhóm Library thứ 5.
+- **6 nhiệm vụ cốt truyện** qua V27 (accuracy ≥ 80% mới hoàn thành — sửa B-33-1; +20 XP, ≥ 90% thêm +10 XP, nhiệm vụ cuối +1 💎). **Time Echo** (từ sai nhiều nhất, tối đa 10, trạng thái trống trung thực). **Chrono Rift** (3 tầng × 7 câu, mở tầng sau khi tầng trước ≥ 70%, thưởng theo accuracy 1 lần/ngày/tầng).
+- **3 loài pet mới** (Hươu Sao / Bọ Bánh Răng / Kỳ Lân Vũ Trụ) + 3 trứng, đăng ký vào `__V23_DATA` (guarded + idempotent), tiến hóa theo đá/cost hiện có; mốc sưu tập 45 form (+60 💎, “Bậc Thầy Thời Gian”).
+- **Quyết định MOVE (ảnh pet):** `v23.js` hardcode tiền tố `assets/pets/v15/` + subpath stage và `assets/pets/v15/eggs/` + tên file trần, nên ảnh pet Chrono CHỈ nằm ở `assets/pets/v15/chrono/` + `assets/pets/v15/eggs/chrono_egg_*.png`. Không có `assets/pets/v17/` ở đâu, không trùng byte trong ZIP.
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, Firebase Auth/Sync, login khách, các lớp V6–V32 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0, v27 = 16.0.0, v31 = 16.3.0, v32 = 16.4.0). Không migration, không tiền tệ mới. Thêm đúng 1 khóa lười mới `S.v7.en33` (boss thắng vẫn ghi `en19`).
+- **Đã sửa sau build đầu (B-33-1, B-33-2):** nhiệm vụ cần accuracy ≥ 80% (hằng `QUEST_MIN_ACC`); merge `regionClaimed` dùng MAX từng ngôn ngữ thay vì `unionTrue` (local 0 ghi đè cloud 1). Cả hai đã trong bản build thứ hai (`out/index.html` sha256 `b04179cf…`).
+
+### Ngoài phạm vi (không làm trong V17.0)
+- Tích hợp Library (nhóm thứ 5) cho từ Chrono; gõ bàn phím Hangul trong boss fight; Claude #3/#4/#5; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.

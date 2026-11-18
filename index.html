@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V16.4 — Data Safety — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V17.0 — Chrono Kingdom — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -978,7 +978,7 @@ function setView(v){view=v;render()}
 const TI={study:'🌱',list:'📖',shop:'🛒',dex:'🏆',rem:'⏰',data:'💾'};
 function render(){
   const pg=$('#app');pg.classList.remove('pg');void pg.offsetWidth;pg.classList.add('pg');
-  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>'+'<button class="tab v23kotab" onclick="window.__v23&&__v23.openHub()" title="Thú Cưng — 펫"><span class="ti">🐾</span><span>Thú Cưng</span></button>'+'<button class="tab v27kotab" onclick="window.__v27&&__v27.openSmart(\'ko\')" title="Học thông minh"><span class="ti">🧠</span><span>Học thông minh</span></button>';
+  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>'+'<button class="tab v23kotab" onclick="window.__v23&&__v23.openHub()" title="Thú Cưng — 펫"><span class="ti">🐾</span><span>Thú Cưng</span></button>'+'<button class="tab v27kotab" onclick="window.__v27&&__v27.openSmart(\'ko\')" title="Học thông minh"><span class="ti">🧠</span><span>Học thông minh</span></button>'+'<button class="tab v33kotab" onclick="window.__v33&&__v33.openChrono(\'ko\')" title="Vương Quốc Thời Gian — Chrono Kingdom"><span class="ti">⏳</span><span>Chrono</span></button>';
   stats();({study:rStudy,list:rList,shop:rShop,dex:rDex,rem:rRem,data:rData})[view]()}
 
 function rStudy(){
@@ -4089,6 +4089,30 @@ function buildWords(){
           WORDS.push(nw);BYID[nw.id]=nw;K2W2[key]=nw;LV[key]='BT';
         }
       });
+    });
+  }catch(e){}
+  /* V33: CHRONO KINGDOM — gắn 240 từ Chrono (data qua
+     window.__V33_WORDS, ids 'v33_<slug>') vào WORDS chung, theo mẫu
+     V22 (Basic Tactics). Từ đã có chỉ được gắn thêm thư viện
+     'chrono'; từ chỉ có trong Chrono nhận id ổn định 'v33_<slug>'
+     và cấp độ 'B2' (boss Chrono là diff B2 nên wordPool gồm chúng).
+     KHÔNG tạo S.cards — trường ko chỉ là dữ liệu hiển thị/học. */
+  try{
+    var ch33=(window.__V33_WORDS||[]);
+    var K2W3={};WORDS.forEach(function(ww){if(!ww.custom)K2W3[ww.en.toLowerCase()]=ww});
+    ch33.forEach(function(a){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W3[key];
+      if(ww){
+        ww.lib=ww.lib||[];
+        if(ww.lib.indexOf('chrono')<0)ww.lib.push('chrono');
+        ww.chronoSet=ww.chronoSet||a.set;
+        if(!ww.ko&&a.ko)ww.ko=a.ko;
+      }else{
+        var nw={id:a.id,t:'chrono',en:a.en,vi:a.vi,ipa:a.ipa||'',pos:a.pos||'',ex:a.ex||'',exvi:a.exvi||'',lv:'B2',custom:false,
+          lib:['chrono'],chronoSet:a.set,ko:a.ko||''};
+        WORDS.push(nw);BYID[nw.id]=nw;K2W3[key]=nw;LV[key]='B2';
+      }
     });
   }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
@@ -7407,7 +7431,7 @@ function arenaMeta(id){var a=(B18().arenas||[]);for(var i=0;i<a.length;i++)if(a[
 function bossById(id){return (B18().byId?B18().byId(id):null)}
 function newBosses(){var d=B18();return (d.en||[]).concat(d.el||[],d.leg||[])}
 function v19Bosses(){return (window.__V19_DATA&&__V19_DATA.bosses)||[]}
-function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses())}
+function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]))}
 
 /* ---------- V18 state (new key) ---------- */
 function en18(){
@@ -7574,7 +7598,7 @@ function collSearch(q){CF.q=q;collApply()}
 function collSet(k,v){CF[k]=v;var v15=V15();if(v15)v15.renderTab()}
 function collDetail(id){
   CF.detail=id;
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   var host=$('#v18colldetail');if(!host)return;
   var won=isWon(b),un=bossUnlocked(b);
   var e=en18();
@@ -7595,7 +7619,7 @@ function collDetail(id){
 }
 function collCloseDetail(){var host=$('#v18colldetail');if(host)host.innerHTML='';CF.detail=null}
 function challenge(id){
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   if(b.zone){var v19=window.__v19;if(v19){v19.openMap();v19.fight(id)}return}
   if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
   openArena(b.arena);fight(id);
@@ -8405,7 +8429,8 @@ function zoneNeedText(zid,lang){
 }
 function bossUnlocked19(id,lang){
   lang=lang||lang19();
-  var b=D19().byId(id);if(!b)return false;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return false;
+  if(b.zone==='chrono'&&window.__v33&&__v33.bossUnlocked)return __v33.bossUnlocked(id,lang);
   if(!zoneOpen(b.zone,lang))return false;
   var list=zoneBosses(b.zone),i=list.indexOf(id);
   if(i<=0)return true;
@@ -8660,7 +8685,7 @@ function markKO19(ok){
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
 function fight(id){
-  var b=D19().byId(id);if(!b)return;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
   if(!document.querySelector('#v19fight'))openMap();
   startFight(b,lang19());
@@ -8668,7 +8693,7 @@ function fight(id){
 function startFight(b,lang){
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
     combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
-    shield:(b.skills.elem.id==='shield'?30:0),cleansed:false,
+    shield:(b.id==='v17_geargolem'?90:(b.skills.elem.id==='shield'?30:0)),cleansed:false,
     over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
     timer:null,left:0,lastDmg:0,crit:false,
@@ -8776,8 +8801,9 @@ function checkPhase(){
     F.phase=2;F.anim='special';
     F.banner='⚡ AWAKENING — '+b.vi+' thức tỉnh! Giai đoạn 2: phòng thủ và kỹ năng mạnh hơn!';
   }
-  if(F.phase===2&&F.hp<=F.maxHp*0.2){
+  if(F.phase===2&&F.hp<=F.maxHp*0.2&&F.boss.id!=='v17_geargolem'){
     /* Berserk begins with the Ultimate: Knowledge Counterattack */
+    /* V33: GEAR GOLEM has no P3 Knowledge Counterattack (2 phases only). */
     F.ultActive=true;F.caQ=0;F.caRight=0;F.anim='special';
     F.banner='⚠️ BOSS ĐANG CHUẨN BỊ TUYỆT KỸ: '+b.skills.ult.n+'! Trả lời đúng 3 câu liên tiếp để phản công!';
   }
@@ -8857,6 +8883,8 @@ function answer(ok,timeout){
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
     if(b.skills.pass.id==='vampiric')healBoss(4,'🧛 Hút Sinh Lực: boss hồi 4 HP!');
+    /* V33: GEAR GOLEM time-reversal — wrong answer in P2 heals +10 HP. */
+    if(b.id==='v17_geargolem'&&F.phase===2)healBoss(10,'⏳ Đảo ngược thời gian: GEAR GOLEM hồi 10 HP!');
   }
   var qc=F.qCount;
   if(b.skills.elem.id==='heal'&&qc>0&&qc%4===0)healBoss(6,'🌸 Hồi Phục: boss hồi 6 HP!');
@@ -8965,7 +8993,7 @@ function renderFight(){
   var host=$('#v19fight');if(!host)return;
   if(!F){host.innerHTML='';return}
   var b=F.boss;
-  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/3'+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
+  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/'+(F.boss.id==='v17_geargolem'?'2':'3')+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
   var sk=b.skills;
   var h='<div class="v19fight '+(F.over==='win'?'win':'')+'">'
   +'<div class="v19fight-top"><img class="v19boss-img anim-'+F.anim+'" src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
@@ -9198,6 +9226,8 @@ function hasProgress(S){
   if(v7.en27&&v7.en27.days){ for(var d27 in v7.en27.days){ if(v7.en27.days[d27]) return true; } }
   if(v7.en23&&v7.en23.pets){ for(var p23 in v7.en23.pets){ if(v7.en23.pets[p23]) return true; } }
   if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
+  if(v7.en33&&v7.en33.quests){ for(var q33 in v7.en33.quests){ if(v7.en33.quests[q33]) return true; } }
+  if(v7.en33&&v7.en33.regionClaimed){ for(var rc33 in v7.en33.regionClaimed){ if(v7.en33.regionClaimed[rc33]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -9422,6 +9452,35 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m27.plan=n27p.plan!==undefined?n27p.plan:(o27p.plan||{en:{},ko:{}});
           m27.uiLang=n27p.uiLang||o27p.uiLang||'en';
           v7.en27=m27;
+        }
+        else if(kk==='en33'){
+          /* V33 (Chrono Kingdom): quests union (done/claimed/acc/at
+             MAX), rift best MAX per floor + claimed union for the
+             newer day only (claimed reset when the day changes),
+             regionClaimed union (per-language MAX — NOT unionTrue:
+             unionTrue is local-priority last-writer-wins, so a local
+             {ko:0} would overwrite a cloud {ko:1}; regionClaimed
+             carries explicit 0s, unlike the 1/absent claimed maps),
+             created MIN. XP/gems are never
+             summed (MAX at the top level, as everywhere else).
+             Pending launches are session-local and dropped. */
+          var l33=(localS.v7&&localS.v7.en33)||{}, c33=(cloudS.v7&&cloudS.v7.en33)||{};
+          var m33={};
+          m33.created=Math.min(l33.created||Infinity, c33.created||Infinity);
+          if(!isFinite(m33.created)) m33.created=(l33.created||c33.created||Date.now());
+          var q33={};
+          [l33.quests,c33.quests].forEach(function(src){ if(!src) return; for(var qk in src){ var a=q33[qk]=q33[qk]||{}; var b=src[qk]||{}; a.done=Math.max(a.done||0,b.done||0); a.claimed=Math.max(a.claimed||0,b.claimed||0); a.acc=Math.max(a.acc||0,b.acc||0); a.at=Math.max(a.at||0,b.at||0); } });
+          m33.quests=q33;
+          var day33=(newer.v7&&newer.v7.en33&&newer.v7.en33.rift&&newer.v7.en33.rift.day)||(older.v7&&older.v7.en33&&older.v7.en33.rift&&older.v7.en33.rift.day)||'';
+          var best33={};
+          [l33.rift&&l33.rift.best,c33.rift&&c33.rift.best].forEach(function(src){ if(!src) return; for(var fk in src) best33[fk]=Math.max(best33[fk]||0,src[fk]||0); });
+          var cl33={};
+          [l33.rift,c33.rift].forEach(function(src){ if(!src||src.day!==day33) return; for(var ck in (src.claimed||{})) cl33[ck]=src.claimed[ck]; });
+          m33.rift={day:day33,best:best33,claimed:cl33};
+          var rcL=l33.regionClaimed||{}, rcC=c33.regionClaimed||{};
+          m33.regionClaimed={en:Math.max(rcL.en||0,rcC.en||0),ko:Math.max(rcL.ko||0,rcC.ko||0)};
+          m33.pending={};
+          v7.en33=m33;
         }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }
@@ -10458,7 +10517,7 @@ var AVATARS=[
   {id:'unicorn', name:'Kỳ lân',            wins:60},
   {id:'phoenix', name:'Phượng hoàng',      wins:70}
 ];
-var TOTAL_BOSSES=70; /* 10 old (V15) + 30 (V10) + 30 (V11) */
+var TOTAL_BOSSES=78; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) */
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function getS(){ try{ return S; }catch(e){ return null; } }
@@ -15642,7 +15701,7 @@ try{
     version:VERSION,
     openSmart:openSmart,closeSmart:closeSmart,setTab:setTab,setLang:setLang,goTab:goTab,goWeak:goWeak,
     recordAnswer:recordAnswer,buildPlan:buildPlan,planOf:planOf,
-    startPlan:startPlan,startWeak:startWeak,startWeakWord:startWeakWord,
+    startPlan:startPlan,startSession:startSession,startWeak:startWeak,startWeakWord:startWeakWord,
     setMins:setMins,setCustomMins:setCustomMins,rebuildPlan:rebuildPlan,
     answerMC:answerMC,answerType:answerType,answerFlash:answerFlash,typeHint:typeHint,
     nextQ:nextQ,endEarly:endEarly,
@@ -16964,6 +17023,3899 @@ window.__v32={
     saveWrapped:function(){ return _saveWrapped&&!!(window.save&&window.save.__v32); },
     flushWrapped:function(){ try{ return !!(window.__v20&&window.__v20.flush&&window.__v20.flush.__v32); }catch(e){ return false; } },
     init:init32, wrapDataPanel:wrapDataPanel, armAcctDecorator:armAcctDecorator
+  }
+};
+})();
+
+</script>
+
+<style id="v33">
+/* ===== V33 — CHRONO KINGDOM (V17.0) =====
+   Overlay z-index 1500 (above V31 1400, V20 modal 1200, V32 badge
+   1100, V27 hub 990). Tokens --ui-* (V24/V25/V26 design system),
+   WCAG AA contrast, 44px minimum touch targets, no overflow at
+   360-430px. */
+#v33hub{box-sizing:border-box;position:fixed;inset:0;z-index:1500;display:flex;align-items:flex-start;justify-content:center;background:rgba(10,6,24,.82);overflow-y:auto;padding:14px 10px;color:var(--ui-text-primary,#FFFFFF);font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.v33in{box-sizing:border-box;width:100%;max-width:720px;margin:0 auto;background:linear-gradient(180deg,#241640 0%,#1B1033 60%,#120A24 100%);border:2px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.v33head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.v33title b{display:block;font-size:19px;line-height:1.3;color:var(--ui-title-gold,#FFD76A)}
+.v33title span{display:block;font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin-top:2px}
+.v33x{flex:0 0 auto;min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-bg-panel,#292044);color:var(--ui-text-primary,#FFFFFF);font-size:18px;cursor:pointer}
+.v33lang{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}
+.v33langbtn{flex:1 1 140px;min-height:44px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:#1B1430;color:var(--ui-text-primary,#FFFFFF);font-size:15px;font-weight:700;cursor:pointer}
+.v33langbtn.on{background:var(--ui-selected,#F7BE38);color:#251A38;border-color:var(--ui-selected,#F7BE38)}
+.v33card{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:12px;margin:12px 0 0;color:var(--ui-text-primary,#FFFFFF)}
+.v33card>b{display:block;font-size:15px;line-height:1.4;color:var(--ui-title-gold,#FFD76A);margin-bottom:6px}
+.v33card p,.v33mut{font-size:14px;line-height:1.5;color:var(--ui-text-secondary,#E4DDF1);margin:6px 0 0}
+.v33bar{height:12px;border-radius:8px;background:#1B1430;border:1px solid var(--ui-border,#A78BFA);overflow:hidden;margin:8px 0}
+.v33bar i{display:block;height:100%;background:linear-gradient(90deg,#F7BE38,#FFD76A)}
+.v33empty{box-sizing:border-box;background:#1B1430;border:1px dashed var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ui-text-secondary,#E4DDF1)}
+.v33sec{margin:16px 0 0}
+.v33sec>h3{font-size:17px;line-height:1.35;color:var(--ui-title-gold,#FFD76A);margin:0 0 4px}
+.v33sec>p{font-size:14px;line-height:1.5;color:var(--ui-text-secondary,#E4DDF1);margin:0 0 10px}
+.v33bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.v33boss{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.v33boss.done{border-color:#7ED957}
+.v33boss.locked{opacity:.75}
+.v33boss img{width:100%;max-width:160px;height:auto;margin:0 auto;display:block}
+.v33boss b{font-size:15px;line-height:1.35;color:var(--ui-text-primary,#FFFFFF)}
+.v33boss .v33mut{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v33boss em{font-style:normal;font-size:13px;line-height:1.45;color:var(--ui-title-gold,#FFD76A)}
+.v33boss p{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v33chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;background:#7B61FF}
+.v33quests{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.v33quest{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.v33quest b{font-size:15px;line-height:1.35;color:var(--ui-text-primary,#FFFFFF)}
+.v33quest .v33mut{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v33quest em{font-style:normal;font-size:13px;line-height:1.45;color:var(--ui-title-gold,#FFD76A)}
+.v33quest p{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v33btn{box-sizing:border-box;min-height:var(--ui-btn-min-height,44px);padding:10px 14px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-btn-secondary,#6845A8);color:var(--ui-text-primary,#FFFFFF);font-size:14px;font-weight:700;line-height:1.35;cursor:pointer;white-space:normal;margin-top:6px}
+.v33btn.pri{background:var(--ui-selected,#F7BE38);color:#251A38;border-color:var(--ui-selected,#F7BE38)}
+.v33btn:disabled{opacity:.55;cursor:not-allowed}
+@media (max-width:430px){
+  #v33hub{padding:8px 6px}
+  .v33in{padding:10px}
+  .v33bosses,.v33quests{grid-template-columns:1fr 1fr}
+}
+@media (max-width:360px){
+  .v33bosses,.v33quests{grid-template-columns:1fr}
+}
+
+</style>
+<script id="v33data">
+/* ===== V33 DATA — CHRONO KINGDOM (V17.0) =====
+   Generated by tools/v33/gen_v33_data.py from data/v33_words.json
+   (240 words: 4 sets x 60 — time / space / machines / change).
+   Word ids: 'v33_<slug>' (slug of the English headword). Boss ids:
+   'v17_*' (distinct from V10 v10_* and V11 v11_*). Pet species ids:
+   'stardeer' / 'gearbeetle' / 'cosmicunicorn'; egg ids 'star' /
+   'gear' / 'cosmic'. Quest word lists are fixed index slices into
+   each set (see gen_v33_data.py); Rift floors use 7 ids each, chosen
+   disjoint from every quest list so a Rift session can never be
+   mistaken for a quest completion.
+   Boss scale (adapted from ChatGPT Lv 71-78 / HP 18k-50k, NOT on game
+   scale): lv 61-68, hp 620-750, continuing the V19 progression
+   (V19 max lv 60 / hp 600). Elements mapped onto the real V19 EL:
+   Sand->earth, Metal->earth, Dark->dark, Electric->thunder,
+   Void->cosmic, Light->light, Time->cosmic. Skill ids come only from
+   the V19 palette (elem: burn/freeze/chain/veil/cleanse/regen/heal/
+   gale/shield/rift; tact: tshield/theal/ttimer/tveil/tenrage; pass:
+   bulwark/vampiric/swift/thorns). */
+(function(){
+'use strict';
+var WORDS33=[
+  {
+    "id":"v33_alarm_clock",
+    "set":"time",
+    "en":"alarm clock",
+    "ko":"알람 시계",
+    "vi":"đồng hồ báo thức",
+    "ipa":"/əˈlɑːm klɒk/",
+    "pos":"noun",
+    "ex":"My alarm clock rings at six every morning.",
+    "exvi":"Đồng hồ báo thức của tôi reo lúc sáu giờ mỗi sáng."
+  },
+  {
+    "id":"v33_agenda",
+    "set":"time",
+    "en":"agenda",
+    "ko":"안건",
+    "vi":"chương trình nghị sự",
+    "ipa":"/əˈdʒendə/",
+    "pos":"noun",
+    "ex":"The meeting agenda has five items.",
+    "exvi":"Chương trình nghị sự của cuộc họp có năm mục."
+  },
+  {
+    "id":"v33_antique",
+    "set":"time",
+    "en":"antique",
+    "ko":"골동품",
+    "vi":"đồ cổ",
+    "ipa":"/ænˈtiːk/",
+    "pos":"noun",
+    "ex":"She collects antique furniture.",
+    "exvi":"Cô ấy sưu tầm đồ nội thất cổ."
+  },
+  {
+    "id":"v33_await",
+    "set":"time",
+    "en":"await",
+    "ko":"기다리다",
+    "vi":"chờ đợi",
+    "ipa":"/əˈweɪt/",
+    "pos":"verb",
+    "ex":"We await your reply.",
+    "exvi":"Chúng tôi đang chờ câu trả lời của bạn."
+  },
+  {
+    "id":"v33_bedtime",
+    "set":"time",
+    "en":"bedtime",
+    "ko":"취침 시간",
+    "vi":"giờ đi ngủ",
+    "ipa":"/ˈbedtaɪm/",
+    "pos":"noun",
+    "ex":"It is past my bedtime.",
+    "exvi":"Đã quá giờ đi ngủ của tôi."
+  },
+  {
+    "id":"v33_beforehand",
+    "set":"time",
+    "en":"beforehand",
+    "ko":"미리",
+    "vi":"trước",
+    "ipa":"/bɪˈfɔːhænd/",
+    "pos":"adverb",
+    "ex":"Please call beforehand.",
+    "exvi":"Xin hãy gọi điện trước."
+  },
+  {
+    "id":"v33_belated",
+    "set":"time",
+    "en":"belated",
+    "ko":"뒤늦은",
+    "vi":"muộn màng",
+    "ipa":"/bɪˈleɪtɪd/",
+    "pos":"adjective",
+    "ex":"He sent a belated birthday card.",
+    "exvi":"Anh ấy đã gửi một tấm thiệp sinh nhật muộn."
+  },
+  {
+    "id":"v33_chronological",
+    "set":"time",
+    "en":"chronological",
+    "ko":"연대순의",
+    "vi":"theo thứ tự thời gian",
+    "ipa":"/ˌkrɒnəˈlɒdʒɪkəl/",
+    "pos":"adjective",
+    "ex":"The events are listed in chronological order.",
+    "exvi":"Các sự kiện được liệt kê theo thứ tự thời gian."
+  },
+  {
+    "id":"v33_countdown",
+    "set":"time",
+    "en":"countdown",
+    "ko":"카운트다운",
+    "vi":"đếm ngược",
+    "ipa":"/ˈkaʊntdaʊn/",
+    "pos":"noun",
+    "ex":"The countdown to the launch has begun.",
+    "exvi":"Quá trình đếm ngược đến giờ phóng đã bắt đầu."
+  },
+  {
+    "id":"v33_dawn",
+    "set":"time",
+    "en":"dawn",
+    "ko":"새벽",
+    "vi":"bình minh",
+    "ipa":"/dɔːn/",
+    "pos":"noun",
+    "ex":"We left at dawn.",
+    "exvi":"Chúng tôi rời đi lúc bình minh."
+  },
+  {
+    "id":"v33_daybreak",
+    "set":"time",
+    "en":"daybreak",
+    "ko":"새벽녘",
+    "vi":"lúc rạng sáng",
+    "ipa":"/ˈdeɪbreɪk/",
+    "pos":"noun",
+    "ex":"They worked from daybreak until noon.",
+    "exvi":"Họ làm việc từ lúc rạng sáng đến trưa."
+  },
+  {
+    "id":"v33_daylight",
+    "set":"time",
+    "en":"daylight",
+    "ko":"일광",
+    "vi":"ánh sáng ban ngày",
+    "ipa":"/ˈdeɪlaɪt/",
+    "pos":"noun",
+    "ex":"We need more daylight to finish the work.",
+    "exvi":"Chúng ta cần thêm ánh sáng ban ngày để hoàn thành công việc."
+  },
+  {
+    "id":"v33_duration",
+    "set":"time",
+    "en":"duration",
+    "ko":"지속 시간",
+    "vi":"khoảng thời gian",
+    "ipa":"/djʊˈreɪʃən/",
+    "pos":"noun",
+    "ex":"The duration of the course is six weeks.",
+    "exvi":"Khoá học kéo dài sáu tuần."
+  },
+  {
+    "id":"v33_dusk",
+    "set":"time",
+    "en":"dusk",
+    "ko":"황혼",
+    "vi":"hoàng hôn",
+    "ipa":"/dʌsk/",
+    "pos":"noun",
+    "ex":"The birds return home at dusk.",
+    "exvi":"Chim bay về nhà lúc hoàng hôn."
+  },
+  {
+    "id":"v33_endless",
+    "set":"time",
+    "en":"endless",
+    "ko":"끝없는",
+    "vi":"vô tận",
+    "ipa":"/ˈendləs/",
+    "pos":"adjective",
+    "ex":"The desert seems endless.",
+    "exvi":"Sa mạc dường như vô tận."
+  },
+  {
+    "id":"v33_epoch",
+    "set":"time",
+    "en":"epoch",
+    "ko":"시대",
+    "vi":"thời đại",
+    "ipa":"/ˈiːpɒk/",
+    "pos":"noun",
+    "ex":"This discovery began a new epoch in science.",
+    "exvi":"Phát hiện này đã mở ra một thời đại mới trong khoa học."
+  },
+  {
+    "id":"v33_equinox",
+    "set":"time",
+    "en":"equinox",
+    "ko":"분점",
+    "vi":"điểm phân",
+    "ipa":"/ˈiːkwɪnɒks/",
+    "pos":"noun",
+    "ex":"Day and night are equal at the equinox.",
+    "exvi":"Ngày và đêm dài bằng nhau vào điểm phân."
+  },
+  {
+    "id":"v33_era",
+    "set":"time",
+    "en":"era",
+    "ko":"시대",
+    "vi":"kỷ nguyên",
+    "ipa":"/ˈɪərə/",
+    "pos":"noun",
+    "ex":"We live in the era of the internet.",
+    "exvi":"Chúng ta đang sống trong kỷ nguyên của internet."
+  },
+  {
+    "id":"v33_eternal",
+    "set":"time",
+    "en":"eternal",
+    "ko":"영원한",
+    "vi":"vĩnh cửu",
+    "ipa":"/ɪˈtɜːnəl/",
+    "pos":"adjective",
+    "ex":"Their love seemed eternal.",
+    "exvi":"Tình yêu của họ dường như vĩnh cửu."
+  },
+  {
+    "id":"v33_expire",
+    "set":"time",
+    "en":"expire",
+    "ko":"만료되다",
+    "vi":"hết hạn",
+    "ipa":"/ɪkˈspaɪər/",
+    "pos":"verb",
+    "ex":"My passport expires next year.",
+    "exvi":"Hộ chiếu của tôi hết hạn vào năm sau."
+  },
+  {
+    "id":"v33_forthcoming",
+    "set":"time",
+    "en":"forthcoming",
+    "ko":"다가오는",
+    "vi":"sắp tới",
+    "ipa":"/fɔːθˈkʌmɪŋ/",
+    "pos":"adjective",
+    "ex":"The forthcoming book is about time travel.",
+    "exvi":"Cuốn sách sắp tới nói về du hành thời gian."
+  },
+  {
+    "id":"v33_fortnight",
+    "set":"time",
+    "en":"fortnight",
+    "ko":"2주",
+    "vi":"hai tuần",
+    "ipa":"/ˈfɔːtnaɪt/",
+    "pos":"noun",
+    "ex":"We stayed there for a fortnight.",
+    "exvi":"Chúng tôi đã ở đó hai tuần."
+  },
+  {
+    "id":"v33_hourglass",
+    "set":"time",
+    "en":"hourglass",
+    "ko":"모래시계",
+    "vi":"đồng hồ cát",
+    "ipa":"/ˈaʊəɡlɑːs/",
+    "pos":"noun",
+    "ex":"An hourglass measures time with sand.",
+    "exvi":"Đồng hồ cát đo thời gian bằng cát."
+  },
+  {
+    "id":"v33_hourly",
+    "set":"time",
+    "en":"hourly",
+    "ko":"매시간",
+    "vi":"hàng giờ",
+    "ipa":"/ˈaʊəli/",
+    "pos":"adverb",
+    "ex":"The bus leaves hourly.",
+    "exvi":"Xe buýt khởi hành mỗi giờ."
+  },
+  {
+    "id":"v33_instantly",
+    "set":"time",
+    "en":"instantly",
+    "ko":"즉시",
+    "vi":"ngay lập tức",
+    "ipa":"/ˈɪnstəntli/",
+    "pos":"adverb",
+    "ex":"She instantly recognised him.",
+    "exvi":"Cô ấy nhận ra anh ấy ngay lập tức."
+  },
+  {
+    "id":"v33_leap_year",
+    "set":"time",
+    "en":"leap year",
+    "ko":"윤년",
+    "vi":"năm nhuận",
+    "ipa":"/ˈliːp jɪər/",
+    "pos":"noun",
+    "ex":"Next year is a leap year.",
+    "exvi":"Năm sau là năm nhuận."
+  },
+  {
+    "id":"v33_lifetime",
+    "set":"time",
+    "en":"lifetime",
+    "ko":"일생",
+    "vi":"cả đời",
+    "ipa":"/ˈlaɪftaɪm/",
+    "pos":"noun",
+    "ex":"It was the chance of a lifetime.",
+    "exvi":"Đó là cơ hội có một không hai trong đời."
+  },
+  {
+    "id":"v33_lunchtime",
+    "set":"time",
+    "en":"lunchtime",
+    "ko":"점심 시간",
+    "vi":"giờ ăn trưa",
+    "ipa":"/ˈlʌntʃtaɪm/",
+    "pos":"noun",
+    "ex":"I will meet you at lunchtime.",
+    "exvi":"Tôi sẽ gặp bạn vào giờ ăn trưa."
+  },
+  {
+    "id":"v33_millennium",
+    "set":"time",
+    "en":"millennium",
+    "ko":"천년",
+    "vi":"thiên niên kỷ",
+    "ipa":"/mɪˈleniəm/",
+    "pos":"noun",
+    "ex":"The city is a millennium old.",
+    "exvi":"Thành phố đã có tuổi đời một thiên niên kỷ."
+  },
+  {
+    "id":"v33_momentary",
+    "set":"time",
+    "en":"momentary",
+    "ko":"순간의",
+    "vi":"thoáng qua",
+    "ipa":"/ˈməʊməntri/",
+    "pos":"adjective",
+    "ex":"There was a momentary silence.",
+    "exvi":"Có một khoảng lặng thoáng qua."
+  },
+  {
+    "id":"v33_monthly",
+    "set":"time",
+    "en":"monthly",
+    "ko":"매월",
+    "vi":"hàng tháng",
+    "ipa":"/ˈmʌnθli/",
+    "pos":"adjective",
+    "ex":"I pay a monthly fee.",
+    "exvi":"Tôi trả phí hàng tháng."
+  },
+  {
+    "id":"v33_nightfall",
+    "set":"time",
+    "en":"nightfall",
+    "ko":"해질녘",
+    "vi":"lúc chạng vạng",
+    "ipa":"/ˈnaɪtfɔːl/",
+    "pos":"noun",
+    "ex":"We arrived before nightfall.",
+    "exvi":"Chúng tôi đến trước lúc chạng vạng."
+  },
+  {
+    "id":"v33_nostalgia",
+    "set":"time",
+    "en":"nostalgia",
+    "ko":"향수",
+    "vi":"nỗi nhớ",
+    "ipa":"/nɒˈstældʒə/",
+    "pos":"noun",
+    "ex":"He felt nostalgia for his childhood.",
+    "exvi":"Anh ấy cảm thấy nhớ tuổi thơ của mình."
+  },
+  {
+    "id":"v33_outdated",
+    "set":"time",
+    "en":"outdated",
+    "ko":"구식의",
+    "vi":"lỗi thời",
+    "ipa":"/aʊtˈdeɪtɪd/",
+    "pos":"adjective",
+    "ex":"This map is outdated.",
+    "exvi":"Bản đồ này đã lỗi thời."
+  },
+  {
+    "id":"v33_overdue",
+    "set":"time",
+    "en":"overdue",
+    "ko":"기한이 지난",
+    "vi":"quá hạn",
+    "ipa":"/ˌəʊvəˈdjuː/",
+    "pos":"adjective",
+    "ex":"The library book is overdue.",
+    "exvi":"Cuốn sách thư viện đã quá hạn."
+  },
+  {
+    "id":"v33_overnight",
+    "set":"time",
+    "en":"overnight",
+    "ko":"하룻밤",
+    "vi":"qua đêm",
+    "ipa":"/ˌəʊvəˈnaɪt/",
+    "pos":"adverb",
+    "ex":"We stayed overnight in the village.",
+    "exvi":"Chúng tôi đã ở lại qua đêm trong làng."
+  },
+  {
+    "id":"v33_premature",
+    "set":"time",
+    "en":"premature",
+    "ko":"이른",
+    "vi":"quá sớm",
+    "ipa":"/ˈpremətʃʊər/",
+    "pos":"adjective",
+    "ex":"It is premature to decide now.",
+    "exvi":"Còn quá sớm để quyết định ngay bây giờ."
+  },
+  {
+    "id":"v33_punctual",
+    "set":"time",
+    "en":"punctual",
+    "ko":"시간을 잘 지키는",
+    "vi":"đúng giờ",
+    "ipa":"/ˈpʌŋktʃuəl/",
+    "pos":"adjective",
+    "ex":"She is always punctual.",
+    "exvi":"Cô ấy luôn đúng giờ."
+  },
+  {
+    "id":"v33_renew",
+    "set":"time",
+    "en":"renew",
+    "ko":"갱신하다",
+    "vi":"gia hạn",
+    "ipa":"/rɪˈnjuː/",
+    "pos":"verb",
+    "ex":"I need to renew my driving licence.",
+    "exvi":"Tôi cần gia hạn giấy phép lái xe."
+  },
+  {
+    "id":"v33_reschedule",
+    "set":"time",
+    "en":"reschedule",
+    "ko":"일정을 변경하다",
+    "vi":"dời lịch",
+    "ipa":"/ˌriːˈʃedjuːl/",
+    "pos":"verb",
+    "ex":"We had to reschedule the meeting.",
+    "exvi":"Chúng tôi phải dời lịch cuộc họp."
+  },
+  {
+    "id":"v33_rush_hour",
+    "set":"time",
+    "en":"rush hour",
+    "ko":"러시아워",
+    "vi":"giờ cao điểm",
+    "ipa":"/ˈrʌʃ aʊər/",
+    "pos":"noun",
+    "ex":"Avoid driving in the rush hour.",
+    "exvi":"Tránh lái xe vào giờ cao điểm."
+  },
+  {
+    "id":"v33_seldom",
+    "set":"time",
+    "en":"seldom",
+    "ko":"거의 ~하지 않다",
+    "vi":"hiếm khi",
+    "ipa":"/ˈseldəm/",
+    "pos":"adverb",
+    "ex":"I seldom watch television.",
+    "exvi":"Tôi hiếm khi xem truyền hình."
+  },
+  {
+    "id":"v33_shorten",
+    "set":"time",
+    "en":"shorten",
+    "ko":"줄이다",
+    "vi":"rút ngắn",
+    "ipa":"/ˈʃɔːtən/",
+    "pos":"verb",
+    "ex":"We shortened the meeting to one hour.",
+    "exvi":"Chúng tôi đã rút ngắn cuộc họp còn một giờ."
+  },
+  {
+    "id":"v33_simultaneous",
+    "set":"time",
+    "en":"simultaneous",
+    "ko":"동시의",
+    "vi":"đồng thời",
+    "ipa":"/ˌsɪməlˈteɪniəs/",
+    "pos":"adjective",
+    "ex":"There were two simultaneous events.",
+    "exvi":"Có hai sự kiện diễn ra đồng thời."
+  },
+  {
+    "id":"v33_solstice",
+    "set":"time",
+    "en":"solstice",
+    "ko":"지점",
+    "vi":"điểm chí",
+    "ipa":"/ˈsɒlstɪs/",
+    "pos":"noun",
+    "ex":"The summer solstice is the longest day.",
+    "exvi":"Hạ chí là ngày dài nhất trong năm."
+  },
+  {
+    "id":"v33_stopwatch",
+    "set":"time",
+    "en":"stopwatch",
+    "ko":"스톱워치",
+    "vi":"đồng hồ bấm giờ",
+    "ipa":"/ˈstɒpwɒtʃ/",
+    "pos":"noun",
+    "ex":"The coach used a stopwatch to time the race.",
+    "exvi":"Huấn luyện viên dùng đồng hồ bấm giờ để tính thời gian cuộc đua."
+  },
+  {
+    "id":"v33_sundial",
+    "set":"time",
+    "en":"sundial",
+    "ko":"해시계",
+    "vi":"đồng hồ mặt trời",
+    "ipa":"/ˈsʌndaɪəl/",
+    "pos":"noun",
+    "ex":"A sundial tells time by the sun.",
+    "exvi":"Đồng hồ mặt trời cho biết thời gian nhờ mặt trời."
+  },
+  {
+    "id":"v33_sunrise",
+    "set":"time",
+    "en":"sunrise",
+    "ko":"일출",
+    "vi":"bình minh",
+    "ipa":"/ˈsʌnraɪz/",
+    "pos":"noun",
+    "ex":"We watched the sunrise from the hill.",
+    "exvi":"Chúng tôi ngắm bình minh từ trên đồi."
+  },
+  {
+    "id":"v33_sunset",
+    "set":"time",
+    "en":"sunset",
+    "ko":"일몰",
+    "vi":"hoàng hôn",
+    "ipa":"/ˈsʌnset/",
+    "pos":"noun",
+    "ex":"The sunset was beautiful.",
+    "exvi":"Hoàng hôn thật đẹp."
+  },
+  {
+    "id":"v33_time_zone",
+    "set":"time",
+    "en":"time zone",
+    "ko":"시간대",
+    "vi":"múi giờ",
+    "ipa":"/ˈtaɪm zəʊn/",
+    "pos":"noun",
+    "ex":"Vietnam and London are in different time zones.",
+    "exvi":"Việt Nam và Luân Đôn ở hai múi giờ khác nhau."
+  },
+  {
+    "id":"v33_timeless",
+    "set":"time",
+    "en":"timeless",
+    "ko":"시대를 초월한",
+    "vi":"vượt thời gian",
+    "ipa":"/ˈtaɪmləs/",
+    "pos":"adjective",
+    "ex":"Her music is timeless.",
+    "exvi":"Âm nhạc của cô ấy vượt thời gian."
+  },
+  {
+    "id":"v33_timely",
+    "set":"time",
+    "en":"timely",
+    "ko":"시의적절한",
+    "vi":"kịp thời",
+    "ipa":"/ˈtaɪmli/",
+    "pos":"adjective",
+    "ex":"Your timely help saved the day.",
+    "exvi":"Sự giúp đỡ kịp thời của bạn đã cứu vãn tình hình."
+  },
+  {
+    "id":"v33_timer",
+    "set":"time",
+    "en":"timer",
+    "ko":"타이머",
+    "vi":"đồng hồ hẹn giờ",
+    "ipa":"/ˈtaɪmər/",
+    "pos":"noun",
+    "ex":"Set the timer for ten minutes.",
+    "exvi":"Hãy đặt đồng hồ hẹn giờ trong mười phút."
+  },
+  {
+    "id":"v33_twilight",
+    "set":"time",
+    "en":"twilight",
+    "ko":"어스름",
+    "vi":"lúc chạng vạng",
+    "ipa":"/ˈtwaɪlaɪt/",
+    "pos":"noun",
+    "ex":"We walked home in the twilight.",
+    "exvi":"Chúng tôi đi bộ về nhà lúc chạng vạng."
+  },
+  {
+    "id":"v33_untimely",
+    "set":"time",
+    "en":"untimely",
+    "ko":"때아닌",
+    "vi":"không đúng lúc",
+    "ipa":"/ʌnˈtaɪmli/",
+    "pos":"adjective",
+    "ex":"His untimely death shocked everyone.",
+    "exvi":"Cái chết không đúng lúc của anh ấy khiến mọi người bàng hoàng."
+  },
+  {
+    "id":"v33_upcoming",
+    "set":"time",
+    "en":"upcoming",
+    "ko":"곧 있을",
+    "vi":"sắp tới",
+    "ipa":"/ˈʌpkʌmɪŋ/",
+    "pos":"adjective",
+    "ex":"The upcoming holiday is next week.",
+    "exvi":"Kỳ nghỉ sắp tới là vào tuần sau."
+  },
+  {
+    "id":"v33_daytime",
+    "set":"time",
+    "en":"daytime",
+    "ko":"낮",
+    "vi":"ban ngày",
+    "ipa":"/ˈdeɪtaɪm/",
+    "pos":"noun",
+    "ex":"Owls sleep in the daytime.",
+    "exvi":"Cú ngủ vào ban ngày."
+  },
+  {
+    "id":"v33_nighttime",
+    "set":"time",
+    "en":"nighttime",
+    "ko":"밤",
+    "vi":"ban đêm",
+    "ipa":"/ˈnaɪttaɪm/",
+    "pos":"noun",
+    "ex":"The city is quiet at nighttime.",
+    "exvi":"Thành phố yên tĩnh vào ban đêm."
+  },
+  {
+    "id":"v33_punctuality",
+    "set":"time",
+    "en":"punctuality",
+    "ko":"시간 엄수",
+    "vi":"sự đúng giờ",
+    "ipa":"/ˌpʌŋktʃuˈæləti/",
+    "pos":"noun",
+    "ex":"Punctuality is important in this job.",
+    "exvi":"Sự đúng giờ rất quan trọng trong công việc này."
+  },
+  {
+    "id":"v33_eternity",
+    "set":"time",
+    "en":"eternity",
+    "ko":"영원",
+    "vi":"sự vĩnh cửu",
+    "ipa":"/ɪˈtɜːnəti/",
+    "pos":"noun",
+    "ex":"It felt like an eternity.",
+    "exvi":"Cảm giác như cả một đời người."
+  },
+  {
+    "id":"v33_big_bang",
+    "set":"space",
+    "en":"Big Bang",
+    "ko":"빅뱅",
+    "vi":"Vụ Nổ Lớn",
+    "ipa":"/bɪɡ bæŋ/",
+    "pos":"noun",
+    "ex":"The Big Bang theory explains the start of the universe.",
+    "exvi":"Thuyết Vụ Nổ Lớn giải thích sự khởi đầu của vũ trụ."
+  },
+  {
+    "id":"v33_milky_way",
+    "set":"space",
+    "en":"Milky Way",
+    "ko":"은하수",
+    "vi":"Dải Ngân Hà",
+    "ipa":"/ˈmɪlki weɪ/",
+    "pos":"noun",
+    "ex":"Our solar system is in the Milky Way.",
+    "exvi":"Hệ Mặt Trời của chúng ta nằm trong Dải Ngân Hà."
+  },
+  {
+    "id":"v33_airlock",
+    "set":"space",
+    "en":"airlock",
+    "ko":"에어록",
+    "vi":"khoang kín khí",
+    "ipa":"/ˈeəlɒk/",
+    "pos":"noun",
+    "ex":"The astronauts passed through the airlock.",
+    "exvi":"Các phi hành gia đi qua khoang kín khí."
+  },
+  {
+    "id":"v33_alien",
+    "set":"space",
+    "en":"alien",
+    "ko":"외계인",
+    "vi":"người ngoài hành tinh",
+    "ipa":"/ˈeɪliən/",
+    "pos":"noun",
+    "ex":"The film is about an alien from another planet.",
+    "exvi":"Bộ phim kể về một người ngoài hành tinh đến từ hành tinh khác."
+  },
+  {
+    "id":"v33_altitude",
+    "set":"space",
+    "en":"altitude",
+    "ko":"고도",
+    "vi":"độ cao",
+    "ipa":"/ˈæltɪtjuːd/",
+    "pos":"noun",
+    "ex":"The plane flies at a high altitude.",
+    "exvi":"Máy bay bay ở độ cao lớn."
+  },
+  {
+    "id":"v33_antenna",
+    "set":"space",
+    "en":"antenna",
+    "ko":"안테나",
+    "vi":"ăng-ten",
+    "ipa":"/ænˈtenə/",
+    "pos":"noun",
+    "ex":"The satellite has a large antenna.",
+    "exvi":"Vệ tinh có một ăng-ten lớn."
+  },
+  {
+    "id":"v33_asteroid",
+    "set":"space",
+    "en":"asteroid",
+    "ko":"소행성",
+    "vi":"tiểu hành tinh",
+    "ipa":"/ˈæstərɔɪd/",
+    "pos":"noun",
+    "ex":"An asteroid orbits the Sun.",
+    "exvi":"Một tiểu hành tinh quay quanh Mặt Trời."
+  },
+  {
+    "id":"v33_asteroid_belt",
+    "set":"space",
+    "en":"asteroid belt",
+    "ko":"소행성대",
+    "vi":"vành đai tiểu hành tinh",
+    "ipa":"/ˈæstərɔɪd belt/",
+    "pos":"noun",
+    "ex":"The asteroid belt lies between Mars and Jupiter.",
+    "exvi":"Vành đai tiểu hành tinh nằm giữa Sao Hoả và Sao Mộc."
+  },
+  {
+    "id":"v33_astronomer",
+    "set":"space",
+    "en":"astronomer",
+    "ko":"천문학자",
+    "vi":"nhà thiên văn học",
+    "ipa":"/əˈstrɒnəmər/",
+    "pos":"noun",
+    "ex":"The astronomer studies distant stars.",
+    "exvi":"Nhà thiên văn học nghiên cứu những ngôi sao xa xôi."
+  },
+  {
+    "id":"v33_astronomy",
+    "set":"space",
+    "en":"astronomy",
+    "ko":"천문학",
+    "vi":"thiên văn học",
+    "ipa":"/əˈstrɒnəmi/",
+    "pos":"noun",
+    "ex":"Astronomy is her favourite subject.",
+    "exvi":"Thiên văn học là môn học yêu thích của cô ấy."
+  },
+  {
+    "id":"v33_black_hole",
+    "set":"space",
+    "en":"black hole",
+    "ko":"블랙홀",
+    "vi":"hố đen",
+    "ipa":"/blæk həʊl/",
+    "pos":"noun",
+    "ex":"Nothing can escape a black hole.",
+    "exvi":"Không gì có thể thoát khỏi hố đen."
+  },
+  {
+    "id":"v33_celestial",
+    "set":"space",
+    "en":"celestial",
+    "ko":"천체의",
+    "vi":"thuộc về bầu trời",
+    "ipa":"/səˈlestiəl/",
+    "pos":"adjective",
+    "ex":"We watched the celestial display.",
+    "exvi":"Chúng tôi ngắm màn trình diễn trên bầu trời."
+  },
+  {
+    "id":"v33_cluster",
+    "set":"space",
+    "en":"cluster",
+    "ko":"성단",
+    "vi":"chùm sao",
+    "ipa":"/ˈklʌstər/",
+    "pos":"noun",
+    "ex":"A cluster of stars shone in the sky.",
+    "exvi":"Một chùm sao tỏa sáng trên bầu trời."
+  },
+  {
+    "id":"v33_comet",
+    "set":"space",
+    "en":"comet",
+    "ko":"혜성",
+    "vi":"sao chổi",
+    "ipa":"/ˈkɒmɪt/",
+    "pos":"noun",
+    "ex":"The comet appears once every 76 years.",
+    "exvi":"Sao chổi xuất hiện một lần mỗi 76 năm."
+  },
+  {
+    "id":"v33_constellation",
+    "set":"space",
+    "en":"constellation",
+    "ko":"별자리",
+    "vi":"chòm sao",
+    "ipa":"/ˌkɒnstəˈleɪʃən/",
+    "pos":"noun",
+    "ex":"Orion is a famous constellation.",
+    "exvi":"Orion là một chòm sao nổi tiếng."
+  },
+  {
+    "id":"v33_cosmic",
+    "set":"space",
+    "en":"cosmic",
+    "ko":"우주의",
+    "vi":"vũ trụ",
+    "ipa":"/ˈkɒzmɪk/",
+    "pos":"adjective",
+    "ex":"Cosmic dust fills the space between stars.",
+    "exvi":"Bụi vũ trụ lấp đầy khoảng không giữa các ngôi sao."
+  },
+  {
+    "id":"v33_cosmonaut",
+    "set":"space",
+    "en":"cosmonaut",
+    "ko":"우주비행사",
+    "vi":"nhà du hành vũ trụ",
+    "ipa":"/ˈkɒzmənɔːt/",
+    "pos":"noun",
+    "ex":"The cosmonaut spent six months in space.",
+    "exvi":"Nhà du hành vũ trụ đã ở trong không gian sáu tháng."
+  },
+  {
+    "id":"v33_cosmos",
+    "set":"space",
+    "en":"cosmos",
+    "ko":"우주",
+    "vi":"vũ trụ",
+    "ipa":"/ˈkɒzmɒs/",
+    "pos":"noun",
+    "ex":"The cosmos is full of mystery.",
+    "exvi":"Vũ trụ đầy những điều bí ẩn."
+  },
+  {
+    "id":"v33_crater",
+    "set":"space",
+    "en":"crater",
+    "ko":"분화구",
+    "vi":"hố thiên thạch",
+    "ipa":"/ˈkreɪtər/",
+    "pos":"noun",
+    "ex":"The Moon is covered with craters.",
+    "exvi":"Mặt Trăng phủ đầy hố thiên thạch."
+  },
+  {
+    "id":"v33_dark_matter",
+    "set":"space",
+    "en":"dark matter",
+    "ko":"암흑 물질",
+    "vi":"vật chất tối",
+    "ipa":"/dɑːk ˈmætər/",
+    "pos":"noun",
+    "ex":"Scientists still do not understand dark matter.",
+    "exvi":"Các nhà khoa học vẫn chưa hiểu vật chất tối."
+  },
+  {
+    "id":"v33_docking",
+    "set":"space",
+    "en":"docking",
+    "ko":"도킹",
+    "vi":"sự ghép nối",
+    "ipa":"/ˈdɒkɪŋ/",
+    "pos":"noun",
+    "ex":"The docking of the two spacecraft took an hour.",
+    "exvi":"Việc ghép nối hai tàu vũ trụ mất một giờ."
+  },
+  {
+    "id":"v33_eclipse",
+    "set":"space",
+    "en":"eclipse",
+    "ko":"일식/월식",
+    "vi":"nhật thực / nguyệt thực",
+    "ipa":"/ɪˈklɪps/",
+    "pos":"noun",
+    "ex":"We watched the eclipse through special glasses.",
+    "exvi":"Chúng tôi xem nhật thực qua kính đặc biệt."
+  },
+  {
+    "id":"v33_elliptical",
+    "set":"space",
+    "en":"elliptical",
+    "ko":"타원형의",
+    "vi":"hình elip",
+    "ipa":"/ɪˈlɪptɪkəl/",
+    "pos":"adjective",
+    "ex":"The planet follows an elliptical orbit.",
+    "exvi":"Hành tinh đi theo một quỹ đạo hình elip."
+  },
+  {
+    "id":"v33_equator",
+    "set":"space",
+    "en":"equator",
+    "ko":"적도",
+    "vi":"đường xích đạo",
+    "ipa":"/ɪˈkweɪtər/",
+    "pos":"noun",
+    "ex":"The equator divides the Earth in two.",
+    "exvi":"Đường xích đạo chia Trái Đất thành hai nửa."
+  },
+  {
+    "id":"v33_exoplanet",
+    "set":"space",
+    "en":"exoplanet",
+    "ko":"외계 행성",
+    "vi":"ngoại hành tinh",
+    "ipa":"/ˈeksəʊplænɪt/",
+    "pos":"noun",
+    "ex":"Scientists found a new exoplanet.",
+    "exvi":"Các nhà khoa học đã tìm thấy một ngoại hành tinh mới."
+  },
+  {
+    "id":"v33_extraterrestrial",
+    "set":"space",
+    "en":"extraterrestrial",
+    "ko":"외계의",
+    "vi":"ngoài Trái Đất",
+    "ipa":"/ˌekstrətəˈrestriəl/",
+    "pos":"adjective",
+    "ex":"Is there extraterrestrial life?",
+    "exvi":"Có sự sống ngoài Trái Đất không?"
+  },
+  {
+    "id":"v33_galaxy",
+    "set":"space",
+    "en":"galaxy",
+    "ko":"은하",
+    "vi":"thiên hà",
+    "ipa":"/ˈɡæləksi/",
+    "pos":"noun",
+    "ex":"There are billions of galaxies in the universe.",
+    "exvi":"Có hàng tỉ thiên hà trong vũ trụ."
+  },
+  {
+    "id":"v33_hemisphere",
+    "set":"space",
+    "en":"hemisphere",
+    "ko":"반구",
+    "vi":"bán cầu",
+    "ipa":"/ˈhemɪsfɪər/",
+    "pos":"noun",
+    "ex":"Australia is in the southern hemisphere.",
+    "exvi":"Úc nằm ở bán cầu nam."
+  },
+  {
+    "id":"v33_horizon",
+    "set":"space",
+    "en":"horizon",
+    "ko":"지평선",
+    "vi":"đường chân trời",
+    "ipa":"/həˈraɪzən/",
+    "pos":"noun",
+    "ex":"The sun sank below the horizon.",
+    "exvi":"Mặt trời lặn xuống dưới đường chân trời."
+  },
+  {
+    "id":"v33_infrared",
+    "set":"space",
+    "en":"infrared",
+    "ko":"적외선",
+    "vi":"tia hồng ngoại",
+    "ipa":"/ˌɪnfrəˈred/",
+    "pos":"noun",
+    "ex":"Infrared light is invisible to our eyes.",
+    "exvi":"Tia hồng ngoại không nhìn thấy được bằng mắt thường."
+  },
+  {
+    "id":"v33_interplanetary",
+    "set":"space",
+    "en":"interplanetary",
+    "ko":"행성 간의",
+    "vi":"liên hành tinh",
+    "ipa":"/ˌɪntəˈplænɪtəri/",
+    "pos":"adjective",
+    "ex":"Interplanetary travel takes many years.",
+    "exvi":"Du hành liên hành tinh mất nhiều năm."
+  },
+  {
+    "id":"v33_interstellar",
+    "set":"space",
+    "en":"interstellar",
+    "ko":"항성 간의",
+    "vi":"liên sao",
+    "ipa":"/ˌɪntəˈstelər/",
+    "pos":"adjective",
+    "ex":"Interstellar space is almost empty.",
+    "exvi":"Không gian liên sao gần như trống rỗng."
+  },
+  {
+    "id":"v33_jupiter",
+    "set":"space",
+    "en":"Jupiter",
+    "ko":"목성",
+    "vi":"Sao Mộc",
+    "ipa":"/ˈdʒuːpɪtər/",
+    "pos":"noun",
+    "ex":"Jupiter is the largest planet.",
+    "exvi":"Sao Mộc là hành tinh lớn nhất."
+  },
+  {
+    "id":"v33_spacecraft",
+    "set":"space",
+    "en":"spacecraft",
+    "ko":"우주선",
+    "vi":"tàu vũ trụ",
+    "ipa":"/ˈspeɪskrɑːft/",
+    "pos":"noun",
+    "ex":"The spacecraft landed safely.",
+    "exvi":"Tàu vũ trụ đã hạ cánh an toàn."
+  },
+  {
+    "id":"v33_latitude",
+    "set":"space",
+    "en":"latitude",
+    "ko":"위도",
+    "vi":"vĩ độ",
+    "ipa":"/ˈlætɪtjuːd/",
+    "pos":"noun",
+    "ex":"The city is at a latitude of 21 degrees north.",
+    "exvi":"Thành phố nằm ở vĩ độ 21 độ bắc."
+  },
+  {
+    "id":"v33_light_year",
+    "set":"space",
+    "en":"light-year",
+    "ko":"광년",
+    "vi":"năm ánh sáng",
+    "ipa":"/ˈlaɪt jɪər/",
+    "pos":"noun",
+    "ex":"A light-year is a huge distance.",
+    "exvi":"Một năm ánh sáng là một khoảng cách khổng lồ."
+  },
+  {
+    "id":"v33_longitude",
+    "set":"space",
+    "en":"longitude",
+    "ko":"경도",
+    "vi":"kinh độ",
+    "ipa":"/ˈlɒndʒɪtjuːd/",
+    "pos":"noun",
+    "ex":"Longitude is measured from Greenwich.",
+    "exvi":"Kinh độ được đo từ Greenwich."
+  },
+  {
+    "id":"v33_lunar",
+    "set":"space",
+    "en":"lunar",
+    "ko":"달의",
+    "vi":"thuộc về Mặt Trăng",
+    "ipa":"/ˈluːnər/",
+    "pos":"adjective",
+    "ex":"A lunar eclipse happens at night.",
+    "exvi":"Nguyệt thực xảy ra vào ban đêm."
+  },
+  {
+    "id":"v33_mars",
+    "set":"space",
+    "en":"Mars",
+    "ko":"화성",
+    "vi":"Sao Hoả",
+    "ipa":"/mɑːz/",
+    "pos":"noun",
+    "ex":"Mars is called the red planet.",
+    "exvi":"Sao Hoả được gọi là hành tinh đỏ."
+  },
+  {
+    "id":"v33_martian",
+    "set":"space",
+    "en":"Martian",
+    "ko":"화성인",
+    "vi":"người Sao Hoả",
+    "ipa":"/ˈmɑːʃən/",
+    "pos":"noun",
+    "ex":"The story is about a Martian.",
+    "exvi":"Câu chuyện kể về một người Sao Hoả."
+  },
+  {
+    "id":"v33_mercury",
+    "set":"space",
+    "en":"Mercury",
+    "ko":"수성",
+    "vi":"Sao Thuỷ",
+    "ipa":"/ˈmɜːkjʊri/",
+    "pos":"noun",
+    "ex":"Mercury is the closest planet to the Sun.",
+    "exvi":"Sao Thuỷ là hành tinh gần Mặt Trời nhất."
+  },
+  {
+    "id":"v33_meteor",
+    "set":"space",
+    "en":"meteor",
+    "ko":"유성",
+    "vi":"sao băng",
+    "ipa":"/ˈmiːtiər/",
+    "pos":"noun",
+    "ex":"A bright meteor crossed the sky.",
+    "exvi":"Một ngôi sao băng sáng đã bay qua bầu trời."
+  },
+  {
+    "id":"v33_meteorite",
+    "set":"space",
+    "en":"meteorite",
+    "ko":"운석",
+    "vi":"thiên thạch",
+    "ipa":"/ˈmiːtiəraɪt/",
+    "pos":"noun",
+    "ex":"The museum has a large meteorite.",
+    "exvi":"Bảo tàng có một thiên thạch lớn."
+  },
+  {
+    "id":"v33_meteoroid",
+    "set":"space",
+    "en":"meteoroid",
+    "ko":"유성체",
+    "vi":"thiên thạch nhỏ",
+    "ipa":"/ˈmiːtiərɔɪd/",
+    "pos":"noun",
+    "ex":"A meteoroid is a small rock in space.",
+    "exvi":"Thiên thạch nhỏ là một hòn đá nhỏ trong không gian."
+  },
+  {
+    "id":"v33_mission_control",
+    "set":"space",
+    "en":"mission control",
+    "ko":"관제 센터",
+    "vi":"trung tâm điều khiển",
+    "ipa":"/ˈmɪʃən kənˈtrəʊl/",
+    "pos":"noun",
+    "ex":"Mission control answered the call from space.",
+    "exvi":"Trung tâm điều khiển đã trả lời cuộc gọi từ không gian."
+  },
+  {
+    "id":"v33_nebula",
+    "set":"space",
+    "en":"nebula",
+    "ko":"성운",
+    "vi":"tinh vân",
+    "ipa":"/ˈnebjʊlə/",
+    "pos":"noun",
+    "ex":"A nebula is a cloud of gas and dust.",
+    "exvi":"Tinh vân là một đám mây khí và bụi."
+  },
+  {
+    "id":"v33_neptune",
+    "set":"space",
+    "en":"Neptune",
+    "ko":"해왕성",
+    "vi":"Sao Hải Vương",
+    "ipa":"/ˈneptjuːn/",
+    "pos":"noun",
+    "ex":"Neptune is far from the Sun.",
+    "exvi":"Sao Hải Vương ở xa Mặt Trời."
+  },
+  {
+    "id":"v33_neutron_star",
+    "set":"space",
+    "en":"neutron star",
+    "ko":"중성자별",
+    "vi":"sao neutron",
+    "ipa":"/ˈnjuːtrɒn stɑːr/",
+    "pos":"noun",
+    "ex":"A neutron star is very small and heavy.",
+    "exvi":"Sao neutron rất nhỏ nhưng rất nặng."
+  },
+  {
+    "id":"v33_observatory",
+    "set":"space",
+    "en":"observatory",
+    "ko":"천문대",
+    "vi":"đài thiên văn",
+    "ipa":"/əbˈzɜːvətri/",
+    "pos":"noun",
+    "ex":"The observatory has a huge telescope.",
+    "exvi":"Đài thiên văn có một kính viễn vọng khổng lồ."
+  },
+  {
+    "id":"v33_orbit",
+    "set":"space",
+    "en":"orbit",
+    "ko":"궤도",
+    "vi":"quỹ đạo",
+    "ipa":"/ˈɔːbɪt/",
+    "pos":"noun",
+    "ex":"The Moon moves in its orbit around the Earth.",
+    "exvi":"Mặt Trăng di chuyển trên quỹ đạo quanh Trái Đất."
+  },
+  {
+    "id":"v33_planetarium",
+    "set":"space",
+    "en":"planetarium",
+    "ko":"천문관",
+    "vi":"cung thiên văn",
+    "ipa":"/ˌplænɪˈteəriəm/",
+    "pos":"noun",
+    "ex":"We watched a show at the planetarium.",
+    "exvi":"Chúng tôi đã xem một buổi trình diễn ở cung thiên văn."
+  },
+  {
+    "id":"v33_pluto",
+    "set":"space",
+    "en":"Pluto",
+    "ko":"명왕성",
+    "vi":"Sao Diêm Vương",
+    "ipa":"/ˈpluːtəʊ/",
+    "pos":"noun",
+    "ex":"Pluto is a dwarf planet.",
+    "exvi":"Sao Diêm Vương là một hành tinh lùn."
+  },
+  {
+    "id":"v33_propulsion",
+    "set":"space",
+    "en":"propulsion",
+    "ko":"추진",
+    "vi":"lực đẩy",
+    "ipa":"/prəˈpʌlʃən/",
+    "pos":"noun",
+    "ex":"The rocket uses chemical propulsion.",
+    "exvi":"Tên lửa dùng lực đẩy hoá học."
+  },
+  {
+    "id":"v33_pulsar",
+    "set":"space",
+    "en":"pulsar",
+    "ko":"펄서",
+    "vi":"sao xung",
+    "ipa":"/ˈpʌlsɑːr/",
+    "pos":"noun",
+    "ex":"A pulsar sends out regular radio signals.",
+    "exvi":"Sao xung phát ra tín hiệu vô tuyến đều đặn."
+  },
+  {
+    "id":"v33_quasar",
+    "set":"space",
+    "en":"quasar",
+    "ko":"퀘이사",
+    "vi":"chuẩn tinh",
+    "ipa":"/ˈkweɪzɑːr/",
+    "pos":"noun",
+    "ex":"A quasar is one of the brightest objects in space.",
+    "exvi":"Chuẩn tinh là một trong những vật thể sáng nhất trong vũ trụ."
+  },
+  {
+    "id":"v33_radiation",
+    "set":"space",
+    "en":"radiation",
+    "ko":"방사선",
+    "vi":"bức xạ",
+    "ipa":"/ˌreɪdiˈeɪʃən/",
+    "pos":"noun",
+    "ex":"The astronauts are protected from radiation.",
+    "exvi":"Các phi hành gia được bảo vệ khỏi bức xạ."
+  },
+  {
+    "id":"v33_red_giant",
+    "set":"space",
+    "en":"red giant",
+    "ko":"적색 거성",
+    "vi":"sao khổng lồ đỏ",
+    "ipa":"/red ˈdʒaɪənt/",
+    "pos":"noun",
+    "ex":"The Sun will become a red giant one day.",
+    "exvi":"Mặt Trời một ngày nào đó sẽ trở thành sao khổng lồ đỏ."
+  },
+  {
+    "id":"v33_rocket",
+    "set":"space",
+    "en":"rocket",
+    "ko":"로켓",
+    "vi":"tên lửa",
+    "ipa":"/ˈrɒkɪt/",
+    "pos":"noun",
+    "ex":"The rocket lifted off at noon.",
+    "exvi":"Tên lửa cất cánh vào buổi trưa."
+  },
+  {
+    "id":"v33_satellite",
+    "set":"space",
+    "en":"satellite",
+    "ko":"위성",
+    "vi":"vệ tinh",
+    "ipa":"/ˈsætəlaɪt/",
+    "pos":"noun",
+    "ex":"The satellite sends pictures to Earth.",
+    "exvi":"Vệ tinh gửi hình ảnh về Trái Đất."
+  },
+  {
+    "id":"v33_solar_system",
+    "set":"space",
+    "en":"solar system",
+    "ko":"태양계",
+    "vi":"Hệ Mặt Trời",
+    "ipa":"/ˈsəʊlər ˈsɪstəm/",
+    "pos":"noun",
+    "ex":"There are eight planets in our solar system.",
+    "exvi":"Có tám hành tinh trong Hệ Mặt Trời của chúng ta."
+  },
+  {
+    "id":"v33_accelerator",
+    "set":"machines",
+    "en":"accelerator",
+    "ko":"가속 페달",
+    "vi":"bàn đạp ga",
+    "ipa":"/əkˈseləreɪtər/",
+    "pos":"noun",
+    "ex":"Press the accelerator to go faster.",
+    "exvi":"Nhấn bàn đạp ga để đi nhanh hơn."
+  },
+  {
+    "id":"v33_airbag",
+    "set":"machines",
+    "en":"airbag",
+    "ko":"에어백",
+    "vi":"túi khí",
+    "ipa":"/ˈeəbæɡ/",
+    "pos":"noun",
+    "ex":"The airbag opened when the car crashed.",
+    "exvi":"Túi khí bung ra khi xe đâm."
+  },
+  {
+    "id":"v33_apparatus",
+    "set":"machines",
+    "en":"apparatus",
+    "ko":"기구",
+    "vi":"thiết bị",
+    "ipa":"/ˌæpəˈreɪtəs/",
+    "pos":"noun",
+    "ex":"The laboratory has new apparatus.",
+    "exvi":"Phòng thí nghiệm có thiết bị mới."
+  },
+  {
+    "id":"v33_appliance",
+    "set":"machines",
+    "en":"appliance",
+    "ko":"가전제품",
+    "vi":"đồ gia dụng",
+    "ipa":"/əˈplaɪəns/",
+    "pos":"noun",
+    "ex":"This shop sells electrical appliances.",
+    "exvi":"Cửa hàng này bán đồ điện gia dụng."
+  },
+  {
+    "id":"v33_assemble",
+    "set":"machines",
+    "en":"assemble",
+    "ko":"조립하다",
+    "vi":"lắp ráp",
+    "ipa":"/əˈsembəl/",
+    "pos":"verb",
+    "ex":"Workers assemble the cars by hand.",
+    "exvi":"Công nhân lắp ráp ô tô bằng tay."
+  },
+  {
+    "id":"v33_automation",
+    "set":"machines",
+    "en":"automation",
+    "ko":"자동화",
+    "vi":"tự động hoá",
+    "ipa":"/ˌɔːtəˈmeɪʃən/",
+    "pos":"noun",
+    "ex":"Automation has changed the factory.",
+    "exvi":"Tự động hoá đã thay đổi nhà máy."
+  },
+  {
+    "id":"v33_axle",
+    "set":"machines",
+    "en":"axle",
+    "ko":"차축",
+    "vi":"trục xe",
+    "ipa":"/ˈæksəl/",
+    "pos":"noun",
+    "ex":"The axle connects the two wheels.",
+    "exvi":"Trục xe nối hai bánh xe."
+  },
+  {
+    "id":"v33_blueprint",
+    "set":"machines",
+    "en":"blueprint",
+    "ko":"청사진",
+    "vi":"bản thiết kế",
+    "ipa":"/ˈbluːprɪnt/",
+    "pos":"noun",
+    "ex":"The engineer drew a blueprint for the bridge.",
+    "exvi":"Kỹ sư đã vẽ bản thiết kế cho cây cầu."
+  },
+  {
+    "id":"v33_bolt",
+    "set":"machines",
+    "en":"bolt",
+    "ko":"볼트",
+    "vi":"bu lông",
+    "ipa":"/bəʊlt/",
+    "pos":"noun",
+    "ex":"Tighten the bolt with a wrench.",
+    "exvi":"Vặn chặt bu lông bằng cờ lê."
+  },
+  {
+    "id":"v33_brake",
+    "set":"machines",
+    "en":"brake",
+    "ko":"브레이크",
+    "vi":"phanh",
+    "ipa":"/breɪk/",
+    "pos":"noun",
+    "ex":"Press the brake to stop the car.",
+    "exvi":"Nhấn phanh để dừng xe."
+  },
+  {
+    "id":"v33_bulldozer",
+    "set":"machines",
+    "en":"bulldozer",
+    "ko":"불도저",
+    "vi":"xe ủi đất",
+    "ipa":"/ˈbʊldəʊzər/",
+    "pos":"noun",
+    "ex":"A bulldozer cleared the land.",
+    "exvi":"Xe ủi đất đã san phẳng mặt đất."
+  },
+  {
+    "id":"v33_bumper",
+    "set":"machines",
+    "en":"bumper",
+    "ko":"범퍼",
+    "vi":"cản xe",
+    "ipa":"/ˈbʌmpər/",
+    "pos":"noun",
+    "ex":"The bumper was damaged in the crash.",
+    "exvi":"Cản xe bị hỏng trong vụ va chạm."
+  },
+  {
+    "id":"v33_chassis",
+    "set":"machines",
+    "en":"chassis",
+    "ko":"섀시",
+    "vi":"khung gầm",
+    "ipa":"/ˈʃæsi/",
+    "pos":"noun",
+    "ex":"The chassis of the car is very strong.",
+    "exvi":"Khung gầm của xe rất chắc chắn."
+  },
+  {
+    "id":"v33_chisel",
+    "set":"machines",
+    "en":"chisel",
+    "ko":"끌",
+    "vi":"cái đục",
+    "ipa":"/ˈtʃɪzəl/",
+    "pos":"noun",
+    "ex":"He used a chisel to cut the stone.",
+    "exvi":"Anh ấy dùng cái đục để cắt đá."
+  },
+  {
+    "id":"v33_circuit",
+    "set":"machines",
+    "en":"circuit",
+    "ko":"회로",
+    "vi":"mạch điện",
+    "ipa":"/ˈsɜːkɪt/",
+    "pos":"noun",
+    "ex":"The circuit carries electricity around the house.",
+    "exvi":"Mạch điện dẫn điện khắp nhà."
+  },
+  {
+    "id":"v33_clutch",
+    "set":"machines",
+    "en":"clutch",
+    "ko":"클러치",
+    "vi":"bộ ly hợp",
+    "ipa":"/klʌtʃ/",
+    "pos":"noun",
+    "ex":"Press the clutch before you change gear.",
+    "exvi":"Nhấn ly hợp trước khi chuyển số."
+  },
+  {
+    "id":"v33_component",
+    "set":"machines",
+    "en":"component",
+    "ko":"부품",
+    "vi":"linh kiện",
+    "ipa":"/kəmˈpəʊnənt/",
+    "pos":"noun",
+    "ex":"The factory makes electronic components.",
+    "exvi":"Nhà máy sản xuất linh kiện điện tử."
+  },
+  {
+    "id":"v33_conveyor",
+    "set":"machines",
+    "en":"conveyor",
+    "ko":"컨베이어",
+    "vi":"băng chuyền",
+    "ipa":"/kənˈveɪər/",
+    "pos":"noun",
+    "ex":"Boxes move along the conveyor.",
+    "exvi":"Các hộp di chuyển dọc theo băng chuyền."
+  },
+  {
+    "id":"v33_dashboard",
+    "set":"machines",
+    "en":"dashboard",
+    "ko":"대시보드",
+    "vi":"bảng điều khiển",
+    "ipa":"/ˈdæʃbɔːd/",
+    "pos":"noun",
+    "ex":"The speed is shown on the dashboard.",
+    "exvi":"Tốc độ được hiển thị trên bảng điều khiển."
+  },
+  {
+    "id":"v33_diesel",
+    "set":"machines",
+    "en":"diesel",
+    "ko":"디젤",
+    "vi":"dầu diesel",
+    "ipa":"/ˈdiːzəl/",
+    "pos":"noun",
+    "ex":"This truck runs on diesel.",
+    "exvi":"Chiếc xe tải này chạy bằng dầu diesel."
+  },
+  {
+    "id":"v33_drill",
+    "set":"machines",
+    "en":"drill",
+    "ko":"드릴",
+    "vi":"máy khoan",
+    "ipa":"/drɪl/",
+    "pos":"noun",
+    "ex":"Use a drill to make a hole in the wall.",
+    "exvi":"Dùng máy khoan để khoan lỗ trên tường."
+  },
+  {
+    "id":"v33_escalator",
+    "set":"machines",
+    "en":"escalator",
+    "ko":"에스컬레이터",
+    "vi":"thang cuốn",
+    "ipa":"/ˈeskəleɪtər/",
+    "pos":"noun",
+    "ex":"Take the escalator to the second floor.",
+    "exvi":"Đi thang cuốn lên tầng hai."
+  },
+  {
+    "id":"v33_exhaust",
+    "set":"machines",
+    "en":"exhaust",
+    "ko":"배기가스",
+    "vi":"khí thải",
+    "ipa":"/ɪɡˈzɔːst/",
+    "pos":"noun",
+    "ex":"The exhaust from cars pollutes the air.",
+    "exvi":"Khí thải từ ô tô làm ô nhiễm không khí."
+  },
+  {
+    "id":"v33_forge",
+    "set":"machines",
+    "en":"forge",
+    "ko":"단조하다",
+    "vi":"rèn",
+    "ipa":"/fɔːdʒ/",
+    "pos":"verb",
+    "ex":"The blacksmith forges tools from iron.",
+    "exvi":"Người thợ rèn rèn công cụ từ sắt."
+  },
+  {
+    "id":"v33_gearbox",
+    "set":"machines",
+    "en":"gearbox",
+    "ko":"기어박스",
+    "vi":"hộp số",
+    "ipa":"/ˈɡɪəbɒks/",
+    "pos":"noun",
+    "ex":"The gearbox needs oil.",
+    "exvi":"Hộp số cần dầu."
+  },
+  {
+    "id":"v33_generator",
+    "set":"machines",
+    "en":"generator",
+    "ko":"발전기",
+    "vi":"máy phát điện",
+    "ipa":"/ˈdʒenəreɪtər/",
+    "pos":"noun",
+    "ex":"The generator gives us power during a storm.",
+    "exvi":"Máy phát điện cung cấp điện cho chúng tôi khi có bão."
+  },
+  {
+    "id":"v33_headlight",
+    "set":"machines",
+    "en":"headlight",
+    "ko":"전조등",
+    "vi":"đèn pha",
+    "ipa":"/ˈhedlaɪt/",
+    "pos":"noun",
+    "ex":"Turn on your headlights at night.",
+    "exvi":"Bật đèn pha vào ban đêm."
+  },
+  {
+    "id":"v33_hinge",
+    "set":"machines",
+    "en":"hinge",
+    "ko":"경첩",
+    "vi":"bản lề",
+    "ipa":"/hɪndʒ/",
+    "pos":"noun",
+    "ex":"The door hinge needs oil.",
+    "exvi":"Bản lề cửa cần dầu."
+  },
+  {
+    "id":"v33_hydraulic",
+    "set":"machines",
+    "en":"hydraulic",
+    "ko":"유압의",
+    "vi":"thuỷ lực",
+    "ipa":"/haɪˈdrɒlɪk/",
+    "pos":"adjective",
+    "ex":"The hydraulic lift can raise heavy loads.",
+    "exvi":"Thang nâng thuỷ lực có thể nâng vật nặng."
+  },
+  {
+    "id":"v33_ignition",
+    "set":"machines",
+    "en":"ignition",
+    "ko":"점화",
+    "vi":"sự đánh lửa",
+    "ipa":"/ɪɡˈnɪʃən/",
+    "pos":"noun",
+    "ex":"Turn the key in the ignition to start the car.",
+    "exvi":"Vặn chìa khoá trong ổ đánh lửa để khởi động xe."
+  },
+  {
+    "id":"v33_jack",
+    "set":"machines",
+    "en":"jack",
+    "ko":"잭",
+    "vi":"kích xe",
+    "ipa":"/dʒæk/",
+    "pos":"noun",
+    "ex":"Use a jack to lift the car.",
+    "exvi":"Dùng kích xe để nâng ô tô lên."
+  },
+  {
+    "id":"v33_lathe",
+    "set":"machines",
+    "en":"lathe",
+    "ko":"선반",
+    "vi":"máy tiện",
+    "ipa":"/leɪð/",
+    "pos":"noun",
+    "ex":"The worker shaped the metal on a lathe.",
+    "exvi":"Công nhân tạo hình kim loại trên máy tiện."
+  },
+  {
+    "id":"v33_lever",
+    "set":"machines",
+    "en":"lever",
+    "ko":"지렛대",
+    "vi":"đòn bẩy",
+    "ipa":"/ˈliːvər/",
+    "pos":"noun",
+    "ex":"Pull the lever to open the door.",
+    "exvi":"Kéo đòn bẩy để mở cửa."
+  },
+  {
+    "id":"v33_manual",
+    "set":"machines",
+    "en":"manual",
+    "ko":"수동의",
+    "vi":"bằng tay",
+    "ipa":"/ˈmænjuəl/",
+    "pos":"adjective",
+    "ex":"This is a manual machine, not an automatic one.",
+    "exvi":"Đây là máy bằng tay, không phải máy tự động."
+  },
+  {
+    "id":"v33_mechanical",
+    "set":"machines",
+    "en":"mechanical",
+    "ko":"기계의",
+    "vi":"cơ khí",
+    "ipa":"/mɪˈkænɪkəl/",
+    "pos":"adjective",
+    "ex":"The clock has a mechanical problem.",
+    "exvi":"Đồng hồ có vấn đề cơ khí."
+  },
+  {
+    "id":"v33_mechanism",
+    "set":"machines",
+    "en":"mechanism",
+    "ko":"구조",
+    "vi":"cơ chế",
+    "ipa":"/ˈmekənɪzəm/",
+    "pos":"noun",
+    "ex":"The mechanism of the lock is simple.",
+    "exvi":"Cơ chế của ổ khoá rất đơn giản."
+  },
+  {
+    "id":"v33_microwave",
+    "set":"machines",
+    "en":"microwave",
+    "ko":"전자레인지",
+    "vi":"lò vi sóng",
+    "ipa":"/ˈmaɪkrəweɪv/",
+    "pos":"noun",
+    "ex":"Heat the soup in the microwave.",
+    "exvi":"Hâm súp trong lò vi sóng."
+  },
+  {
+    "id":"v33_mould",
+    "set":"machines",
+    "en":"mould",
+    "ko":"틀",
+    "vi":"khuôn đúc",
+    "ipa":"/məʊld/",
+    "pos":"noun",
+    "ex":"Pour the metal into the mould.",
+    "exvi":"Đổ kim loại vào khuôn đúc."
+  },
+  {
+    "id":"v33_patent",
+    "set":"machines",
+    "en":"patent",
+    "ko":"특허",
+    "vi":"bằng sáng chế",
+    "ipa":"/ˈpeɪtənt/",
+    "pos":"noun",
+    "ex":"He applied for a patent for his invention.",
+    "exvi":"Ông ấy nộp đơn xin bằng sáng chế cho phát minh của mình."
+  },
+  {
+    "id":"v33_pedal",
+    "set":"machines",
+    "en":"pedal",
+    "ko":"페달",
+    "vi":"bàn đạp",
+    "ipa":"/ˈpedəl/",
+    "pos":"noun",
+    "ex":"Press the pedal to start the machine.",
+    "exvi":"Nhấn bàn đạp để khởi động máy."
+  },
+  {
+    "id":"v33_piston",
+    "set":"machines",
+    "en":"piston",
+    "ko":"피스톤",
+    "vi":"pít-tông",
+    "ipa":"/ˈpɪstən/",
+    "pos":"noun",
+    "ex":"The piston moves up and down inside the engine.",
+    "exvi":"Pít-tông di chuyển lên xuống bên trong động cơ."
+  },
+  {
+    "id":"v33_pliers",
+    "set":"machines",
+    "en":"pliers",
+    "ko":"펜치",
+    "vi":"kìm",
+    "ipa":"/ˈplaɪərz/",
+    "pos":"noun",
+    "ex":"Use pliers to pull out the nail.",
+    "exvi":"Dùng kìm để nhổ đinh."
+  },
+  {
+    "id":"v33_pneumatic",
+    "set":"machines",
+    "en":"pneumatic",
+    "ko":"공압의",
+    "vi":"khí nén",
+    "ipa":"/njuːˈmætɪk/",
+    "pos":"adjective",
+    "ex":"A pneumatic drill breaks the road.",
+    "exvi":"Máy khoan khí nén phá đường."
+  },
+  {
+    "id":"v33_prototype",
+    "set":"machines",
+    "en":"prototype",
+    "ko":"시제품",
+    "vi":"nguyên mẫu",
+    "ipa":"/ˈprəʊtətaɪp/",
+    "pos":"noun",
+    "ex":"The engineers built a prototype of the new car.",
+    "exvi":"Các kỹ sư đã chế tạo nguyên mẫu của chiếc xe mới."
+  },
+  {
+    "id":"v33_pulley",
+    "set":"machines",
+    "en":"pulley",
+    "ko":"도르래",
+    "vi":"ròng rọc",
+    "ipa":"/ˈpʊli/",
+    "pos":"noun",
+    "ex":"A pulley helps lift heavy boxes.",
+    "exvi":"Ròng rọc giúp nâng các hộp nặng."
+  },
+  {
+    "id":"v33_pump",
+    "set":"machines",
+    "en":"pump",
+    "ko":"펌프",
+    "vi":"máy bơm",
+    "ipa":"/pʌmp/",
+    "pos":"noun",
+    "ex":"The pump brings water from the well.",
+    "exvi":"Máy bơm đưa nước từ giếng lên."
+  },
+  {
+    "id":"v33_radiator",
+    "set":"machines",
+    "en":"radiator",
+    "ko":"라디에이터",
+    "vi":"bộ tản nhiệt",
+    "ipa":"/ˈreɪdieɪtər/",
+    "pos":"noun",
+    "ex":"The radiator keeps the engine cool.",
+    "exvi":"Bộ tản nhiệt giữ cho động cơ mát."
+  },
+  {
+    "id":"v33_robot",
+    "set":"machines",
+    "en":"robot",
+    "ko":"로봇",
+    "vi":"rô-bốt",
+    "ipa":"/ˈrəʊbɒt/",
+    "pos":"noun",
+    "ex":"A robot builds cars in the factory.",
+    "exvi":"Rô-bốt lắp ráp ô tô trong nhà máy."
+  },
+  {
+    "id":"v33_sandpaper",
+    "set":"machines",
+    "en":"sandpaper",
+    "ko":"사포",
+    "vi":"giấy nhám",
+    "ipa":"/ˈsændpeɪpər/",
+    "pos":"noun",
+    "ex":"Use sandpaper to smooth the wood.",
+    "exvi":"Dùng giấy nhám để làm nhẵn gỗ."
+  },
+  {
+    "id":"v33_turbine",
+    "set":"machines",
+    "en":"turbine",
+    "ko":"터빈",
+    "vi":"tuabin",
+    "ipa":"/ˈtɜːbaɪn/",
+    "pos":"noun",
+    "ex":"The turbine makes electricity from wind.",
+    "exvi":"Tuabin tạo ra điện từ gió."
+  },
+  {
+    "id":"v33_scanner",
+    "set":"machines",
+    "en":"scanner",
+    "ko":"스캐너",
+    "vi":"máy quét",
+    "ipa":"/ˈskænər/",
+    "pos":"noun",
+    "ex":"The scanner copies the document into the computer.",
+    "exvi":"Máy quét sao chép tài liệu vào máy tính."
+  },
+  {
+    "id":"v33_screwdriver",
+    "set":"machines",
+    "en":"screwdriver",
+    "ko":"드라이버",
+    "vi":"tua vít",
+    "ipa":"/ˈskruːdraɪvər/",
+    "pos":"noun",
+    "ex":"I need a screwdriver to open this box.",
+    "exvi":"Tôi cần tua vít để mở hộp này."
+  },
+  {
+    "id":"v33_seatbelt",
+    "set":"machines",
+    "en":"seatbelt",
+    "ko":"안전벨트",
+    "vi":"dây an toàn",
+    "ipa":"/ˈsiːtbelt/",
+    "pos":"noun",
+    "ex":"Always wear your seatbelt in a car.",
+    "exvi":"Luôn thắt dây an toàn trong xe hơi."
+  },
+  {
+    "id":"v33_sensor",
+    "set":"machines",
+    "en":"sensor",
+    "ko":"센서",
+    "vi":"cảm biến",
+    "ipa":"/ˈsensər/",
+    "pos":"noun",
+    "ex":"The sensor turns the light on when you enter.",
+    "exvi":"Cảm biến bật đèn khi bạn bước vào."
+  },
+  {
+    "id":"v33_solder",
+    "set":"machines",
+    "en":"solder",
+    "ko":"납땜하다",
+    "vi":"hàn thiếc",
+    "ipa":"/ˈsəʊldər/",
+    "pos":"verb",
+    "ex":"He solders the wires together.",
+    "exvi":"Anh ấy hàn các dây điện lại với nhau."
+  },
+  {
+    "id":"v33_spanner",
+    "set":"machines",
+    "en":"spanner",
+    "ko":"스패너",
+    "vi":"cờ lê",
+    "ipa":"/ˈspænər/",
+    "pos":"noun",
+    "ex":"Tighten the nut with a spanner.",
+    "exvi":"Vặn chặt đai ốc bằng cờ lê."
+  },
+  {
+    "id":"v33_spare_part",
+    "set":"machines",
+    "en":"spare part",
+    "ko":"예비 부품",
+    "vi":"phụ tùng thay thế",
+    "ipa":"/speər pɑːt/",
+    "pos":"noun",
+    "ex":"The garage keeps spare parts for old cars.",
+    "exvi":"Gara giữ phụ tùng thay thế cho xe cũ."
+  },
+  {
+    "id":"v33_spare_wheel",
+    "set":"machines",
+    "en":"spare wheel",
+    "ko":"예비 바퀴",
+    "vi":"bánh xe dự phòng",
+    "ipa":"/speər wiːl/",
+    "pos":"noun",
+    "ex":"Check the spare wheel before a long trip.",
+    "exvi":"Kiểm tra bánh xe dự phòng trước chuyến đi dài."
+  },
+  {
+    "id":"v33_spark_plug",
+    "set":"machines",
+    "en":"spark plug",
+    "ko":"점화 플러그",
+    "vi":"bugi",
+    "ipa":"/spɑːk plʌɡ/",
+    "pos":"noun",
+    "ex":"A bad spark plug can stop the engine.",
+    "exvi":"Bugi hỏng có thể làm động cơ ngừng chạy."
+  },
+  {
+    "id":"v33_steering_wheel",
+    "set":"machines",
+    "en":"steering wheel",
+    "ko":"운전대",
+    "vi":"vô lăng",
+    "ipa":"/ˈstɪərɪŋ wiːl/",
+    "pos":"noun",
+    "ex":"Hold the steering wheel with both hands.",
+    "exvi":"Cầm vô lăng bằng cả hai tay."
+  },
+  {
+    "id":"v33_abrupt",
+    "set":"change",
+    "en":"abrupt",
+    "ko":"갑작스러운",
+    "vi":"đột ngột",
+    "ipa":"/əˈbrʌpt/",
+    "pos":"adjective",
+    "ex":"The meeting ended with an abrupt decision.",
+    "exvi":"Cuộc họp kết thúc bằng một quyết định đột ngột."
+  },
+  {
+    "id":"v33_adaptable",
+    "set":"change",
+    "en":"adaptable",
+    "ko":"적응력이 있는",
+    "vi":"dễ thích nghi",
+    "ipa":"/əˈdæptəbəl/",
+    "pos":"adjective",
+    "ex":"She is adaptable and learns fast.",
+    "exvi":"Cô ấy dễ thích nghi và học nhanh."
+  },
+  {
+    "id":"v33_alternately",
+    "set":"change",
+    "en":"alternately",
+    "ko":"번갈아",
+    "vi":"luân phiên",
+    "ipa":"/ˈɔːltənətli/",
+    "pos":"adverb",
+    "ex":"The lights flashed alternately red and green.",
+    "exvi":"Đèn nhấp nháy luân phiên đỏ và xanh."
+  },
+  {
+    "id":"v33_consecutively",
+    "set":"change",
+    "en":"consecutively",
+    "ko":"연속으로",
+    "vi":"liên tiếp",
+    "ipa":"/kənˈsekjʊtɪvli/",
+    "pos":"adverb",
+    "ex":"He won three games consecutively.",
+    "exvi":"Anh ấy đã thắng ba trận liên tiếp."
+  },
+  {
+    "id":"v33_drastic",
+    "set":"change",
+    "en":"drastic",
+    "ko":"과감한",
+    "vi":"quyết liệt",
+    "ipa":"/ˈdræstɪk/",
+    "pos":"adjective",
+    "ex":"We need drastic action to fix the problem.",
+    "exvi":"Chúng ta cần hành động quyết liệt để khắc phục vấn đề."
+  },
+  {
+    "id":"v33_evolution",
+    "set":"change",
+    "en":"evolution",
+    "ko":"진화",
+    "vi":"sự tiến hoá",
+    "ipa":"/ˌiːvəˈluːʃən/",
+    "pos":"noun",
+    "ex":"Evolution takes millions of years.",
+    "exvi":"Sự tiến hoá mất hàng triệu năm."
+  },
+  {
+    "id":"v33_evolve",
+    "set":"change",
+    "en":"evolve",
+    "ko":"진화하다",
+    "vi":"tiến hoá",
+    "ipa":"/ɪˈvɒlv/",
+    "pos":"verb",
+    "ex":"Birds evolved from dinosaurs.",
+    "exvi":"Chim đã tiến hoá từ khủng long."
+  },
+  {
+    "id":"v33_fade",
+    "set":"change",
+    "en":"fade",
+    "ko":"바래다",
+    "vi":"phai dần",
+    "ipa":"/feɪd/",
+    "pos":"verb",
+    "ex":"The colours fade in the sun.",
+    "exvi":"Màu sắc phai dần dưới ánh nắng."
+  },
+  {
+    "id":"v33_flexible",
+    "set":"change",
+    "en":"flexible",
+    "ko":"유연한",
+    "vi":"linh hoạt",
+    "ipa":"/ˈfleksəbəl/",
+    "pos":"adjective",
+    "ex":"We need a flexible plan.",
+    "exvi":"Chúng ta cần một kế hoạch linh hoạt."
+  },
+  {
+    "id":"v33_halt",
+    "set":"change",
+    "en":"halt",
+    "ko":"멈추다",
+    "vi":"dừng lại",
+    "ipa":"/hɔːlt/",
+    "pos":"verb",
+    "ex":"The train came to a halt.",
+    "exvi":"Đoàn tàu dừng lại."
+  },
+  {
+    "id":"v33_innovative",
+    "set":"change",
+    "en":"innovative",
+    "ko":"혁신적인",
+    "vi":"sáng tạo",
+    "ipa":"/ˈɪnəveɪtɪv/",
+    "pos":"adjective",
+    "ex":"This is an innovative way to save energy.",
+    "exvi":"Đây là cách sáng tạo để tiết kiệm năng lượng."
+  },
+  {
+    "id":"v33_intermediate",
+    "set":"change",
+    "en":"intermediate",
+    "ko":"중간의",
+    "vi":"trung cấp",
+    "ipa":"/ˌɪntəˈmiːdiət/",
+    "pos":"adjective",
+    "ex":"This course is for intermediate students.",
+    "exvi":"Khoá học này dành cho học viên trung cấp."
+  },
+  {
+    "id":"v33_irregularly",
+    "set":"change",
+    "en":"irregularly",
+    "ko":"불규칙하게",
+    "vi":"không đều đặn",
+    "ipa":"/ɪˈreɡjʊlərli/",
+    "pos":"adverb",
+    "ex":"The bus runs irregularly on Sundays.",
+    "exvi":"Xe buýt chạy không đều đặn vào chủ nhật."
+  },
+  {
+    "id":"v33_irreversible",
+    "set":"change",
+    "en":"irreversible",
+    "ko":"되돌릴 수 없는",
+    "vi":"không thể đảo ngược",
+    "ipa":"/ˌɪrɪˈvɜːsəbəl/",
+    "pos":"adjective",
+    "ex":"The damage is irreversible.",
+    "exvi":"Thiệt hại không thể đảo ngược."
+  },
+  {
+    "id":"v33_modify",
+    "set":"change",
+    "en":"modify",
+    "ko":"수정하다",
+    "vi":"sửa đổi",
+    "ipa":"/ˈmɒdɪfaɪ/",
+    "pos":"verb",
+    "ex":"Please modify the plan if needed.",
+    "exvi":"Xin hãy sửa đổi kế hoạch nếu cần."
+  },
+  {
+    "id":"v33_obsolete",
+    "set":"change",
+    "en":"obsolete",
+    "ko":"구식의",
+    "vi":"lỗi thời",
+    "ipa":"/ˈɒbsəliːt/",
+    "pos":"adjective",
+    "ex":"These machines are obsolete now.",
+    "exvi":"Những máy này giờ đã lỗi thời."
+  },
+  {
+    "id":"v33_outcome",
+    "set":"change",
+    "en":"outcome",
+    "ko":"결과",
+    "vi":"kết quả",
+    "ipa":"/ˈaʊtkʌm/",
+    "pos":"noun",
+    "ex":"We are waiting for the outcome of the test.",
+    "exvi":"Chúng tôi đang chờ kết quả của bài kiểm tra."
+  },
+  {
+    "id":"v33_precede",
+    "set":"change",
+    "en":"precede",
+    "ko":"앞서다",
+    "vi":"đi trước",
+    "ipa":"/prɪˈsiːd/",
+    "pos":"verb",
+    "ex":"The speech preceded the concert.",
+    "exvi":"Bài phát biểu diễn ra trước buổi hoà nhạc."
+  },
+  {
+    "id":"v33_preceding",
+    "set":"change",
+    "en":"preceding",
+    "ko":"앞선",
+    "vi":"trước đó",
+    "ipa":"/prɪˈsiːdɪŋ/",
+    "pos":"adjective",
+    "ex":"Read the preceding chapter first.",
+    "exvi":"Hãy đọc chương trước đó trước."
+  },
+  {
+    "id":"v33_radical",
+    "set":"change",
+    "en":"radical",
+    "ko":"근본적인",
+    "vi":"triệt để",
+    "ipa":"/ˈrædɪkəl/",
+    "pos":"adjective",
+    "ex":"The new law brought radical change.",
+    "exvi":"Luật mới đã mang lại thay đổi triệt để."
+  },
+  {
+    "id":"v33_resistant",
+    "set":"change",
+    "en":"resistant",
+    "ko":"저항하는",
+    "vi":"kháng cự",
+    "ipa":"/rɪˈzɪstənt/",
+    "pos":"adjective",
+    "ex":"This material is resistant to heat.",
+    "exvi":"Vật liệu này chịu được nhiệt."
+  },
+  {
+    "id":"v33_resume",
+    "set":"change",
+    "en":"resume",
+    "ko":"재개하다",
+    "vi":"tiếp tục",
+    "ipa":"/rɪˈzjuːm/",
+    "pos":"verb",
+    "ex":"Work will resume on Monday.",
+    "exvi":"Công việc sẽ tiếp tục vào thứ Hai."
+  },
+  {
+    "id":"v33_retreat",
+    "set":"change",
+    "en":"retreat",
+    "ko":"후퇴하다",
+    "vi":"rút lui",
+    "ipa":"/rɪˈtriːt/",
+    "pos":"verb",
+    "ex":"The army had to retreat.",
+    "exvi":"Quân đội phải rút lui."
+  },
+  {
+    "id":"v33_reversible",
+    "set":"change",
+    "en":"reversible",
+    "ko":"되돌릴 수 있는",
+    "vi":"có thể đảo ngược",
+    "ipa":"/rɪˈvɜːsəbəl/",
+    "pos":"adjective",
+    "ex":"The process is reversible.",
+    "exvi":"Quá trình này có thể đảo ngược."
+  },
+  {
+    "id":"v33_rigid",
+    "set":"change",
+    "en":"rigid",
+    "ko":"엄격한",
+    "vi":"cứng nhắc",
+    "ipa":"/ˈrɪdʒɪd/",
+    "pos":"adjective",
+    "ex":"The rules are too rigid.",
+    "exvi":"Các quy tắc quá cứng nhắc."
+  },
+  {
+    "id":"v33_rot",
+    "set":"change",
+    "en":"rot",
+    "ko":"썩다",
+    "vi":"thối rữa",
+    "ipa":"/rɒt/",
+    "pos":"verb",
+    "ex":"Fruit rots quickly in the heat.",
+    "exvi":"Trái cây thối rữa nhanh trong nắng nóng."
+  },
+  {
+    "id":"v33_sequence",
+    "set":"change",
+    "en":"sequence",
+    "ko":"순서",
+    "vi":"trình tự",
+    "ipa":"/ˈsiːkwəns/",
+    "pos":"noun",
+    "ex":"Put the pictures in the correct sequence.",
+    "exvi":"Hãy xếp các bức tranh theo đúng trình tự."
+  },
+  {
+    "id":"v33_shrink",
+    "set":"change",
+    "en":"shrink",
+    "ko":"줄어들다",
+    "vi":"co lại",
+    "ipa":"/ʃrɪŋk/",
+    "pos":"verb",
+    "ex":"The shirt shrank in the wash.",
+    "exvi":"Áo sơ mi bị co lại sau khi giặt."
+  },
+  {
+    "id":"v33_simultaneously",
+    "set":"change",
+    "en":"simultaneously",
+    "ko":"동시에",
+    "vi":"đồng thời",
+    "ipa":"/ˌsɪməlˈteɪniəsli/",
+    "pos":"adverb",
+    "ex":"Two events happened simultaneously.",
+    "exvi":"Hai sự kiện xảy ra đồng thời."
+  },
+  {
+    "id":"v33_subsequent",
+    "set":"change",
+    "en":"subsequent",
+    "ko":"그 다음의",
+    "vi":"tiếp theo",
+    "ipa":"/ˈsʌbsɪkwənt/",
+    "pos":"adjective",
+    "ex":"Subsequent tests confirmed the result.",
+    "exvi":"Các xét nghiệm tiếp theo đã xác nhận kết quả."
+  },
+  {
+    "id":"v33_successively",
+    "set":"change",
+    "en":"successively",
+    "ko":"잇달아",
+    "vi":"liên tiếp",
+    "ipa":"/səkˈsesɪvli/",
+    "pos":"adverb",
+    "ex":"She won successively in three contests.",
+    "exvi":"Cô ấy đã thắng liên tiếp trong ba cuộc thi."
+  },
+  {
+    "id":"v33_transition",
+    "set":"change",
+    "en":"transition",
+    "ko":"전환",
+    "vi":"sự chuyển đổi",
+    "ipa":"/trænˈzɪʃən/",
+    "pos":"noun",
+    "ex":"The transition to a new system takes time.",
+    "exvi":"Sự chuyển đổi sang hệ thống mới cần thời gian."
+  },
+  {
+    "id":"v33_unavoidable",
+    "set":"change",
+    "en":"unavoidable",
+    "ko":"피할 수 없는",
+    "vi":"không thể tránh khỏi",
+    "ipa":"/ˌʌnəˈvɔɪdəbəl/",
+    "pos":"adjective",
+    "ex":"Some mistakes are unavoidable.",
+    "exvi":"Một số sai lầm không thể tránh khỏi."
+  },
+  {
+    "id":"v33_unstable",
+    "set":"change",
+    "en":"unstable",
+    "ko":"불안정한",
+    "vi":"không ổn định",
+    "ipa":"/ʌnˈsteɪbəl/",
+    "pos":"adjective",
+    "ex":"The chair is unstable.",
+    "exvi":"Chiếc ghế không ổn định."
+  },
+  {
+    "id":"v33_vanish",
+    "set":"change",
+    "en":"vanish",
+    "ko":"사라지다",
+    "vi":"biến mất",
+    "ipa":"/ˈvænɪʃ/",
+    "pos":"verb",
+    "ex":"The mist vanished in the morning sun.",
+    "exvi":"Sương mù biến mất dưới nắng buổi sáng."
+  },
+  {
+    "id":"v33_worsen",
+    "set":"change",
+    "en":"worsen",
+    "ko":"악화되다",
+    "vi":"trở nên tồi tệ hơn",
+    "ipa":"/ˈwɜːsən/",
+    "pos":"verb",
+    "ex":"The weather will worsen tomorrow.",
+    "exvi":"Thời tiết sẽ trở nên tồi tệ hơn vào ngày mai."
+  },
+  {
+    "id":"v33_transformation",
+    "set":"change",
+    "en":"transformation",
+    "ko":"변화",
+    "vi":"sự biến đổi",
+    "ipa":"/ˌtrænsfəˈmeɪʃən/",
+    "pos":"noun",
+    "ex":"The city went through a transformation.",
+    "exvi":"Thành phố đã trải qua một sự biến đổi."
+  },
+  {
+    "id":"v33_fluctuation",
+    "set":"change",
+    "en":"fluctuation",
+    "ko":"변동",
+    "vi":"sự dao động",
+    "ipa":"/ˌflʌktʃuˈeɪʃən/",
+    "pos":"noun",
+    "ex":"There are fluctuations in the price of oil.",
+    "exvi":"Giá dầu có sự dao động."
+  },
+  {
+    "id":"v33_breakthrough",
+    "set":"change",
+    "en":"breakthrough",
+    "ko":"돌파구",
+    "vi":"bước đột phá",
+    "ipa":"/ˈbreɪkθruː/",
+    "pos":"noun",
+    "ex":"Scientists made a breakthrough in medicine.",
+    "exvi":"Các nhà khoa học đã có bước đột phá trong y học."
+  },
+  {
+    "id":"v33_milestone",
+    "set":"change",
+    "en":"milestone",
+    "ko":"이정표",
+    "vi":"cột mốc",
+    "ipa":"/ˈmaɪlstəʊn/",
+    "pos":"noun",
+    "ex":"This is a milestone in our history.",
+    "exvi":"Đây là một cột mốc trong lịch sử của chúng ta."
+  },
+  {
+    "id":"v33_momentum",
+    "set":"change",
+    "en":"momentum",
+    "ko":"탄력",
+    "vi":"đà",
+    "ipa":"/məʊˈmentəm/",
+    "pos":"noun",
+    "ex":"The team gained momentum after the first win.",
+    "exvi":"Đội đã có đà sau chiến thắng đầu tiên."
+  },
+  {
+    "id":"v33_mutation",
+    "set":"change",
+    "en":"mutation",
+    "ko":"돌연변이",
+    "vi":"đột biến",
+    "ipa":"/mjuːˈteɪʃən/",
+    "pos":"noun",
+    "ex":"A mutation changed the colour of the flower.",
+    "exvi":"Một đột biến đã thay đổi màu sắc của bông hoa."
+  },
+  {
+    "id":"v33_metamorphosis",
+    "set":"change",
+    "en":"metamorphosis",
+    "ko":"변태",
+    "vi":"sự biến hình",
+    "ipa":"/ˌmetəˈmɔːfəsɪs/",
+    "pos":"noun",
+    "ex":"A caterpillar changes by metamorphosis.",
+    "exvi":"Sâu bướm thay đổi nhờ sự biến hình."
+  },
+  {
+    "id":"v33_conversion",
+    "set":"change",
+    "en":"conversion",
+    "ko":"전환",
+    "vi":"sự chuyển đổi",
+    "ipa":"/kənˈvɜːʃən/",
+    "pos":"noun",
+    "ex":"The conversion of the house took a year.",
+    "exvi":"Việc chuyển đổi ngôi nhà mất một năm."
+  },
+  {
+    "id":"v33_eventual",
+    "set":"change",
+    "en":"eventual",
+    "ko":"최후의",
+    "vi":"cuối cùng",
+    "ipa":"/ɪˈventʃuəl/",
+    "pos":"adjective",
+    "ex":"Their eventual goal is to win the cup.",
+    "exvi":"Mục tiêu cuối cùng của họ là giành chiếc cúp."
+  },
+  {
+    "id":"v33_imminent",
+    "set":"change",
+    "en":"imminent",
+    "ko":"임박한",
+    "vi":"sắp xảy ra",
+    "ipa":"/ˈɪmɪnənt/",
+    "pos":"adjective",
+    "ex":"A storm is imminent.",
+    "exvi":"Một cơn bão sắp xảy ra."
+  },
+  {
+    "id":"v33_predictable",
+    "set":"change",
+    "en":"predictable",
+    "ko":"예측 가능한",
+    "vi":"có thể đoán trước",
+    "ipa":"/prɪˈdɪktəbəl/",
+    "pos":"adjective",
+    "ex":"The ending of the film was predictable.",
+    "exvi":"Cái kết của bộ phim có thể đoán trước."
+  },
+  {
+    "id":"v33_volatile",
+    "set":"change",
+    "en":"volatile",
+    "ko":"변덕스러운",
+    "vi":"hay biến động",
+    "ipa":"/ˈvɒlətaɪl/",
+    "pos":"adjective",
+    "ex":"Oil prices are volatile.",
+    "exvi":"Giá dầu hay biến động."
+  },
+  {
+    "id":"v33_alternate",
+    "set":"change",
+    "en":"alternate",
+    "ko":"번갈아 일어나는",
+    "vi":"xen kẽ",
+    "ipa":"/ˈɔːltənət/",
+    "pos":"adjective",
+    "ex":"We meet on alternate weeks.",
+    "exvi":"Chúng tôi gặp nhau vào các tuần xen kẽ."
+  },
+  {
+    "id":"v33_circular",
+    "set":"change",
+    "en":"circular",
+    "ko":"원형의",
+    "vi":"hình tròn",
+    "ipa":"/ˈsɜːkjʊlər/",
+    "pos":"adjective",
+    "ex":"The table is circular.",
+    "exvi":"Cái bàn có hình tròn."
+  },
+  {
+    "id":"v33_cyclical",
+    "set":"change",
+    "en":"cyclical",
+    "ko":"순환적인",
+    "vi":"theo chu kỳ",
+    "ipa":"/ˈsɪklɪkəl/",
+    "pos":"adjective",
+    "ex":"Fashion is cyclical.",
+    "exvi":"Thời trang mang tính chu kỳ."
+  },
+  {
+    "id":"v33_degrade",
+    "set":"change",
+    "en":"degrade",
+    "ko":"저하시키다",
+    "vi":"làm suy giảm",
+    "ipa":"/dɪˈɡreɪd/",
+    "pos":"verb",
+    "ex":"Pollution degrades the air.",
+    "exvi":"Ô nhiễm làm suy giảm chất lượng không khí."
+  },
+  {
+    "id":"v33_deteriorate",
+    "set":"change",
+    "en":"deteriorate",
+    "ko":"악화되다",
+    "vi":"xấu đi",
+    "ipa":"/dɪˈtɪəriəreɪt/",
+    "pos":"verb",
+    "ex":"His health deteriorated quickly.",
+    "exvi":"Sức khoẻ của ông ấy xấu đi nhanh chóng."
+  },
+  {
+    "id":"v33_diminish",
+    "set":"change",
+    "en":"diminish",
+    "ko":"감소하다",
+    "vi":"giảm bớt",
+    "ipa":"/dɪˈmɪnɪʃ/",
+    "pos":"verb",
+    "ex":"The pain diminished after the medicine.",
+    "exvi":"Cơn đau giảm bớt sau khi uống thuốc."
+  },
+  {
+    "id":"v33_enhance",
+    "set":"change",
+    "en":"enhance",
+    "ko":"향상시키다",
+    "vi":"nâng cao",
+    "ipa":"/ɪnˈhɑːns/",
+    "pos":"verb",
+    "ex":"Good lighting enhances the picture.",
+    "exvi":"Ánh sáng tốt nâng cao chất lượng bức ảnh."
+  },
+  {
+    "id":"v33_escalate",
+    "set":"change",
+    "en":"escalate",
+    "ko":"확대되다",
+    "vi":"leo thang",
+    "ipa":"/ˈeskəleɪt/",
+    "pos":"verb",
+    "ex":"The argument escalated into a fight.",
+    "exvi":"Cuộc tranh cãi leo thang thành đánh nhau."
+  },
+  {
+    "id":"v33_fluctuate",
+    "set":"change",
+    "en":"fluctuate",
+    "ko":"변동하다",
+    "vi":"dao động",
+    "ipa":"/ˈflʌktʃueɪt/",
+    "pos":"verb",
+    "ex":"Prices fluctuate every day.",
+    "exvi":"Giá cả dao động mỗi ngày."
+  },
+  {
+    "id":"v33_decelerate",
+    "set":"change",
+    "en":"decelerate",
+    "ko":"속도를 줄이다",
+    "vi":"giảm tốc",
+    "ipa":"/diːˈseləreɪt/",
+    "pos":"verb",
+    "ex":"The car decelerated before the corner.",
+    "exvi":"Xe giảm tốc trước khúc cua."
+  },
+  {
+    "id":"v33_drift",
+    "set":"change",
+    "en":"drift",
+    "ko":"표류하다",
+    "vi":"trôi dạt",
+    "ipa":"/drɪft/",
+    "pos":"verb",
+    "ex":"The boat drifted down the river.",
+    "exvi":"Chiếc thuyền trôi dạt xuống sông."
+  },
+  {
+    "id":"v33_plummet",
+    "set":"change",
+    "en":"plummet",
+    "ko":"급락하다",
+    "vi":"lao dốc",
+    "ipa":"/ˈplʌmɪt/",
+    "pos":"verb",
+    "ex":"House prices plummeted last year.",
+    "exvi":"Giá nhà đã lao dốc vào năm ngoái."
+  }
+];
+var BOSSES33=[
+  {
+    "id":"v17_sandwisp",
+    "n":"Sandglass Wisp",
+    "vi":"Tinh Linh Đồng Hồ Cát",
+    "img":"assets/bosses/v17/v17_sandwisp.png",
+    "zone":"chrono",
+    "el":"earth",
+    "rarity":"legendary",
+    "lv":61,
+    "hp":620,
+    "def":7,
+    "mode":"mc",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Tinh Linh Đồng Hồ Cát"
+      },
+      "elem":{
+        "id":"veil",
+        "n":"Màn Cát Mờ"
+      },
+      "tact":{
+        "id":"tveil",
+        "n":"Cát Che Mắt"
+      },
+      "pass":{
+        "id":"swift",
+        "n":"Bước Chân Cát"
+      },
+      "ult":{
+        "n":"Cát Thời Gian"
+      }
+    },
+    "reward":{
+      "xp":165,
+      "gems":4,
+      "item":"Cát Thời Gian",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_pendulum",
+    "n":"Pendulum Knight",
+    "vi":"Hiệp Sĩ Quả Lắc",
+    "img":"assets/bosses/v17/v17_pendulum.png",
+    "zone":"chrono",
+    "el":"earth",
+    "rarity":"legendary",
+    "lv":62,
+    "hp":640,
+    "def":7,
+    "mode":"type",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Hiệp Sĩ Quả Lắc"
+      },
+      "elem":{
+        "id":"shield",
+        "n":"Khiên Quả Lắc"
+      },
+      "tact":{
+        "id":"tshield",
+        "n":"Khiên Đồng Hồ"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Áo Giáp Lắc"
+      },
+      "ult":{
+        "n":"Nhịp Đập Thời Gian"
+      }
+    },
+    "reward":{
+      "xp":170,
+      "gems":4,
+      "item":"Quả Lắc Vàng",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_specter",
+    "n":"Secondhand Specter",
+    "vi":"Bóng Ma Giây Phút",
+    "img":"assets/bosses/v17/v17_specter.png",
+    "zone":"chrono",
+    "el":"dark",
+    "rarity":"legendary",
+    "lv":63,
+    "hp":660,
+    "def":7,
+    "mode":"listen",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Bóng Ma Giây Phút"
+      },
+      "elem":{
+        "id":"rift",
+        "n":"Vết Nứt Bóng Ma"
+      },
+      "tact":{
+        "id":"ttimer",
+        "n":"Đồng Hồ Đếm Ngược"
+      },
+      "pass":{
+        "id":"thorns",
+        "n":"Gai Bóng Tối"
+      },
+      "ult":{
+        "n":"Tiếng Vọng Giây Phút"
+      }
+    },
+    "reward":{
+      "xp":175,
+      "gems":4,
+      "item":"Mặt Nạ Bóng Tối",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_mantis",
+    "n":"Gearwing Mantis",
+    "vi":"Bọ Ngựa Bánh Răng",
+    "img":"assets/bosses/v17/v17_mantis.png",
+    "zone":"chrono",
+    "el":"thunder",
+    "rarity":"legendary",
+    "lv":64,
+    "hp":680,
+    "def":8,
+    "mode":"speed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Bọ Ngựa Bánh Răng"
+      },
+      "elem":{
+        "id":"gale",
+        "n":"Cơn Gió Bánh Răng"
+      },
+      "tact":{
+        "id":"tenrage",
+        "n":"Cơn Thịnh Nộ Bánh Răng"
+      },
+      "pass":{
+        "id":"swift",
+        "n":"Đôi Cánh Sấm"
+      },
+      "ult":{
+        "n":"Lưỡi Hái Thời Gian"
+      }
+    },
+    "reward":{
+      "xp":180,
+      "gems":5,
+      "item":"Cánh Bọ Ngựa",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_hound",
+    "n":"Time Rift Hound",
+    "vi":"Chó Săn Vết Nứt",
+    "img":"assets/bosses/v17/v17_hound.png",
+    "zone":"chrono",
+    "el":"cosmic",
+    "rarity":"legendary",
+    "lv":65,
+    "hp":700,
+    "def":8,
+    "mode":"mixed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Chó Săn Vết Nứt"
+      },
+      "elem":{
+        "id":"chain",
+        "n":"Xích Hư Không"
+      },
+      "tact":{
+        "id":"tshield",
+        "n":"Khiên Vết Nứt"
+      },
+      "pass":{
+        "id":"vampiric",
+        "n":"Nanh Hút Sinh Lực"
+      },
+      "ult":{
+        "n":"Tiếng Tru Vết Nứt"
+      }
+    },
+    "reward":{
+      "xp":185,
+      "gems":5,
+      "item":"Nanh Hư Không",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_oracle",
+    "n":"Calendar Oracle",
+    "vi":"Nhà Tiên Tri Lịch",
+    "img":"assets/bosses/v17/v17_oracle.png",
+    "zone":"chrono",
+    "el":"light",
+    "rarity":"legendary",
+    "lv":66,
+    "hp":710,
+    "def":8,
+    "mode":"grammar",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Nhà Tiên Tri Lịch"
+      },
+      "elem":{
+        "id":"cleanse",
+        "n":"Thanh Tẩy Lịch"
+      },
+      "tact":{
+        "id":"theal",
+        "n":"Hồi Phục Tiên Tri"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Trang Lịch Thép"
+      },
+      "ult":{
+        "n":"Ngày Tận Thế"
+      }
+    },
+    "reward":{
+      "xp":190,
+      "gems":5,
+      "item":"Lịch Tiên Tri",
+      "title":null
+    }
+  },
+  {
+    "id":"v17_titan",
+    "n":"Paradox Titan",
+    "vi":"Titan Nghịch Lý",
+    "img":"assets/bosses/v17/v17_titan.png",
+    "zone":"chrono",
+    "el":"cosmic",
+    "rarity":"mythic",
+    "lv":67,
+    "hp":730,
+    "def":8,
+    "mode":"mixed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Titan Nghịch Lý"
+      },
+      "elem":{
+        "id":"burn",
+        "n":"Lửa Nghịch Lý"
+      },
+      "tact":{
+        "id":"tenrage",
+        "n":"Cơn Thịnh Nộ Nghịch Lý"
+      },
+      "pass":{
+        "id":"thorns",
+        "n":"Gai Nghịch Lý"
+      },
+      "ult":{
+        "n":"Vòng Lặp Nghịch Lý"
+      }
+    },
+    "reward":{
+      "xp":200,
+      "gems":6,
+      "item":"Trái Tim Nghịch Lý",
+      "title":"Kẻ Vượt Thời Gian"
+    }
+  },
+  {
+    "id":"v17_geargolem",
+    "n":"GEAR GOLEM",
+    "vi":"Golem Bánh Răng",
+    "img":"assets/bosses/v17/v17_geargolem.png",
+    "zone":"chrono",
+    "el":"earth",
+    "rarity":"mythic",
+    "lv":68,
+    "hp":750,
+    "def":8,
+    "mode":"mixed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Golem Bánh Răng"
+      },
+      "elem":{
+        "id":"shield",
+        "n":"Khiên Bánh Răng"
+      },
+      "tact":{
+        "id":"tshield",
+        "n":"Khiên Cỗ Máy"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Thép Thời Gian"
+      },
+      "ult":{
+        "n":"Cỗ Máy Thời Gian"
+      }
+    },
+    "reward":{
+      "xp":220,
+      "gems":6,
+      "item":"Lõi Bánh Răng",
+      "title":"Vua Thời Gian"
+    }
+  }
+];
+var QUESTS33=[
+  {
+    "id":"q_clock",
+    "n":"The Broken Clock",
+    "vi":"Chiếc Đồng Hồ Vỡ",
+    "d":"Đồng hồ của vương quốc đã vỡ — thu thập lại 12 mảnh thời gian.",
+    "ids":["v33_alarm_clock", "v33_agenda", "v33_antique", "v33_await", "v33_bedtime", "v33_beforehand", "v33_belated", "v33_chronological", "v33_countdown", "v33_dawn", "v33_daybreak", "v33_daylight"]
+  },
+  {
+    "id":"q_gear",
+    "n":"Gear Collection",
+    "vi":"Bộ Sưu Tập Bánh Răng",
+    "d":"Thu thập 12 bánh răng máy móc để sửa cỗ máy thời gian.",
+    "ids":["v33_accelerator", "v33_airbag", "v33_apparatus", "v33_appliance", "v33_assemble", "v33_automation", "v33_axle", "v33_blueprint", "v33_bolt", "v33_brake", "v33_bulldozer", "v33_bumper"]
+  },
+  {
+    "id":"q_travel",
+    "n":"Time Traveler",
+    "vi":"Nhà Du Hành Thời Gian",
+    "d":"Du hành qua thời gian và không gian — 14 từ về thời gian và vũ trụ.",
+    "ids":["v33_duration", "v33_dusk", "v33_endless", "v33_epoch", "v33_equinox", "v33_era", "v33_big_bang", "v33_milky_way", "v33_airlock", "v33_alien", "v33_altitude", "v33_antenna", "v33_asteroid", "v33_asteroid_belt"]
+  },
+  {
+    "id":"q_memory",
+    "n":"Lost Memories",
+    "vi":"Ký Ức Đã Mất",
+    "d":"Tìm lại 12 ký ức đã mất giữa dòng thay đổi và thời gian.",
+    "ids":["v33_abrupt", "v33_adaptable", "v33_alternately", "v33_consecutively", "v33_drastic", "v33_evolution", "v33_eternal", "v33_expire", "v33_forthcoming", "v33_fortnight", "v33_hourglass", "v33_hourly"]
+  },
+  {
+    "id":"q_guardian",
+    "n":"Guardian Challenge",
+    "vi":"Thử Thách Người Gác",
+    "d":"Vượt qua thử thách của người gác cổng — 12 từ về không gian và máy móc.",
+    "ids":["v33_astronomer", "v33_astronomy", "v33_black_hole", "v33_celestial", "v33_cluster", "v33_comet", "v33_chassis", "v33_chisel", "v33_circuit", "v33_clutch", "v33_component", "v33_conveyor"]
+  },
+  {
+    "id":"q_final",
+    "n":"Final Countdown",
+    "vi":"Đếm Ngược Cuối Cùng",
+    "d":"Đếm ngược cuối cùng trước khi vương quốc đóng băng — 14 từ tổng hợp.",
+    "ids":["v33_instantly", "v33_leap_year", "v33_lifetime", "v33_lunchtime", "v33_constellation", "v33_cosmic", "v33_cosmonaut", "v33_cosmos", "v33_dashboard", "v33_diesel", "v33_drill", "v33_escalator", "v33_evolve", "v33_fade"]
+  }
+];
+var RIFT33=[
+  {
+    "floor":1,
+    "n":"Tầng 1 — Đồng Hồ Cát",
+    "ids":["v33_millennium", "v33_momentary", "v33_monthly", "v33_nightfall", "v33_nostalgia", "v33_outdated", "v33_overdue"]
+  },
+  {
+    "floor":2,
+    "n":"Tầng 2 — Tinh Vân",
+    "ids":["v33_crater", "v33_dark_matter", "v33_docking", "v33_eclipse", "v33_elliptical", "v33_equator", "v33_exoplanet"]
+  },
+  {
+    "floor":3,
+    "n":"Tầng 3 — Cỗ Máy",
+    "ids":["v33_exhaust", "v33_forge", "v33_gearbox", "v33_generator", "v33_headlight", "v33_hinge", "v33_hydraulic"]
+  }
+];
+var SPECIES33=[
+  {
+    "id":"stardeer",
+    "n":"Hươu Sao",
+    "el":"nature",
+    "rar":"epic",
+    "egg":"star",
+    "rate":1.0,
+    "base":{
+      "hp":85,
+      "atk":16,
+      "def":11,
+      "spd":18
+    },
+    "perLv":{
+      "hp":7,
+      "atk":2,
+      "def":1,
+      "spd":1
+    },
+    "stages":[
+      {
+        "n":"Hươu Sao Nhỏ",
+        "img":"chrono/stardeer_s1.png"
+      },
+      {
+        "n":"Hươu Sao",
+        "img":"chrono/stardeer_s2.png"
+      },
+      {
+        "n":"Hươu Sao Thần",
+        "img":"chrono/stardeer_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"starheal",
+        "n":"Ánh Sao Chữa Lành",
+        "type":"heal",
+        "val":70,
+        "d":"Hồi lại khiên đội bằng ánh sao thời gian."
+      },
+      "p":{
+        "id":"wisdom",
+        "n":"Cổ Vũ Học Tập",
+        "type":"wisdom",
+        "val":1,
+        "d":"Bị động: mỗi chuỗi 3 câu đúng liên tiếp cho thêm 1 năng lượng."
+      },
+      "u":{
+        "id":"starfall",
+        "n":"Sao Băng Thần",
+        "type":"heal",
+        "val":140,
+        "d":"Tuyệt kỹ: hồi lại rất nhiều khiên cho cả đội."
+      }
+    }
+  },
+  {
+    "id":"gearbeetle",
+    "n":"Bọ Bánh Răng",
+    "el":"thunder",
+    "rar":"rare",
+    "egg":"gear",
+    "rate":1.0,
+    "base":{
+      "hp":95,
+      "atk":18,
+      "def":12,
+      "spd":12
+    },
+    "perLv":{
+      "hp":8,
+      "atk":2,
+      "def":1,
+      "spd":0
+    },
+    "stages":[
+      {
+        "n":"Bọ Bánh Răng Nhỏ",
+        "img":"chrono/gearbeetle_s1.png"
+      },
+      {
+        "n":"Bọ Bánh Răng",
+        "img":"chrono/gearbeetle_s2.png"
+      },
+      {
+        "n":"Bọ Bánh Răng Thần",
+        "img":"chrono/gearbeetle_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"gearshield",
+        "n":"Khiên Bánh Răng",
+        "type":"shield",
+        "val":80,
+        "d":"Tạo lá chắn bánh răng hấp thụ sát thương của boss."
+      },
+      "p":{
+        "id":"crystal",
+        "n":"Giáp Pha Lê",
+        "type":"crystal",
+        "val":15,
+        "d":"Bị động: boss phản công làm vỡ ít khiên hơn 15 điểm."
+      },
+      "u":{
+        "id":"clockguard",
+        "n":"Khiên Đồng Hồ",
+        "type":"shield",
+        "val":150,
+        "d":"Tuyệt kỹ: lá chắn đồng hồ lớn hấp thụ nhiều sát thương."
+      }
+    }
+  },
+  {
+    "id":"cosmicunicorn",
+    "n":"Kỳ Lân Vũ Trụ",
+    "el":"light",
+    "rar":"legendary",
+    "egg":"cosmic",
+    "rate":1.0,
+    "base":{
+      "hp":90,
+      "atk":19,
+      "def":11,
+      "spd":19
+    },
+    "perLv":{
+      "hp":7,
+      "atk":2,
+      "def":1,
+      "spd":1
+    },
+    "stages":[
+      {
+        "n":"Kỳ Lân Vũ Trụ Nhỏ",
+        "img":"chrono/cosmicunicorn_s1.png"
+      },
+      {
+        "n":"Kỳ Lân Vũ Trụ",
+        "img":"chrono/cosmicunicorn_s2.png"
+      },
+      {
+        "n":"Kỳ Lân Vũ Trụ Thần",
+        "img":"chrono/cosmicunicorn_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"cosmicbolt",
+        "n":"Tia Vũ Trụ",
+        "type":"dmg",
+        "val":30,
+        "d":"Bắn tia vũ trụ gây sát thương lớn cho boss."
+      },
+      "p":{
+        "id":"storm",
+        "n":"Bão Vũ Trụ",
+        "type":"storm",
+        "val":8,
+        "d":"Bị động: khi chuỗi đúng từ 3 trở lên, mỗi câu đúng gây thêm 8 sát thương."
+      },
+      "u":{
+        "id":"cosmicnova",
+        "n":"Vụ Nổ Vũ Trụ",
+        "type":"dmg",
+        "val":60,
+        "d":"Tuyệt kỹ: vụ nổ vũ trụ gây sát thương rất lớn."
+      }
+    }
+  }
+];
+var EGGS33=[
+  {
+    "id":"star",
+    "n":"Trứng Sao",
+    "el":"nature",
+    "price":1200,
+    "hatchMin":120,
+    "img":"chrono_egg_star.png",
+    "d":"Nở ra Hươu Sao — thú hệ Rừng của Vương Quốc Thời Gian."
+  },
+  {
+    "id":"gear",
+    "n":"Trứng Bánh Răng",
+    "el":"thunder",
+    "price":1000,
+    "hatchMin":120,
+    "img":"chrono_egg_gear.png",
+    "d":"Nở ra Bọ Bánh Răng — thú hệ Sấm của Vương Quốc Thời Gian."
+  },
+  {
+    "id":"cosmic",
+    "n":"Trứng Vũ Trụ",
+    "el":"light",
+    "price":2000,
+    "hatchMin":240,
+    "img":"chrono_egg_cosmic.png",
+    "d":"Nở ra Kỳ Lân Vũ Trụ — thú hệ Ánh Sáng của Vương Quốc Thời Gian."
+  }
+];
+var _byId={};BOSSES33.forEach(function(b){_byId[b.id]=b});
+window.__V33_WORDS=WORDS33;
+window.__V33_DATA={
+  version:'17.0.0',
+  words:WORDS33,bosses:BOSSES33,quests:QUESTS33,rift:RIFT33,
+  species:SPECIES33,eggs:EGGS33,
+  byId:function(id){return _byId[id]||null},
+  questById:function(id){for(var i=0;i<QUESTS33.length;i++)if(QUESTS33[i].id===id)return QUESTS33[i];return null},
+  riftByFloor:function(f){for(var i=0;i<RIFT33.length;i++)if(RIFT33[i].floor===f)return RIFT33[i];return null}
+};
+})();
+
+</script>
+<script id="v33js">
+/* ================================================================
+   Korean & English Vocab Farm — V33 (V17.0 CHRONO KINGDOM)
+   Layer V33: additive region layer, version 17.0.0, loads LAST.
+
+   SCOPE (BRIEF_V33.md — ChatGPT CHRONO KINGDOM proposal, adapted):
+   - 8 Chrono bosses (v17_*) fighting in the V19 Universal Combat
+     Engine (no new engine). Stats on game scale (lv 61-68, hp
+     620-750), continuing the V19 progression (V19 max lv 60 /
+     hp 600). ChatGPT's Lv 71-78 / HP 18,000-50,000 are NOT on game
+     scale and were NOT used. Elements mapped onto the real V19 EL
+     (Sand->earth, Metal->earth, Dark->dark, Electric->thunder,
+     Void->cosmic, Light->light, Time->cosmic). Skill ids come only
+     from the V19 palette. GEAR GOLEM: 90-HP gear shield at fight
+     start, 2 phases only (NO P3 Knowledge Counterattack — deliberate
+     adaptation), time-reversal heal +10 HP on wrong answers in P2
+     (guarded branches in v19.js, keyed on boss id).
+   - 70-win region gate with a V33-LOCAL corrected win count.
+     bossWinCount() (v21.js:111) undercounts flat V18 wins (AUTO
+     finding V17-1); it is NOT changed here (avatar unlocks belong
+     to the AUTO project). V33 counts en15 keys + en18 (flat win OR
+     nested en/ko win) + en19 (nested en/ko win). Correct total =
+     10 + 30 + 30 = 70, so the gate opens exactly when the player
+     has won everything. Locked state shows real x/70 progress.
+   - 3 pet species x 3 stages + 3 eggs, registered into the live
+     __V23_DATA (guarded + idempotent). Elements nature/thunder/
+     light; skills use existing v23 types only (Star Deer: passive
+     'wisdom' + active 'heal'; Gear Beetle: active 'shield' +
+     passive 'crystal'; Cosmic Unicorn: passive 'storm' + active
+     'dmg'). Evolution uses the element's stone + feather/fruit/
+     coins per PET_EVO_COST — no new materials. Collection
+     milestones extended with a 45-form milestone (36 + 9 new
+     forms) — the existing ladder topped out at 36.
+   - 6 story quests via the V27 engine (ONE guarded replacement
+     exports startSession on __v27). Completion is detected from
+     en27 session records (rec.t >= startedAt, rec.words covers
+     the quest ids, accuracy >= 0.8); rewards are claimed-guarded
+     in en33.quests and come only from real stores (XP via gain15,
+     gems via S.v7.gems).
+   - Time Echo: up to 10 words with en27.en.cw >= 1 (most-wrong
+     first), launched via startSession kind 'echo'; honest empty
+     state when there is nothing to echo. No extra bonus — the
+     session already pays through mark15.
+   - Chrono Rift: 3 floors x 7 questions, one V27 session per
+     floor (kind 'rift'). Floor N+1 unlocks only if floor N
+     accuracy >= 0.7. Rewards accuracy-scaled, once per day per
+     floor, claimed-guarded in en33.rift. NOTE: the V27 session
+     still reasks wrong words in its main phase; the floor
+     accuracy is correct/total of the session record, reasks
+     included.
+   - 240 Chrono words (4 sets x 60) enter the shared WORDS array
+     via the V33 block inside buildWords() (BT precedent) with ids
+     'v33_<slug>', lib 'chrono', lv 'B2'. No S.cards entries are
+     ever created — the ko field is display/learning data only.
+   - New save key S.v7.en33 (lazy, no migration). Boss wins stay
+     in en19 (UCE); en33 holds quests / rift / echo / region
+     claims / pending launches only. Worst case < 20 KB.
+
+   ENTRY: EN Hub decorator (MutationObserver, V27 precedent) +
+   KO build-time button (V11.1/V27 precedent — injected by the build
+   script, never by this file). Overlay
+   z-index 1500 (above V31 1400, V20 modal 1200, V32 badge 1100).
+
+   RULES (per vocab_farm_versioned_builds skill): IIFE, 'use
+   strict', try/catch around everything, other layers only through
+   window.__vNN with guards, never edit another layer's source,
+   never change a schema, localStorage key, Firestore path, XP/
+   gold/gems, boss/pet/vocab/SRS data, or working game logic. The
+   V6 save object is a top-level `let S` (NOT a window property)
+   — read it via bare S in try/catch, never via a window property
+   (the V11.1 lesson). No new currency, no energy system.
+   ================================================================ */
+(function(){
+'use strict';
+var VERSION='17.0.0';
+var GATE_TOTAL=70;
+var CHRONO_IDS=['v17_sandwisp','v17_pendulum','v17_specter','v17_mantis','v17_hound','v17_oracle','v17_titan','v17_geargolem'];
+var REGION_XP=150, REGION_GEMS=5, REGION_TITLE='Chúa Tể Thời Gian';
+var QUEST_XP=20, QUEST_BONUS_XP=10, QUEST_FINAL_GEMS=1, QUEST_MIN_ACC=0.8;
+var RIFT_REWARDS=[{acc:0.9,xp:40,gems:2},{acc:0.7,xp:25,gems:1},{acc:0,xp:10,gems:0}];
+
+function $(s,r){try{return (r||document).querySelector(s)}catch(e){return null}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function getS(){try{return S}catch(e){return null}}
+function V15(){try{return window.__v15||null}catch(e){return null}}
+function V19(){try{return window.__v19||null}catch(e){return null}}
+function V23(){try{return window.__v23||null}catch(e){return null}}
+function V27(){try{return window.__v27||null}catch(e){return null}}
+function D33(){try{return window.__V33_DATA||{}}catch(e){return {}}}
+function save33(){try{var v=V15();if(v&&v.save15)v.save15();}catch(e){}}
+function gain33(n){try{var v=V15();if(v&&v.gain15)v.gain15(n);}catch(e){}}
+function pop33(t){try{var v=V15();if(v&&v.pop15){v.pop15(t);return}}catch(e){} try{if(window.console&&console.log)console.log('[V33] '+t)}catch(e){}}
+function addGems(n){try{var s=getS();if(s){s.v7=s.v7||{};s.v7.gems=(s.v7.gems||0)+n}}catch(e){}}
+function todayStr(){try{return new Date().toDateString()}catch(e){return ''}}
+
+/* ---------- en33 state (lazy, no migration) ---------- */
+function en33(){
+  try{
+    var s=getS();if(!s)return {quests:{},rift:{day:'',best:{},claimed:{}},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()};
+    s.v7=s.v7||{};
+    var e=s.v7.en33;
+    if(!e)e=s.v7.en33={quests:{},rift:{day:'',best:{},claimed:{}},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()};
+    e.quests=e.quests||{};e.rift=e.rift||{day:'',best:{},claimed:{}};
+    e.rift.best=e.rift.best||{};e.rift.claimed=e.rift.claimed||{};
+    e.regionClaimed=e.regionClaimed||{en:0,ko:0};e.pending=e.pending||{};
+    return e;
+  }catch(err){return {quests:{},rift:{day:'',best:{},claimed:{}},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()}}
+}
+
+/* ---------- 70-win gate (V33-local corrected count) ---------- */
+function correctedWinCount(){
+  var s=getS(),n=0;
+  if(!s||!s.v7)return 0;
+  try{
+    var b15=(s.v7.en15&&s.v7.en15.bosses)||{};
+    n+=Object.keys(b15).length; /* V21's own definition for en15 */
+  }catch(e){}
+  try{
+    var b18=(s.v7.en18&&s.v7.en18.bosses)||{};
+    for(var id18 in b18){var r18=b18[id18]||{};if(r18.win||r18.wins||(r18.en&&r18.en.win)||(r18.ko&&r18.ko.win))n++;}
+  }catch(e){}
+  try{
+    var b19=(s.v7.en19&&s.v7.en19.bosses)||{};
+    for(var id19 in b19){var r19=b19[id19]||{};if((r19.en&&r19.en.win)||(r19.ko&&r19.ko.win))n++;}
+  }catch(e){}
+  return n;
+}
+function winBreakdown(){
+  var s=getS(),o={en15:0,en18:0,en19:0};
+  if(!s||!s.v7)return o;
+  try{o.en15=Object.keys((s.v7.en15&&s.v7.en15.bosses)||{}).length}catch(e){}
+  try{var b18=(s.v7.en18&&s.v7.en18.bosses)||{};for(var k in b18){var r=b18[k]||{};if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win))o.en18++}}catch(e){}
+  try{var b19=(s.v7.en19&&s.v7.en19.bosses)||{};for(var k2 in b19){var r2=b19[k2]||{};if((r2.en&&r2.en.win)||(r2.ko&&r2.ko.win))o.en19++}}catch(e){}
+  return o;
+}
+function gateOpen(){return correctedWinCount()>=GATE_TOTAL}
+
+/* ---------- bosses (records live in en19 via the UCE) ---------- */
+function bossList(){var d=D33();return (d.bosses||[]).slice()}
+function bossById(id){var d=D33();return (d.byId?d.byId(id):null)}
+function isWon33(id,lang){try{var v=V19();return v?v.isWon(id,lang):false}catch(e){return false}}
+function stars33(id,lang){try{var v=V19();return v?v.stars(id,lang):0}catch(e){return 0}}
+function bossUnlocked(id,lang){
+  /* Sequential inside Chrono + the 70-win gate. Called by the V19
+     bossUnlocked19 replacement for zone 'chrono' (and by the V33
+     overlay). Never calls back into __v19.bossUnlocked (no recursion). */
+  lang=lang||ST.lang||'en';
+  if(!gateOpen())return false;
+  var i=CHRONO_IDS.indexOf(id);
+  if(i<0)return false;
+  if(i===0)return true;
+  return isWon33(CHRONO_IDS[i-1],lang);
+}
+function regionWon(lang){
+  for(var i=0;i<CHRONO_IDS.length;i++)if(!isWon33(CHRONO_IDS[i],lang))return false;
+  return true;
+}
+function claimRegion(lang){
+  lang=lang||ST.lang||'en';
+  var e=en33();
+  if(!regionWon(lang))return {ok:false,msg:'Chưa thắng đủ 8 boss Chrono bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.'};
+  if(e.regionClaimed[lang])return {ok:false,msg:'Đã nhận thưởng hoàn thành vùng này rồi.'};
+  e.regionClaimed[lang]=1;
+  gain33(REGION_XP);addGems(REGION_GEMS);
+  try{var v=V19();if(v){var e19=v.en19();e19.titles=e19.titles||[];if(e19.titles.indexOf(REGION_TITLE)<0)e19.titles.push(REGION_TITLE)}}catch(err){}
+  save33();
+  return {ok:true,msg:'Hoàn thành Vương Quốc Thời Gian ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+'): +'+REGION_XP+' XP, +'+REGION_GEMS+' 💎, danh hiệu “'+REGION_TITLE+'”!'};
+}
+function fightBoss(id){
+  var lang=ST.lang||'en';
+  if(!gateOpen()){pop33('Vương Quốc Thời Gian cần thắng đủ 70 boss ('+correctedWinCount()+'/70).');return false}
+  if(!bossUnlocked(id,lang)){pop33('Boss này chưa mở khóa — thắng boss trước đó trước nhé.');return false}
+  var v=V19();if(!v){pop33('Chưa tải được hệ thống Boss (V19).');return false}
+  try{v.setLang(lang)}catch(e){}
+  closeChrono();
+  try{v.fight(id)}catch(e){pop33('Không mở được trận đấu.');return false}
+  return true;
+}
+
+/* ---------- words: attach into the shared WORDS array ---------- */
+function attachChrono(){
+  try{
+    if(!window.__V33_WORDS||!window.__V33_WORDS.length)return 0;
+    var v=V15();if(!v||!v.buildWords)return 0;
+    v.buildWords(); /* the V33 block inside buildWords() merges __V33_WORDS */
+    var n=0;
+    (v.words||[]).forEach(function(w){if(w.lib&&w.lib.indexOf('chrono')>=0)n++});
+    return n;
+  }catch(e){return 0}
+}
+
+/* ---------- pets: register species + eggs into __V23_DATA ---------- */
+function registerPets(){
+  var out={species:0,eggs:0,milestone:false};
+  try{
+    var d=D33(),vd=window.__V23_DATA;
+    if(!vd||!d.species||!d.eggs)return out;
+    vd.species=vd.species||[];vd.eggs=vd.eggs||[];
+    d.species.forEach(function(sp){
+      var has=false;
+      vd.species.forEach(function(x){if(x.id===sp.id)has=true});
+      if(!has){vd.species.push(sp);out.species++}
+    });
+    d.eggs.forEach(function(eg){
+      var has=false;
+      vd.eggs.forEach(function(x){if(x.id===eg.id)has=true});
+      if(!has){vd.eggs.push(eg);out.eggs++}
+    });
+    /* Collection ladder topped out at 36 forms; 9 new forms take the
+       total to 45 — add one milestone (guarded + idempotent). */
+    vd.collectionRewards=vd.collectionRewards||[];
+    var has45=false;
+    vd.collectionRewards.forEach(function(r){if(r.forms===45)has45=true});
+    if(!has45){
+      vd.collectionRewards.push({forms:45,gems:60,mats:{},title:'Bậc Thầy Thời Gian',
+        d:'Sưu tập đủ 45 hình thái: +60 💎, danh hiệu “Bậc Thầy Thời Gian”'});
+      out.milestone=true;
+    }
+  }catch(e){}
+  return out;
+}
+
+/* ---------- V27 session plumbing (quests / echo / rift) ---------- */
+function en27rec(){
+  try{var v=V27();return v?v.en27():null}catch(e){return null}
+}
+function findSession(ids,startedAt){
+  /* First en27 session rec at/after startedAt whose words cover all
+     ids (rec.words holds the first 30 ids of the session). Scans all
+     sessions, not just the newest, so a later Smart session does not
+     steal the completion. */
+  var d=en27rec();if(!d||!d.sessions)return null;
+  for(var i=0;i<d.sessions.length;i++){
+    var rec=d.sessions[i];
+    if(!rec||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
+    if(!rec.words||!rec.words.length)continue;
+    var ok=true;
+    for(var j=0;j<ids.length;j++)if(rec.words.indexOf(ids[j])<0){ok=false;break}
+    if(!ok)continue;
+    var tot=(rec.correct||0)+(rec.wrong||0);
+    if(tot<=0)continue;
+    return {rec:rec,acc:rec.correct/tot,total:tot};
+  }
+  return null;
+}
+function launchSession(ids,kind){
+  var v=V27();
+  if(!v||!v.startSession){pop33('Chưa tải được Học thông minh (V27).');return false}
+  if(!ids||!ids.length)return false;
+  closeChrono();
+  try{v.openSmart('en')}catch(e){}
+  try{return !!v.startSession('en',ids.slice(),kind)}catch(e){return false}
+}
+function questById(qid){var d=D33();return (d.questById?d.questById(qid):null)}
+function startQuest(qid){
+  var q=questById(qid);if(!q){pop33('Không tìm thấy nhiệm vụ.');return false}
+  var e=en33();
+  e.pending['quest:'+qid]={kind:'quest',id:qid,ids:q.ids.slice(),startedAt:Date.now()};
+  save33();
+  return launchSession(q.ids,'quest');
+}
+function checkCompletions(){
+  /* Quest + Rift pending launches -> completed states. Runs on every
+     Chrono overlay open (and after a session ends, when the player
+     reopens Chrono to claim). Returns newly completed quest ids. */
+  var e=en33(),done=[];
+  try{
+    var pend=e.pending||{},changed=false;
+    Object.keys(pend).forEach(function(key){
+      var p=pend[key];if(!p||!p.ids)return;
+      var hit=findSession(p.ids,p.startedAt||0);
+      if(!hit)return;
+      if(p.kind==='quest'){
+        var q=e.quests[p.id]=e.quests[p.id]||{};
+        /* B-33-1 (found by test33 §4): completion needs accuracy >= 0.8.
+           A below-threshold run consumes the attempt (pending is deleted
+           below) but does NOT mark the quest done — the player retries
+           with a fresh startQuest, whose startedAt excludes the old rec. */
+        if(!q.done&&hit.acc>=QUEST_MIN_ACC){q.done=1;q.acc=Math.round(hit.acc*100)/100;q.at=hit.rec.t;done.push(p.id)}
+        delete pend[key];changed=true;
+      }else if(p.kind==='rift'){
+        var f=parseInt(p.id,10);
+        if(f>=1&&f<=3){
+          var prev=e.rift.best[f]||0;
+          if(hit.acc>prev)e.rift.best[f]=Math.round(hit.acc*100)/100;
+        }
+        delete pend[key];changed=true;
+      }
+    });
+    if(changed)save33();
+  }catch(err){}
+  return done;
+}
+function claimQuest(qid){
+  var e=en33(),q=e.quests[qid];
+  if(!q||!q.done)return {ok:false,msg:'Nhiệm vụ chưa hoàn thành.'};
+  if(q.claimed)return {ok:false,msg:'Đã nhận thưởng nhiệm vụ này rồi.'};
+  var xp=QUEST_XP+((q.acc||0)>=0.9?QUEST_BONUS_XP:0);
+  gain33(xp);
+  if(qid==='q_final')addGems(QUEST_FINAL_GEMS);
+  q.claimed=1;save33();
+  return {ok:true,msg:'Nhận thưởng nhiệm vụ: +'+xp+' XP'+(qid==='q_final'?' +'+QUEST_FINAL_GEMS+' 💎':'')+'.'};
+}
+function questState(qid){
+  var e=en33(),q=e.quests[qid]||{};
+  if(q.claimed)return 'claimed';
+  if(q.done)return 'done';
+  if(e.pending['quest:'+qid])return 'active';
+  return 'new';
+}
+
+/* ---------- Time Echo ---------- */
+function echoList(){
+  var out=[];
+  try{
+    var d=en27rec();if(!d||!d.en||!d.en.cw)return out;
+    var cw=d.en.cw;
+    Object.keys(cw).forEach(function(id){if((cw[id]||0)>=1)out.push({id:id,cw:cw[id]})});
+    out.sort(function(a,b){return b.cw-a.cw});
+  }catch(e){}
+  return out.slice(0,10);
+}
+function startEcho(){
+  var list=echoList();
+  if(!list.length){pop33('Chưa có từ nào trả lời sai — Time Echo đang trống.');return false}
+  return launchSession(list.map(function(x){return x.id}),'echo');
+}
+
+/* ---------- Chrono Rift ---------- */
+function riftFloor(f){
+  var d=D33();return (d.riftByFloor?d.riftByFloor(f):null);
+}
+function riftUnlocked(f){
+  if(f===1)return true;
+  var e=en33();
+  return (e.rift.best[f-1]||0)>=0.7;
+}
+function startRift(f){
+  var fl=riftFloor(f);if(!fl){pop33('Không tìm thấy tầng này.');return false}
+  if(!riftUnlocked(f)){pop33('Mở tầng '+(f-1)+' với độ chính xác ≥ 70% trước nhé.');return false}
+  var e=en33();
+  e.pending['rift:'+f]={kind:'rift',id:String(f),ids:fl.ids.slice(),startedAt:Date.now()};
+  save33();
+  return launchSession(fl.ids,'rift');
+}
+function riftRewardFor(acc){
+  for(var i=0;i<RIFT_REWARDS.length;i++)if(acc>=RIFT_REWARDS[i].acc)return RIFT_REWARDS[i];
+  return RIFT_REWARDS[RIFT_REWARDS.length-1];
+}
+function claimRift(f){
+  var e=en33();
+  var day=todayStr();
+  if(e.rift.day!==day){e.rift.day=day;e.rift.claimed={}}
+  if(e.rift.claimed[f])return {ok:false,msg:'Đã nhận thưởng tầng '+f+' hôm nay rồi.'};
+  var acc=e.rift.best[f];
+  if(acc==null||acc===undefined)return {ok:false,msg:'Chưa hoàn thành tầng '+f+' — đánh tầng này trước nhé.'};
+  var rw=riftRewardFor(acc);
+  gain33(rw.xp);if(rw.gems)addGems(rw.gems);
+  e.rift.claimed[f]=1;save33();
+  return {ok:true,msg:'Khe Nứt Thời Gian tầng '+f+' ('+Math.round(acc*100)+'%): +'+rw.xp+' XP'+(rw.gems?' +'+rw.gems+' 💎':'')+'.'};
+}
+
+/* ---------- overlay UI ---------- */
+var ST={lang:'en',tab:'bosses'};
+function elChip(el){
+  try{var els=(window.__V19_DATA&&__V19_DATA.elements)||{};var o=els[el];if(o)return '<span class="v33chip">'+esc(o.ic+' '+o.n)+'</span>'}catch(e){}
+  return '<span class="v33chip">'+esc(el||'')+'</span>';
+}
+function starStr(n){var s='';for(var i=0;i<3;i++)s+=i<(n||0)?'★':'☆';return s}
+function bossCardHTML(b){
+  var lang=ST.lang,un=bossUnlocked(b.id,lang),won=isWon33(b.id,lang),st=stars33(b.id,lang);
+  var el=elChip(b.el);
+  return '<div class="v33boss'+(won?' done':'')+(!un?' locked':'')+'">'
+    +'<img src="'+esc(b.img)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+    +'<b>'+esc(b.vi)+'</b><span class="v33mut">'+esc(b.n)+' · Lv '+b.lv+'</span>'
+    +'<span>'+el+'</span>'
+    +'<span class="v33mut">HP '+b.hp+' · Thủ '+b.def+' · '+esc(b.mode)+' · '+esc(b.diff)+'</span>'
+    +'<span>'+starStr(st)+(won?' ✅ Đã thắng':'')+'</span>'
+    +'<em>'+(won?'Đã thắng ('+starStr(st)+')':(un?'⚔️ Có thể đánh':'🔒 Thắng boss trước để mở'))+'</em>'
+    +'<p class="v33mut">Kỹ năng: '+esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n)+'</p>'
+    +(un?'<button type="button" class="v33btn pri" onclick="window.__v33.fightBoss(\''+b.id+'\')">Bắt đầu chiến đấu</button>':'')
+    +'</div>';
+}
+function overlayHTML(){
+  var lang=ST.lang,gate=gateOpen(),n=correctedWinCount(),bd=winBreakdown();
+  var h='<div class="v33in">'
+    +'<div class="v33head"><div class="v33title"><b>⏳ Vương Quốc Thời Gian</b><span>Chrono Kingdom · V17.0 — vùng đất cuối, mở sau 70 chiến thắng boss</span></div>'
+    +'<button type="button" class="v33x" onclick="window.__v33.closeChrono()" aria-label="Đóng">✕</button></div>'
+    +'<div class="v33lang" role="group" aria-label="Chọn ngôn ngữ chiến đấu">'
+    +'<button type="button" class="v33langbtn'+(lang==='en'?' on':'')+'" onclick="window.__v33.setLang(\'en\')">🇬🇧 Tiếng Anh</button>'
+    +'<button type="button" class="v33langbtn'+(lang==='ko'?' on':'')+'" onclick="window.__v33.setLang(\'ko\')">🇰🇷 Tiếng Hàn</button></div>';
+  /* gate */
+  h+='<div class="v33card"><b>🔒 Cổng Thời Gian — '+n+'/'+GATE_TOTAL+' boss đã thắng</b>'
+    +'<div class="v33bar"><i style="width:'+Math.min(100,Math.round(n/GATE_TOTAL*100))+'%"></i></div>'
+    +'<p class="v33mut">Boss cũ (V15): '+bd.en15+'/10 · Boss V10 (V18): '+bd.en18+'/30 · Boss V11 (V19): '+bd.en19+'/30. '
+    +(gate?'✅ Cổng đã mở — chào mừng đến Vương Quốc Thời Gian!':'Thắng đủ 70 boss để mở vùng đất này. Không có đường tắt — số liệu là thật, đếm từ chính bản lưu của bạn.')+'</p></div>';
+  if(!gate){
+    h+='<div class="v33empty">Vương Quốc Thời Gian đang khóa. Các boss, nhiệm vụ, Time Echo và Khe Nứt Thời Gian sẽ mở khi bạn thắng đủ 70 boss.</div>';
+  }else{
+    /* bosses */
+    var langLabel=(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh');
+    h+='<div class="v33sec"><h3>⚔️ Boss Chrono ('+langLabel+')</h3>'
+      +'<p class="v33mut">Thắng lần lượt từ trên xuống dưới. Thắng bằng cả hai ngôn ngữ để nhận danh hiệu “Bậc Thầy Song Ngữ” cho từng boss.</p>'
+      +'<div class="v33bosses">'+bossList().map(bossCardHTML).join('')+'</div></div>';
+    var e=en33();
+    if(regionWon(lang)){
+      h+='<div class="v33card"><b>👑 Hoàn thành vùng ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+')</b><p class="v33mut">Thắng cả 8 boss Chrono — thưởng một lần: +'+REGION_XP+' XP, +'+REGION_GEMS+' 💎, danh hiệu “'+REGION_TITLE+'”.</p>'
+        +(e.regionClaimed[lang]?'<p>✅ Đã nhận thưởng hoàn thành vùng.</p>'
+          :'<button type="button" class="v33btn pri" onclick="window.__v33.claimRegion()">Nhận thưởng hoàn thành vùng</button>')
+        +'</div>';
+    }
+    /* quests */
+    h+='<div class="v33sec"><h3>📜 Nhiệm Vụ Cốt Truyện</h3><p class="v33mut">Mỗi nhiệm vụ là một buổi học qua Học thông minh (10–14 từ Chrono). Hoàn thành với độ chính xác ≥ 80% rồi quay lại đây nhận thưởng. Thưởng lần đầu +'+QUEST_XP+' XP, ≥ 90% thêm +'+QUEST_BONUS_XP+' XP; nhiệm vụ cuối thêm +'+QUEST_FINAL_GEMS+' 💎.</p><div class="v33quests">';
+    (D33().quests||[]).forEach(function(q){
+      var st=questState(q.id);
+      h+='<div class="v33quest"><b>'+esc(q.vi)+'</b><span class="v33mut">'+esc(q.n)+' · '+q.ids.length+' từ</span>'
+        +'<p class="v33mut">'+esc(q.d)+'</p>'
+        +'<em>'+(st==='claimed'?'✅ Đã nhận thưởng':st==='done'?'🎉 Hoàn thành — nhận thưởng ngay!':st==='active'?'⏳ Đang làm — hoàn thành buổi học rồi quay lại đây':'📖 Chưa bắt đầu')+'</em>'
+        +(st==='done'?'<button type="button" class="v33btn pri" onclick="window.__v33.claimQuest(\''+q.id+'\')">Nhận thưởng</button>'
+          :st==='claimed'?'':'<button type="button" class="v33btn" onclick="window.__v33.startQuest(\''+q.id+'\')">'+(st==='active'?'Học tiếp':'Bắt đầu nhiệm vụ')+'</button>')
+        +'</div>';
+    });
+    h+='</div></div>';
+    /* Time Echo */
+    var echo=echoList();
+    h+='<div class="v33sec"><h3>🪞 Time Echo — Tiếng Vọng Thời Gian</h3>'
+      +(echo.length
+        ?'<p class="v33mut">Bạn có '+echo.length+' từ trả lời sai gần đây (nhiều nhất: '+echo.map(function(x){return esc(x.id.replace(/^v33_/,'').replace(/_/g,' '))}).slice(0,3).join(', ')+'…). Ôn lại qua Học thông minh — trả lời đúng sẽ xóa từ khỏi danh sách này.</p><button type="button" class="v33btn pri" onclick="window.__v33.startEcho()">Ôn '+echo.length+' từ sai</button>'
+        :'<p class="v33mut">Chưa có từ nào trả lời sai — Time Echo đang trống. Trả lời sai trong các buổi học hoặc trận boss sẽ đưa từ vào đây.</p>')
+      +'</div>';
+    /* Chrono Rift */
+    h+='<div class="v33sec"><h3>🌀 Khe Nứt Thời Gian — Chrono Rift</h3><p class="v33mut">3 tầng × 7 câu. Tầng sau mở khi tầng trước đạt ≥ 70%. Thưởng mỗi tầng một lần mỗi ngày theo độ chính xác: ≥ 90% +40 XP/+2 💎 · ≥ 70% +25 XP/+1 💎 · dưới 70% +10 XP.</p><div class="v33quests">';
+    for(var f=1;f<=3;f++){
+      var fl=riftFloor(f),un=riftUnlocked(f),best=e.rift.best[f],claimedToday=e.rift.day===todayStr()&&!!e.rift.claimed[f];
+      h+='<div class="v33quest"><b>'+esc(fl?fl.n:('Tầng '+f))+'</b><span class="v33mut">7 câu hỏi · '+(un?'đã mở':'🔒 cần tầng '+(f-1)+' ≥ 70%')+'</span>'
+        +'<em>'+(best==null?'Chưa đánh tầng này':'Kỷ lục: '+Math.round(best*100)+'%')+(claimedToday?' · ✅ Đã nhận thưởng hôm nay':'')+'</em>'
+        +(un?'<button type="button" class="v33btn" onclick="window.__v33.startRift('+f+')">Đánh tầng '+f+'</button>':'')
+        +(best!=null&&!claimedToday?'<button type="button" class="v33btn pri" onclick="window.__v33.claimRift('+f+')">Nhận thưởng tầng '+f+'</button>':'')
+        +'</div>';
+    }
+    h+='</div></div>';
+    /* pets + words */
+    var chronoN=0;try{var v15=V15();if(v15)(v15.words||[]).forEach(function(w){if(w.lib&&w.lib.indexOf('chrono')>=0)chronoN++})}catch(err){}
+    h+='<div class="v33sec"><h3>🐾 Thú Cưng &amp; Từ Vựng Mới</h3>'
+      +'<p class="v33mut">3 thú Chrono mới — Hươu Sao, Bọ Bánh Răng, Kỳ Lân Vũ Trụ — đã có trong Cửa hàng Pet (trứng Sao / Bánh Răng / Vũ Trụ). 240 từ Chrono ('+chronoN+' đã gắn vào kho từ chung, cấp B2) dùng được trong mọi chế độ học, ôn SRS và trận boss.</p>'
+      +'<button type="button" class="v33btn" onclick="window.__v33.openPetShop()">Mở Cửa hàng Pet</button></div>';
+  }
+  h+='</div>';
+  return h;
+}
+function ensureHub(){
+  var h=$('#v33hub');
+  if(h)return h;
+  h=document.createElement('div');
+  h.id='v33hub';h.className='v33hub';h.style.display='none';
+  h.setAttribute('role','dialog');h.setAttribute('aria-label','Vương Quốc Thời Gian — Chrono Kingdom');
+  document.body.appendChild(h);
+  return h;
+}
+function openChrono(lang){
+  try{
+    if(lang==='en'||lang==='ko')ST.lang=lang;
+    checkCompletions();
+    var h=ensureHub();
+    h.innerHTML=overlayHTML();
+    h.style.display='flex';
+    try{document.body.style.overflow='hidden'}catch(e){}
+  }catch(e){}
+}
+function closeChrono(){
+  try{
+    var h=$('#v33hub');if(h)h.style.display='none';
+    try{if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel()}catch(e){}
+    try{var hub15=$('#v15hub');if(!hub15||hub15.style.display==='none')document.body.style.overflow=''}catch(e){document.body.style.overflow=''}
+  }catch(e){}
+}
+function setLang33(l){
+  if(l!=='en'&&l!=='ko')return;
+  ST.lang=l;
+  try{var h=$('#v33hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+}
+function claimRegionUI(){
+  var r=claimRegion(ST.lang);
+  pop33(r.msg);
+  try{var h=$('#v33hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+  return r.ok;
+}
+function claimQuestUI(qid){
+  var r=claimQuest(qid);
+  pop33(r.msg);
+  try{var h=$('#v33hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+  return r.ok;
+}
+function claimRiftUI(f){
+  var r=claimRift(f);
+  pop33(r.msg);
+  try{var h=$('#v33hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+  return r.ok;
+}
+function openPetShop(){
+  closeChrono();
+  try{var v=V23();if(v)v.openHub('shop')}catch(e){}
+}
+
+/* ---------- EN Hub entry: MutationObserver decorator (V27 precedent) ---------- */
+var _decT=null;
+function decorateEN(){
+  try{
+    var hb=document.querySelector('.v15hub-headbtns');
+    if(hb&&!hb.querySelector('.v33hubbtn')){
+      var b=document.createElement('button');
+      b.className='btn sm v33hubbtn';b.type='button';b.textContent='⏳ Chrono Kingdom';
+      b.onclick=function(){openChrono('en')};
+      var x=hb.querySelector('.v15x');
+      if(x)hb.insertBefore(b,x);else hb.appendChild(b);
+    }
+    var lb=document.querySelector('#v15langbar .v15lb-in');
+    if(lb&&!lb.querySelector('.v33hubbtn')){
+      var b2=document.createElement('button');
+      b2.className='v15lb-hub v33hubbtn';b2.type='button';b2.textContent='⏳ Chrono Kingdom';
+      b2.onclick=function(){openChrono('en')};
+      lb.appendChild(b2);
+    }
+  }catch(e){}
+}
+function scheduleDecorate(){
+  if(_decT)return;
+  _decT=setTimeout(function(){_decT=null;decorateEN()},60);
+}
+
+/* ---------- init ---------- */
+function init33(){
+  try{registerPets()}catch(e){}
+  try{attachChrono()}catch(e){}
+  try{
+    decorateEN();
+    if(window.MutationObserver){
+      var _obs=new MutationObserver(function(){scheduleDecorate()});
+      _obs.observe(document.body,{childList:true,subtree:true});
+    }
+  }catch(e){}
+}
+try{init33()}catch(e){}
+if(typeof document!=='undefined'&&document&&document.readyState==='loading'){try{document.addEventListener('DOMContentLoaded',function(){try{init33()}catch(e){}})}catch(e){}}
+
+window.__v33={
+  version:VERSION,
+  openChrono:openChrono,closeChrono:closeChrono,setLang:setLang33,
+  en33:en33,gateOpen:gateOpen,correctedWinCount:correctedWinCount,winBreakdown:winBreakdown,
+  bossUnlocked:bossUnlocked,fightBoss:fightBoss,isWon:isWon33,stars:stars33,
+  claimRegion:claimRegionUI,regionWon:regionWon,
+  startQuest:startQuest,claimQuest:claimQuestUI,questState:questState,checkCompletions:checkCompletions,
+  echoList:echoList,startEcho:startEcho,
+  startRift:startRift,claimRift:claimRiftUI,riftUnlocked:riftUnlocked,
+  attachChrono:attachChrono,registerPets:registerPets,openPetShop:openPetShop,
+  _test:{
+    en33:en33,correctedWinCount:correctedWinCount,winBreakdown:winBreakdown,gateOpen:gateOpen,
+    bossUnlocked:bossUnlocked,regionWon:regionWon,claimRegion:claimRegion,
+    startQuest:startQuest,claimQuest:claimQuest,questState:questState,checkCompletions:checkCompletions,
+    echoList:echoList,startEcho:startEcho,startRift:startRift,claimRift:claimRift,
+    riftUnlocked:riftUnlocked,riftRewardFor:riftRewardFor,findSession:findSession,
+    attachChrono:attachChrono,registerPets:registerPets,
+    overlayHTML:overlayHTML,openChrono:openChrono,closeChrono:closeChrono,
+    CHRONO_IDS:CHRONO_IDS,GATE_TOTAL:GATE_TOTAL
   }
 };
 })();

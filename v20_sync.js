@@ -77,6 +77,8 @@ function hasProgress(S){
   if(v7.en27&&v7.en27.days){ for(var d27 in v7.en27.days){ if(v7.en27.days[d27]) return true; } }
   if(v7.en23&&v7.en23.pets){ for(var p23 in v7.en23.pets){ if(v7.en23.pets[p23]) return true; } }
   if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
+  if(v7.en33&&v7.en33.quests){ for(var q33 in v7.en33.quests){ if(v7.en33.quests[q33]) return true; } }
+  if(v7.en33&&v7.en33.regionClaimed){ for(var rc33 in v7.en33.regionClaimed){ if(v7.en33.regionClaimed[rc33]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -301,6 +303,35 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m27.plan=n27p.plan!==undefined?n27p.plan:(o27p.plan||{en:{},ko:{}});
           m27.uiLang=n27p.uiLang||o27p.uiLang||'en';
           v7.en27=m27;
+        }
+        else if(kk==='en33'){
+          /* V33 (Chrono Kingdom): quests union (done/claimed/acc/at
+             MAX), rift best MAX per floor + claimed union for the
+             newer day only (claimed reset when the day changes),
+             regionClaimed union (per-language MAX — NOT unionTrue:
+             unionTrue is local-priority last-writer-wins, so a local
+             {ko:0} would overwrite a cloud {ko:1}; regionClaimed
+             carries explicit 0s, unlike the 1/absent claimed maps),
+             created MIN. XP/gems are never
+             summed (MAX at the top level, as everywhere else).
+             Pending launches are session-local and dropped. */
+          var l33=(localS.v7&&localS.v7.en33)||{}, c33=(cloudS.v7&&cloudS.v7.en33)||{};
+          var m33={};
+          m33.created=Math.min(l33.created||Infinity, c33.created||Infinity);
+          if(!isFinite(m33.created)) m33.created=(l33.created||c33.created||Date.now());
+          var q33={};
+          [l33.quests,c33.quests].forEach(function(src){ if(!src) return; for(var qk in src){ var a=q33[qk]=q33[qk]||{}; var b=src[qk]||{}; a.done=Math.max(a.done||0,b.done||0); a.claimed=Math.max(a.claimed||0,b.claimed||0); a.acc=Math.max(a.acc||0,b.acc||0); a.at=Math.max(a.at||0,b.at||0); } });
+          m33.quests=q33;
+          var day33=(newer.v7&&newer.v7.en33&&newer.v7.en33.rift&&newer.v7.en33.rift.day)||(older.v7&&older.v7.en33&&older.v7.en33.rift&&older.v7.en33.rift.day)||'';
+          var best33={};
+          [l33.rift&&l33.rift.best,c33.rift&&c33.rift.best].forEach(function(src){ if(!src) return; for(var fk in src) best33[fk]=Math.max(best33[fk]||0,src[fk]||0); });
+          var cl33={};
+          [l33.rift,c33.rift].forEach(function(src){ if(!src||src.day!==day33) return; for(var ck in (src.claimed||{})) cl33[ck]=src.claimed[ck]; });
+          m33.rift={day:day33,best:best33,claimed:cl33};
+          var rcL=l33.regionClaimed||{}, rcC=c33.regionClaimed||{};
+          m33.regionClaimed={en:Math.max(rcL.en||0,rcC.en||0),ko:Math.max(rcL.ko||0,rcC.ko||0)};
+          m33.pending={};
+          v7.en33=m33;
         }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }
