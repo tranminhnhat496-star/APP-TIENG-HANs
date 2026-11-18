@@ -318,6 +318,7 @@ function mark18(ok,w){
   e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
   if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
   if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
+  try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
   save18();
 }
 function markKO(ok){

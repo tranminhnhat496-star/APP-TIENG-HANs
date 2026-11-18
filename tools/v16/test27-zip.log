@@ -1,0 +1,190 @@
+
+== §0 layer integrity ==
+  PASS style markers in order v23<v24<v25<v26<v27
+  PASS script markers in order v23js<...<v27js, v27js last
+  PASS title is V16
+  PASS KO tabs line structurally closed (v23 string closes before v27)
+  PASS all 3 hooks present exactly once in built index.html
+  PASS __v27 version 16.0.0
+  PASS old layer versions pinned
+  PASS no JS errors on load
+  PASS KO hub has exactly 1 .v27kotab
+  PASS KO hub still has Boss Map + Pet tabs (1 each)
+  PASS KO tab button opens Smart overlay in KO
+  PASS EN Hub decorator injects Smart button (headbtns + langbar)
+  PASS Smart button re-injected after EN tab switches
+  PASS EN decorator button opens Smart overlay in EN
+  PASS §0 no JS errors during layer checks
+
+== §1 hook coverage (mark15 / mark18 / mark19, exactly once) ==
+  PASS H1 correct records last+cr exactly once per call
+  PASS H1 wrong records cw=1, clears cr
+  PASS H1 correct after wrong clears cw, cr=1
+  PASS H1 mark15 returns XP (10 first correct)
+  PASS H1 only the answered word gained a last record
+  PASS H2 V18 fight renders
+  PASS H2 boss correct records exactly once (cr +1, one new last key)
+  PASS H2 boss wrong then records cw=1, clears cr
+  PASS H3 V19 fight renders
+  PASS H3 boss correct records exactly once (cr +1, one new last key)
+  PASS §1 no JS errors during hook checks
+
+== §2 no double XP (session XP = mark15 returns only + plan bonus once) ==
+  PASS weak session: every answer XP delta equals mark15-rule expected XP
+  PASS weak session: wrong answer re-asked, summary shows improvement
+  PASS weak session: total S.xp delta equals sum of per-answer XP (no end bonus)
+  PASS weak session: no plan bonus, no gem (kind=weak)
+  PASS §2a no JS errors during weak session
+  PASS 5-min plan builds (ids > 0)
+  PASS plan session: every answer XP delta equals mark15-rule expected XP
+  PASS plan session: S.xp delta = per-answer XP + exactly +20 plan bonus
+  PASS plan session: summary shows the +20 completion bonus
+  PASS plan bonus claimed flag set once
+  PASS plan replay: S.xp delta = per-answer XP only (no second +20)
+  PASS plan replay: summary shows no +20 bonus line
+  PASS §2b no JS errors during plan sessions
+  PASS streak-7 session completes
+  PASS streak-7 gem awarded exactly +1
+  PASS streak-7 summary mentions the 7-day streak gem (icon or char)
+  PASS second session same week awards no second gem
+  PASS §2c no JS errors during streak sessions
+
+== §3 classification (design §5.2) ==
+  PASS EN NEW (box0, no history)
+  PASS EN LEARNING (box2, wrong<=right)
+  PASS EN WEAK via wrong>right
+  PASS EN WEAK via cw>=2 despite right>wrong
+  PASS EN REVIEW (box2, due, not weak)
+  PASS EN MASTERED (box4, right>=3, no wrong in 30d)
+  PASS EN MASTERED legacy (box5, wrong==0, no V27 history)
+  PASS EN hand-marked box=5 with wrong>0 is NOT MASTERED
+  PASS EN box=0 with a wrong answer is WEAK, not NEW
+  PASS Weak tab renders rows with Vietnamese badges
+  PASS KO NEW (box0, no w, no history)
+  PASS KO WEAK via pest rule (w>=3, box<4)
+  PASS KO MASTERED legacy (box5, no w)
+  PASS KO hand-marked box=5 with w=2 is NOT MASTERED
+  PASS KO WEAK via V27 wrong>right
+  PASS KO REVIEW (box2, due past)
+  PASS §3 no JS errors during classification checks
+
+== §4 plan (§5.3 caps, priority, shortfall honesty, time picker, stale) ==
+  PASS 10-min plan caps: 5 new + 10 due + 5 weak = 20 ids
+  PASS cw>=3 word pinned at the top of the plan
+  PASS 15-min plan capped at 30 ids
+  PASS scoped plan: exactly 2 due available (seeded)
+  PASS scoped plan: shortfall reported honestly
+  PASS scoped plan: NO silent fallback — all ids in scope
+  PASS plan tab UI shows the Oxford scope banner
+  PASS 5 min -> ~10 words (labelled estimate)
+  PASS 10 min -> ~20 words
+  PASS 15 min -> ~30 words
+  PASS custom 7 min -> ~14 words
+  PASS stale plan: planOf returns null for yesterday
+  PASS stale plan: startPlan rebuilds and a question renders
+  PASS stale plan: rebuilt plan is dated today
+  PASS §4 no JS errors during plan checks
+
+== §5 Smart Practice engine (EN + KO, re-ask, double-click guard) ==
+  PASS EN session covers MC + type + listen + flash kinds
+  PASS EN session: 5/5 correct, summary shows next review
+  PASS EN session: each word right+1 and box+1 via mark15
+  PASS §5a no JS errors during EN kinds session
+  PASS still-weak session completes with re-ask phase
+  PASS summary shows "Vẫn còn yếu" for the twice-wrong word
+  PASS summary shows "Đã cải thiện" for words fixed in re-ask
+  PASS §5b no JS errors during still-weak session
+  PASS double-click / double-call records exactly one correct answer
+  PASS session still ends cleanly after double-click test
+  PASS KO session covers MC + listen + flash, NO type kind
+  PASS KO session completes 4/4
+  PASS KO session: each card box 1->2 and ko.right +1 via V27
+  PASS KO session: +5 XP per correct answer, no other channel
+  PASS §5 no JS errors during Smart Practice checks
+
+== §6 BT ensureData path (V14 edge case: BT scope + fresh load) ==
+  PASS BT words NOT loaded before buildPlan (fresh load, Library never opened)
+  PASS buildPlan loads BT data via ensureData (no "no words")
+  PASS plan built from BT scope contains BT words
+  PASS startPlan with BT scope starts a question (no empty state)
+  PASS §6 no JS errors during BT checks
+
+== §7 KO derive-only (seeded weak list + no recording from normal modes) ==
+  PASS seeded KO weak list matches the derive rule exactly
+  PASS KO derive: box0/no-w is NEW, w3/box1 is WEAK, box5 is MASTERED, box1/due is REVIEW
+  PASS normal V6 flashcard answer updates the card box (real answer happened)
+  PASS normal V6 answer does NOT touch en27.ko (Q2 limit, documented)
+  PASS §7 no JS errors during KO derive checks
+
+== §8 150 KB prune guard (synthetic heavy en27) ==
+  PASS prune: recordAnswer does not throw on a heavy en27
+  PASS prune: every per-word map capped at <=1000 entries
+  PASS prune: sessions capped at 30, days capped at 90
+  PASS prune: JSON size shrinks (was over 150 KB)
+  PASS prune: save succeeds and en27 round-trips through localStorage
+  PASS §8 no JS errors during prune checks
+
+== §9 the 12 situations from the user spec §12 ==
+  PASS J1 new player EN: "chưa có dữ liệu" cells, 0/4409 learned, no invented numbers
+  PASS J1 new player KO: "chưa có dữ liệu" cells, 0/20 learned
+  PASS J2 100 words studied: dashboard shows 100/4409 learned
+  PASS J3 repeated wrong (1 right / 5 wrong) -> WEAK
+  PASS J4 repeated right (10 right / 0 wrong, box 5) -> MASTERED
+  PASS J3 repeated-wrong word is first in the plan
+  PASS J5 7-day absence: plan capped at 20, weak-first order
+  PASS J5 7-day absence: dashboard shows the true 20-word backlog
+  PASS J6 plan session completes
+  PASS J6 plan-tab goal "Hoàn thành kế hoạch" checked after completion
+  PASS J6 dashboard suggests new words when nothing is due/weak
+  PASS J6 summary numbers are real (correct count matches answers)
+  PASS J7 offline: navigator.onLine is false under CDP offline
+  PASS J7 offline: offline banner shows in the overlay
+  PASS J7 offline: a Smart question still answers and records
+  PASS J7 no JS errors while offline
+  PASS J8 en27 persists across reload (cw/cr/streak/last)
+  PASS J9 merge keeps the NEWER device whole en27 (last-write-wins, Q1 absent)
+  PASS J9 merge does not mutate its inputs
+  PASS J9 merge still takes MAX xp (200)
+  PASS J10 fresh/old save has NO en27 before Smart is opened (lazy creation)
+  PASS J10 stored save still has no en27 after reload (no pre-creation)
+  PASS J10 old SRS intact after reload (box/right/wrong)
+  PASS J10 XP intact (12500)
+  PASS J10 en27 lazy-creates with full defaults on first open
+  PASS J11 double-click guard (measured in §5: one record per double answer)
+
+== §9 (12) mobile overlay geometry + contrast ==
+  PASS [390 dash] overlay: no horizontal scroll
+  PASS [390 dash] overlay: no element wider than viewport
+  PASS [390 dash] overlay: all buttons/inputs >=44px tall
+  PASS [390 dash] overlay: WCAG AA contrast (0 violations, 29 texts checked)
+  PASS [390 weak] overlay: no horizontal scroll
+  PASS [390 weak] overlay: no element wider than viewport
+  PASS [390 weak] overlay: all buttons/inputs >=44px tall
+  PASS [390 weak] overlay: WCAG AA contrast (0 violations, 816 texts checked)
+  PASS [390 plan] overlay: no horizontal scroll
+  PASS [390 plan] overlay: no element wider than viewport
+  PASS [390 plan] overlay: all buttons/inputs >=44px tall
+  PASS [390 plan] overlay: WCAG AA contrast (0 violations, 37 texts checked)
+  PASS [360 dash] overlay: no horizontal scroll
+  PASS [360 dash] overlay: no element wider than viewport
+  PASS [360 dash] overlay: all buttons/inputs >=44px tall
+  PASS [360 dash] overlay: WCAG AA contrast (0 violations, 29 texts checked)
+  PASS [430 dash] overlay: no horizontal scroll
+  PASS [430 dash] overlay: no element wider than viewport
+  PASS [430 dash] overlay: all buttons/inputs >=44px tall
+  PASS [430 dash] overlay: WCAG AA contrast (0 violations)
+  PASS §9 no JS errors during situation checks
+
+== §10 regression (spot): hubs, library, boss fights, pets, Korean tabs ==
+  PASS regression: save intact after fresh load (XP 12500, gems 42+6 achievements, a4+a5 claimed)
+  PASS regression: EN Hub opens with 10 modes
+  PASS regression: Library renders (Oxford/Thư viện)
+  PASS regression: V18 boss fight still works
+  PASS regression: V19 Boss Map has 10 zones and fight works
+  PASS regression: Pet Hub opens with 7 tabs
+  PASS regression: Korean Hub has exactly 1 Boss Map + 1 Pet + 1 Smart tab
+  PASS regression: tab counts stay 1 after view switches (render() rewrites tabs)
+  PASS §10 no JS errors during regression checks
+  PASS no JS errors anywhere in the run (all sections incl. across reloads)
+
+==== RESULT: 164 passed, 0 failed ====

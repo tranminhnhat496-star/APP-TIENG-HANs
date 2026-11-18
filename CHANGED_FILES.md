@@ -436,3 +436,45 @@
 
 ### Dữ liệu người chơi (localStorage) — không đổi
 - Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa. V26 chỉ đọc qua API sẵn có (`__v23._test.en23()`, `__v15.en15()`); tab nhớ trong `sessionStorage` (`v26.petTab`, mất khi đóng tab trình duyệt, không chạm save game). Decorator không ghi dữ liệu người chơi (chỉ thêm class/element hiển thị).
+
+---
+
+# Danh sách file đã thay đổi — V15.3 → V16 (Smart Learning)
+
+## File mới (lớp V27 — toàn bộ tính năng V16 nằm ở đây)
+| File | Nội dung |
+|---|---|
+| `index.html` | Tiêu đề đổi thành V16; thêm lớp V27 CUỐI: `<style id="v27">`, `<script id="v27js">`; thêm nút "Học thông minh" (`v27kotab`) vào tab Korean; 3 hook `recordAnswer` trong khối inline v15/v18/v19. Không sửa bất kỳ lớp cũ nào ngoài 3 dòng hook. |
+| `v27.js` | Học Thông Minh: overlay 3 tab (Bảng điều khiển / Từ yếu / Kế hoạch ngày), nút chuyển Hàn/Anh nội bộ, kho `S.v7.en27`, phân loại từ yếu NEW/LEARNING/WEAK/REVIEW/MASTERED, điểm ưu tiên, kế hoạch ngày, bộ máy câu hỏi riêng (EN MC/gõ/nghe/tự chấm; KO MC/nghe/tự chấm, không gõ Hangul), thưởng hoàn thành kế hoạch +20 XP (chống nhận trùng) và +1 gem khi chuỗi 7 ngày. |
+| `v27.css` | Theme Học Thông Minh (tím đậm, viền vàng, ≥44px, WCAG AA, không tràn ngang ở 320–430px). |
+| `build_v16.py` | Script build V16 (chạy 1 lần trên bản V15.3 nguyên vẹn): inject V27 CUỐI trước `</body>`, chèn nút KO, gắn 3 hook H1/H2/H3 với assert khớp chính xác, kiểm tra thứ tự marker `… v23, v24, v25, v26, v27` và version `16.0.0`. **Không idempotent cho v27** (từ chối chạy nếu đã có marker v27 — xem CHANGELOG). |
+| `package_v16.py` | Script đóng gói ZIP V16 + kiểm tra `index.html`, `v27.js`, `v27.css`, `build_v16.py`, `tools/v16/test27.js` trong ZIP và marker theo thứ tự. |
+| `README_V16_SMART_LEARNING.md` | Hướng dẫn V16: tính năng, dữ liệu, thưởng, giới hạn (Q1/Q2 hoãn, Q4 +20 XP là đề xuất chờ xác nhận). |
+| `CHANGELOG_V15_3_to_V16.md` | Changelog đầy đủ V15.3 → V16 (kèm lỗi nút KO tìm được lúc build và giới hạn của `build_v16.py`). |
+| `SMOKE_TEST_V16_2026-11-18.md` | Báo cáo kiểm thử V16 (test27.js trên Chrome thật: 164/164 × 2 lần trên build + 1 lần trên ZIP đã đóng gói). |
+| `tools/v16/` | Bộ kiểm thử V16: `test27.js` + `smoke27.js` + `TODO_Q1_merge_branch.md` (bản phác nhánh hợp nhất Firebase cho `en27`, chưa áp dụng) + `repair_kotab_2026-11-18.py` (sửa lỗi nút KO lúc build) + log 3 lần chạy + ảnh sau (`shots-after/`). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v15.js` | Thêm đúng 1 dòng hook H1 trong `mark15` (trước `save15();`, dòng 390): ghi đáp án EN vào `en27`. |
+| `v18.js` | Thêm đúng 1 dòng hook H2 trong `mark18` (trước `save18();`, dòng 321), mode `'boss18'`. |
+| `v19.js` | Thêm đúng 1 dòng hook H3 trong `mark19` (trước `save19();`, dòng 331), mode `'boss19'`. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V16. |
+
+### Lớp V27 — tóm tắt nội dung (chi tiết trong README_V16_SMART_LEARNING.md)
+- **Một overlay duy nhất, 3 tab:** Bảng điều khiển (số liệu thật từ kho dữ liệu; ô nào chưa có dữ liệu ghi "chưa có dữ liệu"), Từ yếu (tìm kiếm + lọc, hàng từ có số lần sai/ngày ôn gần nhất/hạng sao/trạng thái, nút nghe), Kế hoạch ngày (5 từ mới + 10 từ đến hạn + 5 từ yếu, chọn 5/10/15 phút hoặc tùy chỉnh, nút "Bắt đầu ôn tập").
+- **Nút chuyển Hàn/Anh nội bộ** (`en27.uiLang`), không ghi `en15().lang` — không đổi ngôn ngữ học chính.
+- **Vào từ cả hai Hub:** Korean Hub qua nút "Học thông minh" chèn lúc build (mẫu nút Boss/Pet); English Hub qua decorator MutationObserver (không sửa file cũ), nút tự chèn lại sau mỗi lần render.
+- **Ghi đáp án:** EN qua 3 hook (mark15/mark18/mark19 đều ghi đúng 1 lần mỗi câu trả lời, kể cả đánh boss); KO chỉ ghi từ bài Học Thông Minh + ước lượng qua `box`/`due`/`w` (không gắn hook vào code V6 — Q2 hoãn).
+- **Không tạo SRS thứ hai:** V27 chỉ chọn và xếp ưu tiên theo box/due có sẵn; mỗi câu trả lời EN vẫn gọi `mark15(..., 'smart')`, KO tự cập nhật `box`/`due` theo bảng khoảng V6 + `gain`/`res`. XP chỉ qua một kênh; không cộng `score*2` cuối buổi; không gọi `gain` cho câu trả lời trong boss.
+- **Thưởng chống nhận trùng:** hoàn thành kế hoạch +20 XP một lần mỗi ngày mỗi ngôn ngữ (`claimed['plan:<lang>:<ngày>']`); +1 gem chỉ khi đạt chuỗi Học Thông Minh 7 ngày (`claimed['streak7:...']`). Không có tiền tệ mới. Mức +20 XP là **đề xuất, chờ Anh xác nhận** (đổi một dòng trong `claimPlanBonus()` nếu cần).
+- **Hoãn theo thiết kế:** Q1 (nhánh hợp nhất Firebase cho `en27` — hợp nhất 2 máy hiện vẫn last-write-wins cho `en27`, đã kiểm thử trung thực), Q2 (hook tiếng Hàn trong code V6), Q7 (lỗi hợp nhất `S.v7.en` có sẵn). Xem `tools/v16/TODO_Q1_merge_branch.md`.
+- **Lỗi tìm được lúc build (đã sửa):** nút KO bị lỗi cú pháp do build script cắt thừa 1 ký tự (`...button>'';`) — sửa bằng repair script có assert + sửa `build_v16.py` (`[:-2]` → `[:-1]`) + thêm assert cấu trúc; sau sửa, cả 32 khối `<script>` inline đều qua `node --check`.
+
+### File giữ nguyên 100% (không sửa, không xóa)
+- Mọi lớp cũ V6–V26 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0), mọi dữ liệu từ vựng/thú/boss, `firebase-config.js`, `firestore.rules`. `build_v15ui.py` / `build_v15lib.py` / `build_v15nav.py` không sửa (và không được chạy lại trên bản đã xong — xem rebuild proof).
+
+### Dữ liệu người chơi (localStorage) — không đổi khóa, có thêm khóa con mới
+- Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa localStorage.
+- Thêm khóa con duy nhất trong cùng bản lưu: `S.v7.en27` (tiến trình Học Thông Minh: `en.last/cw/cr`, `ko.right/wrong/cw/cr/last`, `plan`, `sessions` tối đa 30, `days` tối đa 90 ngày, `streak`, `claimed`, `uiLang`). Tạo lười với đầy đủ giá trị mặc định khi mở lần đầu (như `enState()`); không ghi trước trong migration. Giới hạn: mỗi map tối đa 1.000 mục, trần 150 KB có cắt tỉa khi ghi, không bao giờ chặn `save()`. Dữ liệu SRS cũ (`S.v7.en`, `S.cards`) không đổi; V27 chỉ đọc, không ghi đè.

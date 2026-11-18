@@ -1,0 +1,13 @@
+jsExceptionsOnLoad: 0
+v27version: "16.0.0"
+v27kotabInDOM: true
+v27hubbtnCount: 1
+mascotImgOk: true
+overlayVisible: true
+hScroll: 0
+en27created: true
+hookH1record: {"id":"w0","lastSet":true,"cr":1,"cw":0,"before":false}
+planEN5min: {"ids":3,"avail":{"NEW":4408,"DUE":0,"WEAK":0},"short":["Chỉ có 0 từ yếu (kế hoạch cần 2)","Chỉ có 0 từ đến hạn (kế hoạch cần 5)"]}
+koDashRenders: true
+koTotal: "0/20"
+screenshot: "/home/hatch/workspace/v7build/tools/v16/shots-after/v27-dash-390.png"
