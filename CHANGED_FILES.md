@@ -478,3 +478,65 @@
 ### Dữ liệu người chơi (localStorage) — không đổi khóa, có thêm khóa con mới
 - Khóa `hanvocab.v1` giữ nguyên, không migration, không thêm khóa localStorage.
 - Thêm khóa con duy nhất trong cùng bản lưu: `S.v7.en27` (tiến trình Học Thông Minh: `en.last/cw/cr`, `ko.right/wrong/cw/cr/last`, `plan`, `sessions` tối đa 30, `days` tối đa 90 ngày, `streak`, `claimed`, `uiLang`). Tạo lười với đầy đủ giá trị mặc định khi mở lần đầu (như `enState()`); không ghi trước trong migration. Giới hạn: mỗi map tối đa 1.000 mục, trần 150 KB có cắt tỉa khi ghi, không bao giờ chặn `save()`. Dữ liệu SRS cũ (`S.v7.en`, `S.cards`) không đổi; V27 chỉ đọc, không ghi đè.
+
+## V16.3 — Backup & Restore Fix (2026-11-18)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `src/v31.js`, `src/v31.css` | Lớp V31 mới, version 16.3.0, nạp CUỐI (sau V27): Backup History, xác minh sao lưu đám mây bằng đọc lại, báo cáo hợp nhất, hoàn tác khôi phục, bọc panel Quản lý dữ liệu + decorator tab Sao lưu trong Trung tâm tài khoản, bọc F-11 cho `__v27.recordAnswer`. |
+| `build_v31.py` | Script build V16.3: kiểm tra base là V16 nguyên vẹn (sha256 `c59da336…`), áp dụng 24 replacement (14 staged trong phạm vi + 10 mới V31), chèn lớp V31 cuối cùng, assert marker/thứ tự/version/KO không đổi/không có marker ngoài phạm vi, `node --check` mọi file đã chạm. Chạy đúng 1 lần, không chạy lại trên bản đã xong. |
+| `package_v31.py` | Script đóng gói ZIP V16.3 + kiểm tra `index.html`, `v31.js`, `v31.css`, `build_v31.py`, `package_v31.py`, `tools/v31/test31.js` trong ZIP; marker V31 cuối cùng; replacement trong phạm vi có mặt, ngoài phạm vi vắng mặt; không có nút KO mới; `firebase-config.js` trong ZIP là placeholder. |
+| `README_V16_3_BACKUP_FIX.md` | Hướng dẫn V16.3: lỗi đã sửa, tính năng mới, giới hạn (Firebase live chưa kiểm thử, Chrome bị chặn). |
+| `CHANGELOG_V16_to_V16_3.md` | Changelog đầy đủ V16 → V16.3 (kèm hiệu chỉnh F-15/F-16 và cờ xác nhận F-12). |
+| `SMOKE_TEST_V16_3_2026-11-18.md` | Báo cáo kiểm thử V16.3 (harness Node vm `test31.js` × 2 trên build + 1 trên ZIP; Chrome bị chặn — driver `verify-v31c.js` đã chuẩn bị sẵn). |
+| `tools/v31/` | Bộ kiểm thử V16.3: `PLAN_V31.md` (kế hoạch Stage A), `VERIFY_V31_BASELINE.md` (baseline V16: R1/R4/R5 FAIL), `test31.js` + `verify-v31c.js` + fixtures + log. |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v20_sync.js` | Hợp nhất theo từng subkey (F-01/F-03/en16): MAX theo từ cho SRS, union cho boss/pet/quest/session, `due` lấy sớm nhất, `map`/`claimed` local-first; `hasProgress` đếm en27/en23/en22 + boss thắng dạng phẳng (F-13); fallback `localTime` (F-14); độ sâu quét 4→6 (F-15). |
+| `v15.js` | `flush()` trước ghi trực tiếp trong `backupImport` (F-02a); `backupImport` độc lập kiểm tra + chụp snapshot (F-16); `backupExport` flush trước khi đọc + tên file `v16.3` (C1); `resetEN` xóa thêm `en27.en.last/cw/cr` — chỉ phía EN, chờ Anh xác nhận (F-12). |
+| `v20.js` | `flush()` trước ghi trong `importFile` (F-02b); `sum()` trong `conflictHTML` đếm boss thắng dạng phẳng (C6); câu chữ hợp nhất mới (C6b). |
+| `v21.js` | `flush()` trước kích hoạt tài khoản/khách (F-02c/d); khôi phục Trung tâm tài khoản truyền đúng input element, bỏ `.then()` (C9); câu chữ xuất file "đã bắt đầu tải" (C1c); câu chữ hợp nhất mới (C6c). |
+| `v27.js` | `recordAnswer` bỏ qua + `console.warn` khi `S` vắng mặt (F-11). |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V16.3. |
+
+### Lớp V31 — tóm tắt nội dung (chi tiết trong README_V16_3_BACKUP_FIX.md)
+- **Giao diện Sao lưu & Khôi phục mới** trong panel Quản lý dữ liệu (bọc `__v20.dataPanelHTML`) và tab Sao lưu của Trung tâm tài khoản (decorator MutationObserver): trạng thái sao lưu đám mây, 3 dòng thời gian riêng (lưu cục bộ / đồng bộ / sao lưu đám mây đã xác minh), kích thước thật + giới hạn 900 KB, lịch sử sao lưu, khôi phục, xuất, đồng bộ. **Không thêm nút KO** — KO đã mở được panel qua nút Quản lý dữ liệu có sẵn.
+- **Lịch sử sao lưu mới** (khóa `hanvocab.v16.backup-history`, tối đa 20 mục) + liệt kê chỉ-đọc các snapshot hệ thống `hanvocab.v12.*` đã có, khôi phục được khi hợp lệ; `hanvocab.v11-backup` không bao giờ bị V31 xóa.
+- **Chụp trước khôi phục + hoàn tác:** mọi lần khôi phục đều giữ `hanvocab.v12.preimport-<ms>` trước khi ghi đè; nút "Hoàn tác lần khôi phục này" khôi phục snapshot mới nhất (tự chụp trước nên hoàn tác được hoàn tác).
+- **Xác minh đám mây bằng đọc lại:** sau khi tải lên, V31 tải lại tài liệu đám mây và chỉ ghi nhận "đã sao lưu" khi hash khớp; thời gian đã xác minh lưu ở `hanvocab.v16.last-verified-cloud`. Đồng bộ tự động chưa được xác minh kiểu này (sẽ xác minh ở lần đồng bộ tay sau).
+- **Báo cáo hợp nhất:** sau khi hợp nhất, panel liệt kê số lượng giữ được từ mỗi bên và các trường lấy theo bản mới hơn theo thiết kế (`en23.team`/`hatch`, `en27.plan`/`uiLang`).
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, Firebase Auth/Sync, login khách, các lớp V6–V27 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0, v27 = 16.0.0). `build_v16.py` không chạy lại trên bản đã xong.
+
+### Ngoài phạm vi (không làm trong V16.3)
+- Nói trùng XP (V17-3), id trùng (F-09), listener Escape (F-10), observer (F-05/F-07), V17-1/V17-2, icon F-04, lỗi chính tả V17-4, M1/M2 — thuộc dự án AUTO/V28 đã dừng, chưa sửa.
+
+## V16.4 — Data Safety (2026-11-19)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `src/v32.js`, `src/v32.css` | Lớp V32 mới, version 16.4.0, nạp CUỐI (sau V31): Storage Monitor (ngân sách ước tính 5 MB, mức ok/warn/critical, liệt kê từng khóa), Safe Cleanup (chỉ xóa snapshot cũ hơn 5 bản mới nhất + lịch sử cũ hơn 10 mục mới nhất, luôn hỏi xác nhận trước), Pre-save Guard (bọc `save` toàn cục + `__v20.flush` + `__v31.recordBackupEvent`, kiểm tra mỗi 30 giây + khi tab hiện lại), badge cảnh báo nổi (z-index 1100, đóng được). |
+| `build_v32.py` | Script build V16.4: kiểm tra base là V16.3 nguyên vẹn (sha256 `4378dc22…`), áp dụng đúng 1 replacement (R-V32-VER), chèn lớp V32 cuối cùng, assert marker/thứ tự/version/KO không đổi/không có marker ngoài phạm vi, `node --check` v32.js + v20_sync.js. Chạy đúng 1 lần, không chạy lại trên bản đã xong. |
+| `package_v32.py` | Script đóng gói ZIP V16.4 + kiểm tra `index.html`, `v32.js`, `v32.css`, `build_v32.py`, `package_v32.py`, `tools/v32/test32.js` trong ZIP; marker V32 cuối cùng; fragment V31 còn đủ; R-V32-VER có mặt; không có nút KO mới; `firebase-config.js` trong ZIP là placeholder. |
+| `README_V16_4_DATA_SAFETY.md` | Hướng dẫn V16.4: monitor, dọn dẹp an toàn, pre-save guard, giới hạn (Firebase live chưa kiểm thử, Chrome bị chặn). |
+| `CHANGELOG_V16_3_to_V16_4.md` | Changelog đầy đủ V16.3 → V16.4 (kèm ghi chú build: assert `bad-version` ×2 đã sửa). |
+| `SMOKE_TEST_V16_4_2026-11-19.md` | Báo cáo kiểm thử V16.4 (build gates đầy đủ; bảng số lượng test TBD cho test agent; Chrome bị chặn). |
+| `tools/v32/` | Bộ kiểm thử V16.4: `PLAN_V32.md` (kế hoạch binding), `test32.js` + `verify-v32c.js` (test agent owns). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v20_sync.js` | `validateSave` thêm kiểm tra phiên bản (R-V32-VER): `meta.saveVersion` vắng mặt → chấp nhận, == 12 → chấp nhận, khác → từ chối với `bad-version:<n>`. Đây là hardening phòng ngừa, không phải sửa lỗi đã quan sát. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V16.4. |
+
+### Lớp V32 — tóm tắt nội dung (chi tiết trong README_V16_4_DATA_SAFETY.md)
+- **Giám sát dung lượng lưu trữ** trong panel Quản lý dữ liệu (bọc `__v20.dataPanelHTML` lần thứ hai, trên lớp bọc của V31) và tab Sao lưu của Trung tâm tài khoản (decorator MutationObserver, chèn sau `#v31acct`): tổng dùng / ngân sách 5 MB (ước tính), thanh tiến trình, ngưỡng 70%/90%, phiên bản bản lưu hiện tại, liệt kê từng khóa `hanvocab.*` với kích thước + loại. **Không thêm nút KO** — KO đã mở được panel qua nút Quản lý dữ liệu có sẵn.
+- **Dọn dẹp an toàn:** chỉ xóa snapshot hệ thống cũ hơn 5 bản mới nhất và mục lịch sử sao lưu cũ hơn 10 mục mới nhất; luôn hỏi xác nhận trước (hủy = không xóa gì); không bao giờ xóa `hanvocab.v1`, `hanvocab.v11-backup`, bản sao lưu đám mây đã xác minh, `hanvocab.v12.meta`, khóa `other`/`protected` hay khóa ngoài `hanvocab.*`. Kết quả được ghi vào lịch sử sao lưu V31 (`cleanup`).
+- **Pre-save guard:** bọc `save` toàn cục (đã xác minh trong source: hàm V6 ở HTML:947, V20 đã bọc một lần thành debounce — V32 bọc tiếp, gọi gốc trước rồi kiểm tra sau 900 ms, không chặn/không đổi/không xóa dữ liệu), bọc `__v20.flush` + `__v31.recordBackupEvent`, kiểm tra mỗi 30 giây và khi tab hiện lại; cảnh báo hiện ở 3 nơi (mục monitor, badge nổi đóng được, `console.warn`).
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, Firebase Auth/Sync, login khách, các lớp V6–V31 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0, v27 = 16.0.0, v31 = 16.3.0). Không thêm khóa localStorage mới, không migration, không tiền tệ mới. `build_v31.py` không chạy lại trên bản đã xong.
+
+### Ngoài phạm vi (không làm trong V16.4)
+- Claude #3 (daily-start + review boss), #4 (review-debt cap + welcome-back), #5 (bulk Korean import) — follow-up, chưa làm. V17-1/V17-2/V17-3, F-04/F-05/F-07/F-09/F-10, V17-4 typo, M1/M2, V9 word fixes, V14.1, PR #7 follow-ups, F-12 full-wipe (vẫn chờ Anh) — chưa sửa.

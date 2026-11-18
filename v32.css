@@ -1,0 +1,43 @@
+/* ===== V32 — Data Safety (V16.4) =====
+   Additive layer, loads LAST. Reuses the V24 design tokens (WCAG AA
+   verified in V15.1/V15.2) — no new palette. Single column, no fixed
+   heights, min 44px touch targets, no horizontal scroll at 360-430px.
+   Z-INDEX STACK (documented; no other layer touched):
+     .v20modal 1200 < V31 overlays 1400 < #v21account 9998 /
+     #v21auth 9999. V32 floating badge is 1100 — BELOW the V20 modal
+     (1200) and V31 (1400) so it never covers a modal. */
+.v32section{box-sizing:border-box;max-width:100%;margin:12px 0 0;padding:0;color:var(--ui-text-primary,#FFFFFF)}
+.v32section .v32h{color:var(--ui-title-gold,#FFD76A);font-size:17px;line-height:1.35;margin:0 0 10px}
+.v32card{box-sizing:border-box;max-width:100%;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#B99AF7);border-radius:var(--ui-radius,16px);padding:12px;margin:0 0 12px;color:var(--ui-text-primary,#FFFFFF)}
+.v32card>b{display:block;font-size:15px;line-height:1.4;margin-bottom:6px;color:var(--ui-title-gold,#FFD76A)}
+.v32line{font-size:14px;line-height:1.55;color:var(--ui-text-secondary,#E5DEF5);margin:6px 0;overflow-wrap:break-word}
+.v32line b{color:var(--ui-text-primary,#FFFFFF)}
+.v32warn{color:var(--ui-warning,#FFD166)}
+.v32crit{color:var(--ui-danger,#FF828F)}
+.v32ok{color:#7ED9A5}
+.v32note{font-size:13px;line-height:1.5}
+.v32acts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+.v32acts .btn{flex:1 1 auto;min-width:0}
+.v32btn{min-height:var(--ui-btn-min-height,44px);font-size:14px;line-height:1.35;white-space:normal}
+.v32btn:disabled{opacity:.55;cursor:not-allowed}
+.v32barwrap{box-sizing:border-box;max-width:100%;height:16px;background:#1B1430;border:1px solid var(--ui-border,#B99AF7);border-radius:8px;overflow:hidden;margin:8px 0 4px}
+.v32bar{height:100%;width:0%}
+.v32barfill-ok{background:#4CAF7D}
+.v32barfill-warn{background:#FFB020}
+.v32barfill-critical{background:#FF5A6E}
+.v32barfill{height:100%}
+.v32keys{list-style:none;margin:8px 0 0;padding:0}
+.v32keyrow{box-sizing:border-box;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;justify-content:space-between;border-top:1px solid var(--ui-border,#B99AF7);padding:8px 0;max-width:100%}
+.v32keyrow:first-child{border-top:0}
+.v32keyname{flex:1 1 180px;min-width:0;font-size:14px;line-height:1.5;color:var(--ui-text-primary,#FFFFFF);overflow-wrap:break-word}
+.v32keykind{font-size:13px;line-height:1.5;color:var(--ui-text-secondary,#E5DEF5)}
+.v32keybytes{flex:0 0 auto;font-size:14px;line-height:1.5;color:var(--ui-text-primary,#FFFFFF);white-space:nowrap}
+.v32badge{box-sizing:border-box;position:fixed;right:12px;bottom:76px;z-index:1100;max-width:calc(100vw - 24px);display:flex;align-items:center;gap:10px;background:#3A2A12;border:1px solid var(--ui-warning,#FFD166);border-radius:var(--ui-radius,16px);padding:10px 12px;color:var(--ui-text-primary,#FFFFFF);box-shadow:0 4px 16px rgba(0,0,0,.45)}
+.v32badge.v32badge-critical{background:#4A1620;border-color:var(--ui-danger,#FF828F)}
+.v32badge-text{flex:1 1 auto;min-width:0;font-size:14px;line-height:1.45;overflow-wrap:break-word}
+.v32badge-close{flex:0 0 auto;min-width:44px;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--ui-border,#B99AF7);background:#251A38;color:var(--ui-text-primary,#FFFFFF);font-size:14px;line-height:1;cursor:pointer}
+@media (max-width:430px){
+  .v32card{padding:10px}
+  .v32keyrow{flex-direction:column;gap:2px}
+  .v32keybytes{white-space:normal}
+}
