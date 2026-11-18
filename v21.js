@@ -209,6 +209,7 @@ function activateAccount(uid, transfer){
     if(home){ if(!writeVerified(SAVE_KEY, home)) return {ok:false, reason:'slot-write-failed'}; }
     else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
   }
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'account', uid:uid, at:Date.now()});
   reload();
   return {ok:true};
@@ -219,6 +220,7 @@ function activateGuest(){
   var gh=readHome(null);
   if(gh){ if(!writeVerified(SAVE_KEY, gh)) return {ok:false, reason:'slot-write-failed'}; }
   else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'guest', at:Date.now()});
   reload();
   return {ok:true};
@@ -691,7 +693,7 @@ function accountContentHTML(tab){
         +'<div class="v21btns"><button type="button" class="v21btn primary" data-resolve="local">Dùng bản trên thiết bị</button>'
         +'<button type="button" class="v21btn primary" data-resolve="cloud">Dùng bản trên đám mây</button>'
         +'<button type="button" class="v21btn amber" data-resolve="merge">Hợp nhất an toàn</button></div>'
-        +'<p class="v21muted">Cả hai bản đã được sao lưu trước khi áp dụng lựa chọn. Hợp nhất lấy XP/kim cương cao nhất, không cộng dồn.</p></div>';
+        +'<p class="v21muted">Cả hai bản đã được sao lưu trước khi áp dụng lựa chọn. Hợp nhất: từ tiếng Anh giữ mức cao nhất từng từ; boss, thú cưng, nhiệm vụ và lịch sử Học thông minh hợp nhất từ cả hai bên; XP/kim cương lấy mức cao nhất, không cộng dồn.</p></div>';
     } else if(!authConfigured()){
       h+='<p class="v21muted">Chưa cấu hình Firebase — xem FIREBASE_SETUP.md trong file ZIP để bật đồng bộ.</p>';
     }
@@ -812,7 +814,7 @@ function wireAccountContent(){
   }
   on('v21export','click', function(){
     var msg=$('#v21bakmsg');
-    try{ if(window.__v20&&__v20.exportFile) __v20.exportFile(); if(msg){ msg.textContent='Đã tải file sao lưu.'; msg.className='v21msg show'; } }
+    try{ if(window.__v20&&__v20.exportFile) __v20.exportFile(); if(msg){ msg.textContent='Đã bắt đầu tải file sao lưu — kiểm tra thư mục tải về.'; msg.className='v21msg show'; } }
     catch(e){ if(msg){ msg.textContent='Không xuất được file.'; msg.className='v21msg err show'; } }
   });
   var imp=$('#v21importfile');
@@ -821,10 +823,8 @@ function wireAccountContent(){
     if(!f) return;
     try{
       if(window.__v20&&__v20.importFile){
-        __v20.importFile(f).then(function(r){
-          if(msg){ msg.textContent=r&&r.ok?'Đã khôi phục. Trang sẽ tải lại để áp dụng.':'Không khôi phục được: '+((r&&r.error)||'file không hợp lệ'); msg.className='v21msg'+(r&&r.ok?'':' err')+' show'; }
-          if(r&&r.ok) setTimeout(reload, 800);
-        });
+        __v20.importFile(imp);
+        if(msg){ msg.textContent='Đang khôi phục — trang sẽ tải lại nếu file hợp lệ.'; msg.className='v21msg show'; }
       }
     }catch(e){ if(msg){ msg.textContent='Không khôi phục được file.'; msg.className='v21msg err show'; } }
   });

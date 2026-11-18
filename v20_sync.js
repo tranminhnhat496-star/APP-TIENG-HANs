@@ -70,9 +70,13 @@ function hasProgress(S){
   var en=[v7.en18, v7.en19];
   for(var i=0;i<en.length;i++){
     var b=en[i]&&en[i].bosses;
-    if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) return true; }
+    if(b) for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) return true; }
   }
   if(v7.en15&&v7.en15.bosses){ var b15=v7.en15.bosses; for(var k in b15){ if(b15[k]) return true; } }
+  if(v7.en27&&v7.en27.sessions&&v7.en27.sessions.length) return true;
+  if(v7.en27&&v7.en27.days){ for(var d27 in v7.en27.days){ if(v7.en27.days[d27]) return true; } }
+  if(v7.en23&&v7.en23.pets){ for(var p23 in v7.en23.pets){ if(v7.en23.pets[p23]) return true; } }
+  if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -97,7 +101,7 @@ function validateSave(obj){
   /* prototype-pollution guard: refuse suspicious keys anywhere shallow */
   var bad=['__proto__','constructor','prototype'];
   function scan(o,depth){
-    if(depth>4||!o||typeof o!=='object') return;
+    if(depth>6||!o||typeof o!=='object') return;
     for(var k in o){ if(bad.indexOf(k)>=0){ errs.push('bad-key:'+k); return; } scan(o[k],depth+1); }
   }
   scan(obj,0);
@@ -125,6 +129,16 @@ function mergeBossMaps(a,b){
     for(var id in map){
       var src=map[id]; if(!src) continue;
       var dst=out[id]=out[id]||{};
+      /* V31 (F-01): V18 boss records are FLAT {win,wins,at,item} (v18.js:496),
+         not nested {en,ko} like V19 — merge them directly, or a two-device
+         merge silently drops every English Challenge Arena win. */
+      if(src.win||src.wins){
+        dst.win=(dst.win||src.win)?1:0;
+        dst.wins=Math.max(dst.wins||0,src.wins||0);
+        if(src.stars!==undefined) dst.stars=Math.max(dst.stars||0,src.stars);
+        if(src.at!==undefined) dst.at=Math.max(dst.at||0,src.at);
+        if(src.item!==undefined&&dst.item===undefined) dst.item=src.item;
+      }
       ['en','ko'].forEach(function(l){
         var r=src[l]; if(!r) return;
         var d=dst[l]=dst[l]||{win:0,wins:0,stars:0};
@@ -139,6 +153,16 @@ function mergeBossMaps(a,b){
   return out;
 }
 function mergeSaves(localS, cloudS, localTime, cloudTime){
+  /* V31 (F-01): helpers for the per-subkey merge branches below.
+     maxMap: per-key MAX (counters, boxes, timestamps). fillMissing:
+     cloud keys fill only keys absent locally (local-first on
+     conflict). unionTrue: a flag key is set if EITHER side has it
+     (local-first on conflict — values are 1/true either way).
+     unionArr: set union, order-preserving. */
+  function maxMap(a,b){ var o={}; [a,b].forEach(function(src){ if(src) for(var k in src) o[k]=Math.max(o[k]||0, src[k]||0); }); return o; }
+  function fillMissing(l,c){ var o={}; if(c) for(var k in c) o[k]=c[k]; if(l) for(var k2 in l) o[k2]=l[k2]; return o; }
+  function unionTrue(a,b){ var o={}; if(b) for(var k in b) o[k]=b[k]; if(a) for(var k2 in a) o[k2]=a[k2]; return o; }
+  function unionArr(a,b){ return Array.from(new Set([].concat(a||[],b||[]))); }
   /* Returns a NEW save object (neither input is mutated). Currencies take
      the MAX (never summed). Farm state, settings and deck choice come from
      the newer save. Boss/library progress unions. */
@@ -178,16 +202,12 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           var m15={};
           for(var k15 in l15) m15[k15]=l15[k15];
           for(var k15b in c15){
-            if(k15b==='old'&&l15.old&&c15.old){
-              var o={};
-              ['box','right','wrong','xpAt'].forEach(function(f){
-                o[f]={};
-                [l15.old[f],c15.old[f]].forEach(function(src){ if(src) for(var wid in src) o[f][wid]=Math.max(o[f][wid]||0, src[wid]||0); });
-              });
-              o.review=Array.from(new Set([].concat(l15.old.review||[],c15.old.review||[])));
-              o.streak=Math.max(l15.old.streak||0, c15.old.streak||0);
-              m15.old=o;
-            } else if(m15[k15b]===undefined) m15[k15b]=c15[k15b];
+            if(k15b==='due'){ var d15={}; [l15.due,c15.due].forEach(function(src){ if(src) for(var wid in src) d15[wid]=(d15[wid]===undefined)?src[wid]:Math.min(d15[wid], src[wid]); }); m15.due=d15; }
+            else if(k15b==='intv'){ m15.intv=maxMap(l15.intv, c15.intv); }
+            else if(k15b==='hist'){ var h15={}; [l15.hist,c15.hist].forEach(function(src){ if(!src) return; for(var dn in src){ var a=h15[dn]=h15[dn]||{c:0,t:0,xp:0}; var b=src[dn]||{}; a.c=Math.max(a.c,b.c||0); a.t=Math.max(a.t,b.t||0); a.xp=Math.max(a.xp,b.xp||0); } }); m15.hist=h15; }
+            else if(k15b==='daily'){ m15.daily=(newer.v7&&newer.v7.en15&&newer.v7.en15.daily!==undefined)?newer.v7.en15.daily:(older.v7&&older.v7.en15?older.v7.en15.daily:undefined); }
+            else if(k15b==='bosses'){ m15.bosses=unionTrue(l15.bosses, c15.bosses); }
+            else if(m15[k15b]===undefined) m15[k15b]=c15[k15b];
           }
           v7.en15=m15;
         }
@@ -197,6 +217,7 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           for(var k16 in l16) m16[k16]=l16[k16];
           for(var k16b in c16){
             if(k16b==='decks') m16.decks=unionById(l16.decks, c16.decks, newer.v7.en16?newer.v7.en16.decks:null);
+            else if(k16b==='map'||k16b==='overrides') m16[k16b]=fillMissing(l16[k16b], c16[k16b]);
             else if(m16[k16b]===undefined) m16[k16b]=c16[k16b];
           }
           v7.en16=m16;
@@ -206,12 +227,80 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           var m17={};
           for(var k17 in l17) m17[k17]=l17[k17];
           for(var k17b in c17){
-            if(k17b==='fav'||k17b==='mastered') m17[k17b]=Array.from(new Set([].concat(l17[k17b]||[],c17[k17b]||[])));
+            if(k17b==='fav') m17[k17b]=Array.from(new Set([].concat(l17[k17b]||[],c17[k17b]||[])));
+            else if(k17b==='claimed') m17.claimed=fillMissing(l17.claimed, c17.claimed);
             else if(m17[k17b]===undefined) m17[k17b]=c17[k17b];
           }
           v7.en17=m17;
         }
         else if(kk==='meta') v7.meta=newer.v7.meta||older.v7.meta;
+        else if(kk==='en'){
+          var lEn=(localS.v7&&localS.v7.en)||{}, cEn=(cloudS.v7&&cloudS.v7.en)||{};
+          var mEn={};
+          for(var kEn in lEn) mEn[kEn]=lEn[kEn];
+          for(var kEn2 in cEn){
+            if(kEn2==='box'||kEn2==='right'||kEn2==='wrong'||kEn2==='xpAt') mEn[kEn2]=maxMap(lEn[kEn2], cEn[kEn2]);
+            else if(kEn2==='review') mEn.review=unionArr(lEn.review, cEn.review);
+            else if(kEn2==='streak') mEn.streak=Math.max(lEn.streak||0, cEn.streak||0);
+            else if(kEn2==='done') mEn.done=unionTrue(lEn.done, cEn.done);
+            else if(kEn2==='custom') mEn.custom=unionById(lEn.custom, cEn.custom, (newer.v7&&newer.v7.en&&newer.v7.en.custom)||null);
+            else if(kEn2==='stats'){
+              var stEn={};
+              ['ev','ve'].forEach(function(d){ var a=(lEn.stats&&lEn.stats[d])||{}, b=(cEn.stats&&cEn.stats[d])||{}; stEn[d]={r:Math.max(a.r||0,b.r||0), w:Math.max(a.w||0,b.w||0)}; });
+              mEn.stats=stEn;
+            }
+            else if(kEn2==='dir'||kEn2==='ex'||kEn2==='topic'||kEn2==='lastDay') mEn[kEn2]=(newer.v7&&newer.v7.en&&newer.v7.en[kEn2]!==undefined)?newer.v7.en[kEn2]:((older.v7&&older.v7.en&&older.v7.en[kEn2]!==undefined)?older.v7.en[kEn2]:undefined);
+            else if(mEn[kEn2]===undefined) mEn[kEn2]=cEn[kEn2];
+          }
+          v7.en=mEn;
+        }
+        else if(kk==='en22'){
+          var l22=(localS.v7&&localS.v7.en22)||{}, c22=(cloudS.v7&&cloudS.v7.en22)||{};
+          var m22={}; for(var k22 in l22) m22[k22]=l22[k22];
+          var q22={};
+          [l22.quest,c22.quest].forEach(function(src){ if(!src) return; for(var u in src){ var s=src[u]||{}; var d=q22[u]=q22[u]||{}; d.stars=Math.max(d.stars||0,s.stars||0); d.best=Math.max(d.best||0,s.best||0); d.attempts=Math.max(d.attempts||0,s.attempts||0); d.lastAt=Math.max(d.lastAt||0,s.lastAt||0); if(s.claimed1)d.claimed1=1; if(s.claimed3)d.claimed3=1; } });
+          m22.quest=q22;
+          v7.en22=m22;
+        }
+        else if(kk==='en23'){
+          var l23=(localS.v7&&localS.v7.en23)||{}, c23=(cloudS.v7&&cloudS.v7.en23)||{};
+          var m23={};
+          var o23p=(older.v7&&older.v7.en23&&older.v7.en23.pets)||{}, n23p=(newer.v7&&newer.v7.en23&&newer.v7.en23.pets)||{};
+          var pets23={}; for(var p23 in o23p) pets23[p23]=o23p[p23]; for(var p23b in n23p) pets23[p23b]=n23p[p23b];
+          m23.pets=pets23;
+          m23.eggs=maxMap(l23.eggs, c23.eggs);
+          m23.hatch=(newer.v7&&newer.v7.en23&&newer.v7.en23.hatch!==undefined)?newer.v7.en23.hatch:(older.v7&&older.v7.en23?older.v7.en23.hatch:null);
+          m23.mats=maxMap(l23.mats, c23.mats);
+          m23.team=(newer.v7&&newer.v7.en23&&newer.v7.en23.team!==undefined)?newer.v7.en23.team:(older.v7&&older.v7.en23?older.v7.en23.team:[null,null,null]);
+          m23.claimed=unionTrue(l23.claimed, c23.claimed);
+          m23.affClaimed=unionTrue(l23.affClaimed, c23.affClaimed);
+          m23.created=Math.min(l23.created||Infinity, c23.created||Infinity);
+          if(!isFinite(m23.created)) m23.created=(l23.created||c23.created||Date.now());
+          v7.en23=m23;
+        }
+        else if(kk==='en27'){
+          var l27=(localS.v7&&localS.v7.en27)||{}, c27=(cloudS.v7&&cloudS.v7.en27)||{};
+          var m27={v:Math.max(l27.v||1, c27.v||1)};
+          m27.created=Math.min(l27.created||Infinity, c27.created||Infinity);
+          if(!isFinite(m27.created)) m27.created=(l27.created||c27.created||Date.now());
+          m27.en={last:maxMap(l27.en&&l27.en.last, c27.en&&c27.en.last), cw:maxMap(l27.en&&l27.en.cw, c27.en&&c27.en.cw), cr:maxMap(l27.en&&l27.en.cr, c27.en&&c27.en.cr)};
+          m27.ko={right:maxMap(l27.ko&&l27.ko.right, c27.ko&&c27.ko.right), wrong:maxMap(l27.ko&&l27.ko.wrong, c27.ko&&c27.ko.wrong), cw:maxMap(l27.ko&&l27.ko.cw, c27.ko&&c27.ko.cw), cr:maxMap(l27.ko&&l27.ko.cr, c27.ko&&c27.ko.cr), last:maxMap(l27.ko&&l27.ko.last, c27.ko&&c27.ko.last)};
+          var ses27={};
+          (l27.sessions||[]).concat(c27.sessions||[]).forEach(function(s){ if(s&&s.t!=null) ses27[s.t]=s; });
+          m27.sessions=Object.keys(ses27).map(function(k){ return ses27[k]; }).sort(function(a,b){ return b.t-a.t; }).slice(0,30);
+          var dys27={};
+          [l27.days,c27.days].forEach(function(src){ if(!src) return; for(var dn in src){ var a=dys27[dn]=dys27[dn]||{c:0,t:0,xp:0,mins:0}; var b=src[dn]||{}; a.c=Math.max(a.c,b.c||0); a.t=Math.max(a.t,b.t||0); a.xp=Math.max(a.xp,b.xp||0); a.mins=Math.max(a.mins,b.mins||0); } });
+          var dk27=Object.keys(dys27).sort().slice(-90), dys27b={};
+          dk27.forEach(function(k){ dys27b[k]=dys27[k]; });
+          m27.days=dys27b;
+          m27.streak={en:{d:'',n:0}, ko:{d:'',n:0}};
+          ['en','ko'].forEach(function(lg){ var a=(l27.streak&&l27.streak[lg])||{}, b=(c27.streak&&c27.streak[lg])||{}, nw=(newer.v7&&newer.v7.en27&&newer.v7.en27.streak&&newer.v7.en27.streak[lg])||{}; m27.streak[lg]={d:nw.d||a.d||b.d||'', n:Math.max(a.n||0,b.n||0)}; });
+          m27.claimed=unionTrue(l27.claimed, c27.claimed);
+          var n27p=(newer.v7&&newer.v7.en27)||{}, o27p=(older.v7&&older.v7.en27)||{};
+          m27.plan=n27p.plan!==undefined?n27p.plan:(o27p.plan||{en:{},ko:{}});
+          m27.uiLang=n27p.uiLang||o27p.uiLang||'en';
+          v7.en27=m27;
+        }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }
       out.v7=v7;
@@ -462,7 +551,7 @@ engine.syncNow=function(opts){
       });
     }
     /* both sides changed since the last sync: NEVER auto-pick. */
-    engine.conflict={local:loc.obj, cloud:cloud.data, localTime:m.lastSavedAt||0, cloudTime:cloud.updatedAt||0, localHash:loc.hash, cloudHash:cloudHash};
+    engine.conflict={local:loc.obj, cloud:cloud.data, localTime:(m.lastSavedAt||(loc.obj.v7&&loc.obj.v7.meta&&loc.obj.v7.meta.migratedAt)||(loc.obj.v7&&loc.obj.v7.en15&&loc.obj.v7.en15.created)||0), cloudTime:cloud.updatedAt||0, localHash:loc.hash, cloudHash:cloudHash};
     snapshot('hanvocab.v12.conflict-local-'+Date.now(), loc.raw);
     snapshot('hanvocab.v12.conflict-cloud-'+Date.now(), JSON.stringify(cloud.data));
     engine.syncing=false; setCloud('conflict'); return {ok:false, reason:'conflict'};
