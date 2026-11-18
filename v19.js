@@ -328,6 +328,7 @@ function mark19(ok,w){
   e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
   if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
   if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
+  try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}
   save19();
 }
 function markKO19(ok){

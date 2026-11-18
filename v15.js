@@ -387,6 +387,7 @@ function mark15(ok,w,mode){
      and speeds up the active hatch by 30s. Guarded — no team/hatch = no-op. */
   if(ok){try{if(window.__v23)__v23.onLearnCorrect()}catch(e){}}
   sfx15(ok?'ok':'bad');
+  try{if(window.__v27)__v27.recordAnswer('en',id,ok,mode)}catch(e){}
   save15();
   return xp;
 }
