@@ -174,6 +174,30 @@ function buildWords(){
       });
     });
   }catch(e){}
+  /* V33: CHRONO KINGDOM — gắn 240 từ Chrono (data qua
+     window.__V33_WORDS, ids 'v33_<slug>') vào WORDS chung, theo mẫu
+     V22 (Basic Tactics). Từ đã có chỉ được gắn thêm thư viện
+     'chrono'; từ chỉ có trong Chrono nhận id ổn định 'v33_<slug>'
+     và cấp độ 'B2' (boss Chrono là diff B2 nên wordPool gồm chúng).
+     KHÔNG tạo S.cards — trường ko chỉ là dữ liệu hiển thị/học. */
+  try{
+    var ch33=(window.__V33_WORDS||[]);
+    var K2W3={};WORDS.forEach(function(ww){if(!ww.custom)K2W3[ww.en.toLowerCase()]=ww});
+    ch33.forEach(function(a){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W3[key];
+      if(ww){
+        ww.lib=ww.lib||[];
+        if(ww.lib.indexOf('chrono')<0)ww.lib.push('chrono');
+        ww.chronoSet=ww.chronoSet||a.set;
+        if(!ww.ko&&a.ko)ww.ko=a.ko;
+      }else{
+        var nw={id:a.id,t:'chrono',en:a.en,vi:a.vi,ipa:a.ipa||'',pos:a.pos||'',ex:a.ex||'',exvi:a.exvi||'',lv:'B2',custom:false,
+          lib:['chrono'],chronoSet:a.set,ko:a.ko||''};
+        WORDS.push(nw);BYID[nw.id]=nw;K2W3[key]=nw;LV[key]='B2';
+      }
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
