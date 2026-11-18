@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V16 — Smart Learning — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V16.3 — Backup &amp; Restore Fix — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -5522,8 +5522,9 @@ function backupHTML(){
   +'<div class="acts"><button class="btn bad" onclick="__v15.resetEN()">Đặt lại tiến trình tiếng Anh</button></div>';
 }
 function backupExport(){
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   var raw='';try{raw=localStorage.getItem('hanvocab.v1')||'{}'}catch(e){raw='{}'}
-  dl('korean-vocab-farm-backup-v7.json',raw);
+  dl('korean-vocab-farm-backup-v16.3.json',raw);
 }
 function backupImport(input){
   var f=input&&input.files&&input.files[0];if(!f)return;
@@ -5532,7 +5533,9 @@ function backupImport(input){
     try{
       var j=JSON.parse(rd.result);
       if(!j||!Array.isArray(j.cards))throw new Error('bad save');
+      try{ var _s20=window.__v20sync; if(_s20&&_s20.validateSave){ var _v=_s20.validateSave(j); if(!_v.ok) throw new Error('invalid save: '+(_v.errors||[]).slice(0,3).join(', ')); if(_s20.snapshot){ var _cur=''; try{ _cur=localStorage.getItem('hanvocab.v1')||''; }catch(e){} _s20.snapshot('hanvocab.v12.preimport-'+Date.now(), _cur); } } }catch(_ve){ if(_ve&&String(_ve.message||'').indexOf('invalid save')===0) throw _ve; }
       if(!confirm('Khôi phục bản lưu này? Dữ liệu hiện tại sẽ bị thay thế.'))return;
+      try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
       localStorage.setItem('hanvocab.v1',JSON.stringify(j));
       location.reload();
     }catch(e){alert('File sao lưu không hợp lệ: cần file JSON của game (có trường cards).')}
@@ -5541,7 +5544,7 @@ function backupImport(input){
 }
 function resetEN(){
   if(!confirm('Xóa toàn bộ tiến trình tiếng Anh (từ đã học, farm, boss)? Từ tiếng Hàn và XP giữ nguyên.'))return;
-  try{delete S.v7.en;delete S.v7.en15;save15();buildWords();pop15('Đã đặt lại tiến trình tiếng Anh.');renderTab()}catch(e){}
+  try{delete S.v7.en;delete S.v7.en15;try{var _e27=S.v7&&S.v7.en27;if(_e27&&_e27.en){_e27.en.last={};_e27.en.cw={};_e27.en.cr={};}}catch(_e27e){}save15();buildWords();pop15('Đã đặt lại tiến trình tiếng Anh.');renderTab()}catch(e){}
 }
 
 /* ---------- INIT ---------- */
@@ -9188,9 +9191,13 @@ function hasProgress(S){
   var en=[v7.en18, v7.en19];
   for(var i=0;i<en.length;i++){
     var b=en[i]&&en[i].bosses;
-    if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) return true; }
+    if(b) for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) return true; }
   }
   if(v7.en15&&v7.en15.bosses){ var b15=v7.en15.bosses; for(var k in b15){ if(b15[k]) return true; } }
+  if(v7.en27&&v7.en27.sessions&&v7.en27.sessions.length) return true;
+  if(v7.en27&&v7.en27.days){ for(var d27 in v7.en27.days){ if(v7.en27.days[d27]) return true; } }
+  if(v7.en23&&v7.en23.pets){ for(var p23 in v7.en23.pets){ if(v7.en23.pets[p23]) return true; } }
+  if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -9215,7 +9222,7 @@ function validateSave(obj){
   /* prototype-pollution guard: refuse suspicious keys anywhere shallow */
   var bad=['__proto__','constructor','prototype'];
   function scan(o,depth){
-    if(depth>4||!o||typeof o!=='object') return;
+    if(depth>6||!o||typeof o!=='object') return;
     for(var k in o){ if(bad.indexOf(k)>=0){ errs.push('bad-key:'+k); return; } scan(o[k],depth+1); }
   }
   scan(obj,0);
@@ -9243,6 +9250,16 @@ function mergeBossMaps(a,b){
     for(var id in map){
       var src=map[id]; if(!src) continue;
       var dst=out[id]=out[id]||{};
+      /* V31 (F-01): V18 boss records are FLAT {win,wins,at,item} (v18.js:496),
+         not nested {en,ko} like V19 — merge them directly, or a two-device
+         merge silently drops every English Challenge Arena win. */
+      if(src.win||src.wins){
+        dst.win=(dst.win||src.win)?1:0;
+        dst.wins=Math.max(dst.wins||0,src.wins||0);
+        if(src.stars!==undefined) dst.stars=Math.max(dst.stars||0,src.stars);
+        if(src.at!==undefined) dst.at=Math.max(dst.at||0,src.at);
+        if(src.item!==undefined&&dst.item===undefined) dst.item=src.item;
+      }
       ['en','ko'].forEach(function(l){
         var r=src[l]; if(!r) return;
         var d=dst[l]=dst[l]||{win:0,wins:0,stars:0};
@@ -9257,6 +9274,16 @@ function mergeBossMaps(a,b){
   return out;
 }
 function mergeSaves(localS, cloudS, localTime, cloudTime){
+  /* V31 (F-01): helpers for the per-subkey merge branches below.
+     maxMap: per-key MAX (counters, boxes, timestamps). fillMissing:
+     cloud keys fill only keys absent locally (local-first on
+     conflict). unionTrue: a flag key is set if EITHER side has it
+     (local-first on conflict — values are 1/true either way).
+     unionArr: set union, order-preserving. */
+  function maxMap(a,b){ var o={}; [a,b].forEach(function(src){ if(src) for(var k in src) o[k]=Math.max(o[k]||0, src[k]||0); }); return o; }
+  function fillMissing(l,c){ var o={}; if(c) for(var k in c) o[k]=c[k]; if(l) for(var k2 in l) o[k2]=l[k2]; return o; }
+  function unionTrue(a,b){ var o={}; if(b) for(var k in b) o[k]=b[k]; if(a) for(var k2 in a) o[k2]=a[k2]; return o; }
+  function unionArr(a,b){ return Array.from(new Set([].concat(a||[],b||[]))); }
   /* Returns a NEW save object (neither input is mutated). Currencies take
      the MAX (never summed). Farm state, settings and deck choice come from
      the newer save. Boss/library progress unions. */
@@ -9296,16 +9323,12 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           var m15={};
           for(var k15 in l15) m15[k15]=l15[k15];
           for(var k15b in c15){
-            if(k15b==='old'&&l15.old&&c15.old){
-              var o={};
-              ['box','right','wrong','xpAt'].forEach(function(f){
-                o[f]={};
-                [l15.old[f],c15.old[f]].forEach(function(src){ if(src) for(var wid in src) o[f][wid]=Math.max(o[f][wid]||0, src[wid]||0); });
-              });
-              o.review=Array.from(new Set([].concat(l15.old.review||[],c15.old.review||[])));
-              o.streak=Math.max(l15.old.streak||0, c15.old.streak||0);
-              m15.old=o;
-            } else if(m15[k15b]===undefined) m15[k15b]=c15[k15b];
+            if(k15b==='due'){ var d15={}; [l15.due,c15.due].forEach(function(src){ if(src) for(var wid in src) d15[wid]=(d15[wid]===undefined)?src[wid]:Math.min(d15[wid], src[wid]); }); m15.due=d15; }
+            else if(k15b==='intv'){ m15.intv=maxMap(l15.intv, c15.intv); }
+            else if(k15b==='hist'){ var h15={}; [l15.hist,c15.hist].forEach(function(src){ if(!src) return; for(var dn in src){ var a=h15[dn]=h15[dn]||{c:0,t:0,xp:0}; var b=src[dn]||{}; a.c=Math.max(a.c,b.c||0); a.t=Math.max(a.t,b.t||0); a.xp=Math.max(a.xp,b.xp||0); } }); m15.hist=h15; }
+            else if(k15b==='daily'){ m15.daily=(newer.v7&&newer.v7.en15&&newer.v7.en15.daily!==undefined)?newer.v7.en15.daily:(older.v7&&older.v7.en15?older.v7.en15.daily:undefined); }
+            else if(k15b==='bosses'){ m15.bosses=unionTrue(l15.bosses, c15.bosses); }
+            else if(m15[k15b]===undefined) m15[k15b]=c15[k15b];
           }
           v7.en15=m15;
         }
@@ -9315,6 +9338,7 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           for(var k16 in l16) m16[k16]=l16[k16];
           for(var k16b in c16){
             if(k16b==='decks') m16.decks=unionById(l16.decks, c16.decks, newer.v7.en16?newer.v7.en16.decks:null);
+            else if(k16b==='map'||k16b==='overrides') m16[k16b]=fillMissing(l16[k16b], c16[k16b]);
             else if(m16[k16b]===undefined) m16[k16b]=c16[k16b];
           }
           v7.en16=m16;
@@ -9324,12 +9348,80 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           var m17={};
           for(var k17 in l17) m17[k17]=l17[k17];
           for(var k17b in c17){
-            if(k17b==='fav'||k17b==='mastered') m17[k17b]=Array.from(new Set([].concat(l17[k17b]||[],c17[k17b]||[])));
+            if(k17b==='fav') m17[k17b]=Array.from(new Set([].concat(l17[k17b]||[],c17[k17b]||[])));
+            else if(k17b==='claimed') m17.claimed=fillMissing(l17.claimed, c17.claimed);
             else if(m17[k17b]===undefined) m17[k17b]=c17[k17b];
           }
           v7.en17=m17;
         }
         else if(kk==='meta') v7.meta=newer.v7.meta||older.v7.meta;
+        else if(kk==='en'){
+          var lEn=(localS.v7&&localS.v7.en)||{}, cEn=(cloudS.v7&&cloudS.v7.en)||{};
+          var mEn={};
+          for(var kEn in lEn) mEn[kEn]=lEn[kEn];
+          for(var kEn2 in cEn){
+            if(kEn2==='box'||kEn2==='right'||kEn2==='wrong'||kEn2==='xpAt') mEn[kEn2]=maxMap(lEn[kEn2], cEn[kEn2]);
+            else if(kEn2==='review') mEn.review=unionArr(lEn.review, cEn.review);
+            else if(kEn2==='streak') mEn.streak=Math.max(lEn.streak||0, cEn.streak||0);
+            else if(kEn2==='done') mEn.done=unionTrue(lEn.done, cEn.done);
+            else if(kEn2==='custom') mEn.custom=unionById(lEn.custom, cEn.custom, (newer.v7&&newer.v7.en&&newer.v7.en.custom)||null);
+            else if(kEn2==='stats'){
+              var stEn={};
+              ['ev','ve'].forEach(function(d){ var a=(lEn.stats&&lEn.stats[d])||{}, b=(cEn.stats&&cEn.stats[d])||{}; stEn[d]={r:Math.max(a.r||0,b.r||0), w:Math.max(a.w||0,b.w||0)}; });
+              mEn.stats=stEn;
+            }
+            else if(kEn2==='dir'||kEn2==='ex'||kEn2==='topic'||kEn2==='lastDay') mEn[kEn2]=(newer.v7&&newer.v7.en&&newer.v7.en[kEn2]!==undefined)?newer.v7.en[kEn2]:((older.v7&&older.v7.en&&older.v7.en[kEn2]!==undefined)?older.v7.en[kEn2]:undefined);
+            else if(mEn[kEn2]===undefined) mEn[kEn2]=cEn[kEn2];
+          }
+          v7.en=mEn;
+        }
+        else if(kk==='en22'){
+          var l22=(localS.v7&&localS.v7.en22)||{}, c22=(cloudS.v7&&cloudS.v7.en22)||{};
+          var m22={}; for(var k22 in l22) m22[k22]=l22[k22];
+          var q22={};
+          [l22.quest,c22.quest].forEach(function(src){ if(!src) return; for(var u in src){ var s=src[u]||{}; var d=q22[u]=q22[u]||{}; d.stars=Math.max(d.stars||0,s.stars||0); d.best=Math.max(d.best||0,s.best||0); d.attempts=Math.max(d.attempts||0,s.attempts||0); d.lastAt=Math.max(d.lastAt||0,s.lastAt||0); if(s.claimed1)d.claimed1=1; if(s.claimed3)d.claimed3=1; } });
+          m22.quest=q22;
+          v7.en22=m22;
+        }
+        else if(kk==='en23'){
+          var l23=(localS.v7&&localS.v7.en23)||{}, c23=(cloudS.v7&&cloudS.v7.en23)||{};
+          var m23={};
+          var o23p=(older.v7&&older.v7.en23&&older.v7.en23.pets)||{}, n23p=(newer.v7&&newer.v7.en23&&newer.v7.en23.pets)||{};
+          var pets23={}; for(var p23 in o23p) pets23[p23]=o23p[p23]; for(var p23b in n23p) pets23[p23b]=n23p[p23b];
+          m23.pets=pets23;
+          m23.eggs=maxMap(l23.eggs, c23.eggs);
+          m23.hatch=(newer.v7&&newer.v7.en23&&newer.v7.en23.hatch!==undefined)?newer.v7.en23.hatch:(older.v7&&older.v7.en23?older.v7.en23.hatch:null);
+          m23.mats=maxMap(l23.mats, c23.mats);
+          m23.team=(newer.v7&&newer.v7.en23&&newer.v7.en23.team!==undefined)?newer.v7.en23.team:(older.v7&&older.v7.en23?older.v7.en23.team:[null,null,null]);
+          m23.claimed=unionTrue(l23.claimed, c23.claimed);
+          m23.affClaimed=unionTrue(l23.affClaimed, c23.affClaimed);
+          m23.created=Math.min(l23.created||Infinity, c23.created||Infinity);
+          if(!isFinite(m23.created)) m23.created=(l23.created||c23.created||Date.now());
+          v7.en23=m23;
+        }
+        else if(kk==='en27'){
+          var l27=(localS.v7&&localS.v7.en27)||{}, c27=(cloudS.v7&&cloudS.v7.en27)||{};
+          var m27={v:Math.max(l27.v||1, c27.v||1)};
+          m27.created=Math.min(l27.created||Infinity, c27.created||Infinity);
+          if(!isFinite(m27.created)) m27.created=(l27.created||c27.created||Date.now());
+          m27.en={last:maxMap(l27.en&&l27.en.last, c27.en&&c27.en.last), cw:maxMap(l27.en&&l27.en.cw, c27.en&&c27.en.cw), cr:maxMap(l27.en&&l27.en.cr, c27.en&&c27.en.cr)};
+          m27.ko={right:maxMap(l27.ko&&l27.ko.right, c27.ko&&c27.ko.right), wrong:maxMap(l27.ko&&l27.ko.wrong, c27.ko&&c27.ko.wrong), cw:maxMap(l27.ko&&l27.ko.cw, c27.ko&&c27.ko.cw), cr:maxMap(l27.ko&&l27.ko.cr, c27.ko&&c27.ko.cr), last:maxMap(l27.ko&&l27.ko.last, c27.ko&&c27.ko.last)};
+          var ses27={};
+          (l27.sessions||[]).concat(c27.sessions||[]).forEach(function(s){ if(s&&s.t!=null) ses27[s.t]=s; });
+          m27.sessions=Object.keys(ses27).map(function(k){ return ses27[k]; }).sort(function(a,b){ return b.t-a.t; }).slice(0,30);
+          var dys27={};
+          [l27.days,c27.days].forEach(function(src){ if(!src) return; for(var dn in src){ var a=dys27[dn]=dys27[dn]||{c:0,t:0,xp:0,mins:0}; var b=src[dn]||{}; a.c=Math.max(a.c,b.c||0); a.t=Math.max(a.t,b.t||0); a.xp=Math.max(a.xp,b.xp||0); a.mins=Math.max(a.mins,b.mins||0); } });
+          var dk27=Object.keys(dys27).sort().slice(-90), dys27b={};
+          dk27.forEach(function(k){ dys27b[k]=dys27[k]; });
+          m27.days=dys27b;
+          m27.streak={en:{d:'',n:0}, ko:{d:'',n:0}};
+          ['en','ko'].forEach(function(lg){ var a=(l27.streak&&l27.streak[lg])||{}, b=(c27.streak&&c27.streak[lg])||{}, nw=(newer.v7&&newer.v7.en27&&newer.v7.en27.streak&&newer.v7.en27.streak[lg])||{}; m27.streak[lg]={d:nw.d||a.d||b.d||'', n:Math.max(a.n||0,b.n||0)}; });
+          m27.claimed=unionTrue(l27.claimed, c27.claimed);
+          var n27p=(newer.v7&&newer.v7.en27)||{}, o27p=(older.v7&&older.v7.en27)||{};
+          m27.plan=n27p.plan!==undefined?n27p.plan:(o27p.plan||{en:{},ko:{}});
+          m27.uiLang=n27p.uiLang||o27p.uiLang||'en';
+          v7.en27=m27;
+        }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }
       out.v7=v7;
@@ -9580,7 +9672,7 @@ engine.syncNow=function(opts){
       });
     }
     /* both sides changed since the last sync: NEVER auto-pick. */
-    engine.conflict={local:loc.obj, cloud:cloud.data, localTime:m.lastSavedAt||0, cloudTime:cloud.updatedAt||0, localHash:loc.hash, cloudHash:cloudHash};
+    engine.conflict={local:loc.obj, cloud:cloud.data, localTime:(m.lastSavedAt||(loc.obj.v7&&loc.obj.v7.meta&&loc.obj.v7.meta.migratedAt)||(loc.obj.v7&&loc.obj.v7.en15&&loc.obj.v7.en15.created)||0), cloudTime:cloud.updatedAt||0, localHash:loc.hash, cloudHash:cloudHash};
     snapshot('hanvocab.v12.conflict-local-'+Date.now(), loc.raw);
     snapshot('hanvocab.v12.conflict-cloud-'+Date.now(), JSON.stringify(cloud.data));
     engine.syncing=false; setCloud('conflict'); return {ok:false, reason:'conflict'};
@@ -9893,6 +9985,7 @@ function importFile(input, fallback){
     snapshot('hanvocab.v12.preimport-'+Date.now(), cur);
     var stamp=(j.v7&&j.v7.meta&&j.v7.meta.saveVersion)||11;
     if(!confirm('Khôi phục bản lưu này (phiên bản '+stamp+')? Dữ liệu hiện tại sẽ được thay thế — bản sao lưu trước khi khôi phục đã được giữ lại.')) return;
+    try{ flush(); }catch(e){}
     try{ localStorage.setItem(SAVE_KEY, JSON.stringify(j)); }catch(e){ alert('Không ghi được dữ liệu (bộ nhớ trình duyệt đầy?).'); return; }
     location.reload();
   };
@@ -10023,7 +10116,7 @@ function conflictHTML(){
   var c=s.conflict(); if(!c) return '';
   function sum(x){
     if(!x) return 'không có dữ liệu';
-    var wins=0; ['en18','en19'].forEach(function(k){ var b=x.v7&&x.v7[k]&&x.v7[k].bosses; if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; } });
+    var wins=0; ['en18','en19'].forEach(function(k){ var b=x.v7&&x.v7[k]&&x.v7[k].bosses; if(b) for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; } });
     return 'XP '+(x.xp||0)+' · 💎 '+((x.v7&&x.v7.gems)||0)+' · '+(x.cards||[]).length+' thẻ Hàn · '+wins+' boss đã thắng';
   }
   return '<div class="v20modal"><div class="v20card v20conflict"><h3>⚠️ Dữ liệu trên thiết bị và đám mây khác nhau</h3>'
@@ -10033,7 +10126,7 @@ function conflictHTML(){
   +'<div class="acts"><button class="btn pri" onclick="__v20.resolveConflict(\'local\')">Dùng bản trên thiết bị này</button>'
   +'<button class="btn" onclick="__v20.resolveConflict(\'cloud\')">Dùng bản trên đám mây</button>'
   +'<button class="btn" onclick="__v20.resolveConflict(\'merge\')">Hợp nhất an toàn</button></div>'
-  +'<p class="mute">Hợp nhất an toàn: boss đã thắng ở bên nào cũng tính, sao lấy mức cao nhất; XP/kim cương lấy mức cao nhất (không cộng dồn); thẻ từ hợp nhất theo ID.</p>'
+  +'<p class="mute">Hợp nhất an toàn: từ tiếng Anh giữ mức cao nhất từng từ (box/số câu đúng/số câu sai); boss, thú cưng, nhiệm vụ và lịch sử Học thông minh được hợp nhất từ cả hai bên; XP/kim cương lấy mức cao nhất (không cộng dồn); một số lựa chọn hiện tại (đội thú cưng, kế hoạch hôm nay) lấy theo bản mới hơn.</p>'
   +'</div></div>';
 }
 function refreshConflict(){
@@ -10541,6 +10634,7 @@ function activateAccount(uid, transfer){
     if(home){ if(!writeVerified(SAVE_KEY, home)) return {ok:false, reason:'slot-write-failed'}; }
     else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
   }
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'account', uid:uid, at:Date.now()});
   reload();
   return {ok:true};
@@ -10551,6 +10645,7 @@ function activateGuest(){
   var gh=readHome(null);
   if(gh){ if(!writeVerified(SAVE_KEY, gh)) return {ok:false, reason:'slot-write-failed'}; }
   else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'guest', at:Date.now()});
   reload();
   return {ok:true};
@@ -11023,7 +11118,7 @@ function accountContentHTML(tab){
         +'<div class="v21btns"><button type="button" class="v21btn primary" data-resolve="local">Dùng bản trên thiết bị</button>'
         +'<button type="button" class="v21btn primary" data-resolve="cloud">Dùng bản trên đám mây</button>'
         +'<button type="button" class="v21btn amber" data-resolve="merge">Hợp nhất an toàn</button></div>'
-        +'<p class="v21muted">Cả hai bản đã được sao lưu trước khi áp dụng lựa chọn. Hợp nhất lấy XP/kim cương cao nhất, không cộng dồn.</p></div>';
+        +'<p class="v21muted">Cả hai bản đã được sao lưu trước khi áp dụng lựa chọn. Hợp nhất: từ tiếng Anh giữ mức cao nhất từng từ; boss, thú cưng, nhiệm vụ và lịch sử Học thông minh hợp nhất từ cả hai bên; XP/kim cương lấy mức cao nhất, không cộng dồn.</p></div>';
     } else if(!authConfigured()){
       h+='<p class="v21muted">Chưa cấu hình Firebase — xem FIREBASE_SETUP.md trong file ZIP để bật đồng bộ.</p>';
     }
@@ -11144,7 +11239,7 @@ function wireAccountContent(){
   }
   on('v21export','click', function(){
     var msg=$('#v21bakmsg');
-    try{ if(window.__v20&&__v20.exportFile) __v20.exportFile(); if(msg){ msg.textContent='Đã tải file sao lưu.'; msg.className='v21msg show'; } }
+    try{ if(window.__v20&&__v20.exportFile) __v20.exportFile(); if(msg){ msg.textContent='Đã bắt đầu tải file sao lưu — kiểm tra thư mục tải về.'; msg.className='v21msg show'; } }
     catch(e){ if(msg){ msg.textContent='Không xuất được file.'; msg.className='v21msg err show'; } }
   });
   var imp=$('#v21importfile');
@@ -11153,10 +11248,8 @@ function wireAccountContent(){
     if(!f) return;
     try{
       if(window.__v20&&__v20.importFile){
-        __v20.importFile(f).then(function(r){
-          if(msg){ msg.textContent=r&&r.ok?'Đã khôi phục. Trang sẽ tải lại để áp dụng.':'Không khôi phục được: '+((r&&r.error)||'file không hợp lệ'); msg.className='v21msg'+(r&&r.ok?'':' err')+' show'; }
-          if(r&&r.ok) setTimeout(reload, 800);
-        });
+        __v20.importFile(imp);
+        if(msg){ msg.textContent='Đang khôi phục — trang sẽ tải lại nếu file hợp lệ.'; msg.className='v21msg show'; }
       }
     }catch(e){ if(msg){ msg.textContent='Không khôi phục được file.'; msg.className='v21msg err show'; } }
   });
@@ -14621,6 +14714,7 @@ function touchStreak(d,lang){
 function recordAnswer(lang,id,ok,mode){
   try{
     if(!id)return;
+    if(!getS()){ try{ if(window.console&&console.warn) console.warn('[V31] recordAnswer dropped: S unavailable, refusing to write into the never-persisted _mem fallback (F-11).'); }catch(e){} return; }
     var d=en27(),now=Date.now();
     if(lang==='ko'){
       var k=d.ko;
@@ -15551,6 +15645,736 @@ try{
     _test:{en27:en27,koCards:koCards,allENWords:allENWords,buildPlanCore:buildPlanCore,claimPlanBonus:claimPlanBonus,claimStreak7:claimStreak7}
   };
 }catch(e){}
+})();
+
+</script>
+
+<style id="v31">
+/* ===== V31 — Backup & Restore Fix (V16.3) =====
+   Additive layer, loads LAST. Reuses the V24 design tokens (WCAG AA
+   verified in V15.1/V15.2) — no new palette. Single column, no fixed
+   heights, min 44px touch targets, no horizontal scroll at 360-430px.
+   Z-INDEX STACK (documented; F-06 out of scope, no other layer touched):
+     .v20modal 1200 < V31 overlays 1400 < #v21account 9998 / #v21auth 9999.
+   V31 adds no modal of its own; 1400 is reserved for any future V31
+   confirm overlay. */
+.v31section{box-sizing:border-box;max-width:100%;margin:12px 0 0;padding:0;color:var(--ui-text-primary,#FFFFFF)}
+.v31section .v31h{color:var(--ui-title-gold,#FFD76A);font-size:17px;line-height:1.35;margin:0 0 10px}
+.v31card{box-sizing:border-box;max-width:100%;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#B99AF7);border-radius:var(--ui-radius,16px);padding:12px;margin:0 0 12px;color:var(--ui-text-primary,#FFFFFF)}
+.v31card>b{display:block;font-size:15px;line-height:1.4;margin-bottom:6px;color:var(--ui-title-gold,#FFD76A)}
+.v31line{font-size:14px;line-height:1.55;color:var(--ui-text-secondary,#E5DEF5);margin:6px 0;overflow-wrap:break-word}
+.v31line b{color:var(--ui-text-primary,#FFFFFF)}
+.v31err{color:var(--ui-danger,#FF828F)}
+.v31note{font-size:13px;line-height:1.5}
+.v31verify{font-size:14px;line-height:1.5;color:var(--ui-warning,#FFD166)}
+.v31acts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+.v31acts .btn{flex:1 1 auto;min-width:0}
+.v31btn{min-height:var(--ui-btn-min-height,44px);font-size:14px;line-height:1.35;white-space:normal}
+.v31btn:disabled{opacity:.55;cursor:not-allowed}
+.v31hist{list-style:none;margin:8px 0 0;padding:0}
+.v31hist li{box-sizing:border-box;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;justify-content:space-between;border-top:1px solid var(--ui-border,#B99AF7);padding:10px 0;max-width:100%}
+.v31hist li:first-child{border-top:0}
+.v31histmain{flex:1 1 200px;min-width:0;font-size:14px;line-height:1.55;color:var(--ui-text-secondary,#E5DEF5);overflow-wrap:break-word}
+.v31histmain b{color:var(--ui-text-primary,#FFFFFF)}
+.v31histbtns{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.v31histbtns .btn{margin:0}
+@media (max-width:430px){
+  .v31card{padding:10px}
+  .v31hist li{flex-direction:column}
+  .v31histbtns{width:100%}
+  .v31histbtns .btn{flex:1 1 auto}
+}
+
+</style>
+<script id="v31js">
+/* ================================================================
+   Korean & English Vocab Farm — V31 (V16.3 Backup & Restore Fix)
+   Layer V31: additive fix layer, version 16.3.0, loads LAST.
+
+   SCOPE (PLAN_V31.md — backup/restore/sync only):
+   - F-01/F-03 merge branches: build replacements R-F-01a/b, R-F-03a/b,
+     R-F-01-en16 (in v20_sync.js, applied by build_v31.py).
+   - F-02 stale-S race: build replacements R-F-02a/b/c/d.
+   - F-11: no-op-with-warn guard on __v27.recordAnswer (§2 below) +
+     build replacement R-V31-F11 on the closure-local recordAnswer.
+   - F-12: resetEN clears ONLY the EN-side en27.en maps (EN-side-only
+     interpretation, CHOSEN PENDING OWNER CONFIRMATION — see CHANGELOG).
+   - F-13/F-14/F-15/F-16: build replacements (hasProgress, localTime
+     fallback, scan depth 4->6 hardening, standalone backupImport).
+   - C1 export: flush-before-export + v16.3 filename (build R-V31-C1).
+   - C6 conflict summary: flat-V18 boss-win predicate fix (R-V31-C6)
+     + updated merge copy (R-V31-C6b/c) + post-merge report (§6).
+   - C9 Account Center restore: passes the input element, not a File
+     (build R-V31-C9).
+   - D.3 backup history (new key hanvocab.v16.backup-history, cap 20),
+     D.5 cloud read-back verification (option b — V31-side post-sync
+     check, see §5), D.7 export history.
+
+   Z-INDEX STACK (documented, not changed — F-06 is out of scope):
+     .v20modal 1200 < V31 overlays 1400 < #v21account 9998 /
+     #v21auth 9999. V31 adds no modal of its own; 1400 is reserved for
+     any future V31 confirm overlay.
+
+   RULES (per vocab_farm_versioned_builds skill): IIFE, 'use strict',
+   try/catch around everything, other layers only through window.__vNN
+   with guards, never edit another layer's source, never change a
+   schema, localStorage key, Firestore path, XP/gold/gems, boss/pet/
+   vocab/SRS data, or working game logic. No feature is disabled,
+   hidden, or error-suppressed anywhere in this file. The V6 save
+   object is a top-level `let S` (NOT a window property) — read it via
+   bare S in try/catch, never window.S (the V11.1 lesson).
+   ================================================================ */
+(function(){
+'use strict';
+var VERSION='16.3.0';
+
+/* ---------- small helpers ---------- */
+function logWarn(msg){ try{ if(window.console&&console.warn) console.warn('[V31] '+msg); }catch(e){} }
+function hasS(){ try{ return typeof S!=='undefined' && !!S; }catch(e){ return false; } }
+function getS31(){ try{ return S; }catch(e){ return null; } }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtTime(ts){
+  if(!ts) return 'chưa có';
+  try{ var d=new Date(ts); return d.toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}); }catch(e){ return String(ts); }
+}
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); return true; }catch(e){ return false; } }
+function lsKeys(){ try{ var a=[]; for(var i=0;i<localStorage.length;i++) a.push(localStorage.key(i)); return a; }catch(e){ return []; } }
+function fnv(s){
+  var h=0x811c9dc5; s=String(s||'');
+  for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; }
+  return ('0000000'+h.toString(16)).slice(-8);
+}
+function hashOf(raw){ try{ var s=window.__v20sync; if(s&&s.hash) return s.hash(raw); }catch(e){} return fnv(raw||''); }
+function saveBytes(){ try{ return (lsGet('hanvocab.v1')||'').length; }catch(e){ return 0; } }
+
+/* ---------- D.3 backup history (new key, cap 20) ---------- */
+var HIST_KEY='hanvocab.v16.backup-history';
+var VERIFIED_KEY='hanvocab.v16.last-verified-cloud';
+var MAX_HIST=20;
+var KIND_LABEL={'local-export':'Xuất file','cloud-upload':'Sao lưu đám mây','cloud-download':'Tải từ đám mây','restore':'Khôi phục','pre-restore':'Ảnh chụp trước khôi phục','conflict':'Xung đột','merge':'Hợp nhất'};
+function readHistory(){
+  try{ var a=JSON.parse(lsGet(HIST_KEY)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; }
+}
+function writeHistory(a){ try{ lsSet(HIST_KEY, JSON.stringify((a||[]).slice(0,MAX_HIST))); }catch(e){} }
+function recordBackupEvent(kind, bytes, hash, key, ok, note){
+  try{
+    var h=readHistory();
+    h.unshift({at:Date.now(), kind:kind, bytes:(bytes==null?0:bytes), hash:(hash||''), key:(key||''), ok:(ok!==false), note:(note||'')});
+    writeHistory(h.slice(0,MAX_HIST));
+    return true;
+  }catch(e){ return false; }
+}
+function lastVerifiedCloud(){ try{ var v=JSON.parse(lsGet(VERIFIED_KEY)||'null'); return v||null; }catch(e){ return null; } }
+
+/* Pre-existing snapshots (C7): enumerate the known prefixes READ-ONLY.
+   hanvocab.v11-backup (pre-migration) is listed info-only: it is never
+   deleted by V31 and its restore stays on the existing rollback button. */
+var SNAP_PREFIXES=['hanvocab.v12.preimport-','hanvocab.v12.pre-download-','hanvocab.v12.conflict-local-','hanvocab.v12.conflict-cloud-','hanvocab.v12.pre-merge-','hanvocab.v12.pre-rollback-'];
+function listSystemSnapshots(){
+  var out=[];
+  try{
+    lsKeys().forEach(function(k){
+      if(k==='hanvocab.v11-backup'){ out.push({key:k, at:0, label:'Bản sao lưu trước khi chuyển đổi V12', valid:null}); return; }
+      for(var i=0;i<SNAP_PREFIXES.length;i++){
+        var p=SNAP_PREFIXES[i];
+        if(k.indexOf(p)===0){
+          var at=parseInt(k.slice(p.length),10)||0, ok=null;
+          try{
+            var j=JSON.parse(lsGet(k)||'null');
+            if(j&&Array.isArray(j.cards)){
+              var s=window.__v20sync;
+              if(s&&s.validateSave){ var v=s.validateSave(j); ok=!!(v&&v.ok); } else ok=true;
+            } else ok=false;
+          }catch(e){ ok=false; }
+          out.push({key:k, at:at, label:p.replace('hanvocab.v12.',''), valid:ok});
+          break;
+        }
+      }
+    });
+  }catch(e){}
+  out.sort(function(a,b){ return (b.at||0)-(a.at||0); });
+  return out;
+}
+
+/* ---------- C8 restore / undo (snapshot first, validate, confirm) ---------- */
+var _reloadCalled=false;
+function reloadPage(){ _reloadCalled=true; try{ location.reload(); }catch(e){} }
+function snapshotCurrent(){
+  try{
+    var s=window.__v20sync;
+    if(s&&s.snapshot){
+      var cur=lsGet('hanvocab.v1')||'';
+      var k='hanvocab.v12.preimport-'+Date.now();
+      s.snapshot(k, cur);
+      recordBackupEvent('pre-restore', cur.length, hashOf(cur), k, true, 'Ảnh chụp trước khi khôi phục');
+      return k;
+    }
+  }catch(e){}
+  return '';
+}
+function restoreRaw(raw, sourceLabel){
+  /* Validate -> flush pending in-memory changes -> snapshot current ->
+     write -> record -> reload. Returns {ok} / {ok:false, reason}. */
+  var j=null;
+  try{ j=JSON.parse(raw); }catch(e){ return {ok:false, reason:'bad-json'}; }
+  var s=window.__v20sync;
+  if(s&&s.validateSave){
+    var v=s.validateSave(j);
+    if(!v.ok) return {ok:false, reason:'invalid', errors:(v.errors||[])};
+  } else if(!j||!Array.isArray(j.cards)) return {ok:false, reason:'bad-save'};
+  if((raw||'').length>((s&&s.MAX_IMPORT_BYTES)||10485760)) return {ok:false, reason:'file-too-large'};
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
+  snapshotCurrent();
+  try{ localStorage.setItem('hanvocab.v1', JSON.stringify(j)); }catch(e){ return {ok:false, reason:'write-failed'}; }
+  recordBackupEvent('restore', (raw||'').length, hashOf(raw), '', true, 'Khôi phục từ '+(sourceLabel||'lịch sử'));
+  reloadPage();
+  return {ok:true};
+}
+function confirmDlg(msg){
+  try{ if(typeof window.confirm==='function') return !!window.confirm(msg); }catch(e){}
+  return false;
+}
+function restoreHistoryEntry(key){
+  try{
+    if(!key) return {ok:false, reason:'no-key'};
+    var raw=lsGet(key);
+    if(raw==null) return {ok:false, reason:'not-found'};
+    if(!confirmDlg('Khôi phục bản sao lưu này? Dữ liệu hiện tại sẽ được thay thế — bản hiện tại đã được giữ lại trước khi khôi phục.')) return {ok:false, reason:'cancelled'};
+    return restoreRaw(raw, key);
+  }catch(e){ return {ok:false, reason:'error'}; }
+}
+function newestPreRestoreKey(){
+  var best='', bestAt=0;
+  lsKeys().forEach(function(k){
+    if(k.indexOf('hanvocab.v12.preimport-')===0){
+      var at=parseInt(k.slice('hanvocab.v12.preimport-'.length),10)||0;
+      if(at>bestAt){ bestAt=at; best=k; }
+    }
+  });
+  return best;
+}
+function undoRestore(){
+  /* Undo always targets the NEWEST pre-restore snapshot, so it undoes
+     the latest restore; restoreRaw snapshots the current save first,
+     so an undo is itself undoable (undo/redo toggle). */
+  try{
+    var k=newestPreRestoreKey();
+    if(!k) return {ok:false, reason:'no-snapshot'};
+    if(!confirmDlg('Hoàn tác lần khôi phục gần nhất? Dữ liệu hiện tại sẽ được thay thế bằng bản đã giữ lại trước khi khôi phục.')) return {ok:false, reason:'cancelled'};
+    return restoreRaw(lsGet(k)||'', k+' (hoàn tác)');
+  }catch(e){ return {ok:false, reason:'error'}; }
+}
+function deleteHistoryEntry(at){
+  try{
+    var h=readHistory().filter(function(e){ return e.at!==at; });
+    writeHistory(h);
+    return {ok:true};
+  }catch(e){ return {ok:false}; }
+}
+function deleteSnapshot(key){
+  try{
+    if(!key||key==='hanvocab.v11-backup') return {ok:false, reason:'protected'};
+    if(!confirmDlg('Xóa bản sao lưu đã giữ lại này? Không thể hoàn tác.')) return {ok:false, reason:'cancelled'};
+    lsDel(key);
+    return {ok:true};
+  }catch(e){ return {ok:false, reason:'error'}; }
+}
+function restoreFromFile(input){
+  /* V31 section file picker: one code path — the existing V20 importFile
+     (validate + snapshot + confirm). V31 only routes to it. */
+  try{
+    if(window.__v20&&__v20.importFile){ __v20.importFile(input); return {ok:true, started:true}; }
+    return {ok:false, reason:'no-import'};
+  }catch(e){ return {ok:false, reason:'error'}; }
+}
+
+/* ================================================================
+   §2. F-11 — en27 _mem guard (defense-in-depth; the primary fix is
+   build replacement R-V31-F11 on the closure-local recordAnswer).
+   DECISION: no-op with console.warn (NOT flush _mem into S.v7.en27).
+   A flush would need a poller watching for S to appear, plus a copy
+   that must not double-count answers the hooks record again after S
+   appears. S absent means the game never loaded a save — there is no
+   live session whose records deserve rescuing — so dropping the write
+   visibly (warn) loses nothing a real session could have saved, while
+   a flush could write stale, half-counted data into a live save. The
+   claim paths get the same guard for external callers; V27's own UI
+   calls the closure-local claimPlanBonus/claimStreak7 directly, which
+   V31 cannot reach — but those paths can only run after openSmart(),
+   which itself requires S, so the unreachable case cannot occur
+   from the UI.
+   ================================================================ */
+function wrapRecordAnswer(){
+  try{
+    var v27=window.__v27;
+    if(!v27||typeof v27.recordAnswer!=='function') return;
+    if(v27.__v31wrapped) return;
+    var _rec=v27.recordAnswer;
+    v27.recordAnswer=function(lang,id,ok,mode){
+      if(!hasS()){
+        logWarn('recordAnswer dropped: game state S is unavailable; refusing to write into the never-persisted _mem fallback (F-11).');
+        return;
+      }
+      return _rec.apply(this,arguments);
+    };
+    v27.__v31wrapped=true;
+    try{
+      var t=v27._test;
+      if(t){
+        if(typeof t.claimPlanBonus==='function'&&!t.__v31wrapped){
+          var _cpb=t.claimPlanBonus;
+          t.claimPlanBonus=function(l){
+            if(!hasS()){ logWarn('claimPlanBonus dropped: S unavailable (F-11).'); return 0; }
+            return _cpb.apply(this,arguments);
+          };
+        }
+        if(typeof t.claimStreak7==='function'&&!t.__v31wrapped){
+          var _cs7=t.claimStreak7;
+          t.claimStreak7=function(l){
+            if(!hasS()){ logWarn('claimStreak7 dropped: S unavailable (F-11).'); return 0; }
+            return _cs7.apply(this,arguments);
+          };
+        }
+        t.__v31wrapped=true;
+      }
+    }catch(e){}
+  }catch(e){}
+}
+
+/* ================================================================
+   §5. D.5 cloud read-back verification (option b — V31-side post-sync
+   check, chosen because it is additive: no edit to the closure-local
+   engine.syncNow upload branches).
+   After an upload, verification re-loads the cloud doc through a
+   fresh syncNow({auto:true}) and requires action 'already-synced'
+   with the local hash unchanged — i.e. the cloud copy was actually
+   read back and compared. 'already-synced' on a later manual sync is
+   itself a read-back confirmation, so it also marks the cloud copy
+   verified. The V31 section NEVER shows "Đã sao lưu lên đám mây"
+   until a check has passed; before that it shows "chưa có" / "đang
+   xác minh…" / "chưa được xác minh — thử lại".
+   KNOWN LIMIT: auto-syncs (noteLocalSaved -> engine.syncNow, which
+   bypasses the __v20sync.syncNow export) are NOT verified by this
+   wrapper; they become verified on the next manual sync, which
+   returns 'already-synced' after reading the cloud doc back. The
+   pre-existing V20 toast "Đã đồng bộ lên đám mây." still fires on
+   adapter.save() resolve (V20's own wording, out of V31 scope); the
+   V31 panel is the authoritative verified-backup indicator.
+   ================================================================ */
+var _verifyState='idle'; /* idle | verifying | verified | unverified | error */
+var _verifyMsg='';
+var _syncNowOrig=null;
+var _verifying=false; /* re-entrancy guard: a verify in flight never starts another */
+function verifyCloudBackup(source){
+  try{
+    if(_verifying) return Promise.resolve({ok:false, reason:'verifying'});
+    var s=window.__v20sync;
+    if(!s||typeof s.syncNow!=='function') return Promise.resolve({ok:false, reason:'no-sync'});
+    if(!s.configured||!s.configured()) return Promise.resolve({ok:false, reason:'not-configured'});
+    if(!s.currentUser||!s.currentUser()) return Promise.resolve({ok:false, reason:'guest'});
+    var h0=''; try{ h0=hashOf(lsGet('hanvocab.v1')||''); }catch(e){}
+    _verifying=true;
+    _verifyState='verifying'; _verifyMsg='Đang xác minh bản sao lưu đám mây…';
+    refreshVerifyText();
+    var orig=_syncNowOrig||s.syncNow;
+    return orig.call(s,{auto:true}).then(function(r){
+      _verifying=false;
+      var h1=''; try{ h1=hashOf(lsGet('hanvocab.v1')||''); }catch(e){}
+      if(r&&r.ok&&r.action==='already-synced'&&h0===h1){
+        _verifyState='verified';
+        var at=Date.now();
+        _verifyMsg='Đã xác minh sao lưu đám mây lúc '+fmtTime(at)+'.';
+        try{ lsSet(VERIFIED_KEY, JSON.stringify({at:at, hash:h0})); }catch(e){}
+        recordBackupEvent('cloud-upload', saveBytes(), h0, '', true, 'Sao lưu đám mây đã xác minh'+(source?' ('+source+')':''));
+        refreshVerifyText();
+        return {ok:true, verified:true, at:at};
+      }
+      _verifyState='unverified';
+      _verifyMsg='Đồng bộ chưa được xác minh'+(r&&r.action?(' (kết quả: '+r.action+')'):'')+' — thử lại.';
+      recordBackupEvent('cloud-upload', 0, h0, '', false, 'Sao lưu đám mây chưa được xác minh'+(source?' ('+source+')':''));
+      refreshVerifyText();
+      return {ok:false, verified:false, action:r&&r.action};
+    }).catch(function(e){
+      _verifying=false;
+      _verifyState='error'; _verifyMsg='Không xác minh được sao lưu đám mây: '+String((e&&e.message)||e);
+      refreshVerifyText();
+      return {ok:false, verified:false, error:String((e&&e.message)||e)};
+    });
+  }catch(e){ return Promise.resolve({ok:false, reason:'error'}); }
+}
+function wrapSyncNow(){
+  try{
+    var s=window.__v20sync;
+    if(!s||typeof s.syncNow!=='function'||s.syncNow.__v31) return;
+    _syncNowOrig=s.syncNow;
+    var nw=function(opts){
+      return _syncNowOrig.call(s, opts).then(function(r){
+        try{
+          if(r&&r.ok&&r.action==='uploaded'){
+            verifyCloudBackup('syncNow');
+          } else if(r&&r.ok&&r.action==='already-synced'){
+            /* The cloud doc was just read back and its hash equals the
+               local hash: the cloud copy is confirmed present. */
+            var h=''; try{ h=hashOf(lsGet('hanvocab.v1')||''); }catch(e){}
+            _verifyState='verified';
+            _verifyMsg='Đã xác minh sao lưu đám mây lúc '+fmtTime(Date.now())+'.';
+            try{ lsSet(VERIFIED_KEY, JSON.stringify({at:Date.now(), hash:h})); }catch(e){}
+            refreshVerifyText();
+          } else if(r&&!r.ok&&r.reason==='conflict'){
+            recordBackupEvent('conflict', saveBytes(), hashOf(lsGet('hanvocab.v1')||''), '', true, 'Xung đột dữ liệu — chờ lựa chọn của bạn');
+          }
+        }catch(e){}
+        return r;
+      });
+    };
+    nw.__v31=true; s.syncNow=nw;
+  }catch(e){}
+}
+function syncAndVerify(){
+  try{
+    var v=window.__v20;
+    if(!v||typeof v.syncNow!=='function') return Promise.resolve({ok:false, reason:'no-sync'});
+    return v.syncNow().then(function(r){ refreshVerifyText(); return r; });
+  }catch(e){ return Promise.resolve({ok:false, reason:'error'}); }
+}
+
+/* ================================================================
+   §6. C6 post-merge report. The merge itself writes the merged save
+   locally (v20_sync engine.resolveConflict 'merge' -> writeLocalRaw)
+   before uploading, so the wrapper reads the merged save from
+   localStorage and diffs it against the conflict's local/cloud sides
+   captured before the call. Fields resolved last-write-wins by design
+   (en23.team/hatch, en27.plan/uiLang, en15.daily) are named with the
+   winning side (the newer side).
+   ================================================================ */
+var _lastMergeReport=null;
+function summarizeSide(x){
+  try{
+    var enBox=0; if(x&&x.v7&&x.v7.en&&x.v7.en.box) enBox=Object.keys(x.v7.en.box).length;
+    var pets=0; if(x&&x.v7&&x.v7.en23&&x.v7.en23.pets) pets=Object.keys(x.v7.en23.pets).length;
+    var quests=0; if(x&&x.v7&&x.v7.en22&&x.v7.en22.quest) quests=Object.keys(x.v7.en22.quest).length;
+    var sess=0; if(x&&x.v7&&x.v7.en27&&x.v7.en27.sessions) sess=x.v7.en27.sessions.length;
+    var wins=0;
+    ['en18','en19'].forEach(function(k){
+      var b=x&&x.v7&&x.v7[k]&&x.v7[k].bosses;
+      if(b) for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; }
+    });
+    return {xp:(x&&x.xp)||0, gems:((x&&x.v7&&x.v7.gems)||0), cards:((x&&x.cards)||[]).length, enWords:enBox, pets:pets, quests:quests, sessions:sess, bossWins:wins};
+  }catch(e){ return {xp:0,gems:0,cards:0,enWords:0,pets:0,quests:0,sessions:0,bossWins:0}; }
+}
+function buildMergeReport(localS, cloudS, mergedS, localTime, cloudTime){
+  var L=summarizeSide(localS), C=summarizeSide(cloudS), M=summarizeSide(mergedS);
+  var newerSide=((cloudTime||0)>=(localTime||0))?'cloud':'local';
+  return {at:Date.now(), local:L, cloud:C, merged:M, newerSide:newerSide,
+    lastWriteWins:['Đội thú cưng (en23.team)','Ấp trứng (en23.hatch)','Kế hoạch hôm nay (en27.plan)','Ngôn ngữ giao diện Học thông minh (en27.uiLang)'],
+    lastWriteWinsSide:newerSide};
+}
+var _rcOrig=null;
+function wrapResolveConflict(){
+  try{
+    var s=window.__v20sync;
+    if(!s||typeof s.resolveConflict!=='function'||s.resolveConflict.__v31) return;
+    _rcOrig=s.resolveConflict;
+    var nw=function(choice){
+      var c=null; try{ c=s.conflict&&s.conflict(); }catch(e){}
+      var loc=c?c.local:null, cld=c?c.cloud:null, lt=c?c.localTime:0, ct=c?c.cloudTime:0;
+      return _rcOrig.call(s, choice).then(function(r){
+        try{
+          if(r&&r.ok&&r.action==='merged'&&loc&&cld){
+            var merged=null; try{ merged=JSON.parse(lsGet('hanvocab.v1')||'null'); }catch(e){}
+            if(merged){
+              _lastMergeReport=buildMergeReport(loc, cld, merged, lt, ct);
+              recordBackupEvent('merge', saveBytes(), hashOf(lsGet('hanvocab.v1')||''), '', true,
+                'Hợp nhất: '+_lastMergeReport.merged.enWords+' từ EN · '+_lastMergeReport.merged.pets+' thú cưng · '+_lastMergeReport.merged.quests+' nhiệm vụ · '+_lastMergeReport.merged.sessions+' phiên Học thông minh');
+            }
+            verifyCloudBackup('resolve:merged');
+          } else if(r&&r.ok&&r.action==='kept-local'){
+            verifyCloudBackup('resolve:kept-local');
+          }
+        }catch(e){}
+        return r;
+      });
+    };
+    nw.__v31=true; s.resolveConflict=nw;
+  }catch(e){}
+}
+
+/* ---------- export history (D.7) ---------- */
+function wrapBackupExport(){
+  try{
+    var v=window.__v15;
+    if(!v||typeof v.backupExport!=='function'||v.backupExport.__v31) return;
+    var _be=v.backupExport;
+    var nw=function(){
+      var r=_be.apply(this,arguments);
+      try{
+        var raw=lsGet('hanvocab.v1')||'';
+        recordBackupEvent('local-export', raw.length, hashOf(raw), '', true, 'Xuất file sao lưu (.json)');
+      }catch(e){}
+      return r;
+    };
+    nw.__v31=true; v.backupExport=nw;
+  }catch(e){}
+}
+
+/* ---------- cloud status snapshot (read-only) ---------- */
+function cloudInfo(){
+  var info={configured:false, user:null, cloud:'off', lastError:'', pending:false, lastSavedAt:0, lastSyncAt:0};
+  try{
+    var s=window.__v20sync;
+    if(!s) return info;
+    if(s.configured) info.configured=!!s.configured();
+    if(s.status){ var st=s.status(); info.cloud=st.cloud||'off'; info.user=st.user||null; info.lastError=st.lastError||''; }
+    if(s.meta){ var m=s.meta(); info.lastSavedAt=m.lastSavedAt||0; info.lastSyncAt=m.lastSyncAt||0; }
+    if(s._test&&s._test.engine) info.pending=!!s._test.engine.pending;
+  }catch(e){}
+  return info;
+}
+function cloudStateText(ci){
+  if(!ci.configured) return 'Chưa cấu hình Firebase';
+  if(!ci.user) return 'Chưa đăng nhập — đang chơi với tư cách khách, tiến trình chỉ lưu trên thiết bị này';
+  var map={ready:'Sẵn sàng',syncing:'Đang đồng bộ…',synced:'Đã đồng bộ',offline:'Mất mạng — lưu cục bộ',conflict:'Có xung đột dữ liệu — cần bạn chọn',error:'Lỗi đồng bộ',guest:'Chưa đăng nhập',off:'Chưa cấu hình'};
+  return map[ci.cloud]||ci.cloud;
+}
+
+/* ---------- V31 section HTML (shared by panel + Account Center) ---------- */
+function sectionHTML(compact){
+  try{
+    var ci=cloudInfo();
+    var vc=lastVerifiedCloud();
+    var hist=readHistory();
+    var snaps=listSystemSnapshots();
+    var undoKey=newestPreRestoreKey();
+    var undoAt=0;
+    if(undoKey){ var m=undoKey.match(/(\d+)$/); if(m) undoAt=parseInt(m[1],10)||0; }
+    var bytes=saveBytes();
+    var kb=(bytes/1024).toFixed(1);
+    var overCap=bytes>900*1024;
+    var h='<div class="v31section" id="'+(compact?'v31acct':'v31panel')+'">'
+      +'<h3 class="v31h">Sao lưu &amp; khôi phục — V16.3</h3>'
+      /* Cloud Backup Status + Last Backup (three labelled rows, C3) */
+      +'<div class="v31card"><b>Trạng thái sao lưu đám mây</b>'
+      +'<p class="v31line">'+esc(cloudStateText(ci))+(ci.user?' — '+(esc(ci.user.email||ci.user.displayName||ci.user.uid)||''):'')+'</p>'
+      +(ci.lastError?'<p class="v31line v31err">Lỗi: '+esc(ci.lastError)+'</p>':'')
+      +(ci.pending?'<p class="v31line">Đang chờ mạng — sẽ tự đồng bộ khi có mạng.</p>':'')
+      +'<p class="v31line">Lần lưu gần nhất trên thiết bị (đã xác minh ghi): <b>'+esc(fmtTime(ci.lastSavedAt))+'</b></p>'
+      +'<p class="v31line">Lần đồng bộ gần nhất: <b>'+esc(fmtTime(ci.lastSyncAt))+'</b></p>'
+      +'<p class="v31line">Lần sao lưu đám mây đã xác minh: <b class="v31lastverified">'+esc(vc?fmtTime(vc.at):'chưa có')+'</b></p>'
+      +'<p class="v31line">Kích thước bản lưu: <b>'+esc(kb)+' KB ('+bytes+' byte)</b>'+(overCap?' — <span class="v31err">vượt giới hạn đám mây 900 KB, sao lưu đám mây sẽ bị từ chối (save-too-large)</span>':' — giới hạn đám mây 900 KB')+'</p>'
+      +'<p class="v31line v31verify">'+esc(_verifyState==='idle'?'Chưa xác minh lần sao lưu đám mây nào trong phiên này.':_verifyMsg)+'</p>'
+      +'<div class="v31acts">'
+      +'<button type="button" class="btn pri v31btn" onclick="window.__v31&&__v31.syncAndVerify()"'+((!ci.configured||!ci.user)?' disabled':'')+'>Đồng bộ ngay</button>'
+      +'<button type="button" class="btn v31btn" onclick="window.__v15&&__v15.backupExport()">Xuất file sao lưu (.json)</button>'
+      +'</div>'
+      +((!ci.configured)?'<p class="v31line">Đồng bộ đám mây: Chưa cấu hình Firebase — xem FIREBASE_SETUP.md.</p>':(!ci.user?'<p class="v31line">Đăng nhập để bật đồng bộ đám mây.</p>':'')) 
+      +'<p class="v31line v31note">Sao lưu từ file khôi phục không mang theo trạng thái đồng bộ (lần đồng bộ gần nhất); trạng thái này được thiết lập lại ở lần đồng bộ sau.</p>'
+      +'</div>'
+      /* Backup History (D.3) */
+      +'<div class="v31card"><b>Lịch sử sao lưu</b>';
+    if(!hist.length){
+      h+='<p class="v31line">Chưa có lịch sử sao lưu.</p>';
+    } else {
+      h+='<ul class="v31hist">';
+      hist.forEach(function(e){
+        h+='<li><span class="v31histmain"><b>'+esc(fmtTime(e.at))+'</b> · '+esc(KIND_LABEL[e.kind]||e.kind)+' · '+(e.bytes?((e.bytes/1024).toFixed(1)+' KB'):'—')+(e.hash?' · #'+esc(e.hash):'')+(e.ok?'':' · <span class="v31err">chưa xác minh/thất bại</span>')+(e.note?' — '+esc(e.note):'')+'</span>'
+          +'<span class="v31histbtns">'
+          +(e.key?'<button type="button" class="btn v31btn sm" onclick="window.__v31&&__v31.restoreHistoryEntry(\''+esc(e.key)+'\')">Khôi phục</button>':'')
+          +'<button type="button" class="btn v31btn sm" onclick="window.__v31&&__v31.deleteHistoryEntry('+e.at+')">Xóa</button>'
+          +'</span></li>';
+      });
+      h+='</ul>';
+    }
+    h+='</div>'
+      /* System snapshots (C7/C8) + undo */
+      +'<div class="v31card"><b>Bản sao lưu hệ thống đã giữ lại</b>';
+    if(!snaps.length){
+      h+='<p class="v31line">Chưa có bản sao lưu hệ thống nào được giữ lại.</p>';
+    } else {
+      h+='<ul class="v31hist">';
+      snaps.forEach(function(sn){
+        h+='<li><span class="v31histmain"><b>'+esc(sn.at?fmtTime(sn.at):'trước khi chuyển đổi V12')+'</b> · '+esc(sn.label)+(sn.valid===true?' · hợp lệ':(sn.valid===false?' · <span class="v31err">file không hợp lệ</span>':''))+'</span>'
+          +'<span class="v31histbtns">'
+          +(sn.key==='hanvocab.v11-backup'?'<span class="v31line">Dùng nút “Khôi phục bản trước khi chuyển đổi” trong mục Chuyển đổi dữ liệu.</span>'
+            :(sn.valid===true?'<button type="button" class="btn v31btn sm" onclick="window.__v31&&__v31.restoreHistoryEntry(\''+esc(sn.key)+'\')">Khôi phục</button>'
+            :(sn.valid===false?'<button type="button" class="btn v31btn sm" disabled>Không khôi phục được</button>':'')))
+          +(sn.key!=='hanvocab.v11-backup'?'<button type="button" class="btn v31btn sm" onclick="window.__v31&&__v31.deleteSnapshot(\''+esc(sn.key)+'\')">Xóa</button>':'')
+          +'</span></li>';
+      });
+      h+='</ul>';
+    }
+    h+='<p class="v31line">Mỗi lần khôi phục đều giữ lại một ảnh chụp của dữ liệu hiện tại trước khi ghi đè.</p>'
+      +(undoKey?'<div class="v31acts"><button type="button" class="btn v31btn" onclick="window.__v31&&__v31.undoRestore()">Hoàn tác lần khôi phục này'+(undoAt?' ('+esc(fmtTime(undoAt))+')':'')+'</button></div>':'')
+      +'</div>'
+      /* Restore from file: one picker per screen already exists; point to it */
+      +'<div class="v31card"><b>Khôi phục từ file</b>'
+      +'<p class="v31line">Chọn file sao lưu .json đã xuất trước đây. File được kiểm tra cấu trúc trước khi ghi, bản hiện tại được giữ lại trước, và bạn xác nhận trước khi thay thế.</p>'
+      +'<p class="v31line">Dùng ô “Khôi phục từ file” '+(compact?'ở phía trên trong tab này':'ngay bên dưới')+' — cùng một đường khôi phục đã kiểm tra (V20 importFile).</p>'
+      +'</div>';
+    if(_lastMergeReport){
+      var R=_lastMergeReport;
+      h+='<div class="v31card"><b>Báo cáo hợp nhất gần nhất ('+esc(fmtTime(R.at))+')</b>'
+        +'<p class="v31line">Từ tiếng Anh (SRS): '+R.merged.enWords+' từ sau hợp nhất (thiết bị: '+R.local.enWords+', đám mây: '+R.cloud.enWords+').</p>'
+        +'<p class="v31line">Thú cưng: '+R.merged.pets+' (thiết bị: '+R.local.pets+', đám mây: '+R.cloud.pets+'). Nhiệm vụ: '+R.merged.quests+' (thiết bị: '+R.local.quests+', đám mây: '+R.cloud.quests+'). Phiên Học thông minh: '+R.merged.sessions+' (thiết bị: '+R.local.sessions+', đám mây: '+R.cloud.sessions+'). Boss đã thắng: '+R.merged.bossWins+'.</p>'
+        +'<p class="v31line">XP/kim cương lấy mức cao nhất, không cộng dồn. Các mục sau lấy theo bản mới hơn ('+(R.lastWriteWinsSide==='cloud'?'đám mây':'thiết bị')+'): '+esc(R.lastWriteWins.join('; '))+'. Không có dữ liệu nào bị xóa lặng lẽ ngoài các mục đã nêu.</p>'
+        +'</div>';
+    }
+    h+='</div>';
+    return h;
+  }catch(e){ return ''; }
+}
+function refreshVerifyText(){
+  try{
+    var vc=lastVerifiedCloud();
+    var nodes=document.querySelectorAll('.v31verify');
+    for(var i=0;i<nodes.length;i++) nodes[i].textContent=(_verifyState==='idle'?'Chưa xác minh lần sao lưu đám mây nào trong phiên này.':_verifyMsg);
+    var lv=document.querySelectorAll('.v31lastverified');
+    for(var j=0;j<lv.length;j++) lv[j].textContent=vc?fmtTime(vc.at):'chưa có';
+  }catch(e){}
+}
+
+/* ---------- D.2 entry points ---------- */
+var panelWrapped=false;
+function wrapDataPanel(){
+  try{
+    var v=window.__v20;
+    if(!v||typeof v.dataPanelHTML!=='function') return false;
+    if(v.dataPanelHTML.__v31) { panelWrapped=true; return true; }
+    var orig=v.dataPanelHTML;
+    var nw=function(){
+      var h=''; try{ h=orig.apply(this,arguments)||''; }catch(e){ h=''; }
+      try{
+        var sec=sectionHTML(false);
+        if(h&&sec){
+          var idx=h.lastIndexOf('</div>');
+          if(idx>=0) h=h.slice(0,idx)+sec+'</div>';
+          else h+=sec;
+        }
+      }catch(e){}
+      return h;
+    };
+    nw.__v31=true;
+    v.dataPanelHTML=nw;
+    panelWrapped=true;
+    return true;
+  }catch(e){ return false; }
+}
+
+/* Account Center backup tab — MutationObserver decorator (V27 pattern).
+   accountContentHTML is closure-local in v21.js and not exported, so no
+   runtime wrap is possible; the tab re-renders on every switch, so a
+   one-time injection would be wiped. */
+var _acctObs=null, _acctBodyObs=null, _acctArmed=false;
+function decorateAcct(){
+  try{
+    if(!document.getElementById('v21importfile')) return; /* backup tab not showing */
+    if(document.getElementById('v31acct')) return;
+    var msg=document.getElementById('v21bakmsg');
+    if(!msg||!msg.parentNode) return;
+    var div=document.createElement('div');
+    div.innerHTML=sectionHTML(true);
+    var node=div.firstChild;
+    if(node) msg.parentNode.insertBefore(node, msg.nextSibling);
+  }catch(e){}
+}
+function armAcctDecorator(){
+  try{
+    if(_acctArmed) return;
+    _acctArmed=true;
+    var start=function(){
+      try{
+        if(_acctObs) _acctObs.disconnect();
+        var host=document.getElementById('v21mcontent');
+        if(host){
+          _acctObs=new MutationObserver(function(){ decorateAcct(); });
+          _acctObs.observe(host,{childList:true,subtree:true});
+        } else if(window.MutationObserver){
+          if(_acctBodyObs) _acctBodyObs.disconnect();
+          _acctBodyObs=new MutationObserver(function(){
+            if(document.getElementById('v21mcontent')){
+              try{ _acctBodyObs.disconnect(); }catch(e){}
+              start();
+            }
+          });
+          if(document.body) _acctBodyObs.observe(document.body,{childList:true,subtree:true});
+        }
+        decorateAcct();
+      }catch(e){}
+    };
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  }catch(e){}
+}
+function disarmAcctDecorator(){
+  try{ if(_acctObs) _acctObs.disconnect(); if(_acctBodyObs) _acctBodyObs.disconnect(); _acctArmed=false; }catch(e){}
+}
+function wrapAccount(){
+  try{
+    var v=window.__v21;
+    if(!v) return;
+    if(typeof v.openAccount==='function'&&!v.openAccount.__v31){
+      var _o=v.openAccount;
+      var nw=function(){ var r=_o.apply(this,arguments); armAcctDecorator(); return r; };
+      nw.__v31=true; v.openAccount=nw;
+    }
+    if(typeof v.closeAccount==='function'&&!v.closeAccount.__v31){
+      var _c=v.closeAccount;
+      var nc=function(){ var r=_c.apply(this,arguments); disarmAcctDecorator(); return r; };
+      nc.__v31=true; v.closeAccount=nc;
+    }
+  }catch(e){}
+}
+
+/* ---------- status probe ---------- */
+function status(){
+  var ci=cloudInfo();
+  var vc=lastVerifiedCloud();
+  return {version:VERSION, panelWrapped:panelWrapped, acctDecoratorArmed:_acctArmed,
+    historyCount:readHistory().length, lastLocalAt:ci.lastSavedAt, lastSyncAt:ci.lastSyncAt,
+    lastVerifiedCloudAt:vc?vc.at:0, cloudConfigured:ci.configured, cloudState:ci.cloud,
+    cloudUser:!!ci.user, pendingOffline:ci.pending, verifyState:_verifyState, verifyMsg:_verifyMsg,
+    mergeReport:_lastMergeReport, reloadCalled:_reloadCalled};
+}
+
+/* ---------- init (all wraps idempotent; safe to call twice) ---------- */
+function init31(){
+  wrapRecordAnswer();
+  wrapDataPanel();
+  wrapAccount();
+  wrapBackupExport();
+  wrapSyncNow();
+  wrapResolveConflict();
+}
+try{ init31(); }catch(e){}
+if(document.readyState==='loading'){ try{ document.addEventListener('DOMContentLoaded', function(){ try{ init31(); }catch(e){} }); }catch(e){} }
+
+window.__v31={
+  version:VERSION,
+  status:status,
+  syncAndVerify:syncAndVerify,
+  verifyCloudBackup:verifyCloudBackup,
+  restoreHistoryEntry:restoreHistoryEntry,
+  restoreFromFile:restoreFromFile,
+  undoRestore:undoRestore,
+  deleteHistoryEntry:deleteHistoryEntry,
+  deleteSnapshot:deleteSnapshot,
+  sectionHTML:sectionHTML,
+  recordBackupEvent:recordBackupEvent,
+  _test:{
+    status:status, readHistory:readHistory, listSystemSnapshots:listSystemSnapshots,
+    restoreRaw:restoreRaw, restoreHistoryEntry:restoreHistoryEntry, undoRestore:undoRestore,
+    snapshotCurrent:snapshotCurrent, newestPreRestoreKey:newestPreRestoreKey,
+    verifyCloudBackup:verifyCloudBackup, buildMergeReport:buildMergeReport,
+    summarizeSide:summarizeSide, fmtTime:fmtTime, hashOf:hashOf,
+    lastMergeReport:function(){ return _lastMergeReport; },
+    setLastMergeReport:function(r){ _lastMergeReport=r; },
+    verifyState:function(){ return _verifyState; },
+    reloadCalled:function(){ return _reloadCalled; },
+    resetReload:function(){ _reloadCalled=false; },
+    init:init31, wrapDataPanel:wrapDataPanel, armAcctDecorator:armAcctDecorator
+  }
+};
 })();
 
 </script>

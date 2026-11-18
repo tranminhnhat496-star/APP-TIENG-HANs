@@ -193,6 +193,7 @@ function importFile(input, fallback){
     snapshot('hanvocab.v12.preimport-'+Date.now(), cur);
     var stamp=(j.v7&&j.v7.meta&&j.v7.meta.saveVersion)||11;
     if(!confirm('Khôi phục bản lưu này (phiên bản '+stamp+')? Dữ liệu hiện tại sẽ được thay thế — bản sao lưu trước khi khôi phục đã được giữ lại.')) return;
+    try{ flush(); }catch(e){}
     try{ localStorage.setItem(SAVE_KEY, JSON.stringify(j)); }catch(e){ alert('Không ghi được dữ liệu (bộ nhớ trình duyệt đầy?).'); return; }
     location.reload();
   };
@@ -323,7 +324,7 @@ function conflictHTML(){
   var c=s.conflict(); if(!c) return '';
   function sum(x){
     if(!x) return 'không có dữ liệu';
-    var wins=0; ['en18','en19'].forEach(function(k){ var b=x.v7&&x.v7[k]&&x.v7[k].bosses; if(b) for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; } });
+    var wins=0; ['en18','en19'].forEach(function(k){ var b=x.v7&&x.v7[k]&&x.v7[k].bosses; if(b) for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; } });
     return 'XP '+(x.xp||0)+' · 💎 '+((x.v7&&x.v7.gems)||0)+' · '+(x.cards||[]).length+' thẻ Hàn · '+wins+' boss đã thắng';
   }
   return '<div class="v20modal"><div class="v20card v20conflict"><h3>⚠️ Dữ liệu trên thiết bị và đám mây khác nhau</h3>'
@@ -333,7 +334,7 @@ function conflictHTML(){
   +'<div class="acts"><button class="btn pri" onclick="__v20.resolveConflict(\'local\')">Dùng bản trên thiết bị này</button>'
   +'<button class="btn" onclick="__v20.resolveConflict(\'cloud\')">Dùng bản trên đám mây</button>'
   +'<button class="btn" onclick="__v20.resolveConflict(\'merge\')">Hợp nhất an toàn</button></div>'
-  +'<p class="mute">Hợp nhất an toàn: boss đã thắng ở bên nào cũng tính, sao lấy mức cao nhất; XP/kim cương lấy mức cao nhất (không cộng dồn); thẻ từ hợp nhất theo ID.</p>'
+  +'<p class="mute">Hợp nhất an toàn: từ tiếng Anh giữ mức cao nhất từng từ (box/số câu đúng/số câu sai); boss, thú cưng, nhiệm vụ và lịch sử Học thông minh được hợp nhất từ cả hai bên; XP/kim cương lấy mức cao nhất (không cộng dồn); một số lựa chọn hiện tại (đội thú cưng, kế hoạch hôm nay) lấy theo bản mới hơn.</p>'
   +'</div></div>';
 }
 function refreshConflict(){

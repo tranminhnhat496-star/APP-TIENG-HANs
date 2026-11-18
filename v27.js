@@ -160,6 +160,7 @@ function touchStreak(d,lang){
 function recordAnswer(lang,id,ok,mode){
   try{
     if(!id)return;
+    if(!getS()){ try{ if(window.console&&console.warn) console.warn('[V31] recordAnswer dropped: S unavailable, refusing to write into the never-persisted _mem fallback (F-11).'); }catch(e){} return; }
     var d=en27(),now=Date.now();
     if(lang==='ko'){
       var k=d.ko;

@@ -1605,8 +1605,9 @@ function backupHTML(){
   +'<div class="acts"><button class="btn bad" onclick="__v15.resetEN()">Đặt lại tiến trình tiếng Anh</button></div>';
 }
 function backupExport(){
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   var raw='';try{raw=localStorage.getItem('hanvocab.v1')||'{}'}catch(e){raw='{}'}
-  dl('korean-vocab-farm-backup-v7.json',raw);
+  dl('korean-vocab-farm-backup-v16.3.json',raw);
 }
 function backupImport(input){
   var f=input&&input.files&&input.files[0];if(!f)return;
@@ -1615,7 +1616,9 @@ function backupImport(input){
     try{
       var j=JSON.parse(rd.result);
       if(!j||!Array.isArray(j.cards))throw new Error('bad save');
+      try{ var _s20=window.__v20sync; if(_s20&&_s20.validateSave){ var _v=_s20.validateSave(j); if(!_v.ok) throw new Error('invalid save: '+(_v.errors||[]).slice(0,3).join(', ')); if(_s20.snapshot){ var _cur=''; try{ _cur=localStorage.getItem('hanvocab.v1')||''; }catch(e){} _s20.snapshot('hanvocab.v12.preimport-'+Date.now(), _cur); } } }catch(_ve){ if(_ve&&String(_ve.message||'').indexOf('invalid save')===0) throw _ve; }
       if(!confirm('Khôi phục bản lưu này? Dữ liệu hiện tại sẽ bị thay thế.'))return;
+      try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
       localStorage.setItem('hanvocab.v1',JSON.stringify(j));
       location.reload();
     }catch(e){alert('File sao lưu không hợp lệ: cần file JSON của game (có trường cards).')}
@@ -1624,7 +1627,7 @@ function backupImport(input){
 }
 function resetEN(){
   if(!confirm('Xóa toàn bộ tiến trình tiếng Anh (từ đã học, farm, boss)? Từ tiếng Hàn và XP giữ nguyên.'))return;
-  try{delete S.v7.en;delete S.v7.en15;save15();buildWords();pop15('Đã đặt lại tiến trình tiếng Anh.');renderTab()}catch(e){}
+  try{delete S.v7.en;delete S.v7.en15;try{var _e27=S.v7&&S.v7.en27;if(_e27&&_e27.en){_e27.en.last={};_e27.en.cw={};_e27.en.cr={};}}catch(_e27e){}save15();buildWords();pop15('Đã đặt lại tiến trình tiếng Anh.');renderTab()}catch(e){}
 }
 
 /* ---------- INIT ---------- */
