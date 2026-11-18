@@ -98,6 +98,7 @@ function validateSave(obj){
   if(obj.decks!==undefined&&!Array.isArray(obj.decks)) errs.push('bad-decks');
   if(obj.xp!==undefined&&typeof obj.xp!=='number') errs.push('bad-xp');
   if(obj.v7!==undefined&&(typeof obj.v7!=='object'||obj.v7===null||Array.isArray(obj.v7))) errs.push('bad-v7');
+  if(obj.v7&&obj.v7.meta&&obj.v7.meta.saveVersion!==undefined&&obj.v7.meta.saveVersion!==SAVE_VERSION) errs.push('bad-version:'+obj.v7.meta.saveVersion);
   /* prototype-pollution guard: refuse suspicious keys anywhere shallow */
   var bad=['__proto__','constructor','prototype'];
   function scan(o,depth){

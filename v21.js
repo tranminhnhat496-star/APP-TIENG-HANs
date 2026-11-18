@@ -196,6 +196,11 @@ function activateAccount(uid, transfer){
      this account's local home. Only honoured when the previous identity
      was the guest or unclaimed (no V13 session yet, e.g. a V12 save);
      an account-to-account switch never copies bytes. */
+  /* B-32-3: flush FIRST — before parkSlot()/readSlot()/any slot
+     write. The pending in-memory save must land in localStorage
+     before the slot is parked/switched, or the flush writes stale
+     S over the just-switched bytes. Guard text unchanged (F-02c). */
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   var prev=session();
   var slot=readSlot();
   var parked=parkSlot();
@@ -209,18 +214,19 @@ function activateAccount(uid, transfer){
     if(home){ if(!writeVerified(SAVE_KEY, home)) return {ok:false, reason:'slot-write-failed'}; }
     else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
   }
-  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'account', uid:uid, at:Date.now()});
   reload();
   return {ok:true};
 }
 function activateGuest(){
+  /* B-32-3: flush FIRST — before parkSlot()/any slot write (see
+     activateAccount above). Guard text unchanged (F-02d). */
+  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   var parked=parkSlot();
   if(!parked.ok) return {ok:false, reason:'park-failed'};
   var gh=readHome(null);
   if(gh){ if(!writeVerified(SAVE_KEY, gh)) return {ok:false, reason:'slot-write-failed'}; }
   else { lsRemove(SAVE_KEY); /* fresh seed on reload */ }
-  try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   setSession({mode:'guest', at:Date.now()});
   reload();
   return {ok:true};

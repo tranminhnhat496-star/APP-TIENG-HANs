@@ -769,3 +769,84 @@ Repo: **APP-TIENG-HANS**.
   `hanvocab.v1`. File `v27.css`/`v27.js` thừa ra sau khi revert có thể xóa
   khỏi repo (nó không được V15.3 dùng đến). Dữ liệu `S.v7.en27` còn lại
   trong bản lưu sẽ bị V15.3 bỏ qua, vô hại.
+
+## V16.3 — Backup & Restore Fix (2026-11-18)
+1. Tải file `Korean_English_Vocab_Farm_V16_3_Backup_Restore_Fix.zip` (đính kèm
+   trong chat; không push ZIP lên repo) và giải nén.
+2. Sao chép đè lên thư mục site (giữ nguyên cấu trúc): `index.html`,
+   `v31.js`, `v31.css`, các file `v15.js`/`v20.js`/`v20_sync.js`/`v21.js`/
+   `v27.js` đã vá, `build_v31.py`, `package_v31.py`, `tools/v31/` và các
+   tài liệu `README_V16_3_BACKUP_FIX.md`, `CHANGELOG_V16_to_V16_3.md`,
+   `SMOKE_TEST_V16_3_2026-11-18.md`. **Không** ghi đè `firebase-config.js`
+   trên repo bằng file placeholder trong ZIP (file cấu hình thật của Anh
+   nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai: mở EN Hub → tab 💾 Dữ liệu,
+   cuối panel phải có mục "Sao lưu & khôi phục — V16.3" với 3 dòng thời
+   gian riêng và "Chưa có lịch sử sao lưu."; mở Trung tâm tài khoản →
+   tab Sao lưu & Khôi phục phải thấy cùng mục đó. Dữ liệu người chơi
+   không đổi (cùng khóa `hanvocab.v1`, không migration, không cần đăng
+   nhập lại).
+4. Commit với thông điệp `Upgrade to V16.3: Backup & Restore Fix` rồi
+   **Push origin**. Nên push qua nhánh `muse/fix-backup-restore` và mở
+   Draft PR về `main` (không merge trực tiếp vào `main`, không
+   force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V16.3 không đổi code Firebase và không thêm nhánh hợp nhất
+   cho `en27` (Q1 vẫn hoãn). Đồng bộ/đăng nhập đám mây thật vẫn chưa
+   được kiểm thử live — chạy checklist `FIREBASE_SETUP.md` (mục 6 +
+   V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi đầy đủ
+   offline và panel nói rõ "Chưa cấu hình Firebase".
+6. Lưu ý F-12 (đang chờ Anh xác nhận): `resetEN` hiện chỉ xóa các map
+   phía EN trong `en27` (`last`/`cw`/`cr`); lịch sử ngày/phiên/chuỗi
+   Học Thông Minh được giữ lại. Nếu Anh muốn xóa toàn bộ `en27` khi
+   đặt lại tiếng Anh, đó là thay đổi một dòng — báo lại trước khi làm.
+7. Nếu cần quay lại V16: revert commit V16.3 trong GitHub Desktop như
+   mục V16. Dữ liệu người chơi không bị ảnh hưởng vì V16.3 không đổi
+   tên khóa lưu `hanvocab.v1`. File `v31.css`/`v31.js` thừa ra sau khi
+   revert có thể xóa khỏi repo. Hai khóa mới `hanvocab.v16.backup-history`
+   và `hanvocab.v16.last-verified-cloud` còn lại trong localStorage sẽ
+   bị V16 bỏ qua, vô hại.
+
+## Quay lại V16 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V16.3 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V16.3 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v31.css`/`v31.js` thừa ra sau khi revert có thể
+  xóa khỏi repo (nó không được V16 dùng đến). Dữ liệu `hanvocab.v16.*`
+  còn lại trong bản lưu sẽ bị V16 bỏ qua, vô hại.
+
+## V16.4 — Data Safety (2026-11-19)
+1. Tải file `Korean_English_Vocab_Farm_V16_4_Data_Safety.zip` (đính kèm
+   trong chat; không push ZIP lên repo) và giải nén.
+2. Sao chép đè lên thư mục site (giữ nguyên cấu trúc): `index.html`,
+   `v32.js`, `v32.css`, file `v20_sync.js` đã vá (1 dòng R-V32-VER),
+   `build_v32.py`, `package_v32.py`, `tools/v32/` và các tài liệu
+   `README_V16_4_DATA_SAFETY.md`, `CHANGELOG_V16_3_to_V16_4.md`,
+   `SMOKE_TEST_V16_4_2026-11-19.md`. **Không** ghi đè `firebase-config.js`
+   trên repo bằng file placeholder trong ZIP (file cấu hình thật của Anh
+   nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai: mở EN Hub → tab 💾 Dữ liệu,
+   cuối panel phải có mục "Giám sát dung lượng lưu trữ — V16.4" với thanh
+   tiến trình, mức "Ổn" và phiên bản bản lưu hiện tại; mở Trung tâm tài
+   khoản → tab Sao lưu & Khôi phục phải thấy cùng mục đó. Dữ liệu người
+   chơi không đổi (cùng khóa `hanvocab.v1`, không migration, không cần
+   đăng nhập lại).
+4. Commit với thông điệp `Upgrade to V16.4: Data Safety` rồi **Push
+   origin**. Nên push qua nhánh `muse/data-safety-v164` và mở Draft PR
+   về nhánh `muse/fix-backup-restore` (stacked — không merge trực tiếp
+   vào `main`, không force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V16.4 không đổi code Firebase. Đồng bộ/đăng nhập đám mây
+   thật vẫn chưa được kiểm thử live — chạy checklist `FIREBASE_SETUP.md`
+   (mục 6 + V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi
+   đầy đủ offline và panel nói rõ "Chưa cấu hình Firebase".
+6. Nếu cần quay lại V16.3: revert commit V16.4 trong GitHub Desktop như
+   mục V16. Dữ liệu người chơi không bị ảnh hưởng vì V16.4 không đổi
+   tên khóa lưu `hanvocab.v1`. File `v32.css`/`v32.js` thừa ra sau khi
+   revert có thể xóa khỏi repo. V16.4 không thêm khóa localStorage mới
+   nên không còn gì sót lại trong bản lưu.
+
+## Quay lại V16.3 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V16.4 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V16.4 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v32.css`/`v32.js` thừa ra sau khi revert có thể
+  xóa khỏi repo (nó không được V16.3 dùng đến).
