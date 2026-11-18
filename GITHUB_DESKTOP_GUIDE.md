@@ -707,3 +707,65 @@ Repo: **APP-TIENG-HANS**.
   người chơi không bị ảnh hưởng vì V15.3 không đổi tên khóa lưu
   `hanvocab.v1`. File `v26.css`/`v26.js` thừa ra sau khi revert có thể xóa
   khỏi repo (nó không được V15.2 dùng đến).
+
+## V16 — Smart Learning (2026-11-18)
+
+## Chuẩn bị (giống các lần trước)
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, commit hết thay
+  đổi đang dở (nếu có).
+- **Sao lưu dữ liệu người chơi trước khi cập nhật:** mở trang game hiện
+  tại, vào tab 💾 Dữ liệu (English Hub), bấm "Tải file sao lưu (.json)".
+  V16 không đổi khóa lưu `hanvocab.v1` và không migration, nhưng có file
+  sao lưu ngoài máy thì luôn an toàn hơn.
+
+## Cập nhật
+- Giải nén file `Korean_English_Vocab_Farm_V16_Smart_Learning.zip`
+  ra một thư mục.
+- Trong GitHub Desktop, mở repository **APP-TIENG-HANS**, vào tab
+  **Changes**.
+- Copy **toàn bộ nội dung** trong thư mục vừa giải nén (gồm `index.html`,
+  `v27.js`, `v27.css`, `build_v16.py`, `package_v16.py` và các file khác)
+  vào thư mục repository, ghi đè các file cũ. Chỉ có 3 file code mới thật
+  sự (`v27.css`, `v27.js` và 1 dòng hook trong mỗi file `v15.js`,
+  `v18.js`, `v19.js`); mọi file cũ khác được ghi đè bằng bản giống hệt
+  V15.3 (chỉ khác title V16 và 3 dòng hook).
+- Kiểm tra tab **Changes** hiện các file mới/sửa, commit với nội dung
+  `Upgrade to V16: Smart Learning` rồi **Push origin**.
+
+## Kiểm tra sau khi deploy (quan trọng — kiểm thử trên trình duyệt thật)
+1. Đợi 1–2 phút, mở trang GitHub Pages của bạn trên điện thoại.
+2. Mở **Học thông minh** từ Korean Farm (nút mới cạnh "Bản Đồ Boss" /
+   "Thú Cưng") và từ English Hub: overlay phải mở với 3 tab **Bảng điều
+   khiển / Từ yếu / Kế hoạch ngày**, nút chuyển Hàn/Anh bên trong.
+3. Bảng điều khiển: số từ đã học / cần ôn / từ yếu phải là số thật từ dữ
+   liệu của bạn; ô nào chưa có dữ liệu (vd độ chính xác tiếng Hàn trước
+   khi dùng Học Thông Minh) phải ghi "chưa có dữ liệu", không được bịa số.
+4. Tab **Từ yếu**: danh sách từ yếu có số lần sai, trạng thái, nút nghe
+   phát âm được; tìm kiếm và lọc hoạt động.
+5. Tab **Kế hoạch ngày**: phải hiện đúng số từ mới / đến hạn / thường
+   sai; chọn 10 phút rồi bấm **Bắt đầu ôn tập** — bài ôn chạy đủ các dạng
+   câu hỏi, cuối buổi hiện tổng kết đúng/sai/từ đã cải thiện/từ còn yếu.
+6. Làm xong một kế hoạch trong ngày: lần đầu +20 XP; mở lại cùng kế hoạch
+   trong ngày và làm lại thì **không** được +20 XP lần nữa.
+7. Chuyển nút Hàn/Anh trong overlay: số liệu hai ngôn ngữ phải tách riêng;
+   ngôn ngữ học chính của game (English/Korean Farm) **không được** đổi
+   theo.
+8. Kiểm tra dữ liệu cũ: từ vựng A1–A2/Oxford 3000/Basic Tactics, từ tự
+   nhập, XP, kim cương, farm, vật nuôi nông trại, boss, bản đồ, thú cưng,
+   đội hình và tiến trình SRS cũ phải còn nguyên. Nếu thiếu, dùng file sao
+   lưu đã tải ở bước chuẩn bị để khôi phục.
+9. Mở overlay ở 360px và 430px: không có thanh cuộn ngang, nút bấm đủ lớn
+   (≥44px), chữ đọc được.
+10. Firebase: V16 không đổi code Firebase và không thêm nhánh hợp nhất cho
+    `en27` (Q1 hoãn) — đồng bộ 2 máy vẫn giữ bản mới hơn cho dữ liệu Học
+    Thông Minh. Nếu bạn chưa chạy checklist FIREBASE_SETUP.md (mục 6 +
+    V13.3) thì đăng nhập/đồng bộ thật vẫn chưa được xác nhận — V16 không
+    làm thay đổi trạng thái này.
+
+## Quay lại V15.3 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit trước
+  khi nâng cấp V16 → **Revert this commit**, commit và push. Dữ liệu
+  người chơi không bị ảnh hưởng vì V16 không đổi tên khóa lưu
+  `hanvocab.v1`. File `v27.css`/`v27.js` thừa ra sau khi revert có thể xóa
+  khỏi repo (nó không được V15.3 dùng đến). Dữ liệu `S.v7.en27` còn lại
+  trong bản lưu sẽ bị V15.3 bỏ qua, vô hại.
