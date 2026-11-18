@@ -1,0 +1,164 @@
+{
+  "label": "https://tranminhnhat496-star.github.io/APP-TIENG-HANs/",
+  "measuredAt": "2026-11-17T19:26:04.954Z",
+  "settledAfterNavMs": 3012,
+  "viewport": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 1,
+    "mobile": true
+  },
+  "chrome": "Muse Browser 157.0.8103.81 (via CDP)",
+  "network": {
+    "requestsSentHttp": 2,
+    "requestsFinished": 1,
+    "requestsFailed": 3,
+    "transferredBytes": 183989,
+    "transferredMiB": 0.18,
+    "bytesByType": {
+      "other": 183989
+    },
+    "failedRequests": [
+      {
+        "url": "https://tranminhnhat496-star.github.io/APP-TIENG-HANs/",
+        "errorText": "net::ERR_TUNNEL_CONNECTION_FAILED",
+        "type": "Document",
+        "canceled": false
+      },
+      {
+        "url": "https://tranminhnhat496-star.github.io/APP-TIENG-HANs/",
+        "errorText": "net::ERR_TUNNEL_CONNECTION_FAILED",
+        "type": "Document",
+        "canceled": false
+      },
+      {
+        "url": "https://tranminhnhat496-star.github.io/APP-TIENG-HANs/",
+        "errorText": "net::ERR_ABORTED",
+        "type": "Document",
+        "canceled": true
+      }
+    ],
+    "finishedRequests": [
+      {
+        "url": "https://tranminhnhat496-star.github.io/APP-TIENG-HANs/",
+        "type": null,
+        "status": null,
+        "bytes": 183989
+      }
+    ]
+  },
+  "perf": {
+    "href": "chrome-error://chromewebdata/",
+    "title": "tranminhnhat496-star.github.io",
+    "visibilityState": "visible",
+    "nav": {
+      "domContentLoaded": 127.70000000018626,
+      "load": 130.09999999962747,
+      "domInteractive": 126.40000000037253,
+      "responseEnd": 120,
+      "transferSize": 0,
+      "encodedBodySize": 183989,
+      "decodedBodySize": 183989,
+      "type": "navigate"
+    },
+    "lcp": null,
+    "lcpEntries": 0,
+    "cls": 0,
+    "paints": [
+      {
+        "name": "first-paint",
+        "startTime": 148
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 148
+      }
+    ],
+    "layoutShiftCount": 0,
+    "resourceCount": 0,
+    "resourceTransferTotal": 0,
+    "resources": []
+  },
+  "perfObserverLog": {
+    "lcp": [
+      {
+        "startTime": 148,
+        "size": 27528,
+        "el": "DIV"
+      }
+    ],
+    "cls": 0,
+    "shifts": 0,
+    "supported": [
+      "element",
+      "event",
+      "first-input",
+      "interaction-contentful-paint",
+      "largest-contentful-paint",
+      "layout-shift",
+      "long-animation-frame",
+      "longtask",
+      "mark",
+      "measure",
+      "navigation",
+      "paint",
+      "resource",
+      "soft-navigation",
+      "visibility-state"
+    ]
+  },
+  "firebaseCheck": {
+    "firebaseGlobal": "undefined",
+    "firebaseApp": false,
+    "fontsStatus": "loaded",
+    "fontsLoaded": 0,
+    "bodyText": "This site can’t be reached\n\nThe webpage at https://tranminhnhat496-star.github.io/APP-TIENG-HANs/ might be temporarily d"
+  },
+  "cdMetrics": {
+    "Timestamp": 7797.924862,
+    "AudioHandlers": 0,
+    "AudioWorkletProcessors": 0,
+    "Documents": 7,
+    "Frames": 7,
+    "JSEventListeners": 2,
+    "LayoutObjects": 55,
+    "MediaKeySessions": 0,
+    "MediaKeys": 0,
+    "Nodes": 446,
+    "Resources": 6,
+    "ContextLifecycleStateObservers": 21,
+    "V8PerContextDatas": 2,
+    "WorkerGlobalScopes": 0,
+    "UACSSResources": 0,
+    "RTCPeerConnections": 0,
+    "ResourceFetchers": 7,
+    "AdSubframes": 0,
+    "DetachedScriptStates": 1,
+    "ArrayBufferContents": 0,
+    "LayoutCount": 3,
+    "RecalcStyleCount": 3,
+    "LayoutDuration": 0.000536,
+    "RecalcStyleDuration": 0.001257,
+    "DevToolsCommandDuration": 0.001092,
+    "ScriptDuration": 0.002549,
+    "V8CompileDuration": 0.000123,
+    "TaskDuration": 0.041522,
+    "TaskOtherDuration": 0.035965,
+    "ThreadTime": 0.029393,
+    "ProcessTime": 0.16,
+    "JSHeapUsedSize": 1299304,
+    "JSHeapTotalSize": 2621440,
+    "FirstMeaningfulPaint": 7794.557466,
+    "DomContentLoaded": 7794.538952,
+    "NavigationStart": 7794.412496
+  },
+  "cdMetricsDeltaAcrossReload": {
+    "ScriptDuration": 0.003,
+    "V8CompileDuration": 0,
+    "TaskDuration": 0.025,
+    "LayoutDuration": -0.006,
+    "RecalcStyleDuration": 0,
+    "LayoutCount": -2,
+    "RecalcStyleCount": -1
+  }
+}
