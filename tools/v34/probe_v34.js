@@ -325,7 +325,7 @@ async function main() {
     function poolOf(b){
       var list;
       if(b._v34old) list=words.slice(); /* V15 fights use wordsFiltered ALL */
-      else if(b.lib==='oxford') list=words.filter(function(x){ return (x.lib||[]).indexOf('oxford')>=0; });
+      else if(b.lib==='oxford'){ list=words.filter(function(x){ return (x.lib||[]).indexOf('oxford')>=0; }); if(b.diff) list=list.filter(function(x){ return x.lv===b.diff; }); }
       else if(b.arena==='leg'){ var lv=legDiff(); list=words.filter(function(x){ return lv.indexOf(x.lv)>=0; }); }
       else if(b.diff) list=words.filter(function(x){ return x.lv===b.diff; });
       else list=words.slice();
@@ -339,16 +339,21 @@ async function main() {
       if(any===0||inPool===0) bad.push({id:b.id, weak:w, any:any, inPool:inPool, poolSize:poolOf(b).length});
     });
     return bad; })() `);
-  // KNOWN LIMIT (data, not code): 12 bosses' weaknesses can never appear
+  // KNOWN LIMIT (data, not code): 13 bosses' weaknesses can never appear
   // in their diff-filtered fight pool — the A1-A2 basic topics
   // (animals/vehicles/clothes-and-accessories/fruit-and-vegetables/
   // food-and-drinks) have no B1/B2-level words (verified via
   // V34_DEBUG_TOPICS counts). The honest handling (blocked bar, meter
   // never fills) covers them; the spec's weakness table is kept as-is.
-  // Any deviation from exactly these 12 is a real regression.
-  const expectedUnfillable = ['v11_seadragon', 'v11_sharkking', 'v11_timemachine', 'v11_golem', 'v11_goldephant', 'v10_tiger', 'v10_wizard', 'v10_dict', 'v10_king', 'v10_fox', 'v10_octopus', 'v10_fairy'];
+  // Any deviation from exactly these 13 is a real regression.
+  // V18.1 correction: the list was 12 until the probe-model fix
+  // (V36 R-PROBE: the oxford branch now applies the diff filter);
+  // v10_owl is the 13th — its pool is Oxford ∩ B1 = 149 words, of
+  // which 0 match 'clothes-and-accessories'. In-game behaviour was
+  // already correct (honest blocked message); only the count was wrong.
+  const expectedUnfillable = ['v11_seadragon', 'v11_sharkking', 'v11_timemachine', 'v11_golem', 'v11_goldephant', 'v10_tiger', 'v10_wizard', 'v10_dict', 'v10_king', 'v10_fox', 'v10_octopus', 'v10_fairy', 'v10_owl'];
   const gotUnfillable = poolCheck.map(b => b.id).sort();
-  check('unfillable weaknesses are exactly the 12 known B1/B2 basic-topic bosses', JSON.stringify(gotUnfillable) === JSON.stringify(expectedUnfillable.slice().sort()), gotUnfillable.join(', '));
+  check('unfillable weaknesses are exactly the 13 known B1/B2 basic-topic bosses', JSON.stringify(gotUnfillable) === JSON.stringify(expectedUnfillable.slice().sort()), gotUnfillable.join(', '));
   if (process.env.V34_DUMP_POOL) fs.writeFileSync('/tmp/v34_pool_bad.json', JSON.stringify(poolCheck, null, 1));
   // Debug aid: V15-topic x level counts for the weakness topics that have
   // zero B1/B2 words via a1a2Topics (decides whether a topic-synonym

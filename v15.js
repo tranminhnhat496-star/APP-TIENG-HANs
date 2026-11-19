@@ -198,6 +198,31 @@ function buildWords(){
       }
     });
   }catch(e){}
+  /* V35: SKYROOT SANCTUARY — gắn 240 từ Skyroot (data qua
+     window.__V35_WORDS, ids 'v35_<slug>') vào WORDS chung, theo mẫu
+     V33 (Chrono). Từ đã có chỉ được gắn thêm thư viện
+     'skyroot'; từ chỉ có trong Skyroot nhận id ổn định 'v35_<slug>'
+     và cấp độ 'B2' (boss Skyroot là diff B2 nên wordPool gồm chúng).
+     POS chuẩn hóa dài->ngắn tại đây (bài học V34-BUG-1).
+     KHÔNG tạo S.cards — trường ko chỉ là dữ liệu hiển thị/học. */
+  try{
+    var sk35=(window.__V35_WORDS||[]);
+    var K2W5={};WORDS.forEach(function(ww){if(!ww.custom)K2W5[ww.en.toLowerCase()]=ww});
+    sk35.forEach(function(a){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W5[key];
+      if(ww){
+        ww.lib=ww.lib||[];
+        if(ww.lib.indexOf('skyroot')<0)ww.lib.push('skyroot');
+        ww.skyrootSet=ww.skyrootSet||a.set;
+        if(!ww.ko&&a.ko)ww.ko=a.ko;
+      }else{
+        var nw={id:a.id,t:'skyroot',en:a.en,vi:a.vi,ipa:a.ipa||'',pos:(function(p){var m={noun:'n',verb:'v',adjective:'adj',adverb:'adv'};return (p||'').split(',').map(function(x){var k=x.trim();return m[k]||k}).join(', ')})(a.pos),ex:a.ex||'',exvi:a.exvi||'',lv:'B2',custom:false,
+          lib:['skyroot'],skyrootSet:a.set,ko:a.ko||''};
+        WORDS.push(nw);BYID[nw.id]=nw;K2W5[key]=nw;LV[key]='B2';
+      }
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -302,6 +327,9 @@ function inScope15(w){
   if(sc.lib==='chrono'&&sc.set){
     if(w.chronoSet!==sc.set)return false;
   }
+  if(sc.lib==='skyroot'&&sc.set){
+    if(w.skyrootSet!==sc.set)return false;
+  }
   if(sc.lib==='bt'){
     if(sc.unit){
       var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
@@ -344,6 +372,9 @@ function wordsFiltered(o){
       }
       if(sc.lib==='chrono'&&sc.set){
         if(w.chronoSet!==sc.set)return false;
+      }
+      if(sc.lib==='skyroot'&&sc.set){
+        if(w.skyrootSet!==sc.set)return false;
       }
       if(sc.lib==='bt'){
         /* Basic Tactics: lọc theo Unit(s), loại mục từ và trạng thái.
@@ -1088,9 +1119,10 @@ function speakRecord(){
     var hit=tw.filter(function(t){return gw.indexOf(t)>=0}).length;
     var ratio=tw.length?hit/tw.length:0;
     var ok=ratio>=0.7||got===target;
-    M.result={ok:ok,text:ok?'Khớp tốt ('+Math.round(ratio*100)+'% từ đúng)! +5 XP':'Chưa khớp lắm ('+Math.round(ratio*100)+'% từ đúng). Hãy nghe mẫu và thử lại — đáp án: '+w.en};
-    if(ok){M.score++;gain15(5);mark15(true,w,'speak')}
+    var _sxp36=0;
+    if(ok){M.score++;_sxp36=mark15(true,w,'speak')}
     else mark15(false,w,'speak');
+    M.result={ok:ok,text:ok?'Khớp tốt ('+Math.round(ratio*100)+'% từ đúng)! +'+_sxp36+' XP':'Chưa khớp lắm ('+Math.round(ratio*100)+'% từ đúng). Hãy nghe mẫu và thử lại — đáp án: '+w.en};
     save15();renderMode();
   };
   rec.onerror=function(){M.listening=false;M.result={ok:false,text:'Không nghe được giọng nói. Hãy kiểm tra micro và thử lại.'};renderMode()};

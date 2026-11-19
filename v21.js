@@ -32,7 +32,7 @@ var AVATARS=[
   {id:'unicorn', name:'Kỳ lân',            wins:60},
   {id:'phoenix', name:'Phượng hoàng',      wins:70}
 ];
-var TOTAL_BOSSES=78; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) */
+var TOTAL_BOSSES=86; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) + 8 (V18 Skyroot) */
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function getS(){ try{ return S; }catch(e){ return null; } }
@@ -115,7 +115,7 @@ function bossWinCount(){
   ['en18','en19'].forEach(function(k){
     var b=S.v7[k]&&S.v7[k].bosses;
     if(!b) return;
-    for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) n++; }
+    for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) n++; }
   });
   return n;
 }
@@ -158,7 +158,7 @@ function summarizeSave(obj){
   ['en18','en19'].forEach(function(k){
     var b=obj.v7&&obj.v7[k]&&obj.v7[k].bosses;
     if(!b) return;
-    for(var id in b){ var r=b[id]||{}; if((r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; }
+    for(var id in b){ var r=b[id]||{}; if(r.win||r.wins||(r.en&&r.en.win)||(r.ko&&r.ko.win)) wins++; }
   });
   return {xp:xp, cards:cards, gems:gems, bossWins:wins};
 }
@@ -347,7 +347,7 @@ function screenHTML(name){
       +det
       +'<div class="v21btns">'
       +'<button type="button" class="v21btn google" id="v21google" data-label="Đăng nhập bằng Google">'+GOOGLE_G+'<span>Đăng nhập bằng Google</span></button>'
-      +'<button type="button" class="v21btn primary" id="v21email" data-label="Đăng nhập bằng Email">Đăng nhập bằng Email</button>'
+      +'<button type="button" class="v21btn primary" id="v21emailbtn" data-label="Đăng nhập bằng Email">Đăng nhập bằng Email</button>'
       +'<button type="button" class="v21btn purple" id="v21register" data-label="Tạo tài khoản">Tạo tài khoản</button>'
       +'<button type="button" class="v21btn amber" id="v21guest" data-label="Chơi với tư cách khách">Chơi với tư cách khách</button>'
       +'</div>'
@@ -457,7 +457,7 @@ function wireAuth(name){
     setSession({mode:'guest', at:Date.now()});
     enterGame();
   });
-  on('v21email','click', function(){ showAuth('login'); });
+  on('v21emailbtn','click', function(){ showAuth('login'); });
   on('v21register','click', function(){ showAuth('register'); });
   on('v21toregister','click', function(){ showAuth('register'); });
   on('v21tologin','click', function(){ showAuth('login'); });
@@ -737,7 +737,8 @@ function openAccount(tab){
   document.body.appendChild(m);
   wireAccount();
 }
-function closeAccount(){ var m=$('#v21account'); if(m) m.remove(); }
+var _esc21=null;
+function closeAccount(){ if(_esc21){try{document.removeEventListener('keydown',_esc21)}catch(e){}_esc21=null;} var m=$('#v21account'); if(m) m.remove(); }
 function rerenderAccount(){ var c=$('#v21mcontent'); if(c){ c.innerHTML=accountContentHTML(accountTab); wireAccountContent(); } }
 function wireAccount(){
   var m=$('#v21account'); if(!m) return;
@@ -751,7 +752,7 @@ function wireAccount(){
     });
   });
   wireAccountContent();
-  document.addEventListener('keydown', function esc21(ev){ if(ev.key==='Escape') closeAccount(); }, {once:true});
+  if(_esc21){try{document.removeEventListener('keydown',_esc21)}catch(e){}} _esc21=function(ev){ if(ev.key==='Escape') closeAccount(); }; document.addEventListener('keydown',_esc21);
 }
 function wireAccountContent(){
   function on(id, ev, fn){ var el=document.getElementById(id); if(el) el.addEventListener(ev, fn); }

@@ -79,6 +79,8 @@ function hasProgress(S){
   if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
   if(v7.en33&&v7.en33.quests){ for(var q33 in v7.en33.quests){ if(v7.en33.quests[q33]) return true; } }
   if(v7.en33&&v7.en33.regionClaimed){ for(var rc33 in v7.en33.regionClaimed){ if(v7.en33.regionClaimed[rc33]) return true; } }
+  if(v7.en35&&v7.en35.quests){ for(var q35 in v7.en35.quests){ if(v7.en35.quests[q35]) return true; } }
+  if(v7.en35&&v7.en35.regionClaimed){ for(var rc35 in v7.en35.regionClaimed){ if(v7.en35.regionClaimed[rc35]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -332,6 +334,28 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m33.regionClaimed={en:Math.max(rcL.en||0,rcC.en||0),ko:Math.max(rcL.ko||0,rcC.ko||0)};
           m33.pending={};
           v7.en33=m33;
+        }
+        else if(kk==='en35'){
+          /* V35 (Skyroot Sanctuary): quests union (done/claimed/acc/at
+             MAX), regionClaimed union (per-language MAX — NOT unionTrue:
+             unionTrue is local-priority last-writer-wins, so a local
+             {ko:0} would overwrite a cloud {ko:1}; regionClaimed
+             carries explicit 0s, unlike the 1/absent claimed maps),
+             created MIN. XP/gems are never
+             summed (MAX at the top level, as everywhere else).
+             Pending launches are session-local and dropped. No rift
+             sub-state exists in V35. */
+          var l35=(localS.v7&&localS.v7.en35)||{}, c35=(cloudS.v7&&cloudS.v7.en35)||{};
+          var m35={};
+          m35.created=Math.min(l35.created||Infinity, c35.created||Infinity);
+          if(!isFinite(m35.created)) m35.created=(l35.created||c35.created||Date.now());
+          var q35={};
+          [l35.quests,c35.quests].forEach(function(src){ if(!src) return; for(var qk in src){ var a=q35[qk]=q35[qk]||{}; var b=src[qk]||{}; a.done=Math.max(a.done||0,b.done||0); a.claimed=Math.max(a.claimed||0,b.claimed||0); a.acc=Math.max(a.acc||0,b.acc||0); a.at=Math.max(a.at||0,b.at||0); } });
+          m35.quests=q35;
+          var rcL35=l35.regionClaimed||{}, rcC35=c35.regionClaimed||{};
+          m35.regionClaimed={en:Math.max(rcL35.en||0,rcC35.en||0),ko:Math.max(rcL35.ko||0,rcC35.ko||0)};
+          m35.pending={};
+          v7.en35=m35;
         }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }

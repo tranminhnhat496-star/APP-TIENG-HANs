@@ -292,7 +292,7 @@ function renderEN(){
   h+='<div class="enhead"><div class="endir">'
     +'<button class="btn '+(e.dir==='ev'?'pri':'')+'" onclick="__v14.dir(\'ev\')">EN → VI</button>'
     +'<button class="btn '+(e.dir==='ve'?'pri':'')+'" onclick="__v14.dir(\'ve\')">VI → EN</button></div>'
-    +'<div class="enstats">'+enIcon('flame.png')+' '+(e.streak||0)+' · Đúng '+EN.sessRight+' · +'+EN.sessXp+' XP · '+enIcon('book.png')+' '+(e.review||[]).length+' cần ôn</div></div>';
+    +'<div class="enstats">'+enIcon('flame.svg')+' '+(e.streak||0)+' · Đúng '+EN.sessRight+' · +'+EN.sessXp+' XP · '+enIcon('book.png')+' '+(e.review||[]).length+' cần ôn</div></div>';
   h+='<div class="entabs">'+EXTABS.map(function(t){ return '<button class="btn sm '+(e.ex===t[0]?'pri':'')+'" onclick="__v14.ex(\''+t[0]+'\')">'+t[1]+'</button>'; }).join('')+'</div>';
   if(['choice','type','match','fill','scramble','listen','race','card'].indexOf(e.ex)>=0){
     h+='<div class="enfilter"><select aria-label="Chủ đề tiếng Anh" onchange="__v14.topic(this.value)"><option value="">Mọi chủ đề</option>'
