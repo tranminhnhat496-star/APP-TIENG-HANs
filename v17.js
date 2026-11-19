@@ -457,7 +457,10 @@ function reviewLesson(n){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'ox
 function reviewCurrent(){var sc=currentScope();var v=V15();if(!v||!sc)return;v.setScope(sc);reviewGo(false)}
 function reviewWeakCurrent(){var sc=currentScope();var v=V15();if(!v||!sc)return;v.setScope(sc);reviewGo(true)}
 function bossCurrent(){var sc=currentScope();var v=V15();if(!v||!sc)return;v.setScope(sc);v.tab('bosses')}
-function clearScope(){var v=V15();if(!v)return;v.clearScope();renderTab()}
+/* V37 (V18.2): the scope banner lives in the hub shell (renderHub),
+   not in #v15body (renderTab) — re-render the whole hub so the
+   banner disappears when the scope is cleared. */
+function clearScope(){var v=V15();if(!v)return;v.clearScope();if(v.renderHub)v.renderHub();else renderTab()}
 function search(q){V.q=q;V.page=0;renderTab();refocus('.v17filters .v15input')}
 function oxSearch(q){V.oxQ=q;V.oxPage=0;renderTab();refocus('.v17ox-tools .v15input')}
 function setPosSel(id,val){

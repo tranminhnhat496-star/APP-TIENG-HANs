@@ -842,7 +842,7 @@ function scopeBanner27(){
   var sc=scopeNameEN();
   if(!sc)return '';
   return '<div class="v27scope">Đang học trong bộ: <b>'+esc(sc)+'</b> — kế hoạch và thống kê chỉ tính từ trong bộ này.'
-    +' <button type="button" class="v27link" onclick="window.__v15&&__v15.clearScope&&__v15.clearScope()">✕ Bỏ chọn</button></div>';
+    +' <button type="button" class="v27link" onclick="window.__v15&&__v15.clearScope&&__v15.clearScope();window.__v27&&__v27.render&&__v27.render()">✕ Bỏ chọn</button></div>';
 }
 function renderDashboard(){
   var body=$('#v27body');if(!body)return;
@@ -1088,7 +1088,7 @@ try{
 try{
   window.__v27={
     version:VERSION,
-    openSmart:openSmart,closeSmart:closeSmart,setTab:setTab,setLang:setLang,goTab:goTab,goWeak:goWeak,
+    openSmart:openSmart,closeSmart:closeSmart,setTab:setTab,setLang:setLang,goTab:goTab,goWeak:goWeak,render:render,
     recordAnswer:recordAnswer,buildPlan:buildPlan,planOf:planOf,
     startPlan:startPlan,startSession:startSession,startWeak:startWeak,startWeakWord:startWeakWord,
     setMins:setMins,setCustomMins:setCustomMins,rebuildPlan:rebuildPlan,
