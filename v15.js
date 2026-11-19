@@ -1726,7 +1726,7 @@ window.__v15={
   /* V16 (Smart Import) dùng các hàm nội bộ này — chỉ đọc/ghi qua API có sẵn,
      không chạm vào logic học/boss/farm. */
   buildWords:buildWords,enOld:enOld,en15:en15,save15:save15,dl:dl,esc:esc,pop15:pop15,
-  renderTab:renderTab,topicName:topicName,counts15:counts15,
+  renderTab:renderTab,renderHub:renderHub,topicName:topicName,counts15:counts15,
   /* V17 (Thư viện có sẵn): phạm vi bài/chủ đề + bộ lọc từ + thưởng bài học */
   setScope:setScope15,clearScope:clearScope15,wordsFiltered:wordsFiltered,inScope:inScope15,
   gain15:gain15,mark15:mark15,

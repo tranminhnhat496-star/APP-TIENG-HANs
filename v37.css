@@ -1,0 +1,5 @@
+/* V37 — V18.2 SCOPE BANNER FIX (18.2.0). Additive layer, loads LAST (wins the
+   cascade at equal specificity). No CSS change is needed for this fix:
+   the bug was a missing re-render, not styling. This file exists only so
+   the layer follows the established pattern (one .js + one .css per
+   version, both injected last, before </body>). */
