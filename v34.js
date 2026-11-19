@@ -33,8 +33,11 @@ function weakFor(b,lang){
     var d=D34();
     var id=b.id||'';
     if(d&&d.weakExplicit&&d.weakExplicit[id])return d.weakExplicit[id];
+    var d35=window.__V35_DATA||null;
+    if(d35&&d35.weakExplicit&&d35.weakExplicit[id])return d35.weakExplicit[id];
     /* Chrono zone (V33 bosses not in the explicit table — safety net). */
     if(b.zone==='chrono')return {kind:'chrono',key:'change'};
+    if(b.zone==='skyroot')return {kind:'skyroot',key:'climate'};
     /* z10 Vô Cực maps to the Chrono 'change' set, not an A1–A2 topic. */
     if(b.zone==='z10')return {kind:'chrono',key:'change'};
     if(b.zone&&d&&d.zoneWeak&&d.zoneWeak[b.zone])return {kind:'a1a2',key:d.zoneWeak[b.zone]};
@@ -48,6 +51,7 @@ function weakMatch(w,weak){
   try{
     if(!w||!weak)return false;
     if(weak.kind==='chrono')return w.chronoSet===weak.key;
+    if(weak.kind==='skyroot')return w.skyrootSet===weak.key;
     if(weak.kind==='a1a2'){
       var ts=w.a1a2Topics||[];
       for(var i=0;i<ts.length;i++){
@@ -70,6 +74,11 @@ function weakName(weak){
     var d=D34();
     if(weak.kind==='chrono'){
       if(d&&d.setLabels&&d.setLabels[weak.key])return d.setLabels[weak.key];
+      return weak.key;
+    }
+    if(weak.kind==='skyroot'){
+      var d35n=window.__V35_DATA||null;
+      if(d35n&&d35n.setLabels&&d35n.setLabels[weak.key])return d35n.setLabels[weak.key];
       return weak.key;
     }
     if(weak.kind==='ko')return 'Bộ từ tiếng Hàn đã chọn';

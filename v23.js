@@ -52,7 +52,7 @@ function statsOf(inst){
 function powerOf(inst){var t=statsOf(inst);return t.hp+t.atk*10+t.def*5+t.spd*2}
 function xpNeed(lv){return 20*lv} /* Lv n -> n+1 costs 20n XP; total to Lv 30 = 8700 */
 function stageName(inst){var sp=spById(inst.sp);return sp?sp.stages[inst.st||0].n:''}
-function stageImg(inst){var sp=spById(inst.sp);return sp?('assets/pets/v15/'+sp.stages[inst.st||0].img):''}
+function stageImg(inst){var sp=spById(inst.sp);if(!sp)return '';var _im=sp.stages[inst.st||0].img;return _im.indexOf('v18/')===0?('assets/pets/'+_im):('assets/pets/v15/'+_im)}
 function skillUnlocks(inst){
   /* skill 1 at Lv 1, skill 2 at Lv 5, ultimate at stage 3 */
   var out=[];var sp=spById(inst.sp);if(!sp)return out;
@@ -381,7 +381,7 @@ function petImgHTML(inst,cls){
     +'<span class="v23petfb">'+esc((stageName(inst)||'?').charAt(0))+'</span></span>';
 }
 function eggImgHTML(egg,cls){
-  return '<span class="v23petimg '+(cls||'')+'"><img src="assets/pets/v15/eggs/'+egg.img+'" alt="'+esc(egg.n)+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')"><span class="v23petfb">🥚</span></span>';
+  return '<span class="v23petimg '+(cls||'')+'"><img src="'+(egg.img.indexOf('v18/')===0?('assets/pets/'+egg.img):('assets/pets/v15/eggs/'+egg.img))+'" alt="'+esc(egg.n)+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')"><span class="v23petfb">🥚</span></span>';
 }
 function starsHTML(rar){
   var r=(D.rarity||{})[rar]||{stars:2};

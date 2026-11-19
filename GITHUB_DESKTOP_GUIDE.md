@@ -955,3 +955,69 @@ Repo: **APP-TIENG-HANS**.
   chơi không bị ảnh hưởng vì V17.1 không thêm khóa lưu hay đổi schema
   (chỉ thêm lớp V34). File `v34.css`/`v34.js`/`v34_data.js` thừa ra sau
   khi revert có thể xóa khỏi repo (nó không được V17.0 dùng đến).
+
+# Cập nhật lên V18.0 — SKYROOT SANCTUARY (2026-11-19)
+
+## Chuẩn bị (giống các lần trước)
+1. Giải nén file ZIP V18.0 ra một thư mục trên máy.
+2. Mở **GitHub Desktop**, mở repo của game (nếu chưa có: `File → Clone Repository`).
+3. **Sao lưu trước (khuyên dùng):** trong game đang chạy, mở English Hub →
+   tab **Sao lưu** → **Tải file sao lưu (.json)** và cất file đó ở nơi an toàn.
+   Dữ liệu người chơi nằm trong trình duyệt của từng người dùng, việc cập nhật
+   code trên GitHub **không xóa** dữ liệu đó.
+
+## Cập nhật
+1. Trong thư mục repo trên máy, **ghi đè / thêm** các file từ ZIP V18.0:
+   - `index.html` (mới — đây là file GitHub Pages sẽ chạy)
+   - `v35.js`, `v35.css`, `v35_data.js`
+   - `v15.js`, `v17.js`, `v18.js`, `v19.js`, `v20_sync.js`, `v21.js`,
+     `v23.js`, `v23_data.js`, `v25.js`, `v34.js`
+     (đã gồm 29 replacement V35)
+   - `assets/bosses/v18/` (8 PNG boss mới), `assets/pets/v18/` (12 PNG
+     pet/trứng mới)
+   - `build_v35.py`, `package_v35.py`
+   - `README_V18_0_SKYROOT_SANCTUARY.md`, `CHANGELOG_V17_1_to_V18_0.md`,
+     `SMOKE_TEST_V18_0_2026-11-19.md`, `CHANGED_FILES.md`,
+     `GITHUB_DESKTOP_GUIDE.md`
+   - Giữ nguyên mọi file V17.1 và thư mục `assets/` còn lại (ZIP đã chứa
+     đầy đủ).
+   - **Lưu ý:** snapshot-push chỉ nhận file text, nên 20 PNG art không đi
+     theo snapshot push — xem `tools/v35/PUSH_MANIFESTS.md` §(b) để đẩy
+     art bằng một route khác (follow-up).
+2. **Không** ghi đè `firebase-config.js` trên repo bằng file placeholder
+   trong ZIP (file cấu hình thật của Anh nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai:
+   - Mở English Hub → **Thư viện** → nhóm **Skyroot Sanctuary** phải hiện
+     4 set (Climate & Environment / Science & Innovation / Society &
+     Culture / Mind & Character, 60 từ mỗi set) + dòng tổng kết; mở một
+     set, tìm kiếm / lọc / flashcards phải chạy.
+   - Nút **🌿 Skyroot Sanctuary** ở English Hub và tab **Skyroot** ở Hub
+     tiếng Hàn phải mở overlay Skyroot. Khi chưa thắng GEAR GOLEM,
+     overlay phải hiện trạng thái khóa thật (không mở boss); sau khi
+     thắng GEAR GOLEM bằng một ngôn ngữ, boss đầu tiên (Linh Miêu Gió
+     Nhẹ) phải đánh được bằng ngôn ngữ đó.
+   - Đánh một boss Skyroot: dưới thanh HP phải có thanh **💥 Điểm yếu**
+     với tên một bộ Skyroot (vd “Climate & Environment — 0/3”); trả lời
+     đúng 3 từ thuộc bộ đó phải thấy `💥 BREAK!` và boss mất thêm HP.
+   - Mở Cửa hàng Pet: 3 trứng mới (Mây / Mầm / Bão) phải hiện với ảnh
+     đúng; tiến hóa Cáo Mây phải cần Tinh Thể Gió (không báo thiếu
+     nguyên liệu lạ).
+   - Dữ liệu người chơi không đổi (cùng khóa `hanvocab.v1`; chỉ thêm
+     khóa lười `S.v7.en35` khi mở Skyroot lần đầu, không migration,
+     không cần đăng nhập lại).
+4. Commit với thông điệp `Upgrade to V18.0: Skyroot Sanctuary` rồi **Push
+   origin**. Nên push qua nhánh `muse/skyroot-sanctuary-v180` và mở Draft PR
+   về nhánh `muse/chrono-complete-v171` (stacked — không merge trực tiếp
+   vào `main`, không force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V18.0 không đổi code Firebase. Đồng bộ/đăng nhập đám mây
+   thật vẫn chưa được kiểm thử live — chạy checklist `FIREBASE_SETUP.md`
+   (mục 6 + V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi
+   đầy đủ offline và panel nói rõ "Chưa cấu hình Firebase".
+
+## Quay lại V17.1 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V18.0 → **Revert this commit**, commit và push. Dữ liệu người
+  chơi không bị ảnh hưởng vì V18.0 chỉ thêm khóa lười `en35` (không dùng
+  đến sau revert thì nằm yên) và không đổi schema (chỉ thêm lớp V35).
+  File `v35.css`/`v35.js`/`v35_data.js` thừa ra sau khi revert có thể
+  xóa khỏi repo (nó không được V17.1 dùng đến).

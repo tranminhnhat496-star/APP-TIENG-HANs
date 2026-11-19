@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V17.1 — Chrono Complete — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V18.0 — Skyroot Sanctuary — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -978,7 +978,7 @@ function setView(v){view=v;render()}
 const TI={study:'🌱',list:'📖',shop:'🛒',dex:'🏆',rem:'⏰',data:'💾'};
 function render(){
   const pg=$('#app');pg.classList.remove('pg');void pg.offsetWidth;pg.classList.add('pg');
-  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>'+'<button class="tab v23kotab" onclick="window.__v23&&__v23.openHub()" title="Thú Cưng — 펫"><span class="ti">🐾</span><span>Thú Cưng</span></button>'+'<button class="tab v27kotab" onclick="window.__v27&&__v27.openSmart(\'ko\')" title="Học thông minh"><span class="ti">🧠</span><span>Học thông minh</span></button>'+'<button class="tab v33kotab" onclick="window.__v33&&__v33.openChrono(\'ko\')" title="Vương Quốc Thời Gian — Chrono Kingdom"><span class="ti">⏳</span><span>Chrono</span></button>';
+  deckBar();$('#tabs').innerHTML=[['study','Học'],['list','Từ vựng'],...(S.skin?[['shop','Cửa hàng']]:[]),['dex','Sổ sưu tầm'],['rem','Nhắc học'],['data','Dữ liệu']].map(([k,l])=>`<button class="tab ${view==k?'on':''}" onclick="setView('${k}')"><span class="ti">${TI[k]}</span><span>${l}</span></button>`).join('')+'<button class="tab v19kotab" onclick="window.__v19&&__v19.openMapFor(\'ko\')" title="Bản Đồ Boss — 보스 지도"><span class="ti">🗺️</span><span>Bản Đồ Boss</span></button>'+'<button class="tab v23kotab" onclick="window.__v23&&__v23.openHub()" title="Thú Cưng — 펫"><span class="ti">🐾</span><span>Thú Cưng</span></button>'+'<button class="tab v27kotab" onclick="window.__v27&&__v27.openSmart(\'ko\')" title="Học thông minh"><span class="ti">🧠</span><span>Học thông minh</span></button>'+'<button class="tab v33kotab" onclick="window.__v33&&__v33.openChrono(\'ko\')" title="Vương Quốc Thời Gian — Chrono Kingdom"><span class="ti">⏳</span><span>Chrono</span></button>'+'<button class="tab v35kotab" onclick="window.__v35&&__v35.openSkyroot(\'ko\')" title="Skyroot Sanctuary — Thánh Địa Thiên Căn"><span class="ti">🌿</span><span>Skyroot</span></button>';
   stats();({study:rStudy,list:rList,shop:rShop,dex:rDex,rem:rRem,data:rData})[view]()}
 
 function rStudy(){
@@ -4115,6 +4115,31 @@ function buildWords(){
       }
     });
   }catch(e){}
+  /* V35: SKYROOT SANCTUARY — gắn 240 từ Skyroot (data qua
+     window.__V35_WORDS, ids 'v35_<slug>') vào WORDS chung, theo mẫu
+     V33 (Chrono). Từ đã có chỉ được gắn thêm thư viện
+     'skyroot'; từ chỉ có trong Skyroot nhận id ổn định 'v35_<slug>'
+     và cấp độ 'B2' (boss Skyroot là diff B2 nên wordPool gồm chúng).
+     POS chuẩn hóa dài->ngắn tại đây (bài học V34-BUG-1).
+     KHÔNG tạo S.cards — trường ko chỉ là dữ liệu hiển thị/học. */
+  try{
+    var sk35=(window.__V35_WORDS||[]);
+    var K2W5={};WORDS.forEach(function(ww){if(!ww.custom)K2W5[ww.en.toLowerCase()]=ww});
+    sk35.forEach(function(a){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W5[key];
+      if(ww){
+        ww.lib=ww.lib||[];
+        if(ww.lib.indexOf('skyroot')<0)ww.lib.push('skyroot');
+        ww.skyrootSet=ww.skyrootSet||a.set;
+        if(!ww.ko&&a.ko)ww.ko=a.ko;
+      }else{
+        var nw={id:a.id,t:'skyroot',en:a.en,vi:a.vi,ipa:a.ipa||'',pos:(function(p){var m={noun:'n',verb:'v',adjective:'adj',adverb:'adv'};return (p||'').split(',').map(function(x){var k=x.trim();return m[k]||k}).join(', ')})(a.pos),ex:a.ex||'',exvi:a.exvi||'',lv:'B2',custom:false,
+          lib:['skyroot'],skyrootSet:a.set,ko:a.ko||''};
+        WORDS.push(nw);BYID[nw.id]=nw;K2W5[key]=nw;LV[key]='B2';
+      }
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -4219,6 +4244,9 @@ function inScope15(w){
   if(sc.lib==='chrono'&&sc.set){
     if(w.chronoSet!==sc.set)return false;
   }
+  if(sc.lib==='skyroot'&&sc.set){
+    if(w.skyrootSet!==sc.set)return false;
+  }
   if(sc.lib==='bt'){
     if(sc.unit){
       var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
@@ -4261,6 +4289,9 @@ function wordsFiltered(o){
       }
       if(sc.lib==='chrono'&&sc.set){
         if(w.chronoSet!==sc.set)return false;
+      }
+      if(sc.lib==='skyroot'&&sc.set){
+        if(w.skyrootSet!==sc.set)return false;
       }
       if(sc.lib==='bt'){
         /* Basic Tactics: lọc theo Unit(s), loại mục từ và trạng thái.
@@ -6850,6 +6881,44 @@ function statsOf(list){
 }
 function a1a2Words(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('a1a2')>=0})}
 function oxWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('oxford')>=0})}
+function skyrootSetName(id){
+  var m={climate:'Climate & Environment',science:'Science & Innovation',society:'Society & Culture',mind:'Mind & Character'};
+  return m[id]||id;
+}
+function skyrootWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('skyroot')>=0})}
+function skyrootSets(){
+  var order=['climate','science','society','mind'],map={};
+  skyrootWords().forEach(function(w){
+    var k=w.skyrootSet||'climate';
+    if(!map[k])map[k]={id:k,name:skyrootSetName(k),words:[]};
+    map[k].words.push(w);
+  });
+  return order.filter(function(k){return map[k]}).map(function(k){return map[k]});
+}
+function skyrootSetCard(g){
+  var s=statsOf(g.words);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  return '<div class="v17card"><div class="v17card-t"><b>'+esc(g.name)+'</b><span class="mute">'+g.words.length+' từ</span></div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="mute">'+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn</div>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnSkyrootSet(\''+g.id+'\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewSkyrootSet(\''+g.id+'\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openSkyrootSet(\''+g.id+'\')">Xem từ</button></div></div>';
+}
+function skyrootGroupHTML(){
+  var ws=skyrootWords();
+  var s=statsOf(ws);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  return '<div class="v17group"><div class="v17group-head"><b>🌿 Skyroot Sanctuary — Thánh Địa Thiên Căn</b><span class="mute">'+ws.length+' từ · 4 bộ · trình độ B2</span></div>'
+    +'<p class="mute">Từ vựng Thánh Địa Thiên Căn (V18.0) — học xong mỗi bộ để nhận thưởng, dùng trong trận boss Skyroot. 120 từ dẫn bằng tiếng Hàn (từ Hàn là từ chính trong nguồn) — trong kho từ chung vẫn hiển thị đầu từ tiếng Anh kèm nghĩa Hàn.</p>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnScopeKey(\'skyroot\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewScopeKey(\'skyroot\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openLib(\'skyroot\')">Xem tất cả từ</button></div>'
+    +'<div class="mute">Tổng: '+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn</div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="v17grid">'+skyrootSets().map(skyrootSetCard).join('')+'</div>'
+    +'<p class="mute">Tiếng Hàn: từ Skyroot tiếng Hàn học qua deck tiếng Hàn đã chọn (trận boss / Học thông minh); từ Skyroot trong kho từ chung dùng đầu từ tiếng Anh.</p></div>';
+}
 function chronoSetName(id){
   var m={time:'Time & Calendar',space:'Space & Astronomy',machines:'Machines & Engineering',change:'Change & Sequence'};
   return m[id]||id;
@@ -6941,6 +7010,7 @@ function currentScope(){
   if(V.lib==='a1a2')return V.topic?{kind:'lib',lib:'a1a2',topic:V.topic}:{kind:'lib',lib:'a1a2'};
   if(V.lib==='oxford')return V.lesson?{kind:'lib',lib:'oxford',lesson:V.lesson}:{kind:'lib',lib:'oxford'};
   if(V.lib==='chrono')return V.set?{kind:'lib',lib:'chrono',set:V.set}:{kind:'lib',lib:'chrono'};
+  if(V.lib==='skyroot')return V.set?{kind:'lib',lib:'skyroot',set:V.set}:{kind:'lib',lib:'skyroot'};
   return null;
 }
 function scopeName(sc){
@@ -6965,11 +7035,17 @@ function scopeName(sc){
     if(sc.set)return 'Chrono · '+chronoSetName(sc.set);
     return 'Chrono Kingdom';
   }
+  if(sc.lib==='skyroot'){
+    if(sc.set)return 'Skyroot · '+skyrootSetName(sc.set);
+    return 'Skyroot Sanctuary';
+  }
   return '';
 }
 function rewardFor(key){
   if(key==='a1a2:all')return {xp:200,gems:5};
   if(key==='oxford:all')return {xp:300,gems:5};
+  if(key==='skyroot:all')return {xp:200,gems:5};
+  if(key.indexOf('skyroot:')===0)return {xp:50,gems:2};
   if(key==='chrono:all')return {xp:200,gems:5};
   if(key.indexOf('chrono:')===0)return {xp:50,gems:2};
   if(key.indexOf('a1a2:')===0)return {xp:50,gems:2};
@@ -7008,6 +7084,7 @@ function libraryHTML(){
     +lessonGrid()+'</div>';
   /* Nhóm 2b — Chrono Kingdom (V34, V17.1: 240 từ đã có từ V17.0) */
   h+=chronoGroupHTML();
+  h+=skyrootGroupHTML();
   /* Nhóm 3 — Basic Tactics for Listening (V22, dữ liệu tải lười) */
   h+=(window.__v22&&__v22.groupHTML?__v22.groupHTML():'');
   /* Nhóm 4 — Từ vựng của tôi */
@@ -7088,6 +7165,11 @@ function lessonHTML(){
     if(!gs)return '<p class="mute">Không tìm thấy bộ từ này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
     list=gs.words;title='Chrono · '+gs.name;key='chrono:'+V.set;
   }else if(V.lib==='chrono'){list=chronoWords();title='Chrono Kingdom — Vương Quốc Thời Gian';key='chrono:all'}
+  else if(V.lib==='skyroot'&&V.set){
+    var gs=skyrootSets().filter(function(x){return x.id===V.set})[0];
+    if(!gs)return '<p class="mute">Không tìm thấy bộ từ này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
+    list=gs.words;title='Skyroot · '+gs.name;key='skyroot:'+V.set;
+  }else if(V.lib==='skyroot'){list=skyrootWords();title='Skyroot Sanctuary — Thánh Địa Thiên Căn';key='skyroot:all'}
   else if(V.lib==='a1a2'){list=a1a2Words();title='A1–A2 Vocabulary';key='a1a2:all'}
   else if(V.lib==='oxford'){list=oxWords();title='Oxford 3000 – Từ vựng thông dụng';key='oxford:all'}
   else return '<p class="mute">Chưa chọn bộ từ nào.</p>';
@@ -7149,6 +7231,7 @@ function wordCard(w){
   var where='';
   if(V.lib==='a1a2'&&!V.topic)where=topicName(w.a1a2Topic||w.t);
   if(V.lib==='chrono'&&!V.set)where=chronoSetName(w.chronoSet);
+  if(V.lib==='skyroot'&&!V.set)where=skyrootSetName(w.skyrootSet);
   if(V.lib==='oxford'&&!V.lesson)where='Bài '+w.oxLesson;
   var extra=(w.extra||[]).map(function(x){
     var src=x.src==='oxford'?'Oxford 3000':(x.src==='bt'?'Basic Tactics':'A1–A2');
@@ -7199,6 +7282,9 @@ function openLesson(n){V.view='lesson';V.lib='oxford';V.lesson=n;V.topic=null;V.
 function openSet(id){V.view='lesson';V.lib='chrono';V.set=id;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
 function learnSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});v.tab('learn')}
 function reviewSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});reviewGo(false)}
+function openSkyrootSet(id){V.view='lesson';V.lib='skyroot';V.set=id;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function learnSkyrootSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'skyroot',set:id});v.tab('learn')}
+function reviewSkyrootSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'skyroot',set:id});reviewGo(false)}
 function openLib(lib){V.view='lesson';V.lib=lib;V.topic=null;V.lesson=0;V.set=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
 function learnScopeKey(lib){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:lib});v.tab('learn')}
 function learnTopic(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'a1a2',topic:id});v.tab('learn')}
@@ -7268,7 +7354,7 @@ function claim(key){
 window.__v17={
   libraryHTML:libraryHTML,scopeBannerHTML:scopeBannerHTML,
   goHome:goHome,openTopic:openTopic,openLesson:openLesson,openLib:openLib,
-  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,
+  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,learnSkyrootSet:learnSkyrootSet,openSkyrootSet:openSkyrootSet,reviewSkyrootSet:reviewSkyrootSet,skyrootWords:skyrootWords,skyrootSets:skyrootSets,
   reviewScopeKey:reviewScopeKey,reviewTopic:reviewTopic,reviewLesson:reviewLesson,
   reviewCurrent:reviewCurrent,reviewWeakCurrent:reviewWeakCurrent,bossCurrent:bossCurrent,
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,
@@ -7500,7 +7586,7 @@ function arenaMeta(id){var a=(B18().arenas||[]);for(var i=0;i<a.length;i++)if(a[
 function bossById(id){return (B18().byId?B18().byId(id):null)}
 function newBosses(){var d=B18();return (d.en||[]).concat(d.el||[],d.leg||[])}
 function v19Bosses(){return (window.__V19_DATA&&__V19_DATA.bosses)||[]}
-function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]))}
+function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]),(window.__V35_DATA?__V35_DATA.bosses:[]))}
 
 /* ---------- V18 state (new key) ---------- */
 function en18(){
@@ -7668,7 +7754,7 @@ function collSearch(q){CF.q=q;collApply()}
 function collSet(k,v){CF[k]=v;var v15=V15();if(v15)v15.renderTab()}
 function collDetail(id){
   CF.detail=id;
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
   var host=$('#v18colldetail');if(!host)return;
   var won=isWon(b),un=bossUnlocked(b);
   var e=en18();
@@ -7690,7 +7776,7 @@ function collDetail(id){
 }
 function collCloseDetail(){var host=$('#v18colldetail');if(host)host.innerHTML='';CF.detail=null}
 function challenge(id){
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
   if(b.zone){var v19=window.__v19;if(v19){v19.openMap();v19.fight(id)}return}
   if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
   openArena(b.arena);fight(id);
@@ -8503,8 +8589,9 @@ function zoneNeedText(zid,lang){
 }
 function bossUnlocked19(id,lang){
   lang=lang||lang19();
-  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return false;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return false;
   if(b.zone==='chrono'&&window.__v33&&__v33.bossUnlocked)return __v33.bossUnlocked(id,lang);
+  if(b.zone==='skyroot'&&window.__v35&&__v35.bossUnlocked)return __v35.bossUnlocked(id,lang);
   if(!zoneOpen(b.zone,lang))return false;
   var list=zoneBosses(b.zone),i=list.indexOf(id);
   if(i<=0)return true;
@@ -8760,7 +8847,7 @@ function markKO19(ok){
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
 function fight(id){
-  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
   if(!document.querySelector('#v19fight'))openMap();
   startFight(b,lang19());
@@ -9306,6 +9393,8 @@ function hasProgress(S){
   if(v7.en22&&v7.en22.quest){ for(var q22 in v7.en22.quest){ if(v7.en22.quest[q22]) return true; } }
   if(v7.en33&&v7.en33.quests){ for(var q33 in v7.en33.quests){ if(v7.en33.quests[q33]) return true; } }
   if(v7.en33&&v7.en33.regionClaimed){ for(var rc33 in v7.en33.regionClaimed){ if(v7.en33.regionClaimed[rc33]) return true; } }
+  if(v7.en35&&v7.en35.quests){ for(var q35 in v7.en35.quests){ if(v7.en35.quests[q35]) return true; } }
+  if(v7.en35&&v7.en35.regionClaimed){ for(var rc35 in v7.en35.regionClaimed){ if(v7.en35.regionClaimed[rc35]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -9559,6 +9648,28 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m33.regionClaimed={en:Math.max(rcL.en||0,rcC.en||0),ko:Math.max(rcL.ko||0,rcC.ko||0)};
           m33.pending={};
           v7.en33=m33;
+        }
+        else if(kk==='en35'){
+          /* V35 (Skyroot Sanctuary): quests union (done/claimed/acc/at
+             MAX), regionClaimed union (per-language MAX — NOT unionTrue:
+             unionTrue is local-priority last-writer-wins, so a local
+             {ko:0} would overwrite a cloud {ko:1}; regionClaimed
+             carries explicit 0s, unlike the 1/absent claimed maps),
+             created MIN. XP/gems are never
+             summed (MAX at the top level, as everywhere else).
+             Pending launches are session-local and dropped. No rift
+             sub-state exists in V35. */
+          var l35=(localS.v7&&localS.v7.en35)||{}, c35=(cloudS.v7&&cloudS.v7.en35)||{};
+          var m35={};
+          m35.created=Math.min(l35.created||Infinity, c35.created||Infinity);
+          if(!isFinite(m35.created)) m35.created=(l35.created||c35.created||Date.now());
+          var q35={};
+          [l35.quests,c35.quests].forEach(function(src){ if(!src) return; for(var qk in src){ var a=q35[qk]=q35[qk]||{}; var b=src[qk]||{}; a.done=Math.max(a.done||0,b.done||0); a.claimed=Math.max(a.claimed||0,b.claimed||0); a.acc=Math.max(a.acc||0,b.acc||0); a.at=Math.max(a.at||0,b.at||0); } });
+          m35.quests=q35;
+          var rcL35=l35.regionClaimed||{}, rcC35=c35.regionClaimed||{};
+          m35.regionClaimed={en:Math.max(rcL35.en||0,rcC35.en||0),ko:Math.max(rcL35.ko||0,rcC35.ko||0)};
+          m35.pending={};
+          v7.en35=m35;
         }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }
@@ -10595,7 +10706,7 @@ var AVATARS=[
   {id:'unicorn', name:'Kỳ lân',            wins:60},
   {id:'phoenix', name:'Phượng hoàng',      wins:70}
 ];
-var TOTAL_BOSSES=78; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) */
+var TOTAL_BOSSES=86; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) + 8 (V18 Skyroot) */
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function getS(){ try{ return S; }catch(e){ return null; } }
@@ -12316,7 +12427,8 @@ var PET_ELEMENTS={
   water:{n:'Nước',icon:'💧',color:'#4A90E2'},
   thunder:{n:'Sấm',icon:'⚡',color:'#FFD93D'},
   light:{n:'Ánh Sáng',icon:'✨',color:'#FFE66D'},
-  dark:{n:'Bóng Tối',icon:'🌙',color:'#9B59B6'}
+  dark:{n:'Bóng Tối',icon:'🌙',color:'#9B59B6'},
+  wind:{n:'Gió',icon:'🌪️',color:'#8FE3C0'}
 };
 var PET_RARITY={
   common:{n:'Thường',stars:2,color:'#B8C4CC'},
@@ -12438,6 +12550,7 @@ var PET_MATERIALS=[
  {id:'stone_water',n:'Tinh Thể Nước',el:'water',price:200,d:'Dùng để tiến hóa thú hệ Nước.'},
  {id:'stone_thunder',n:'Tinh Thể Sấm',el:'thunder',price:200,d:'Dùng để tiến hóa thú hệ Sấm.'},
  {id:'stone_light',n:'Tinh Thể Ánh Sáng',el:'light',price:200,d:'Dùng để tiến hóa thú hệ Ánh Sáng.'},
+ {id:'stone_wind',n:'Tinh Thể Gió',el:'wind',price:200,d:'Dùng để tiến hóa thú hệ Gió.'},
  {id:'stone_dark',n:'Tinh Thể Bóng Tối',el:'dark',price:200,d:'Dùng để tiến hóa thú hệ Bóng Tối.'},
  {id:'feather',n:'Lông Vàng',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'},
  {id:'fruit',n:'Trái Phép Thuật',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'}
@@ -12545,7 +12658,7 @@ function statsOf(inst){
 function powerOf(inst){var t=statsOf(inst);return t.hp+t.atk*10+t.def*5+t.spd*2}
 function xpNeed(lv){return 20*lv} /* Lv n -> n+1 costs 20n XP; total to Lv 30 = 8700 */
 function stageName(inst){var sp=spById(inst.sp);return sp?sp.stages[inst.st||0].n:''}
-function stageImg(inst){var sp=spById(inst.sp);return sp?('assets/pets/v15/'+sp.stages[inst.st||0].img):''}
+function stageImg(inst){var sp=spById(inst.sp);if(!sp)return '';var _im=sp.stages[inst.st||0].img;return _im.indexOf('v18/')===0?('assets/pets/'+_im):('assets/pets/v15/'+_im)}
 function skillUnlocks(inst){
   /* skill 1 at Lv 1, skill 2 at Lv 5, ultimate at stage 3 */
   var out=[];var sp=spById(inst.sp);if(!sp)return out;
@@ -12874,7 +12987,7 @@ function petImgHTML(inst,cls){
     +'<span class="v23petfb">'+esc((stageName(inst)||'?').charAt(0))+'</span></span>';
 }
 function eggImgHTML(egg,cls){
-  return '<span class="v23petimg '+(cls||'')+'"><img src="assets/pets/v15/eggs/'+egg.img+'" alt="'+esc(egg.n)+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')"><span class="v23petfb">🥚</span></span>';
+  return '<span class="v23petimg '+(cls||'')+'"><img src="'+(egg.img.indexOf('v18/')===0?('assets/pets/'+egg.img):('assets/pets/v15/eggs/'+egg.img))+'" alt="'+esc(egg.n)+'" loading="lazy" onerror="this.style.display=\'none\';this.parentNode.classList.add(\'v23imgfail\')"><span class="v23petfb">🥚</span></span>';
 }
 function starsHTML(rar){
   var r=(D.rarity||{})[rar]||{stars:2};
@@ -14000,6 +14113,7 @@ function groupKey(head){
   if(t.indexOf('Oxford')>=0)return 'oxford';
   if(t.indexOf('Basic Tactics')>=0)return 'bt';
   if(t.indexOf('Chrono')>=0)return 'chrono';
+  if(t.indexOf('Skyroot')>=0)return 'skyroot';
   return '';
 }
 function groupStats(key){
@@ -14018,6 +14132,10 @@ function groupStats(key){
   if(key==='chrono'){
     var listC=ws.filter(function(w){return (w.lib||[]).indexOf('chrono')>=0});
     var sC=statsOf(listC);sC.total=listC.length;return sC;
+  }
+  if(key==='skyroot'){
+    var listS=ws.filter(function(w){return (w.lib||[]).indexOf('skyroot')>=0});
+    var sS=statsOf(listS);sS.total=listS.length;return sS;
   }
   if(key==='bt'){
     var v22=V22();
@@ -21172,8 +21290,11 @@ function weakFor(b,lang){
     var d=D34();
     var id=b.id||'';
     if(d&&d.weakExplicit&&d.weakExplicit[id])return d.weakExplicit[id];
+    var d35=window.__V35_DATA||null;
+    if(d35&&d35.weakExplicit&&d35.weakExplicit[id])return d35.weakExplicit[id];
     /* Chrono zone (V33 bosses not in the explicit table — safety net). */
     if(b.zone==='chrono')return {kind:'chrono',key:'change'};
+    if(b.zone==='skyroot')return {kind:'skyroot',key:'climate'};
     /* z10 Vô Cực maps to the Chrono 'change' set, not an A1–A2 topic. */
     if(b.zone==='z10')return {kind:'chrono',key:'change'};
     if(b.zone&&d&&d.zoneWeak&&d.zoneWeak[b.zone])return {kind:'a1a2',key:d.zoneWeak[b.zone]};
@@ -21187,6 +21308,7 @@ function weakMatch(w,weak){
   try{
     if(!w||!weak)return false;
     if(weak.kind==='chrono')return w.chronoSet===weak.key;
+    if(weak.kind==='skyroot')return w.skyrootSet===weak.key;
     if(weak.kind==='a1a2'){
       var ts=w.a1a2Topics||[];
       for(var i=0;i<ts.length;i++){
@@ -21209,6 +21331,11 @@ function weakName(weak){
     var d=D34();
     if(weak.kind==='chrono'){
       if(d&&d.setLabels&&d.setLabels[weak.key])return d.setLabels[weak.key];
+      return weak.key;
+    }
+    if(weak.kind==='skyroot'){
+      var d35n=window.__V35_DATA||null;
+      if(d35n&&d35n.setLabels&&d35n.setLabels[weak.key])return d35n.setLabels[weak.key];
       return weak.key;
     }
     if(weak.kind==='ko')return 'Bộ từ tiếng Hàn đã chọn';
@@ -21406,6 +21533,4085 @@ try{
       chronoWords:chronoWords}
   };
 }catch(e){}
+})();
+
+</script>
+
+<style id="v35">
+/* ===== V35 — SKYROOT SANCTUARY (V18.0) =====
+   Overlay z-index 1500 (above V31 1400, V20 modal 1200, V32 badge
+   1100, V27 hub 990). Tokens --ui-* (V24/V25/V26 design system),
+   WCAG AA contrast, 44px minimum touch targets, no overflow at
+   360-430px. Mirrors v33.css class for class (v33 -> v35). */
+#v35hub{box-sizing:border-box;position:fixed;inset:0;z-index:1500;display:flex;align-items:flex-start;justify-content:center;background:rgba(10,6,24,.82);overflow-y:auto;padding:14px 10px;color:var(--ui-text-primary,#FFFFFF);font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.v35in{box-sizing:border-box;width:100%;max-width:720px;margin:0 auto;background:linear-gradient(180deg,#1C3A24 0%,#142B1C 60%,#0D1F13 100%);border:2px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.v35head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.v35title b{display:block;font-size:19px;line-height:1.3;color:var(--ui-title-gold,#FFD76A)}
+.v35title span{display:block;font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin-top:2px}
+.v35x{flex:0 0 auto;min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-bg-panel,#292044);color:var(--ui-text-primary,#FFFFFF);font-size:18px;cursor:pointer}
+.v35lang{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap}
+.v35langbtn{flex:1 1 140px;min-height:44px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:#1B1430;color:var(--ui-text-primary,#FFFFFF);font-size:15px;font-weight:700;cursor:pointer}
+.v35langbtn.on{background:var(--ui-selected,#F7BE38);color:#251A38;border-color:var(--ui-selected,#F7BE38)}
+.v35card{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:12px;margin:12px 0 0;color:var(--ui-text-primary,#FFFFFF)}
+.v35card>b{display:block;font-size:15px;line-height:1.4;color:var(--ui-title-gold,#FFD76A);margin-bottom:6px}
+.v35card p,.v35mut{font-size:14px;line-height:1.5;color:var(--ui-text-secondary,#E4DDF1);margin:6px 0 0}
+.v35empty{box-sizing:border-box;background:#1B1430;border:1px dashed var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ui-text-secondary,#E4DDF1)}
+.v35sec{margin:16px 0 0}
+.v35sec>h3{font-size:17px;line-height:1.35;color:var(--ui-title-gold,#FFD76A);margin:0 0 4px}
+.v35sec>p{font-size:14px;line-height:1.5;color:var(--ui-text-secondary,#E4DDF1);margin:0 0 10px}
+.v35bosses{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.v35boss{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.v35boss.done{border-color:#7ED957}
+.v35boss.locked{opacity:.75}
+.v35boss img{width:100%;max-width:160px;height:auto;margin:0 auto;display:block}
+.v35boss b{font-size:15px;line-height:1.35;color:var(--ui-text-primary,#FFFFFF)}
+.v35boss .v35mut{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v35boss em{font-style:normal;font-size:13px;line-height:1.45;color:var(--ui-title-gold,#FFD76A)}
+.v35boss p{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v35chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;background:#7B61FF}
+.v35quests{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.v35quest{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.v35quest b{font-size:15px;line-height:1.35;color:var(--ui-text-primary,#FFFFFF)}
+.v35quest .v35mut{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v35quest em{font-style:normal;font-size:13px;line-height:1.45;color:var(--ui-title-gold,#FFD76A)}
+.v35quest p{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin:0}
+.v35btn{box-sizing:border-box;min-height:var(--ui-btn-min-height,44px);padding:10px 14px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-btn-secondary,#6845A8);color:var(--ui-text-primary,#FFFFFF);font-size:14px;font-weight:700;line-height:1.35;cursor:pointer;white-space:normal;margin-top:6px}
+.v35btn.pri{background:var(--ui-selected,#F7BE38);color:#251A38;border-color:var(--ui-selected,#F7BE38)}
+.v35btn:disabled{opacity:.55;cursor:not-allowed}
+@media (max-width:430px){
+  #v35hub{padding:8px 6px}
+  .v35in{padding:10px}
+  .v35bosses,.v35quests{grid-template-columns:1fr 1fr}
+}
+@media (max-width:360px){
+  .v35bosses,.v35quests{grid-template-columns:1fr}
+}
+
+</style>
+<script id="v35data">
+/* ===== V35 DATA — SKYROOT SANCTUARY (V18.0) =====
+   Generated by tools/v35/gen_v35_data.py from data/v35_words.json
+   (240 words: 4 sets x 60 — climate / science / society / mind;
+   120 EN-led + 120 KO-led, 30 + 30 per set).
+   Word ids: 'v35_<slug>' (slug of the English headword). The 'led'
+   field records which language leads the record in the source
+   (EN-led: English headword; KO-led: Korean headword); in the shared
+   WORDS array every record still carries an English headword with a
+   Korean translation (V33 treatment) — no KO deck entries are created.
+   Boss ids: 'v18_*' (distinct from V17 v17_*). Pet species ids:
+   'cloudfx' / 'sproutowl' / 'stormram'; egg ids 'cloud' / 'sprout' /
+   'storm'. Quest word lists are fixed index slices into each set
+   (see gen_v35_data.py); the 6 lists are pairwise disjoint.
+   Boss scale (ChatGPT Lv 69-76 / HP 760-850, ON game scale, used as
+   given): lv 69-76, hp 760-850, continuing the V19 progression
+   (V17 Chrono max lv 68 / hp 750). Elements mapped onto the real
+   V19 EL: Wind->wind, Plant->nature, Water->water, Earth->earth,
+   Thunder->thunder, Crystal->cosmic (no 'crystal' key in the V19 EL;
+   V33 precedent Time->cosmic), Light->light, Nature->nature.
+   Skill ids come only from the V19 palette (elem: burn/freeze/chain/
+   veil/cleanse/regen/heal/gale/shield/rift; tact: tshield/theal/
+   ttimer/tveil/tenrage; pass: bulwark/vampiric/swift/thorns).
+   Pet skill types come only from the existing v23 palette.
+   Weakness: kind 'skyroot', key = one of the 4 Skyroot sets (2 bosses
+   per set); each set holds 60 B2 words, so every Break meter is
+   fillable. Pet art paths are 'v18/...' (assets/pets/v18/). */
+(function(){
+'use strict';
+var WORDS35=[
+  {
+    "id":"v35_air_pollution",
+    "set":"climate",
+    "led":"en",
+    "en":"air pollution",
+    "ko":"대기 오염",
+    "vi":"ô nhiễm không khí",
+    "ipa":"/eə pəˈluːʃn/",
+    "pos":"noun",
+    "ex":"Air pollution is a serious problem in big cities.",
+    "exvi":"Ô nhiễm không khí là một vấn đề nghiêm trọng ở các thành phố lớn."
+  },
+  {
+    "id":"v35_avalanche",
+    "set":"climate",
+    "led":"en",
+    "en":"avalanche",
+    "ko":"눈사태",
+    "vi":"tuyết lở",
+    "ipa":"/ˈævəlɑːntʃ/",
+    "pos":"noun",
+    "ex":"The avalanche blocked the mountain road.",
+    "exvi":"Trận tuyết lở đã chặn đường núi."
+  },
+  {
+    "id":"v35_biodiversity",
+    "set":"climate",
+    "led":"en",
+    "en":"biodiversity",
+    "ko":"생물 다양성",
+    "vi":"đa dạng sinh học",
+    "ipa":"/ˌbaɪəʊdaɪˈvɜːsəti/",
+    "pos":"noun",
+    "ex":"Forests protect biodiversity.",
+    "exvi":"Rừng bảo vệ đa dạng sinh học."
+  },
+  {
+    "id":"v35_blizzard",
+    "set":"climate",
+    "led":"en",
+    "en":"blizzard",
+    "ko":"눈보라",
+    "vi":"bão tuyết",
+    "ipa":"/ˈblɪzəd/",
+    "pos":"noun",
+    "ex":"A blizzard closed all the schools.",
+    "exvi":"Một trận bão tuyết đã khiến mọi trường học phải đóng cửa."
+  },
+  {
+    "id":"v35_carbon_capture",
+    "set":"climate",
+    "led":"en",
+    "en":"carbon capture",
+    "ko":"탄소 포집",
+    "vi":"thu giữ carbon",
+    "ipa":"/ˈkɑːbən ˈkæptʃə/",
+    "pos":"noun",
+    "ex":"Carbon capture can reduce emissions from factories.",
+    "exvi":"Thu giữ carbon có thể giảm khí thải từ các nhà máy."
+  },
+  {
+    "id":"v35_carbon_emissions",
+    "set":"climate",
+    "led":"en",
+    "en":"carbon emissions",
+    "ko":"탄소 배출량",
+    "vi":"lượng khí thải carbon",
+    "ipa":"/ˈkɑːbən ɪˈmɪʃnz/",
+    "pos":"noun",
+    "ex":"Cars produce a lot of carbon emissions.",
+    "exvi":"Ô tô tạo ra rất nhiều khí thải carbon."
+  },
+  {
+    "id":"v35_carbon_footprint",
+    "set":"climate",
+    "led":"en",
+    "en":"carbon footprint",
+    "ko":"탄소 발자국",
+    "vi":"dấu chân carbon",
+    "ipa":"/ˈkɑːbən ˈfʊtprɪnt/",
+    "pos":"noun",
+    "ex":"Riding a bicycle reduces your carbon footprint.",
+    "exvi":"Đi xe đạp giúp giảm dấu chân carbon của bạn."
+  },
+  {
+    "id":"v35_carbon_neutral",
+    "set":"climate",
+    "led":"en",
+    "en":"carbon neutral",
+    "ko":"탄소 중립",
+    "vi":"trung hòa carbon",
+    "ipa":"/ˈkɑːbən ˈnjuːtrəl/",
+    "pos":"adjective",
+    "ex":"The company aims to be carbon neutral by 2030.",
+    "exvi":"Công ty đặt mục tiêu trung hòa carbon vào năm 2030."
+  },
+  {
+    "id":"v35_climate_change",
+    "set":"climate",
+    "led":"en",
+    "en":"climate change",
+    "ko":"기후 변화",
+    "vi":"biến đổi khí hậu",
+    "ipa":"/ˈklaɪmət tʃeɪndʒ/",
+    "pos":"noun",
+    "ex":"Climate change affects farmers everywhere.",
+    "exvi":"Biến đổi khí hậu ảnh hưởng đến nông dân ở khắp nơi."
+  },
+  {
+    "id":"v35_compost",
+    "set":"climate",
+    "led":"en",
+    "en":"compost",
+    "ko":"퇴비",
+    "vi":"phân trộn",
+    "ipa":"/ˈkɒmpɒst/",
+    "pos":"noun",
+    "ex":"She makes compost from kitchen waste.",
+    "exvi":"Cô ấy làm phân trộn từ rác nhà bếp."
+  },
+  {
+    "id":"v35_eco_friendly",
+    "set":"climate",
+    "led":"en",
+    "en":"eco-friendly",
+    "ko":"친환경적인",
+    "vi":"thân thiện với môi trường",
+    "ipa":"/ˌiːkəʊˈfrendli/",
+    "pos":"adjective",
+    "ex":"This bag is eco-friendly.",
+    "exvi":"Chiếc túi này thân thiện với môi trường."
+  },
+  {
+    "id":"v35_endangered_species",
+    "set":"climate",
+    "led":"en",
+    "en":"endangered species",
+    "ko":"멸종 위기종",
+    "vi":"loài có nguy cơ tuyệt chủng",
+    "ipa":"/ɪnˈdeɪndʒəd ˈspiːʃiːz/",
+    "pos":"noun",
+    "ex":"Pandas are an endangered species.",
+    "exvi":"Gấu trúc là loài có nguy cơ tuyệt chủng."
+  },
+  {
+    "id":"v35_erosion",
+    "set":"climate",
+    "led":"en",
+    "en":"erosion",
+    "ko":"침식",
+    "vi":"sự xói mòn",
+    "ipa":"/ɪˈrəʊʒn/",
+    "pos":"noun",
+    "ex":"Heavy rain causes soil erosion.",
+    "exvi":"Mưa lớn gây xói mòn đất."
+  },
+  {
+    "id":"v35_extinction",
+    "set":"climate",
+    "led":"en",
+    "en":"extinction",
+    "ko":"멸종",
+    "vi":"sự tuyệt chủng",
+    "ipa":"/ɪkˈstɪŋkʃn/",
+    "pos":"noun",
+    "ex":"Many animals face extinction.",
+    "exvi":"Nhiều loài động vật đang đối mặt với sự tuyệt chủng."
+  },
+  {
+    "id":"v35_fossil_fuel",
+    "set":"climate",
+    "led":"en",
+    "en":"fossil fuel",
+    "ko":"화석 연료",
+    "vi":"nhiên liệu hóa thạch",
+    "ipa":"/ˈfɒsl ˈfjuːəl/",
+    "pos":"noun",
+    "ex":"Coal is a fossil fuel.",
+    "exvi":"Than đá là một loại nhiên liệu hóa thạch."
+  },
+  {
+    "id":"v35_global_warming",
+    "set":"climate",
+    "led":"en",
+    "en":"global warming",
+    "ko":"지구 온난화",
+    "vi":"sự nóng lên toàn cầu",
+    "ipa":"/ˈɡləʊbl ˈwɔːmɪŋ/",
+    "pos":"noun",
+    "ex":"Global warming melts the ice at the poles.",
+    "exvi":"Sự nóng lên toàn cầu làm tan băng ở hai cực."
+  },
+  {
+    "id":"v35_greenhouse_gas",
+    "set":"climate",
+    "led":"en",
+    "en":"greenhouse gas",
+    "ko":"온실가스",
+    "vi":"khí nhà kính",
+    "ipa":"/ˈɡriːnhaʊs ɡæs/",
+    "pos":"noun",
+    "ex":"Carbon dioxide is a greenhouse gas.",
+    "exvi":"Carbon dioxide là một loại khí nhà kính."
+  },
+  {
+    "id":"v35_invasive_species",
+    "set":"climate",
+    "led":"en",
+    "en":"invasive species",
+    "ko":"외래종",
+    "vi":"loài xâm lấn",
+    "ipa":"/ɪnˈveɪsɪv ˈspiːʃiːz/",
+    "pos":"noun",
+    "ex":"This plant is an invasive species here.",
+    "exvi":"Loài cây này là loài xâm lấn ở đây."
+  },
+  {
+    "id":"v35_landslide",
+    "set":"climate",
+    "led":"en",
+    "en":"landslide",
+    "ko":"산사태",
+    "vi":"sạt lở đất",
+    "ipa":"/ˈlændslaɪd/",
+    "pos":"noun",
+    "ex":"The landslide closed the road for a week.",
+    "exvi":"Vụ sạt lở đất khiến con đường bị đóng một tuần."
+  },
+  {
+    "id":"v35_monsoon",
+    "set":"climate",
+    "led":"en",
+    "en":"monsoon",
+    "ko":"몬순",
+    "vi":"gió mùa",
+    "ipa":"/mɒnˈsuːn/",
+    "pos":"noun",
+    "ex":"The monsoon brings heavy rain in summer.",
+    "exvi":"Gió mùa mang theo mưa lớn vào mùa hè."
+  },
+  {
+    "id":"v35_ocean_acidification",
+    "set":"climate",
+    "led":"en",
+    "en":"ocean acidification",
+    "ko":"해양 산성화",
+    "vi":"sự axit hóa đại dương",
+    "ipa":"/ˈəʊʃn əˌsɪdɪfɪˈkeɪʃn/",
+    "pos":"noun",
+    "ex":"Ocean acidification harms coral reefs.",
+    "exvi":"Sự axit hóa đại dương gây hại cho các rạn san hô."
+  },
+  {
+    "id":"v35_pesticide",
+    "set":"climate",
+    "led":"en",
+    "en":"pesticide",
+    "ko":"살충제",
+    "vi":"thuốc trừ sâu",
+    "ipa":"/ˈpestɪsaɪd/",
+    "pos":"noun",
+    "ex":"Farmers spray pesticide on the crops.",
+    "exvi":"Nông dân phun thuốc trừ sâu lên cây trồng."
+  },
+  {
+    "id":"v35_plastic_waste",
+    "set":"climate",
+    "led":"en",
+    "en":"plastic waste",
+    "ko":"플라스틱 쓰레기",
+    "vi":"rác thải nhựa",
+    "ipa":"/ˈplæstɪk weɪst/",
+    "pos":"noun",
+    "ex":"We must reduce plastic waste.",
+    "exvi":"Chúng ta phải giảm rác thải nhựa."
+  },
+  {
+    "id":"v35_renewable_energy",
+    "set":"climate",
+    "led":"en",
+    "en":"renewable energy",
+    "ko":"재생 에너지",
+    "vi":"năng lượng tái tạo",
+    "ipa":"/rɪˈnjuːəbəl ˈenədʒi/",
+    "pos":"noun",
+    "ex":"Solar power is a form of renewable energy.",
+    "exvi":"Điện mặt trời là một dạng năng lượng tái tạo."
+  },
+  {
+    "id":"v35_sea_level",
+    "set":"climate",
+    "led":"en",
+    "en":"sea level",
+    "ko":"해수면",
+    "vi":"mực nước biển",
+    "ipa":"/ˈsiː ˈlevəl/",
+    "pos":"noun",
+    "ex":"The sea level is rising every year.",
+    "exvi":"Mực nước biển đang dâng lên mỗi năm."
+  },
+  {
+    "id":"v35_smog",
+    "set":"climate",
+    "led":"en",
+    "en":"smog",
+    "ko":"스모그",
+    "vi":"sương khói",
+    "ipa":"/smɒɡ/",
+    "pos":"noun",
+    "ex":"Smog covered the city this morning.",
+    "exvi":"Sương khói bao phủ thành phố sáng nay."
+  },
+  {
+    "id":"v35_solar_panel",
+    "set":"climate",
+    "led":"en",
+    "en":"solar panel",
+    "ko":"태양 전지판",
+    "vi":"tấm pin mặt trời",
+    "ipa":"/ˈsəʊlə ˈpænl/",
+    "pos":"noun",
+    "ex":"They put solar panels on the roof.",
+    "exvi":"Họ lắp các tấm pin mặt trời trên mái nhà."
+  },
+  {
+    "id":"v35_sustainable_living",
+    "set":"climate",
+    "led":"en",
+    "en":"sustainable living",
+    "ko":"지속 가능한 생활",
+    "vi":"lối sống bền vững",
+    "ipa":"/səˈsteɪnəbəl ˈlɪvɪŋ/",
+    "pos":"noun",
+    "ex":"Sustainable living starts with small daily habits.",
+    "exvi":"Lối sống bền vững bắt đầu từ những thói quen nhỏ hằng ngày."
+  },
+  {
+    "id":"v35_water_pollution",
+    "set":"climate",
+    "led":"en",
+    "en":"water pollution",
+    "ko":"수질 오염",
+    "vi":"ô nhiễm nước",
+    "ipa":"/ˈwɔːtə pəˈluːʃn/",
+    "pos":"noun",
+    "ex":"Water pollution kills fish in the river.",
+    "exvi":"Ô nhiễm nước giết chết cá trên sông."
+  },
+  {
+    "id":"v35_wind_turbine",
+    "set":"climate",
+    "led":"en",
+    "en":"wind turbine",
+    "ko":"풍력 터빈",
+    "vi":"tua-bin gió",
+    "ipa":"/ˈwɪnd ˈtɜːbaɪn/",
+    "pos":"noun",
+    "ex":"Wind turbines stand on the green hills.",
+    "exvi":"Các tua-bin gió đứng trên những ngọn đồi xanh."
+  },
+  {
+    "id":"v35_acid_rain",
+    "set":"climate",
+    "led":"ko",
+    "en":"acid rain",
+    "ko":"산성비",
+    "vi":"mưa axit",
+    "ipa":"/ˈæsɪd reɪn/",
+    "pos":"noun",
+    "ex":"Acid rain damages forests and lakes.",
+    "exvi":"Mưa axit gây hại cho rừng và hồ."
+  },
+  {
+    "id":"v35_carbon_neutrality",
+    "set":"climate",
+    "led":"ko",
+    "en":"carbon neutrality",
+    "ko":"탄소중립",
+    "vi":"trung hòa carbon",
+    "ipa":"/ˈkɑːbən njuːˈtræləti/",
+    "pos":"noun",
+    "ex":"The country aims for carbon neutrality by 2050.",
+    "exvi":"Đất nước đặt mục tiêu trung hòa carbon vào năm 2050."
+  },
+  {
+    "id":"v35_clear_sky",
+    "set":"climate",
+    "led":"ko",
+    "en":"clear sky",
+    "ko":"맑은 하늘",
+    "vi":"bầu trời quang đãng",
+    "ipa":"/klɪə skaɪ/",
+    "pos":"noun",
+    "ex":"We saw many stars under a clear sky.",
+    "exvi":"Chúng tôi đã thấy nhiều ngôi sao dưới bầu trời quang đãng."
+  },
+  {
+    "id":"v35_cold_damage",
+    "set":"climate",
+    "led":"ko",
+    "en":"cold damage",
+    "ko":"냉해",
+    "vi":"thiệt hại do rét",
+    "ipa":"/kəʊld ˈdæmɪdʒ/",
+    "pos":"noun",
+    "ex":"Cold damage ruined the rice crop.",
+    "exvi":"Thiệt hại do rét đã phá hỏng vụ lúa."
+  },
+  {
+    "id":"v35_cold_wave",
+    "set":"climate",
+    "led":"ko",
+    "en":"cold wave",
+    "ko":"한파",
+    "vi":"đợt lạnh",
+    "ipa":"/kəʊld weɪv/",
+    "pos":"noun",
+    "ex":"A cold wave is coming this weekend.",
+    "exvi":"Một đợt lạnh sẽ đến vào cuối tuần này."
+  },
+  {
+    "id":"v35_cultivate",
+    "set":"climate",
+    "led":"ko",
+    "en":"cultivate",
+    "ko":"가꾸다",
+    "vi":"trồng trọt; chăm sóc (cây)",
+    "ipa":"/ˈkʌltɪveɪt/",
+    "pos":"verb",
+    "ex":"They cultivate vegetables in the garden.",
+    "exvi":"Họ trồng rau trong vườn."
+  },
+  {
+    "id":"v35_desertification",
+    "set":"climate",
+    "led":"ko",
+    "en":"desertification",
+    "ko":"사막화",
+    "vi":"sự sa mạc hóa",
+    "ipa":"/dɪˌzɜːtɪfɪˈkeɪʃn/",
+    "pos":"noun",
+    "ex":"Desertification turns green land into desert.",
+    "exvi":"Sa mạc hóa biến đất xanh thành sa mạc."
+  },
+  {
+    "id":"v35_disposable_items",
+    "set":"climate",
+    "led":"ko",
+    "en":"disposable items",
+    "ko":"일회용품",
+    "vi":"đồ dùng một lần",
+    "ipa":"/dɪˈspəʊzəbəl ˈaɪtəmz/",
+    "pos":"noun",
+    "ex":"Cafes now charge for disposable items.",
+    "exvi":"Các quán cà phê hiện tính phí đồ dùng một lần."
+  },
+  {
+    "id":"v35_downpour",
+    "set":"climate",
+    "led":"ko",
+    "en":"downpour",
+    "ko":"소나기",
+    "vi":"cơn mưa rào lớn",
+    "ipa":"/ˈdaʊnpɔː/",
+    "pos":"noun",
+    "ex":"A sudden downpour soaked us all.",
+    "exvi":"Một cơn mưa rào bất chợt làm chúng tôi ướt hết."
+  },
+  {
+    "id":"v35_environmental_pollution",
+    "set":"climate",
+    "led":"ko",
+    "en":"environmental pollution",
+    "ko":"환경오염",
+    "vi":"ô nhiễm môi trường",
+    "ipa":"/ɪnˌvaɪrənˈmentəl pəˈluːʃn/",
+    "pos":"noun",
+    "ex":"Environmental pollution harms our health.",
+    "exvi":"Ô nhiễm môi trường gây hại cho sức khỏe của chúng ta."
+  },
+  {
+    "id":"v35_fine_dust",
+    "set":"climate",
+    "led":"ko",
+    "en":"fine dust",
+    "ko":"미세먼지",
+    "vi":"bụi mịn",
+    "ipa":"/faɪn dʌst/",
+    "pos":"noun",
+    "ex":"Fine dust is bad for your lungs.",
+    "exvi":"Bụi mịn có hại cho phổi của bạn."
+  },
+  {
+    "id":"v35_gale",
+    "set":"climate",
+    "led":"ko",
+    "en":"gale",
+    "ko":"강풍",
+    "vi":"gió mạnh",
+    "ipa":"/ɡeɪl/",
+    "pos":"noun",
+    "ex":"A gale broke the branches.",
+    "exvi":"Gió mạnh đã làm gãy cành cây."
+  },
+  {
+    "id":"v35_geothermal_energy",
+    "set":"climate",
+    "led":"ko",
+    "en":"geothermal energy",
+    "ko":"지열",
+    "vi":"năng lượng địa nhiệt",
+    "ipa":"/ˌdʒiːəʊˈθɜːməl ˈenədʒi/",
+    "pos":"noun",
+    "ex":"Iceland uses geothermal energy to heat homes.",
+    "exvi":"Iceland dùng năng lượng địa nhiệt để sưởi ấm nhà cửa."
+  },
+  {
+    "id":"v35_greenhouse_effect",
+    "set":"climate",
+    "led":"ko",
+    "en":"greenhouse effect",
+    "ko":"온실 효과",
+    "vi":"hiệu ứng nhà kính",
+    "ipa":"/ˈɡriːnhaʊs ɪˈfekt/",
+    "pos":"noun",
+    "ex":"The greenhouse effect keeps the Earth warm.",
+    "exvi":"Hiệu ứng nhà kính giữ cho Trái Đất ấm áp."
+  },
+  {
+    "id":"v35_heavy_rain",
+    "set":"climate",
+    "led":"ko",
+    "en":"heavy rain",
+    "ko":"폭우",
+    "vi":"mưa lớn",
+    "ipa":"/ˈhevi reɪn/",
+    "pos":"noun",
+    "ex":"Heavy rain flooded the streets.",
+    "exvi":"Mưa lớn làm ngập đường phố."
+  },
+  {
+    "id":"v35_heavy_snow",
+    "set":"climate",
+    "led":"ko",
+    "en":"heavy snow",
+    "ko":"폭설",
+    "vi":"tuyết rơi dày",
+    "ipa":"/ˈhevi snəʊ/",
+    "pos":"noun",
+    "ex":"Heavy snow covered the whole town.",
+    "exvi":"Tuyết rơi dày bao phủ cả thị trấn."
+  },
+  {
+    "id":"v35_humidity",
+    "set":"climate",
+    "led":"ko",
+    "en":"humidity",
+    "ko":"습도",
+    "vi":"độ ẩm",
+    "ipa":"/hjuːˈmɪdəti/",
+    "pos":"noun",
+    "ex":"The humidity is very high today.",
+    "exvi":"Độ ẩm hôm nay rất cao."
+  },
+  {
+    "id":"v35_hydropower",
+    "set":"climate",
+    "led":"ko",
+    "en":"hydropower",
+    "ko":"수력",
+    "vi":"thủy điện",
+    "ipa":"/ˈhaɪdrəʊpaʊə/",
+    "pos":"noun",
+    "ex":"Hydropower comes from flowing water.",
+    "exvi":"Thủy điện đến từ dòng nước chảy."
+  },
+  {
+    "id":"v35_icy_road",
+    "set":"climate",
+    "led":"ko",
+    "en":"icy road",
+    "ko":"빙판",
+    "vi":"đường đóng băng",
+    "ipa":"/ˈaɪsi rəʊd/",
+    "pos":"noun",
+    "ex":"Drive slowly on an icy road.",
+    "exvi":"Hãy lái xe chậm trên đường đóng băng."
+  },
+  {
+    "id":"v35_ozone_layer",
+    "set":"climate",
+    "led":"ko",
+    "en":"ozone layer",
+    "ko":"오존층",
+    "vi":"tầng ozone",
+    "ipa":"/ˈəʊzəʊn ˈleɪə/",
+    "pos":"noun",
+    "ex":"The ozone layer protects us from the sun.",
+    "exvi":"Tầng ozone bảo vệ chúng ta khỏi ánh nắng mặt trời."
+  },
+  {
+    "id":"v35_precipitation",
+    "set":"climate",
+    "led":"ko",
+    "en":"precipitation",
+    "ko":"강수량",
+    "vi":"lượng mưa",
+    "ipa":"/prɪˌsɪpɪˈteɪʃn/",
+    "pos":"noun",
+    "ex":"This region has low precipitation.",
+    "exvi":"Vùng này có lượng mưa thấp."
+  },
+  {
+    "id":"v35_purify",
+    "set":"climate",
+    "led":"ko",
+    "en":"purify",
+    "ko":"정화하다",
+    "vi":"làm sạch; lọc sạch",
+    "ipa":"/ˈpjʊərɪfaɪ/",
+    "pos":"verb",
+    "ex":"Plants help purify the air.",
+    "exvi":"Cây cối giúp làm sạch không khí."
+  },
+  {
+    "id":"v35_rainy_season",
+    "set":"climate",
+    "led":"ko",
+    "en":"rainy season",
+    "ko":"장마",
+    "vi":"mùa mưa",
+    "ipa":"/ˈreɪni ˈsiːzn/",
+    "pos":"noun",
+    "ex":"The rainy season starts in June.",
+    "exvi":"Mùa mưa bắt đầu vào tháng sáu."
+  },
+  {
+    "id":"v35_recycling",
+    "set":"climate",
+    "led":"ko",
+    "en":"recycling",
+    "ko":"재활용",
+    "vi":"sự tái chế",
+    "ipa":"/riːˈsaɪklɪŋ/",
+    "pos":"noun",
+    "ex":"Recycling saves paper and plastic.",
+    "exvi":"Tái chế giúp tiết kiệm giấy và nhựa."
+  },
+  {
+    "id":"v35_sea_level_rise",
+    "set":"climate",
+    "led":"ko",
+    "en":"sea level rise",
+    "ko":"해수면 상승",
+    "vi":"sự dâng lên của mực nước biển",
+    "ipa":"/ˈsiː ˈlevəl raɪz/",
+    "pos":"noun",
+    "ex":"Sea level rise threatens small islands.",
+    "exvi":"Mực nước biển dâng đe dọa các đảo nhỏ."
+  },
+  {
+    "id":"v35_solar_power",
+    "set":"climate",
+    "led":"ko",
+    "en":"solar power",
+    "ko":"태양광",
+    "vi":"điện mặt trời",
+    "ipa":"/ˈsəʊlə ˈpaʊə/",
+    "pos":"noun",
+    "ex":"This village runs on solar power.",
+    "exvi":"Ngôi làng này dùng điện mặt trời."
+  },
+  {
+    "id":"v35_typhoon",
+    "set":"climate",
+    "led":"ko",
+    "en":"typhoon",
+    "ko":"태풍",
+    "vi":"bão (nhiệt đới)",
+    "ipa":"/taɪˈfuːn/",
+    "pos":"noun",
+    "ex":"A strong typhoon hit the coast.",
+    "exvi":"Một cơn bão mạnh đã đổ bộ vào bờ biển."
+  },
+  {
+    "id":"v35_waste_separation",
+    "set":"climate",
+    "led":"ko",
+    "en":"waste separation",
+    "ko":"분리수거",
+    "vi":"phân loại rác",
+    "ipa":"/weɪst ˌsepəˈreɪʃn/",
+    "pos":"noun",
+    "ex":"Waste separation starts at home.",
+    "exvi":"Phân loại rác bắt đầu từ nhà."
+  },
+  {
+    "id":"v35_wind_power",
+    "set":"climate",
+    "led":"ko",
+    "en":"wind power",
+    "ko":"풍력",
+    "vi":"điện gió",
+    "ipa":"/ˈwɪnd ˈpaʊə/",
+    "pos":"noun",
+    "ex":"Wind power is clean and cheap.",
+    "exvi":"Điện gió sạch và rẻ."
+  },
+  {
+    "id":"v35_yellow_dust",
+    "set":"climate",
+    "led":"ko",
+    "en":"yellow dust",
+    "ko":"황사",
+    "vi":"bụi vàng",
+    "ipa":"/ˈjeləʊ dʌst/",
+    "pos":"noun",
+    "ex":"Yellow dust blows in from the desert in spring.",
+    "exvi":"Bụi vàng từ sa mạc bay đến vào mùa xuân."
+  },
+  {
+    "id":"v35_3d_printing",
+    "set":"science",
+    "led":"en",
+    "en":"3D printing",
+    "ko":"3D 프린팅",
+    "vi":"in 3D",
+    "ipa":"/ˌθriː ˈdiː ˈprɪntɪŋ/",
+    "pos":"noun",
+    "ex":"3D printing can make a plastic model in hours.",
+    "exvi":"In 3D có thể tạo ra một mô hình nhựa trong vài giờ."
+  },
+  {
+    "id":"v35_antibiotic",
+    "set":"science",
+    "led":"en",
+    "en":"antibiotic",
+    "ko":"항생제",
+    "vi":"thuốc kháng sinh",
+    "ipa":"/ˌæntibaɪˈɒtɪk/",
+    "pos":"noun",
+    "ex":"The doctor gave me an antibiotic.",
+    "exvi":"Bác sĩ đã cho tôi thuốc kháng sinh."
+  },
+  {
+    "id":"v35_artificial_intelligence",
+    "set":"science",
+    "led":"en",
+    "en":"artificial intelligence",
+    "ko":"인공지능",
+    "vi":"trí tuệ nhân tạo",
+    "ipa":"/ˌɑːtɪˈfɪʃl ɪnˈtelɪdʒəns/",
+    "pos":"noun",
+    "ex":"Artificial intelligence can translate languages.",
+    "exvi":"Trí tuệ nhân tạo có thể dịch ngôn ngữ."
+  },
+  {
+    "id":"v35_augmented_reality",
+    "set":"science",
+    "led":"en",
+    "en":"augmented reality",
+    "ko":"증강 현실",
+    "vi":"thực tế tăng cường",
+    "ipa":"/ɔːɡˈmentɪd riˈæləti/",
+    "pos":"noun",
+    "ex":"This game uses augmented reality.",
+    "exvi":"Trò chơi này dùng thực tế tăng cường."
+  },
+  {
+    "id":"v35_big_data",
+    "set":"science",
+    "led":"en",
+    "en":"big data",
+    "ko":"빅데이터",
+    "vi":"dữ liệu lớn",
+    "ipa":"/bɪɡ ˈdeɪtə/",
+    "pos":"noun",
+    "ex":"Big data helps shops understand customers.",
+    "exvi":"Dữ liệu lớn giúp các cửa hàng hiểu khách hàng."
+  },
+  {
+    "id":"v35_biotechnology",
+    "set":"science",
+    "led":"en",
+    "en":"biotechnology",
+    "ko":"생명공학",
+    "vi":"công nghệ sinh học",
+    "ipa":"/ˌbaɪəʊtekˈnɒlədʒi/",
+    "pos":"noun",
+    "ex":"Biotechnology makes new medicines.",
+    "exvi":"Công nghệ sinh học tạo ra thuốc mới."
+  },
+  {
+    "id":"v35_blockchain",
+    "set":"science",
+    "led":"en",
+    "en":"blockchain",
+    "ko":"블록체인",
+    "vi":"chuỗi khối",
+    "ipa":"/ˈblɒktʃeɪn/",
+    "pos":"noun",
+    "ex":"Blockchain keeps records safe.",
+    "exvi":"Chuỗi khối giữ cho các bản ghi an toàn."
+  },
+  {
+    "id":"v35_chatbot",
+    "set":"science",
+    "led":"en",
+    "en":"chatbot",
+    "ko":"챗봇",
+    "vi":"chatbot (trợ lý trò chuyện)",
+    "ipa":"/ˈtʃætbɒt/",
+    "pos":"noun",
+    "ex":"The chatbot answers simple questions.",
+    "exvi":"Chatbot trả lời các câu hỏi đơn giản."
+  },
+  {
+    "id":"v35_cloud_computing",
+    "set":"science",
+    "led":"en",
+    "en":"cloud computing",
+    "ko":"클라우드 컴퓨팅",
+    "vi":"điện toán đám mây",
+    "ipa":"/klaʊd kəmˈpjuːtɪŋ/",
+    "pos":"noun",
+    "ex":"Cloud computing stores files on the internet.",
+    "exvi":"Điện toán đám mây lưu trữ tập tin trên mạng."
+  },
+  {
+    "id":"v35_coding",
+    "set":"science",
+    "led":"en",
+    "en":"coding",
+    "ko":"코딩",
+    "vi":"lập trình",
+    "ipa":"/ˈkəʊdɪŋ/",
+    "pos":"noun",
+    "ex":"Coding is fun once you try it.",
+    "exvi":"Lập trình rất thú vị khi bạn thử."
+  },
+  {
+    "id":"v35_cryptocurrency",
+    "set":"science",
+    "led":"en",
+    "en":"cryptocurrency",
+    "ko":"암호화폐",
+    "vi":"tiền mã hóa",
+    "ipa":"/ˈkrɪptəʊˌkʌrənsi/",
+    "pos":"noun",
+    "ex":"Bitcoin is a famous cryptocurrency.",
+    "exvi":"Bitcoin là một loại tiền mã hóa nổi tiếng."
+  },
+  {
+    "id":"v35_data_science",
+    "set":"science",
+    "led":"en",
+    "en":"data science",
+    "ko":"데이터 과학",
+    "vi":"khoa học dữ liệu",
+    "ipa":"/ˈdeɪtə ˈsaɪəns/",
+    "pos":"noun",
+    "ex":"Data science finds patterns in numbers.",
+    "exvi":"Khoa học dữ liệu tìm ra quy luật trong các con số."
+  },
+  {
+    "id":"v35_deep_learning",
+    "set":"science",
+    "led":"en",
+    "en":"deep learning",
+    "ko":"딥러닝",
+    "vi":"học sâu",
+    "ipa":"/diːp ˈlɜːnɪŋ/",
+    "pos":"noun",
+    "ex":"Deep learning helps computers see pictures.",
+    "exvi":"Học sâu giúp máy tính nhận biết hình ảnh."
+  },
+  {
+    "id":"v35_dna",
+    "set":"science",
+    "led":"en",
+    "en":"DNA",
+    "ko":"디엔에이",
+    "vi":"ADN",
+    "ipa":"/ˌdiː en ˈeɪ/",
+    "pos":"noun",
+    "ex":"DNA carries the code of life.",
+    "exvi":"ADN mang mã của sự sống."
+  },
+  {
+    "id":"v35_drone",
+    "set":"science",
+    "led":"en",
+    "en":"drone",
+    "ko":"드론",
+    "vi":"máy bay không người lái",
+    "ipa":"/drəʊn/",
+    "pos":"noun",
+    "ex":"The drone took photos from the sky.",
+    "exvi":"Máy bay không người lái đã chụp ảnh từ trên trời."
+  },
+  {
+    "id":"v35_gene_editing",
+    "set":"science",
+    "led":"en",
+    "en":"gene editing",
+    "ko":"유전자 편집",
+    "vi":"chỉnh sửa gen",
+    "ipa":"/dʒiːn ˈedɪtɪŋ/",
+    "pos":"noun",
+    "ex":"Gene editing can fix a broken gene.",
+    "exvi":"Chỉnh sửa gen có thể sửa một gen bị lỗi."
+  },
+  {
+    "id":"v35_laser",
+    "set":"science",
+    "led":"en",
+    "en":"laser",
+    "ko":"레이저",
+    "vi":"tia laser",
+    "ipa":"/ˈleɪzə/",
+    "pos":"noun",
+    "ex":"The laser draws a red line.",
+    "exvi":"Tia laser vẽ một đường màu đỏ."
+  },
+  {
+    "id":"v35_machine_learning",
+    "set":"science",
+    "led":"en",
+    "en":"machine learning",
+    "ko":"기계 학습",
+    "vi":"học máy",
+    "ipa":"/məˈʃiːn ˈlɜːnɪŋ/",
+    "pos":"noun",
+    "ex":"Machine learning improves with more data.",
+    "exvi":"Học máy tiến bộ hơn khi có nhiều dữ liệu."
+  },
+  {
+    "id":"v35_microscope",
+    "set":"science",
+    "led":"en",
+    "en":"microscope",
+    "ko":"현미경",
+    "vi":"kính hiển vi",
+    "ipa":"/ˈmaɪkrəskəʊp/",
+    "pos":"noun",
+    "ex":"We saw tiny cells under the microscope.",
+    "exvi":"Chúng tôi đã thấy những tế bào nhỏ dưới kính hiển vi."
+  },
+  {
+    "id":"v35_nanotechnology",
+    "set":"science",
+    "led":"en",
+    "en":"nanotechnology",
+    "ko":"나노기술",
+    "vi":"công nghệ nano",
+    "ipa":"/ˌnænəʊtekˈnɒlədʒi/",
+    "pos":"noun",
+    "ex":"Nanotechnology works with very small parts.",
+    "exvi":"Công nghệ nano làm việc với những bộ phận rất nhỏ."
+  },
+  {
+    "id":"v35_neural_network",
+    "set":"science",
+    "led":"en",
+    "en":"neural network",
+    "ko":"신경망",
+    "vi":"mạng nơ-ron",
+    "ipa":"/ˈnjʊərəl ˈnetwɜːk/",
+    "pos":"noun",
+    "ex":"A neural network learns from examples.",
+    "exvi":"Mạng nơ-ron học từ các ví dụ."
+  },
+  {
+    "id":"v35_periodic_table",
+    "set":"science",
+    "led":"en",
+    "en":"periodic table",
+    "ko":"주기율표",
+    "vi":"bảng tuần hoàn",
+    "ipa":"/ˌpɪəriˈɒdɪk ˈteɪbl/",
+    "pos":"noun",
+    "ex":"The periodic table lists all the elements.",
+    "exvi":"Bảng tuần hoàn liệt kê mọi nguyên tố."
+  },
+  {
+    "id":"v35_quantum_computing",
+    "set":"science",
+    "led":"en",
+    "en":"quantum computing",
+    "ko":"양자 컴퓨팅",
+    "vi":"điện toán lượng tử",
+    "ipa":"/ˈkwɒntəm kəmˈpjuːtɪŋ/",
+    "pos":"noun",
+    "ex":"Quantum computing is very fast.",
+    "exvi":"Điện toán lượng tử rất nhanh."
+  },
+  {
+    "id":"v35_robotics",
+    "set":"science",
+    "led":"en",
+    "en":"robotics",
+    "ko":"로봇공학",
+    "vi":"ngành robot",
+    "ipa":"/rəʊˈbɒtɪks/",
+    "pos":"noun",
+    "ex":"Robotics builds machines that move like people.",
+    "exvi":"Ngành robot chế tạo máy móc cử động như con người."
+  },
+  {
+    "id":"v35_self_driving_car",
+    "set":"science",
+    "led":"en",
+    "en":"self-driving car",
+    "ko":"자율주행차",
+    "vi":"xe tự lái",
+    "ipa":"/self ˈdraɪvɪŋ kɑː/",
+    "pos":"noun",
+    "ex":"A self-driving car has no driver.",
+    "exvi":"Xe tự lái không có người lái."
+  },
+  {
+    "id":"v35_solar_cell",
+    "set":"science",
+    "led":"en",
+    "en":"solar cell",
+    "ko":"태양 전지",
+    "vi":"pin mặt trời",
+    "ipa":"/ˈsəʊlə sel/",
+    "pos":"noun",
+    "ex":"A solar cell turns sunlight into power.",
+    "exvi":"Pin mặt trời biến ánh sáng mặt trời thành điện."
+  },
+  {
+    "id":"v35_space_exploration",
+    "set":"science",
+    "led":"en",
+    "en":"space exploration",
+    "ko":"우주 탐사",
+    "vi":"thám hiểm vũ trụ",
+    "ipa":"/speɪs ˌekspləˈreɪʃn/",
+    "pos":"noun",
+    "ex":"Space exploration teaches us about the stars.",
+    "exvi":"Thám hiểm vũ trụ dạy chúng ta về các ngôi sao."
+  },
+  {
+    "id":"v35_surgery",
+    "set":"science",
+    "led":"en",
+    "en":"surgery",
+    "ko":"수술",
+    "vi":"phẫu thuật",
+    "ipa":"/ˈsɜːdʒəri/",
+    "pos":"noun",
+    "ex":"The surgery took two hours.",
+    "exvi":"Ca phẫu thuật kéo dài hai giờ."
+  },
+  {
+    "id":"v35_telescope",
+    "set":"science",
+    "led":"en",
+    "en":"telescope",
+    "ko":"망원경",
+    "vi":"kính thiên văn",
+    "ipa":"/ˈtelɪskəʊp/",
+    "pos":"noun",
+    "ex":"We looked at the moon with a telescope.",
+    "exvi":"Chúng tôi ngắm mặt trăng bằng kính thiên văn."
+  },
+  {
+    "id":"v35_virtual_reality",
+    "set":"science",
+    "led":"en",
+    "en":"virtual reality",
+    "ko":"가상 현실",
+    "vi":"thực tế ảo",
+    "ipa":"/ˈvɜːtʃuəl riˈæləti/",
+    "pos":"noun",
+    "ex":"Virtual reality makes games feel real.",
+    "exvi":"Thực tế ảo khiến trò chơi trở nên chân thật."
+  },
+  {
+    "id":"v35_alloy",
+    "set":"science",
+    "led":"ko",
+    "en":"alloy",
+    "ko":"합금",
+    "vi":"hợp kim",
+    "ipa":"/ˈælɔɪ/",
+    "pos":"noun",
+    "ex":"Brass is an alloy of copper and zinc.",
+    "exvi":"Đồng thau là hợp kim của đồng và kẽm."
+  },
+  {
+    "id":"v35_atomic_nucleus",
+    "set":"science",
+    "led":"ko",
+    "en":"atomic nucleus",
+    "ko":"원자핵",
+    "vi":"hạt nhân nguyên tử",
+    "ipa":"/əˈtɒmɪk ˈnjuːkliəs/",
+    "pos":"noun",
+    "ex":"The atomic nucleus sits at the centre of the atom.",
+    "exvi":"Hạt nhân nguyên tử nằm ở trung tâm của nguyên tử."
+  },
+  {
+    "id":"v35_conductor",
+    "set":"science",
+    "led":"ko",
+    "en":"conductor",
+    "ko":"전도체",
+    "vi":"chất dẫn điện",
+    "ipa":"/kənˈdʌktə/",
+    "pos":"noun",
+    "ex":"Copper is a good conductor of electricity.",
+    "exvi":"Đồng là chất dẫn điện tốt."
+  },
+  {
+    "id":"v35_electron",
+    "set":"science",
+    "led":"ko",
+    "en":"electron",
+    "ko":"전자",
+    "vi":"electron",
+    "ipa":"/ɪˈlektrɒn/",
+    "pos":"noun",
+    "ex":"An electron has a negative charge.",
+    "exvi":"Electron mang điện tích âm."
+  },
+  {
+    "id":"v35_frequency",
+    "set":"science",
+    "led":"ko",
+    "en":"frequency",
+    "ko":"주파수",
+    "vi":"tần số",
+    "ipa":"/ˈfriːkwənsi/",
+    "pos":"noun",
+    "ex":"Each radio station has a different frequency.",
+    "exvi":"Mỗi đài phát thanh có một tần số khác nhau."
+  },
+  {
+    "id":"v35_gene",
+    "set":"science",
+    "led":"ko",
+    "en":"gene",
+    "ko":"유전자",
+    "vi":"gen",
+    "ipa":"/dʒiːn/",
+    "pos":"noun",
+    "ex":"Each gene carries one small instruction.",
+    "exvi":"Mỗi gen mang một chỉ dẫn nhỏ."
+  },
+  {
+    "id":"v35_geology",
+    "set":"science",
+    "led":"ko",
+    "en":"geology",
+    "ko":"지질학",
+    "vi":"địa chất học",
+    "ipa":"/dʒiˈɒlədʒi/",
+    "pos":"noun",
+    "ex":"Geology studies rocks and the Earth.",
+    "exvi":"Địa chất học nghiên cứu đá và Trái Đất."
+  },
+  {
+    "id":"v35_gravitational_wave",
+    "set":"science",
+    "led":"ko",
+    "en":"gravitational wave",
+    "ko":"중력파",
+    "vi":"sóng hấp dẫn",
+    "ipa":"/ˌɡrævɪˈteɪʃənəl weɪv/",
+    "pos":"noun",
+    "ex":"Scientists first heard a gravitational wave in 2015.",
+    "exvi":"Các nhà khoa học lần đầu nghe được sóng hấp dẫn vào năm 2015."
+  },
+  {
+    "id":"v35_hydrogen",
+    "set":"science",
+    "led":"ko",
+    "en":"hydrogen",
+    "ko":"수소",
+    "vi":"hydro",
+    "ipa":"/ˈhaɪdrədʒən/",
+    "pos":"noun",
+    "ex":"Hydrogen is the lightest gas.",
+    "exvi":"Hydro là chất khí nhẹ nhất."
+  },
+  {
+    "id":"v35_insulator",
+    "set":"science",
+    "led":"ko",
+    "en":"insulator",
+    "ko":"부도체",
+    "vi":"chất cách điện",
+    "ipa":"/ˈɪnsjʊleɪtə/",
+    "pos":"noun",
+    "ex":"Rubber is an insulator.",
+    "exvi":"Cao su là chất cách điện."
+  },
+  {
+    "id":"v35_lava",
+    "set":"science",
+    "led":"ko",
+    "en":"lava",
+    "ko":"용암",
+    "vi":"dung nham",
+    "ipa":"/ˈlɑːvə/",
+    "pos":"noun",
+    "ex":"Hot lava flows down the volcano.",
+    "exvi":"Dung nham nóng chảy xuống núi lửa."
+  },
+  {
+    "id":"v35_lens",
+    "set":"science",
+    "led":"ko",
+    "en":"lens",
+    "ko":"렌즈",
+    "vi":"thấu kính",
+    "ipa":"/lenz/",
+    "pos":"noun",
+    "ex":"The lens in a camera bends light.",
+    "exvi":"Thấu kính trong máy ảnh bẻ cong ánh sáng."
+  },
+  {
+    "id":"v35_magma",
+    "set":"science",
+    "led":"ko",
+    "en":"magma",
+    "ko":"마그마",
+    "vi":"mắc-ma",
+    "ipa":"/ˈmæɡmə/",
+    "pos":"noun",
+    "ex":"Magma is hot rock under the ground.",
+    "exvi":"Mắc-ma là đá nóng dưới mặt đất."
+  },
+  {
+    "id":"v35_magnet",
+    "set":"science",
+    "led":"ko",
+    "en":"magnet",
+    "ko":"자석",
+    "vi":"nam châm",
+    "ipa":"/ˈmæɡnət/",
+    "pos":"noun",
+    "ex":"A magnet pulls iron to itself.",
+    "exvi":"Nam châm hút sắt về phía nó."
+  },
+  {
+    "id":"v35_mathematics",
+    "set":"science",
+    "led":"ko",
+    "en":"mathematics",
+    "ko":"수학",
+    "vi":"toán học",
+    "ipa":"/ˌmæθəˈmætɪks/",
+    "pos":"noun",
+    "ex":"Mathematics helps us count and measure.",
+    "exvi":"Toán học giúp chúng ta đếm và đo lường."
+  },
+  {
+    "id":"v35_neutron",
+    "set":"science",
+    "led":"ko",
+    "en":"neutron",
+    "ko":"중성자",
+    "vi":"nơ-tron",
+    "ipa":"/ˈnjuːtrɒn/",
+    "pos":"noun",
+    "ex":"A neutron has no electric charge.",
+    "exvi":"Nơ-tron không mang điện tích."
+  },
+  {
+    "id":"v35_nobel_prize",
+    "set":"science",
+    "led":"ko",
+    "en":"Nobel Prize",
+    "ko":"노벨상",
+    "vi":"giải Nobel",
+    "ipa":"/nəʊˈbel praɪz/",
+    "pos":"noun",
+    "ex":"She won the Nobel Prize for her research.",
+    "exvi":"Bà đã giành giải Nobel nhờ nghiên cứu của mình."
+  },
+  {
+    "id":"v35_nuclear_fission",
+    "set":"science",
+    "led":"ko",
+    "en":"nuclear fission",
+    "ko":"핵분열",
+    "vi":"phân hạch hạt nhân",
+    "ipa":"/ˈnjuːkliə ˈfɪʃn/",
+    "pos":"noun",
+    "ex":"Nuclear fission splits one atom into two.",
+    "exvi":"Phân hạch hạt nhân tách một nguyên tử thành hai."
+  },
+  {
+    "id":"v35_nuclear_fusion",
+    "set":"science",
+    "led":"ko",
+    "en":"nuclear fusion",
+    "ko":"핵융합",
+    "vi":"nhiệt hạch",
+    "ipa":"/ˈnjuːkliə ˈfjuːʒn/",
+    "pos":"noun",
+    "ex":"The sun makes power by nuclear fusion.",
+    "exvi":"Mặt trời tạo ra năng lượng nhờ nhiệt hạch."
+  },
+  {
+    "id":"v35_nuclear_reactor",
+    "set":"science",
+    "led":"ko",
+    "en":"nuclear reactor",
+    "ko":"원자로",
+    "vi":"lò phản ứng hạt nhân",
+    "ipa":"/ˈnjuːkliə riˈæktə/",
+    "pos":"noun",
+    "ex":"A nuclear reactor makes electricity.",
+    "exvi":"Lò phản ứng hạt nhân tạo ra điện."
+  },
+  {
+    "id":"v35_photon",
+    "set":"science",
+    "led":"ko",
+    "en":"photon",
+    "ko":"광자",
+    "vi":"phô-tôn",
+    "ipa":"/ˈfəʊtɒn/",
+    "pos":"noun",
+    "ex":"A photon is a tiny piece of light.",
+    "exvi":"Phô-tôn là một hạt ánh sáng rất nhỏ."
+  },
+  {
+    "id":"v35_probe",
+    "set":"science",
+    "led":"ko",
+    "en":"probe",
+    "ko":"탐사선",
+    "vi":"tàu thăm dò",
+    "ipa":"/prəʊb/",
+    "pos":"noun",
+    "ex":"The probe sends photos back to Earth.",
+    "exvi":"Tàu thăm dò gửi ảnh về Trái Đất."
+  },
+  {
+    "id":"v35_proton",
+    "set":"science",
+    "led":"ko",
+    "en":"proton",
+    "ko":"양성자",
+    "vi":"prô-tôn",
+    "ipa":"/ˈprəʊtɒn/",
+    "pos":"noun",
+    "ex":"A proton has a positive charge.",
+    "exvi":"Prô-tôn mang điện tích dương."
+  },
+  {
+    "id":"v35_radioactivity",
+    "set":"science",
+    "led":"ko",
+    "en":"radioactivity",
+    "ko":"방사능",
+    "vi":"tính phóng xạ",
+    "ipa":"/ˌreɪdiəʊækˈtɪvəti/",
+    "pos":"noun",
+    "ex":"Radioactivity can be dangerous in large amounts.",
+    "exvi":"Tính phóng xạ có thể nguy hiểm với lượng lớn."
+  },
+  {
+    "id":"v35_research_institute",
+    "set":"science",
+    "led":"ko",
+    "en":"research institute",
+    "ko":"연구소",
+    "vi":"viện nghiên cứu",
+    "ipa":"/rɪˈsɜːtʃ ˈɪnstɪtjuːt/",
+    "pos":"noun",
+    "ex":"She works at a research institute.",
+    "exvi":"Cô ấy làm việc tại một viện nghiên cứu."
+  },
+  {
+    "id":"v35_semiconductor",
+    "set":"science",
+    "led":"ko",
+    "en":"semiconductor",
+    "ko":"반도체",
+    "vi":"chất bán dẫn",
+    "ipa":"/ˌsemikənˈdʌktə/",
+    "pos":"noun",
+    "ex":"A semiconductor is inside every phone.",
+    "exvi":"Chất bán dẫn có trong mọi chiếc điện thoại."
+  },
+  {
+    "id":"v35_spectrum",
+    "set":"science",
+    "led":"ko",
+    "en":"spectrum",
+    "ko":"스펙트럼",
+    "vi":"quang phổ",
+    "ipa":"/ˈspektrəm/",
+    "pos":"noun",
+    "ex":"A rainbow shows the spectrum of light.",
+    "exvi":"Cầu vồng cho thấy quang phổ của ánh sáng."
+  },
+  {
+    "id":"v35_vibration",
+    "set":"science",
+    "led":"ko",
+    "en":"vibration",
+    "ko":"진동",
+    "vi":"sự rung động",
+    "ipa":"/vaɪˈbreɪʃn/",
+    "pos":"noun",
+    "ex":"The vibration of the phone woke me up.",
+    "exvi":"Sự rung động của điện thoại đã đánh thức tôi."
+  },
+  {
+    "id":"v35_voltage",
+    "set":"science",
+    "led":"ko",
+    "en":"voltage",
+    "ko":"전압",
+    "vi":"điện áp",
+    "ipa":"/ˈvəʊltɪdʒ/",
+    "pos":"noun",
+    "ex":"This battery has a voltage of nine volts.",
+    "exvi":"Pin này có điện áp chín vôn."
+  },
+  {
+    "id":"v35_wavelength",
+    "set":"science",
+    "led":"ko",
+    "en":"wavelength",
+    "ko":"파장",
+    "vi":"bước sóng",
+    "ipa":"/ˈweɪvleŋθ/",
+    "pos":"noun",
+    "ex":"Red light has a long wavelength.",
+    "exvi":"Ánh sáng đỏ có bước sóng dài."
+  },
+  {
+    "id":"v35_architecture",
+    "set":"society",
+    "led":"en",
+    "en":"architecture",
+    "ko":"건축",
+    "vi":"kiến trúc",
+    "ipa":"/ˈɑːkɪtektʃə/",
+    "pos":"noun",
+    "ex":"The old temple shows beautiful architecture.",
+    "exvi":"Ngôi đền cổ cho thấy kiến trúc tuyệt đẹp."
+  },
+  {
+    "id":"v35_brain_drain",
+    "set":"society",
+    "led":"en",
+    "en":"brain drain",
+    "ko":"두뇌 유출",
+    "vi":"chảy máu chất xám",
+    "ipa":"/breɪn dreɪn/",
+    "pos":"noun",
+    "ex":"Brain drain hurts small countries.",
+    "exvi":"Chảy máu chất xám gây hại cho các nước nhỏ."
+  },
+  {
+    "id":"v35_coming_of_age_ceremony",
+    "set":"society",
+    "led":"en",
+    "en":"coming-of-age ceremony",
+    "ko":"성인식",
+    "vi":"lễ trưởng thành",
+    "ipa":"/ˈkʌmɪŋ əv eɪdʒ ˈserəməni/",
+    "pos":"noun",
+    "ex":"A coming-of-age ceremony marks the start of adult life.",
+    "exvi":"Lễ trưởng thành đánh dấu sự bắt đầu của cuộc sống người lớn."
+  },
+  {
+    "id":"v35_cost_of_living",
+    "set":"society",
+    "led":"en",
+    "en":"cost of living",
+    "ko":"생활비",
+    "vi":"chi phí sinh hoạt",
+    "ipa":"/kɒst əv ˈlɪvɪŋ/",
+    "pos":"noun",
+    "ex":"The cost of living is high in big cities.",
+    "exvi":"Chi phí sinh hoạt ở các thành phố lớn rất cao."
+  },
+  {
+    "id":"v35_cultural_diversity",
+    "set":"society",
+    "led":"en",
+    "en":"cultural diversity",
+    "ko":"문화 다양성",
+    "vi":"đa dạng văn hóa",
+    "ipa":"/ˈkʌltʃərəl daɪˈvɜːsəti/",
+    "pos":"noun",
+    "ex":"Cultural diversity makes a city rich.",
+    "exvi":"Đa dạng văn hóa làm cho một thành phố phong phú."
+  },
+  {
+    "id":"v35_cultural_exchange",
+    "set":"society",
+    "led":"en",
+    "en":"cultural exchange",
+    "ko":"문화 교류",
+    "vi":"giao lưu văn hóa",
+    "ipa":"/ˈkʌltʃərəl ɪksˈtʃeɪndʒ/",
+    "pos":"noun",
+    "ex":"Cultural exchange helps people understand each other.",
+    "exvi":"Giao lưu văn hóa giúp mọi người hiểu nhau hơn."
+  },
+  {
+    "id":"v35_cultural_heritage",
+    "set":"society",
+    "led":"en",
+    "en":"cultural heritage",
+    "ko":"문화유산",
+    "vi":"di sản văn hóa",
+    "ipa":"/ˈkʌltʃərəl ˈherɪtɪdʒ/",
+    "pos":"noun",
+    "ex":"This palace is part of our cultural heritage.",
+    "exvi":"Cung điện này là một phần di sản văn hóa của chúng ta."
+  },
+  {
+    "id":"v35_dialect",
+    "set":"society",
+    "led":"en",
+    "en":"dialect",
+    "ko":"방언",
+    "vi":"phương ngữ",
+    "ipa":"/ˈdaɪəlekt/",
+    "pos":"noun",
+    "ex":"People in Busan speak a different dialect.",
+    "exvi":"Người ở Busan nói một phương ngữ khác."
+  },
+  {
+    "id":"v35_fake_news",
+    "set":"society",
+    "led":"en",
+    "en":"fake news",
+    "ko":"가짜 뉴스",
+    "vi":"tin giả",
+    "ipa":"/feɪk njuːz/",
+    "pos":"noun",
+    "ex":"Do not share fake news online.",
+    "exvi":"Đừng chia sẻ tin giả trên mạng."
+  },
+  {
+    "id":"v35_folklore",
+    "set":"society",
+    "led":"en",
+    "en":"folklore",
+    "ko":"민속",
+    "vi":"văn hóa dân gian",
+    "ipa":"/ˈfəʊklɔː/",
+    "pos":"noun",
+    "ex":"Folklore keeps old stories alive.",
+    "exvi":"Văn hóa dân gian giữ cho những câu chuyện xưa còn sống mãi."
+  },
+  {
+    "id":"v35_freedom_of_speech",
+    "set":"society",
+    "led":"en",
+    "en":"freedom of speech",
+    "ko":"표현의 자유",
+    "vi":"tự do ngôn luận",
+    "ipa":"/ˈfriːdəm əv spiːtʃ/",
+    "pos":"noun",
+    "ex":"Freedom of speech lets people share ideas.",
+    "exvi":"Tự do ngôn luận cho phép mọi người chia sẻ ý kiến."
+  },
+  {
+    "id":"v35_gender_equality",
+    "set":"society",
+    "led":"en",
+    "en":"gender equality",
+    "ko":"성평등",
+    "vi":"bình đẳng giới",
+    "ipa":"/ˈdʒendə ɪˈkwɒləti/",
+    "pos":"noun",
+    "ex":"Gender equality means the same rights for all.",
+    "exvi":"Bình đẳng giới nghĩa là quyền như nhau cho mọi người."
+  },
+  {
+    "id":"v35_generation_gap",
+    "set":"society",
+    "led":"en",
+    "en":"generation gap",
+    "ko":"세대 차이",
+    "vi":"khoảng cách thế hệ",
+    "ipa":"/ˌdʒenəˈreɪʃn ɡæp/",
+    "pos":"noun",
+    "ex":"The generation gap makes talks with teens hard.",
+    "exvi":"Khoảng cách thế hệ khiến việc trò chuyện với thanh thiếu niên trở nên khó khăn."
+  },
+  {
+    "id":"v35_housewarming",
+    "set":"society",
+    "led":"en",
+    "en":"housewarming",
+    "ko":"집들이",
+    "vi":"tiệc tân gia",
+    "ipa":"/ˈhaʊswɔːmɪŋ/",
+    "pos":"noun",
+    "ex":"We gave her a plant for her housewarming.",
+    "exvi":"Chúng tôi tặng cô ấy một chậu cây nhân dịp tân gia."
+  },
+  {
+    "id":"v35_human_rights",
+    "set":"society",
+    "led":"en",
+    "en":"human rights",
+    "ko":"인권",
+    "vi":"nhân quyền",
+    "ipa":"/ˈhjuːmən raɪts/",
+    "pos":"noun",
+    "ex":"Human rights belong to every person.",
+    "exvi":"Nhân quyền thuộc về mọi người."
+  },
+  {
+    "id":"v35_immigration",
+    "set":"society",
+    "led":"en",
+    "en":"immigration",
+    "ko":"이민",
+    "vi":"sự nhập cư",
+    "ipa":"/ˌɪmɪˈɡreɪʃn/",
+    "pos":"noun",
+    "ex":"Immigration brings new cultures to a country.",
+    "exvi":"Nhập cư mang văn hóa mới đến một đất nước."
+  },
+  {
+    "id":"v35_language_barrier",
+    "set":"society",
+    "led":"en",
+    "en":"language barrier",
+    "ko":"언어 장벽",
+    "vi":"rào cản ngôn ngữ",
+    "ipa":"/ˈlæŋɡwɪdʒ ˈbæriə/",
+    "pos":"noun",
+    "ex":"The language barrier made travel hard.",
+    "exvi":"Rào cản ngôn ngữ khiến việc du lịch trở nên khó khăn."
+  },
+  {
+    "id":"v35_mass_media",
+    "set":"society",
+    "led":"en",
+    "en":"mass media",
+    "ko":"대중 매체",
+    "vi":"truyền thông đại chúng",
+    "ipa":"/mæs ˈmiːdiə/",
+    "pos":"noun",
+    "ex":"The mass media shapes what people think.",
+    "exvi":"Truyền thông đại chúng định hình suy nghĩ của mọi người."
+  },
+  {
+    "id":"v35_mythology",
+    "set":"society",
+    "led":"en",
+    "en":"mythology",
+    "ko":"신화",
+    "vi":"thần thoại",
+    "ipa":"/mɪˈθɒlədʒi/",
+    "pos":"noun",
+    "ex":"Greek mythology is full of gods and heroes.",
+    "exvi":"Thần thoại Hy Lạp đầy những vị thần và anh hùng."
+  },
+  {
+    "id":"v35_oral_tradition",
+    "set":"society",
+    "led":"en",
+    "en":"oral tradition",
+    "ko":"구전 전통",
+    "vi":"truyền thống truyền miệng",
+    "ipa":"/ˈɔːrəl trəˈdɪʃn/",
+    "pos":"noun",
+    "ex":"Old songs live on in oral tradition.",
+    "exvi":"Những bài hát cổ còn sống mãi trong truyền thống truyền miệng."
+  },
+  {
+    "id":"v35_public_opinion",
+    "set":"society",
+    "led":"en",
+    "en":"public opinion",
+    "ko":"여론",
+    "vi":"dư luận",
+    "ipa":"/ˈpʌblɪk əˈpɪnjən/",
+    "pos":"noun",
+    "ex":"Public opinion can change a law.",
+    "exvi":"Dư luận có thể thay đổi một đạo luật."
+  },
+  {
+    "id":"v35_quality_of_life",
+    "set":"society",
+    "led":"en",
+    "en":"quality of life",
+    "ko":"삶의 질",
+    "vi":"chất lượng cuộc sống",
+    "ipa":"/ˈkwɒləti əv laɪf/",
+    "pos":"noun",
+    "ex":"Clean air improves our quality of life.",
+    "exvi":"Không khí sạch cải thiện chất lượng cuộc sống của chúng ta."
+  },
+  {
+    "id":"v35_ritual",
+    "set":"society",
+    "led":"en",
+    "en":"ritual",
+    "ko":"의례",
+    "vi":"nghi lễ",
+    "ipa":"/ˈrɪtʃuəl/",
+    "pos":"noun",
+    "ex":"Tea has its own ritual in Korea.",
+    "exvi":"Trà có nghi lễ riêng ở Hàn Quốc."
+  },
+  {
+    "id":"v35_sculpture",
+    "set":"society",
+    "led":"en",
+    "en":"sculpture",
+    "ko":"조각",
+    "vi":"tác phẩm điêu khắc",
+    "ipa":"/ˈskʌlptʃə/",
+    "pos":"noun",
+    "ex":"The sculpture stands in the park.",
+    "exvi":"Tác phẩm điêu khắc đứng trong công viên."
+  },
+  {
+    "id":"v35_social_media",
+    "set":"society",
+    "led":"en",
+    "en":"social media",
+    "ko":"소셜 미디어",
+    "vi":"mạng xã hội",
+    "ipa":"/ˈsəʊʃl ˈmiːdiə/",
+    "pos":"noun",
+    "ex":"Many teens use social media every day.",
+    "exvi":"Nhiều thanh thiếu niên dùng mạng xã hội mỗi ngày."
+  },
+  {
+    "id":"v35_standard_of_living",
+    "set":"society",
+    "led":"en",
+    "en":"standard of living",
+    "ko":"생활 수준",
+    "vi":"mức sống",
+    "ipa":"/ˈstændəd əv ˈlɪvɪŋ/",
+    "pos":"noun",
+    "ex":"The standard of living rose fast in Korea.",
+    "exvi":"Mức sống ở Hàn Quốc đã tăng nhanh."
+  },
+  {
+    "id":"v35_tribe",
+    "set":"society",
+    "led":"en",
+    "en":"tribe",
+    "ko":"부족",
+    "vi":"bộ lạc",
+    "ipa":"/traɪb/",
+    "pos":"noun",
+    "ex":"Each tribe has its own songs.",
+    "exvi":"Mỗi bộ lạc có những bài hát riêng."
+  },
+  {
+    "id":"v35_urban_sprawl",
+    "set":"society",
+    "led":"en",
+    "en":"urban sprawl",
+    "ko":"도시 확산",
+    "vi":"sự mở rộng đô thị",
+    "ipa":"/ˈɜːbən sprɔːl/",
+    "pos":"noun",
+    "ex":"Urban sprawl eats up farms near the city.",
+    "exvi":"Sự mở rộng đô thị nuốt chửng các trang trại gần thành phố."
+  },
+  {
+    "id":"v35_urbanization",
+    "set":"society",
+    "led":"en",
+    "en":"urbanization",
+    "ko":"도시화",
+    "vi":"sự đô thị hóa",
+    "ipa":"/ˌɜːbənaɪˈzeɪʃn/",
+    "pos":"noun",
+    "ex":"Urbanization moves people to cities.",
+    "exvi":"Đô thị hóa đưa mọi người đến thành phố."
+  },
+  {
+    "id":"v35_work_life_balance",
+    "set":"society",
+    "led":"en",
+    "en":"work-life balance",
+    "ko":"일과 삶의 균형",
+    "vi":"cân bằng giữa công việc và cuộc sống",
+    "ipa":"/wɜːk laɪf ˈbæləns/",
+    "pos":"noun",
+    "ex":"Good work-life balance keeps workers happy.",
+    "exvi":"Cân bằng tốt giữa công việc và cuộc sống giúp người lao động vui vẻ."
+  },
+  {
+    "id":"v35_60th_birthday",
+    "set":"society",
+    "led":"ko",
+    "en":"60th birthday",
+    "ko":"환갑",
+    "vi":"sinh nhật sáu mươi tuổi (lễ mừng thọ)",
+    "ipa":"/ˈsɪkstiəθ ˈbɜːθdeɪ/",
+    "pos":"noun",
+    "ex":"A 60th birthday is a big party in Korea.",
+    "exvi":"Sinh nhật sáu mươi tuổi là một bữa tiệc lớn ở Hàn Quốc."
+  },
+  {
+    "id":"v35_ancestral_grave_visit",
+    "set":"society",
+    "led":"ko",
+    "en":"ancestral grave visit",
+    "ko":"성묘",
+    "vi":"viếng mộ tổ tiên",
+    "ipa":"/ænˈsestral ɡreɪv ˈvɪzɪt/",
+    "pos":"noun",
+    "ex":"Families make an ancestral grave visit at Chuseok.",
+    "exvi":"Các gia đình viếng mộ tổ tiên vào dịp Chuseok."
+  },
+  {
+    "id":"v35_ancestral_rite",
+    "set":"society",
+    "led":"ko",
+    "en":"ancestral rite",
+    "ko":"제사",
+    "vi":"lễ cúng tổ tiên",
+    "ipa":"/ænˈsestral raɪt/",
+    "pos":"noun",
+    "ex":"An ancestral rite honours the dead.",
+    "exvi":"Lễ cúng tổ tiên tưởng nhớ người đã khuất."
+  },
+  {
+    "id":"v35_chuseok",
+    "set":"society",
+    "led":"ko",
+    "en":"Chuseok",
+    "ko":"추석",
+    "vi":"Tết Trung thu (Hàn Quốc)",
+    "ipa":"/ˈtʃuːsɒk/",
+    "pos":"noun",
+    "ex":"Families gather at Chuseok.",
+    "exvi":"Các gia đình sum họp vào dịp Chuseok."
+  },
+  {
+    "id":"v35_chuseok_memorial_rite",
+    "set":"society",
+    "led":"ko",
+    "en":"Chuseok memorial rite",
+    "ko":"차례",
+    "vi":"lễ cúng tổ tiên dịp Chuseok",
+    "ipa":"/ˈtʃuːsɒk məˈmɔːriəl raɪt/",
+    "pos":"noun",
+    "ex":"The Chuseok memorial rite starts early in the morning.",
+    "exvi":"Lễ cúng tổ tiên dịp Chuseok bắt đầu từ sáng sớm."
+  },
+  {
+    "id":"v35_etiquette",
+    "set":"society",
+    "led":"ko",
+    "en":"etiquette",
+    "ko":"예절",
+    "vi":"phép lịch sự",
+    "ipa":"/ˈetɪket/",
+    "pos":"noun",
+    "ex":"Good etiquette means bowing to elders.",
+    "exvi":"Phép lịch sự tốt nghĩa là cúi chào người lớn tuổi."
+  },
+  {
+    "id":"v35_filial_piety",
+    "set":"society",
+    "led":"ko",
+    "en":"filial piety",
+    "ko":"효도",
+    "vi":"lòng hiếu thảo",
+    "ipa":"/ˈfɪliəl ˈpaɪəti/",
+    "pos":"noun",
+    "ex":"Filial piety means caring for your parents.",
+    "exvi":"Lòng hiếu thảo nghĩa là chăm sóc cha mẹ."
+  },
+  {
+    "id":"v35_first_birthday_party",
+    "set":"society",
+    "led":"ko",
+    "en":"first birthday party",
+    "ko":"돌잔치",
+    "vi":"tiệc thôi nôi (sinh nhật đầu tiên)",
+    "ipa":"/fɜːst ˈbɜːθdeɪ ˈpɑːti/",
+    "pos":"noun",
+    "ex":"A first birthday party is a big day in Korea.",
+    "exvi":"Tiệc thôi nôi là một ngày quan trọng ở Hàn Quốc."
+  },
+  {
+    "id":"v35_folktale",
+    "set":"society",
+    "led":"ko",
+    "en":"folktale",
+    "ko":"설화",
+    "vi":"truyện dân gian",
+    "ipa":"/ˈfəʊkteɪl/",
+    "pos":"noun",
+    "ex":"This folktale tells of a clever rabbit.",
+    "exvi":"Truyện dân gian này kể về một con thỏ thông minh."
+  },
+  {
+    "id":"v35_greeting",
+    "set":"society",
+    "led":"ko",
+    "en":"greeting",
+    "ko":"인사",
+    "vi":"lời chào",
+    "ipa":"/ˈɡriːtɪŋ/",
+    "pos":"noun",
+    "ex":"A bow is a polite greeting in Korea.",
+    "exvi":"Cúi chào là lời chào lịch sự ở Hàn Quốc."
+  },
+  {
+    "id":"v35_greeting_bow",
+    "set":"society",
+    "led":"ko",
+    "en":"greeting bow",
+    "ko":"큰절",
+    "vi":"cái cúi chào",
+    "ipa":"/ˈɡriːtɪŋ baʊ/",
+    "pos":"noun",
+    "ex":"Children make a greeting bow to their grandparents.",
+    "exvi":"Trẻ em cúi chào ông bà."
+  },
+  {
+    "id":"v35_hanbok",
+    "set":"society",
+    "led":"ko",
+    "en":"hanbok",
+    "ko":"한복",
+    "vi":"hanbok (trang phục truyền thống Hàn Quốc)",
+    "ipa":"/ˈhænbɒk/",
+    "pos":"noun",
+    "ex":"She wears a hanbok at Chuseok.",
+    "exvi":"Cô ấy mặc hanbok vào dịp Chuseok."
+  },
+  {
+    "id":"v35_hometown",
+    "set":"society",
+    "led":"ko",
+    "en":"hometown",
+    "ko":"고향",
+    "vi":"quê hương",
+    "ipa":"/ˈhəʊmtaʊn/",
+    "pos":"noun",
+    "ex":"He misses his hometown in winter.",
+    "exvi":"Anh ấy nhớ quê hương vào mùa đông."
+  },
+  {
+    "id":"v35_jeong",
+    "set":"society",
+    "led":"ko",
+    "en":"jeong",
+    "ko":"정",
+    "vi":"tình cảm gắn bó (jeong)",
+    "ipa":"/dʒɒŋ/",
+    "pos":"noun",
+    "ex":"Jeong grows between old friends.",
+    "exvi":"Tình cảm gắn bó lớn dần giữa những người bạn cũ."
+  },
+  {
+    "id":"v35_kimjang",
+    "set":"society",
+    "led":"ko",
+    "en":"kimjang",
+    "ko":"김장",
+    "vi":"kimjang (làm kim chi mùa đông)",
+    "ipa":"/ˈkɪmdʒæŋ/",
+    "pos":"noun",
+    "ex":"Families make kimchi together at kimjang.",
+    "exvi":"Các gia đình cùng làm kim chi vào dịp kimjang."
+  },
+  {
+    "id":"v35_korean_wave",
+    "set":"society",
+    "led":"ko",
+    "en":"Korean Wave",
+    "ko":"한류",
+    "vi":"làn sóng Hàn Quốc",
+    "ipa":"/kəˈriːən weɪv/",
+    "pos":"noun",
+    "ex":"The Korean Wave spread K-pop around the world.",
+    "exvi":"Làn sóng Hàn Quốc đã đưa K-pop đi khắp thế giới."
+  },
+  {
+    "id":"v35_labor_exchange",
+    "set":"society",
+    "led":"ko",
+    "en":"labor exchange",
+    "ko":"품앗이",
+    "vi":"đổi công",
+    "ipa":"/ˈleɪbə ɪksˈtʃeɪndʒ/",
+    "pos":"noun",
+    "ex":"Labor exchange helped farmers plant rice.",
+    "exvi":"Đổi công giúp nông dân trồng lúa."
+  },
+  {
+    "id":"v35_legend",
+    "set":"society",
+    "led":"ko",
+    "en":"legend",
+    "ko":"전설",
+    "vi":"truyền thuyết",
+    "ipa":"/ˈledʒənd/",
+    "pos":"noun",
+    "ex":"The legend tells of a dragon in the lake.",
+    "exvi":"Truyền thuyết kể về một con rồng trong hồ."
+  },
+  {
+    "id":"v35_mask_dance",
+    "set":"society",
+    "led":"ko",
+    "en":"mask dance",
+    "ko":"탈춤",
+    "vi":"múa mặt nạ",
+    "ipa":"/mɑːsk dɑːns/",
+    "pos":"noun",
+    "ex":"The mask dance makes people laugh.",
+    "exvi":"Múa mặt nạ khiến mọi người cười."
+  },
+  {
+    "id":"v35_multiculturalism",
+    "set":"society",
+    "led":"ko",
+    "en":"multiculturalism",
+    "ko":"다문화",
+    "vi":"chủ nghĩa đa văn hóa",
+    "ipa":"/ˌmʌltɪˈkʌltʃərəlɪzəm/",
+    "pos":"noun",
+    "ex":"Multiculturalism grows in big cities.",
+    "exvi":"Chủ nghĩa đa văn hóa phát triển ở các thành phố lớn."
+  },
+  {
+    "id":"v35_new_year_bow",
+    "set":"society",
+    "led":"ko",
+    "en":"New Year bow",
+    "ko":"세배",
+    "vi":"lễ cúi chào năm mới",
+    "ipa":"/njuː jɪə baʊ/",
+    "pos":"noun",
+    "ex":"Children make a New Year bow and get money.",
+    "exvi":"Trẻ em cúi chào năm mới và nhận tiền mừng tuổi."
+  },
+  {
+    "id":"v35_ondol",
+    "set":"society",
+    "led":"ko",
+    "en":"ondol",
+    "ko":"온돌",
+    "vi":"ondol (sàn nhà sưởi ấm)",
+    "ipa":"/ˈɒndɒl/",
+    "pos":"noun",
+    "ex":"Ondol keeps the floor warm in winter.",
+    "exvi":"Ondol giữ sàn nhà ấm vào mùa đông."
+  },
+  {
+    "id":"v35_pansori",
+    "set":"society",
+    "led":"ko",
+    "en":"pansori",
+    "ko":"판소리",
+    "vi":"pansori (kể chuyện bằng hát)",
+    "ipa":"/pænˈsɔːri/",
+    "pos":"noun",
+    "ex":"Pansori tells old stories through song.",
+    "exvi":"Pansori kể chuyện xưa qua bài hát."
+  },
+  {
+    "id":"v35_respect_for_elders",
+    "set":"society",
+    "led":"ko",
+    "en":"respect for elders",
+    "ko":"경로",
+    "vi":"kính trọng người lớn tuổi",
+    "ipa":"/rɪˈspekt fə ˈeldəz/",
+    "pos":"noun",
+    "ex":"Respect for elders is important in Korea.",
+    "exvi":"Kính trọng người lớn tuổi rất quan trọng ở Hàn Quốc."
+  },
+  {
+    "id":"v35_samulnori",
+    "set":"society",
+    "led":"ko",
+    "en":"samulnori",
+    "ko":"사물놀이",
+    "vi":"samulnori (nhạc cụ truyền thống)",
+    "ipa":"/sɑːmʊlˈnɔːri/",
+    "pos":"noun",
+    "ex":"Samulnori is loud music with four instruments.",
+    "exvi":"Samulnori là nhạc sôi động với bốn nhạc cụ."
+  },
+  {
+    "id":"v35_sarangbang",
+    "set":"society",
+    "led":"ko",
+    "en":"sarangbang",
+    "ko":"사랑방",
+    "vi":"sarangbang (phòng khách truyền thống)",
+    "ipa":"/sɑːˈræŋbæŋ/",
+    "pos":"noun",
+    "ex":"Guests rest in the sarangbang.",
+    "exvi":"Khách nghỉ ngơi trong phòng sarangbang."
+  },
+  {
+    "id":"v35_sense_of_belonging",
+    "set":"society",
+    "led":"ko",
+    "en":"sense of belonging",
+    "ko":"소속감",
+    "vi":"cảm giác thuộc về",
+    "ipa":"/sens əv bɪˈlɒŋɪŋ/",
+    "pos":"noun",
+    "ex":"A club gives you a sense of belonging.",
+    "exvi":"Một câu lạc bộ cho bạn cảm giác thuộc về."
+  },
+  {
+    "id":"v35_seollal",
+    "set":"society",
+    "led":"ko",
+    "en":"Seollal",
+    "ko":"설날",
+    "vi":"Tết Nguyên đán (Hàn Quốc)",
+    "ipa":"/ˈsɒlɑːl/",
+    "pos":"noun",
+    "ex":"Families eat rice cake soup at Seollal.",
+    "exvi":"Các gia đình ăn canh bánh gạo vào dịp Tết Nguyên đán."
+  },
+  {
+    "id":"v35_village_community",
+    "set":"society",
+    "led":"ko",
+    "en":"village community",
+    "ko":"두레",
+    "vi":"cộng đồng làng",
+    "ipa":"/ˈvɪlɪdʒ kəˈmjuːnəti/",
+    "pos":"noun",
+    "ex":"The village community farmed the fields together.",
+    "exvi":"Cộng đồng làng cùng nhau canh tác ruộng."
+  },
+  {
+    "id":"v35_wedding_ceremony",
+    "set":"society",
+    "led":"ko",
+    "en":"wedding ceremony",
+    "ko":"결혼식",
+    "vi":"lễ cưới",
+    "ipa":"/ˈwedɪŋ ˈserəməni/",
+    "pos":"noun",
+    "ex":"The wedding ceremony starts at noon.",
+    "exvi":"Lễ cưới bắt đầu lúc trưa."
+  },
+  {
+    "id":"v35_compassion",
+    "set":"mind",
+    "led":"en",
+    "en":"compassion",
+    "ko":"연민",
+    "vi":"lòng trắc ẩn",
+    "ipa":"/kəmˈpæʃn/",
+    "pos":"noun",
+    "ex":"Compassion moves us to help others.",
+    "exvi":"Lòng trắc ẩn thôi thúc chúng ta giúp đỡ người khác."
+  },
+  {
+    "id":"v35_creativity",
+    "set":"mind",
+    "led":"en",
+    "en":"creativity",
+    "ko":"창의성",
+    "vi":"sự sáng tạo",
+    "ipa":"/ˌkriːeɪˈtɪvəti/",
+    "pos":"noun",
+    "ex":"Art classes build creativity.",
+    "exvi":"Các lớp nghệ thuật xây dựng sự sáng tạo."
+  },
+  {
+    "id":"v35_curiosity",
+    "set":"mind",
+    "led":"en",
+    "en":"curiosity",
+    "ko":"호기심",
+    "vi":"sự tò mò",
+    "ipa":"/ˌkjʊəriˈɒsəti/",
+    "pos":"noun",
+    "ex":"Curiosity makes children ask questions.",
+    "exvi":"Sự tò mò khiến trẻ em đặt câu hỏi."
+  },
+  {
+    "id":"v35_empathy",
+    "set":"mind",
+    "led":"en",
+    "en":"empathy",
+    "ko":"공감",
+    "vi":"sự đồng cảm",
+    "ipa":"/ˈempəθi/",
+    "pos":"noun",
+    "ex":"Empathy helps you feel what others feel.",
+    "exvi":"Sự đồng cảm giúp bạn cảm nhận những gì người khác cảm thấy."
+  },
+  {
+    "id":"v35_extrovert",
+    "set":"mind",
+    "led":"en",
+    "en":"extrovert",
+    "ko":"외향적인 사람",
+    "vi":"người hướng ngoại",
+    "ipa":"/ˈekstrəvɜːt/",
+    "pos":"noun",
+    "ex":"An extrovert loves parties.",
+    "exvi":"Người hướng ngoại thích các bữa tiệc."
+  },
+  {
+    "id":"v35_forgiveness",
+    "set":"mind",
+    "led":"en",
+    "en":"forgiveness",
+    "ko":"용서",
+    "vi":"sự tha thứ",
+    "ipa":"/fəˈɡɪvnəs/",
+    "pos":"noun",
+    "ex":"Forgiveness brings peace to the heart.",
+    "exvi":"Sự tha thứ mang lại bình yên cho tâm hồn."
+  },
+  {
+    "id":"v35_generosity",
+    "set":"mind",
+    "led":"en",
+    "en":"generosity",
+    "ko":"관대함",
+    "vi":"sự hào phóng",
+    "ipa":"/ˌdʒenəˈrɒsəti/",
+    "pos":"noun",
+    "ex":"His generosity helps many poor families.",
+    "exvi":"Sự hào phóng của anh ấy giúp nhiều gia đình nghèo."
+  },
+  {
+    "id":"v35_gratitude",
+    "set":"mind",
+    "led":"en",
+    "en":"gratitude",
+    "ko":"감사",
+    "vi":"lòng biết ơn",
+    "ipa":"/ˈɡrætɪtjuːd/",
+    "pos":"noun",
+    "ex":"Gratitude makes a bad day better.",
+    "exvi":"Lòng biết ơn khiến một ngày tồi tệ trở nên tốt hơn."
+  },
+  {
+    "id":"v35_honesty",
+    "set":"mind",
+    "led":"en",
+    "en":"honesty",
+    "ko":"정직",
+    "vi":"sự trung thực",
+    "ipa":"/ˈɒnəsti/",
+    "pos":"noun",
+    "ex":"Honesty builds trust between friends.",
+    "exvi":"Sự trung thực xây dựng niềm tin giữa bạn bè."
+  },
+  {
+    "id":"v35_humility",
+    "set":"mind",
+    "led":"en",
+    "en":"humility",
+    "ko":"겸손",
+    "vi":"sự khiêm tốn",
+    "ipa":"/hjuːˈmɪləti/",
+    "pos":"noun",
+    "ex":"Humility makes a leader loved.",
+    "exvi":"Sự khiêm tốn khiến người lãnh đạo được yêu mến."
+  },
+  {
+    "id":"v35_impulsive",
+    "set":"mind",
+    "led":"en",
+    "en":"impulsive",
+    "ko":"충동적인",
+    "vi":"bốc đồng",
+    "ipa":"/ɪmˈpʌlsɪv/",
+    "pos":"adjective",
+    "ex":"Do not make an impulsive choice.",
+    "exvi":"Đừng đưa ra lựa chọn bốc đồng."
+  },
+  {
+    "id":"v35_instinct",
+    "set":"mind",
+    "led":"en",
+    "en":"instinct",
+    "ko":"본능",
+    "vi":"bản năng",
+    "ipa":"/ˈɪnstɪŋkt/",
+    "pos":"noun",
+    "ex":"Birds fly south by instinct.",
+    "exvi":"Chim bay về phương nam theo bản năng."
+  },
+  {
+    "id":"v35_integrity",
+    "set":"mind",
+    "led":"en",
+    "en":"integrity",
+    "ko":"진실성",
+    "vi":"sự chính trực",
+    "ipa":"/ɪnˈteɡrəti/",
+    "pos":"noun",
+    "ex":"A judge needs integrity.",
+    "exvi":"Một thẩm phán cần sự chính trực."
+  },
+  {
+    "id":"v35_introvert",
+    "set":"mind",
+    "led":"en",
+    "en":"introvert",
+    "ko":"내향적인 사람",
+    "vi":"người hướng nội",
+    "ipa":"/ˈɪntrəvɜːt/",
+    "pos":"noun",
+    "ex":"An introvert likes quiet time alone.",
+    "exvi":"Người hướng nội thích thời gian yên tĩnh một mình."
+  },
+  {
+    "id":"v35_intuition",
+    "set":"mind",
+    "led":"en",
+    "en":"intuition",
+    "ko":"직관",
+    "vi":"trực giác",
+    "ipa":"/ˌɪntjuˈɪʃn/",
+    "pos":"noun",
+    "ex":"Her intuition told her to wait.",
+    "exvi":"Trực giác mách bảo cô ấy nên chờ đợi."
+  },
+  {
+    "id":"v35_jealousy",
+    "set":"mind",
+    "led":"en",
+    "en":"jealousy",
+    "ko":"질투",
+    "vi":"sự ghen tị",
+    "ipa":"/ˈdʒeləsi/",
+    "pos":"noun",
+    "ex":"Jealousy can hurt a friendship.",
+    "exvi":"Sự ghen tị có thể làm tổn thương tình bạn."
+  },
+  {
+    "id":"v35_loneliness",
+    "set":"mind",
+    "led":"en",
+    "en":"loneliness",
+    "ko":"외로움",
+    "vi":"sự cô đơn",
+    "ipa":"/ˈləʊnlinəs/",
+    "pos":"noun",
+    "ex":"Music helps her fight loneliness.",
+    "exvi":"Âm nhạc giúp cô ấy chống lại sự cô đơn."
+  },
+  {
+    "id":"v35_mindfulness",
+    "set":"mind",
+    "led":"en",
+    "en":"mindfulness",
+    "ko":"마음챙김",
+    "vi":"chánh niệm",
+    "ipa":"/ˈmaɪndfʊlnəs/",
+    "pos":"noun",
+    "ex":"Mindfulness means paying attention to now.",
+    "exvi":"Chánh niệm nghĩa là chú ý đến hiện tại."
+  },
+  {
+    "id":"v35_mindset",
+    "set":"mind",
+    "led":"en",
+    "en":"mindset",
+    "ko":"사고방식",
+    "vi":"tư duy",
+    "ipa":"/ˈmaɪndset/",
+    "pos":"noun",
+    "ex":"A growth mindset helps you learn.",
+    "exvi":"Tư duy phát triển giúp bạn học tập."
+  },
+  {
+    "id":"v35_motivation",
+    "set":"mind",
+    "led":"en",
+    "en":"motivation",
+    "ko":"동기",
+    "vi":"động lực",
+    "ipa":"/ˌməʊtɪˈveɪʃn/",
+    "pos":"noun",
+    "ex":"Music gives me motivation to run.",
+    "exvi":"Âm nhạc cho tôi động lực để chạy."
+  },
+  {
+    "id":"v35_optimism",
+    "set":"mind",
+    "led":"en",
+    "en":"optimism",
+    "ko":"낙관주의",
+    "vi":"sự lạc quan",
+    "ipa":"/ˈɒptɪmɪzəm/",
+    "pos":"noun",
+    "ex":"Optimism helps us face hard times.",
+    "exvi":"Sự lạc quan giúp chúng ta đối mặt với thời khó khăn."
+  },
+  {
+    "id":"v35_perseverance",
+    "set":"mind",
+    "led":"en",
+    "en":"perseverance",
+    "ko":"끈기",
+    "vi":"sự kiên trì",
+    "ipa":"/ˌpɜːsɪˈvɪərəns/",
+    "pos":"noun",
+    "ex":"Perseverance wins in the end.",
+    "exvi":"Sự kiên trì sẽ chiến thắng cuối cùng."
+  },
+  {
+    "id":"v35_pessimism",
+    "set":"mind",
+    "led":"en",
+    "en":"pessimism",
+    "ko":"비관주의",
+    "vi":"sự bi quan",
+    "ipa":"/ˈpesɪmɪzəm/",
+    "pos":"noun",
+    "ex":"Pessimism stops people from trying.",
+    "exvi":"Sự bi quan ngăn mọi người cố gắng."
+  },
+  {
+    "id":"v35_resilience",
+    "set":"mind",
+    "led":"en",
+    "en":"resilience",
+    "ko":"회복력",
+    "vi":"sự kiên cường",
+    "ipa":"/rɪˈzɪliəns/",
+    "pos":"noun",
+    "ex":"Resilience helps her stand up again.",
+    "exvi":"Sự kiên cường giúp cô ấy đứng dậy lần nữa."
+  },
+  {
+    "id":"v35_self_awareness",
+    "set":"mind",
+    "led":"en",
+    "en":"self-awareness",
+    "ko":"자기 인식",
+    "vi":"sự tự nhận thức",
+    "ipa":"/self əˈweənəs/",
+    "pos":"noun",
+    "ex":"Self-awareness helps you know your faults.",
+    "exvi":"Sự tự nhận thức giúp bạn biết khuyết điểm của mình."
+  },
+  {
+    "id":"v35_self_confidence",
+    "set":"mind",
+    "led":"en",
+    "en":"self-confidence",
+    "ko":"자신감",
+    "vi":"sự tự tin",
+    "ipa":"/self ˈkɒnfɪdəns/",
+    "pos":"noun",
+    "ex":"Practice builds self-confidence.",
+    "exvi":"Luyện tập xây dựng sự tự tin."
+  },
+  {
+    "id":"v35_self_control",
+    "set":"mind",
+    "led":"en",
+    "en":"self-control",
+    "ko":"자제력",
+    "vi":"sự tự chủ",
+    "ipa":"/self kənˈtrəʊl/",
+    "pos":"noun",
+    "ex":"Self-control stops you from shouting.",
+    "exvi":"Sự tự chủ ngăn bạn la hét."
+  },
+  {
+    "id":"v35_self_discipline",
+    "set":"mind",
+    "led":"en",
+    "en":"self-discipline",
+    "ko":"자기 절제",
+    "vi":"kỷ luật bản thân",
+    "ipa":"/self ˈdɪsɪplɪn/",
+    "pos":"noun",
+    "ex":"Self-discipline means studying every day.",
+    "exvi":"Kỷ luật bản thân nghĩa là học tập mỗi ngày."
+  },
+  {
+    "id":"v35_self_esteem",
+    "set":"mind",
+    "led":"en",
+    "en":"self-esteem",
+    "ko":"자존감",
+    "vi":"lòng tự trọng",
+    "ipa":"/self ɪˈstiːm/",
+    "pos":"noun",
+    "ex":"Kind words build self-esteem.",
+    "exvi":"Lời nói tử tế xây dựng lòng tự trọng."
+  },
+  {
+    "id":"v35_willpower",
+    "set":"mind",
+    "led":"en",
+    "en":"willpower",
+    "ko":"의지력",
+    "vi":"ý chí",
+    "ipa":"/ˈwɪlpaʊə/",
+    "pos":"noun",
+    "ex":"Willpower keeps him from smoking.",
+    "exvi":"Ý chí giúp anh ấy không hút thuốc."
+  },
+  {
+    "id":"v35_attachment",
+    "set":"mind",
+    "led":"ko",
+    "en":"attachment",
+    "ko":"애착",
+    "vi":"sự gắn bó",
+    "ipa":"/əˈtætʃmənt/",
+    "pos":"noun",
+    "ex":"Children feel a strong attachment to their mother.",
+    "exvi":"Trẻ em cảm thấy gắn bó mạnh mẽ với mẹ."
+  },
+  {
+    "id":"v35_bravery",
+    "set":"mind",
+    "led":"ko",
+    "en":"bravery",
+    "ko":"용감함",
+    "vi":"sự dũng cảm",
+    "ipa":"/ˈbreɪvəri/",
+    "pos":"noun",
+    "ex":"Her bravery saved the child.",
+    "exvi":"Sự dũng cảm của cô ấy đã cứu đứa trẻ."
+  },
+  {
+    "id":"v35_calmness",
+    "set":"mind",
+    "led":"ko",
+    "en":"calmness",
+    "ko":"차분함",
+    "vi":"sự bình tĩnh",
+    "ipa":"/ˈkɑːmnəs/",
+    "pos":"noun",
+    "ex":"His calmness helped the team.",
+    "exvi":"Sự bình tĩnh của anh ấy đã giúp cả đội."
+  },
+  {
+    "id":"v35_cheerfulness",
+    "set":"mind",
+    "led":"ko",
+    "en":"cheerfulness",
+    "ko":"명랑함",
+    "vi":"sự vui vẻ",
+    "ipa":"/ˈtʃɪəfʊlnəs/",
+    "pos":"noun",
+    "ex":"Her cheerfulness lights up the room.",
+    "exvi":"Sự vui vẻ của cô ấy làm sáng cả căn phòng."
+  },
+  {
+    "id":"v35_composure",
+    "set":"mind",
+    "led":"ko",
+    "en":"composure",
+    "ko":"여유",
+    "vi":"sự điềm tĩnh",
+    "ipa":"/kəmˈpəʊʒə/",
+    "pos":"noun",
+    "ex":"She kept her composure in the storm.",
+    "exvi":"Cô ấy giữ được sự điềm tĩnh trong cơn bão."
+  },
+  {
+    "id":"v35_conceit",
+    "set":"mind",
+    "led":"ko",
+    "en":"conceit",
+    "ko":"자만",
+    "vi":"sự tự phụ",
+    "ipa":"/kənˈsiːt/",
+    "pos":"noun",
+    "ex":"Conceit makes people stop learning.",
+    "exvi":"Sự tự phụ khiến mọi người ngừng học hỏi."
+  },
+  {
+    "id":"v35_daydream",
+    "set":"mind",
+    "led":"ko",
+    "en":"daydream",
+    "ko":"백일몽",
+    "vi":"giấc mơ ban ngày",
+    "ipa":"/ˈdeɪdriːm/",
+    "pos":"noun",
+    "ex":"His daydream was full of travel.",
+    "exvi":"Giấc mơ ban ngày của anh ấy đầy những chuyến đi."
+  },
+  {
+    "id":"v35_despair",
+    "set":"mind",
+    "led":"ko",
+    "en":"despair",
+    "ko":"절망",
+    "vi":"sự tuyệt vọng",
+    "ipa":"/dɪˈspeə/",
+    "pos":"noun",
+    "ex":"Do not give in to despair.",
+    "exvi":"Đừng đầu hàng sự tuyệt vọng."
+  },
+  {
+    "id":"v35_diligence",
+    "set":"mind",
+    "led":"ko",
+    "en":"diligence",
+    "ko":"근면",
+    "vi":"sự chăm chỉ",
+    "ipa":"/ˈdɪlɪdʒəns/",
+    "pos":"noun",
+    "ex":"Diligence brings good grades.",
+    "exvi":"Sự chăm chỉ mang lại điểm tốt."
+  },
+  {
+    "id":"v35_envy",
+    "set":"mind",
+    "led":"ko",
+    "en":"envy",
+    "ko":"시기",
+    "vi":"sự đố kỵ",
+    "ipa":"/ˈenvi/",
+    "pos":"noun",
+    "ex":"Envy grows when we compare ourselves.",
+    "exvi":"Sự đố kỵ lớn dần khi chúng ta so sánh bản thân."
+  },
+  {
+    "id":"v35_frustration",
+    "set":"mind",
+    "led":"ko",
+    "en":"frustration",
+    "ko":"답답함",
+    "vi":"sự bực bội",
+    "ipa":"/frʌˈstreɪʃn/",
+    "pos":"noun",
+    "ex":"Her frustration grew with each mistake.",
+    "exvi":"Sự bực bội của cô ấy tăng lên sau mỗi lỗi sai."
+  },
+  {
+    "id":"v35_guilt",
+    "set":"mind",
+    "led":"ko",
+    "en":"guilt",
+    "ko":"죄책감",
+    "vi":"cảm giác tội lỗi",
+    "ipa":"/ɡɪlt/",
+    "pos":"noun",
+    "ex":"Guilt kept him awake all night.",
+    "exvi":"Cảm giác tội lỗi khiến anh ấy thức trắng cả đêm."
+  },
+  {
+    "id":"v35_han",
+    "set":"mind",
+    "led":"ko",
+    "en":"han",
+    "ko":"한",
+    "vi":"nỗi niềm (han)",
+    "ipa":"/hɑːn/",
+    "pos":"noun",
+    "ex":"Han is a deep sorrow in Korean songs.",
+    "exvi":"Han là nỗi niềm sâu sắc trong các bài hát Hàn Quốc."
+  },
+  {
+    "id":"v35_heung",
+    "set":"mind",
+    "led":"ko",
+    "en":"heung",
+    "ko":"흥",
+    "vi":"niềm vui hứng khởi (heung)",
+    "ipa":"/hʌŋ/",
+    "pos":"noun",
+    "ex":"Heung fills the room when the music starts.",
+    "exvi":"Niềm vui hứng khởi tràn ngập căn phòng khi nhạc vang lên."
+  },
+  {
+    "id":"v35_humiliation",
+    "set":"mind",
+    "led":"ko",
+    "en":"humiliation",
+    "ko":"수치심",
+    "vi":"sự nhục nhã",
+    "ipa":"/hjuːˌmɪliˈeɪʃn/",
+    "pos":"noun",
+    "ex":"The defeat was a humiliation for the team.",
+    "exvi":"Thất bại là sự nhục nhã đối với cả đội."
+  },
+  {
+    "id":"v35_impatience",
+    "set":"mind",
+    "led":"ko",
+    "en":"impatience",
+    "ko":"조급함",
+    "vi":"sự thiếu kiên nhẫn",
+    "ipa":"/ɪmˈpeɪʃns/",
+    "pos":"noun",
+    "ex":"His impatience made him shout.",
+    "exvi":"Sự thiếu kiên nhẫn khiến anh ấy la hét."
+  },
+  {
+    "id":"v35_inferiority_complex",
+    "set":"mind",
+    "led":"ko",
+    "en":"inferiority complex",
+    "ko":"열등감",
+    "vi":"mặc cảm tự ti",
+    "ipa":"/ɪnˌfɪəriˈɒrəti ˈkɒmpleks/",
+    "pos":"noun",
+    "ex":"An inferiority complex makes her hide.",
+    "exvi":"Mặc cảm tự ti khiến cô ấy trốn tránh."
+  },
+  {
+    "id":"v35_meditation",
+    "set":"mind",
+    "led":"ko",
+    "en":"meditation",
+    "ko":"명상",
+    "vi":"thiền",
+    "ipa":"/ˌmedɪˈteɪʃn/",
+    "pos":"noun",
+    "ex":"Meditation calms my mind.",
+    "exvi":"Thiền làm tâm trí tôi bình tĩnh."
+  },
+  {
+    "id":"v35_nervousness",
+    "set":"mind",
+    "led":"ko",
+    "en":"nervousness",
+    "ko":"긴장감",
+    "vi":"sự lo lắng",
+    "ipa":"/ˈnɜːvəsnəs/",
+    "pos":"noun",
+    "ex":"Nervousness made her hands shake.",
+    "exvi":"Sự lo lắng khiến tay cô ấy run."
+  },
+  {
+    "id":"v35_nightmare",
+    "set":"mind",
+    "led":"ko",
+    "en":"nightmare",
+    "ko":"악몽",
+    "vi":"cơn ác mộng",
+    "ipa":"/ˈnaɪtmeə/",
+    "pos":"noun",
+    "ex":"The nightmare woke him at midnight.",
+    "exvi":"Cơn ác mộng đánh thức anh ấy lúc nửa đêm."
+  },
+  {
+    "id":"v35_nunchi",
+    "set":"mind",
+    "led":"ko",
+    "en":"nunchi",
+    "ko":"눈치",
+    "vi":"khả năng đọc tình huống (nunchi)",
+    "ipa":"/ˈnʊntʃi/",
+    "pos":"noun",
+    "ex":"Nunchi means reading the room.",
+    "exvi":"Nunchi nghĩa là đọc được tình huống."
+  },
+  {
+    "id":"v35_relaxedness",
+    "set":"mind",
+    "led":"ko",
+    "en":"relaxedness",
+    "ko":"느긋함",
+    "vi":"sự thư thái",
+    "ipa":"/rɪˈlækstnəs/",
+    "pos":"noun",
+    "ex":"His relaxedness calms everyone.",
+    "exvi":"Sự thư thái của anh ấy làm mọi người bình tĩnh."
+  },
+  {
+    "id":"v35_restlessness",
+    "set":"mind",
+    "led":"ko",
+    "en":"restlessness",
+    "ko":"초조함",
+    "vi":"sự bồn chồn",
+    "ipa":"/ˈrestləsnəs/",
+    "pos":"noun",
+    "ex":"Restlessness kept her walking all night.",
+    "exvi":"Sự bồn chồn khiến cô ấy đi lại cả đêm."
+  },
+  {
+    "id":"v35_self_loathing",
+    "set":"mind",
+    "led":"ko",
+    "en":"self-loathing",
+    "ko":"자괴감",
+    "vi":"sự tự ghét bản thân",
+    "ipa":"/self ˈləʊðɪŋ/",
+    "pos":"noun",
+    "ex":"Self-loathing is hard to fight alone.",
+    "exvi":"Sự tự ghét bản thân khó chống lại một mình."
+  },
+  {
+    "id":"v35_shyness",
+    "set":"mind",
+    "led":"ko",
+    "en":"shyness",
+    "ko":"수줍음",
+    "vi":"sự nhút nhát",
+    "ipa":"/ˈʃaɪnəs/",
+    "pos":"noun",
+    "ex":"Shyness kept her silent at first.",
+    "exvi":"Sự nhút nhát khiến cô ấy im lặng lúc đầu."
+  },
+  {
+    "id":"v35_sincerity",
+    "set":"mind",
+    "led":"ko",
+    "en":"sincerity",
+    "ko":"성실",
+    "vi":"sự chân thành",
+    "ipa":"/sɪnˈserəti/",
+    "pos":"noun",
+    "ex":"His sincerity won their trust.",
+    "exvi":"Sự chân thành của anh ấy đã giành được niềm tin của họ."
+  },
+  {
+    "id":"v35_solitude",
+    "set":"mind",
+    "led":"ko",
+    "en":"solitude",
+    "ko":"고독",
+    "vi":"sự cô độc",
+    "ipa":"/ˈsɒlɪtjuːd/",
+    "pos":"noun",
+    "ex":"He enjoys the solitude of the forest.",
+    "exvi":"Anh ấy thích sự cô độc của khu rừng."
+  },
+  {
+    "id":"v35_superiority_complex",
+    "set":"mind",
+    "led":"ko",
+    "en":"superiority complex",
+    "ko":"우월감",
+    "vi":"mặc cảm tự cao",
+    "ipa":"/suːˌpɪəriˈɒrəti ˈkɒmpleks/",
+    "pos":"noun",
+    "ex":"A superiority complex makes him look down on others.",
+    "exvi":"Mặc cảm tự cao khiến anh ấy coi thường người khác."
+  },
+  {
+    "id":"v35_thankfulness",
+    "set":"mind",
+    "led":"ko",
+    "en":"thankfulness",
+    "ko":"고마움",
+    "vi":"lòng biết ơn",
+    "ipa":"/ˈθæŋkfʊlnəs/",
+    "pos":"noun",
+    "ex":"Thankfulness fills her letters.",
+    "exvi":"Lòng biết ơn tràn đầy trong những bức thư của cô ấy."
+  },
+  {
+    "id":"v35_wisdom",
+    "set":"mind",
+    "led":"ko",
+    "en":"wisdom",
+    "ko":"지혜",
+    "vi":"sự khôn ngoan",
+    "ipa":"/ˈwɪzdəm/",
+    "pos":"noun",
+    "ex":"Wisdom comes with age and learning.",
+    "exvi":"Sự khôn ngoan đến cùng tuổi tác và học hỏi."
+  }
+];
+var BOSSES35=[
+  {
+    "id":"v18_breeze_lynx",
+    "n":"Breeze Lynx",
+    "vi":"Linh Miêu Gió Nhẹ",
+    "img":"assets/bosses/v18/v18_breeze_lynx.png",
+    "zone":"skyroot",
+    "el":"wind",
+    "rarity":"legendary",
+    "lv":69,
+    "hp":760,
+    "def":7,
+    "mode":"speed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Linh Miêu Gió Nhẹ"
+      },
+      "elem":{
+        "id":"gale",
+        "n":"Cơn Gió Nhẹ"
+      },
+      "tact":{
+        "id":"tveil",
+        "n":"Màn Gió Mờ"
+      },
+      "pass":{
+        "id":"swift",
+        "n":"Bước Chân Gió"
+      },
+      "ult":{
+        "n":"Lốc Gió Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":225,
+      "gems":5,
+      "item":"Lông Gió Nhẹ",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_thornwing_stag",
+    "n":"Thornwing Stag",
+    "vi":"Hươu Sừng Gai",
+    "img":"assets/bosses/v18/v18_thornwing_stag.png",
+    "zone":"skyroot",
+    "el":"nature",
+    "rarity":"legendary",
+    "lv":70,
+    "hp":770,
+    "def":7,
+    "mode":"mc",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Hươu Sừng Gai"
+      },
+      "elem":{
+        "id":"shield",
+        "n":"Khiên Gai"
+      },
+      "tact":{
+        "id":"tshield",
+        "n":"Khiên Rừng Xanh"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Áo Giáp Gai"
+      },
+      "ult":{
+        "n":"Sừng Gai Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":230,
+      "gems":5,
+      "item":"Nhung Gai",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_cloud_serpent",
+    "n":"Cloud Serpent",
+    "vi":"Xà Mây",
+    "img":"assets/bosses/v18/v18_cloud_serpent.png",
+    "zone":"skyroot",
+    "el":"water",
+    "rarity":"legendary",
+    "lv":71,
+    "hp":785,
+    "def":8,
+    "mode":"listen",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Xà Mây"
+      },
+      "elem":{
+        "id":"veil",
+        "n":"Màn Mây Mờ"
+      },
+      "tact":{
+        "id":"ttimer",
+        "n":"Đồng Hồ Mây"
+      },
+      "pass":{
+        "id":"swift",
+        "n":"Uốn Mây"
+      },
+      "ult":{
+        "n":"Mưa Mây Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":235,
+      "gems":5,
+      "item":"Vảy Mây",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_moss_colossus",
+    "n":"Moss Colossus",
+    "vi":"Khổng Lồ Rêu Xanh",
+    "img":"assets/bosses/v18/v18_moss_colossus.png",
+    "zone":"skyroot",
+    "el":"earth",
+    "rarity":"legendary",
+    "lv":72,
+    "hp":795,
+    "def":8,
+    "mode":"type",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Khổng Lồ Rêu Xanh"
+      },
+      "elem":{
+        "id":"regen",
+        "n":"Hồi Phục Rêu"
+      },
+      "tact":{
+        "id":"theal",
+        "n":"Hồi Phục Cổ Thụ"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Da Rêu Đá"
+      },
+      "ult":{
+        "n":"Rễ Cây Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":240,
+      "gems":6,
+      "item":"Rêu Cổ Thụ",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_tempest_harpy",
+    "n":"Tempest Harpy",
+    "vi":"Ưng Nữ Bão Tố",
+    "img":"assets/bosses/v18/v18_tempest_harpy.png",
+    "zone":"skyroot",
+    "el":"thunder",
+    "rarity":"legendary",
+    "lv":73,
+    "hp":810,
+    "def":8,
+    "mode":"speed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Ưng Nữ Bão Tố"
+      },
+      "elem":{
+        "id":"chain",
+        "n":"Xích Sấm Bão"
+      },
+      "tact":{
+        "id":"tenrage",
+        "n":"Cơn Thịnh Nộ Bão"
+      },
+      "pass":{
+        "id":"vampiric",
+        "n":"Móng Vuốt Hút Sinh Lực"
+      },
+      "ult":{
+        "n":"Bão Tố Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":245,
+      "gems":6,
+      "item":"Lông Bão Tố",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_crystal_treant",
+    "n":"Crystal Treant",
+    "vi":"Cổ Thụ Pha Lê",
+    "img":"assets/bosses/v18/v18_crystal_treant.png",
+    "zone":"skyroot",
+    "el":"cosmic",
+    "rarity":"legendary",
+    "lv":74,
+    "hp":820,
+    "def":8,
+    "mode":"grammar",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Cổ Thụ Pha Lê"
+      },
+      "elem":{
+        "id":"freeze",
+        "n":"Đóng Băng Pha Lê"
+      },
+      "tact":{
+        "id":"tshield",
+        "n":"Khiên Pha Lê"
+      },
+      "pass":{
+        "id":"thorns",
+        "n":"Gai Pha Lê"
+      },
+      "ult":{
+        "n":"Ánh Sáng Pha Lê"
+      }
+    },
+    "reward":{
+      "xp":250,
+      "gems":6,
+      "item":"Tinh Thể Pha Lê",
+      "title":null
+    }
+  },
+  {
+    "id":"v18_aurora_griffin",
+    "n":"Aurora Griffin",
+    "vi":"Sư Điểu Cực Quang",
+    "img":"assets/bosses/v18/v18_aurora_griffin.png",
+    "zone":"skyroot",
+    "el":"light",
+    "rarity":"mythic",
+    "lv":75,
+    "hp":835,
+    "def":8,
+    "mode":"mixed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Sư Điểu Cực Quang"
+      },
+      "elem":{
+        "id":"burn",
+        "n":"Lửa Cực Quang"
+      },
+      "tact":{
+        "id":"tenrage",
+        "n":"Cơn Thịnh Nộ Cực Quang"
+      },
+      "pass":{
+        "id":"swift",
+        "n":"Đôi Cánh Cực Quang"
+      },
+      "ult":{
+        "n":"Cực Quang Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":255,
+      "gems":7,
+      "item":"Lông Cực Quang",
+      "title":"Chúa Tể Cực Quang"
+    }
+  },
+  {
+    "id":"v18_skyroot_empress",
+    "n":"Skyroot Empress",
+    "vi":"Nữ Hoàng Thiên Căn",
+    "img":"assets/bosses/v18/v18_skyroot_empress.png",
+    "zone":"skyroot",
+    "el":"nature",
+    "rarity":"mythic",
+    "lv":76,
+    "hp":850,
+    "def":9,
+    "mode":"mixed",
+    "diff":"B2",
+    "lang":"both",
+    "skills":{
+      "basic":{
+        "n":"Đòn Nữ Hoàng Thiên Căn"
+      },
+      "elem":{
+        "id":"rift",
+        "n":"Vết Nứt Thiên Căn"
+      },
+      "tact":{
+        "id":"tveil",
+        "n":"Màn Thiên Căn"
+      },
+      "pass":{
+        "id":"bulwark",
+        "n":"Áo Giáp Thiên Căn"
+      },
+      "ult":{
+        "n":"Uy Quyền Thiên Căn"
+      }
+    },
+    "reward":{
+      "xp":260,
+      "gems":7,
+      "item":"Vương Miện Thiên Căn",
+      "title":"Nữ Hoàng Thiên Căn"
+    }
+  }
+];
+var QUESTS35=[
+  {
+    "id":"q_islands",
+    "n":"Lost Sky Islands",
+    "vi":"Đảo Trời Đã Mất",
+    "d":"Những đảo trời đã lạc mất — tìm lại 12 từ về khí hậu và môi trường.",
+    "ids":["v35_air_pollution", "v35_avalanche", "v35_biodiversity", "v35_blizzard", "v35_carbon_capture", "v35_carbon_emissions", "v35_carbon_footprint", "v35_carbon_neutral", "v35_climate_change", "v35_compost", "v35_eco_friendly", "v35_endangered_species"]
+  },
+  {
+    "id":"q_temple",
+    "n":"Wind Temple",
+    "vi":"Đền Gió",
+    "d":"Lên đền gió trên mây — 14 từ về khí hậu và khoa học.",
+    "ids":["v35_erosion", "v35_extinction", "v35_fossil_fuel", "v35_global_warming", "v35_greenhouse_gas", "v35_invasive_species", "v35_3d_printing", "v35_antibiotic", "v35_artificial_intelligence", "v35_augmented_reality", "v35_big_data", "v35_biotechnology", "v35_blockchain", "v35_chatbot"]
+  },
+  {
+    "id":"q_roots",
+    "n":"Ancient Roots",
+    "vi":"Rễ Cây Cổ Thụ",
+    "d":"Lần theo rễ cây cổ thụ — 12 từ về khoa học và xã hội.",
+    "ids":["v35_cloud_computing", "v35_coding", "v35_cryptocurrency", "v35_data_science", "v35_deep_learning", "v35_dna", "v35_architecture", "v35_brain_drain", "v35_coming_of_age_ceremony", "v35_cost_of_living", "v35_cultural_diversity", "v35_cultural_exchange"]
+  },
+  {
+    "id":"q_guardians",
+    "n":"Crystal Guardians",
+    "vi":"Người Gác Pha Lê",
+    "d":"Vượt qua những người gác pha lê — 12 từ về xã hội và tâm trí.",
+    "ids":["v35_cultural_heritage", "v35_dialect", "v35_fake_news", "v35_folklore", "v35_freedom_of_speech", "v35_gender_equality", "v35_compassion", "v35_creativity", "v35_curiosity", "v35_empathy", "v35_extrovert", "v35_forgiveness"]
+  },
+  {
+    "id":"q_trials",
+    "n":"Sky Beast Trials",
+    "vi":"Thử Thách Thú Trời",
+    "d":"Thử thách của các thú trời — 12 từ về tâm trí và khí hậu.",
+    "ids":["v35_generosity", "v35_gratitude", "v35_honesty", "v35_humility", "v35_impulsive", "v35_instinct", "v35_landslide", "v35_monsoon", "v35_ocean_acidification", "v35_pesticide", "v35_plastic_waste", "v35_renewable_energy"]
+  },
+  {
+    "id":"q_empress",
+    "n":"Empress Awakening",
+    "vi":"Nữ Hoàng Thức Tỉnh",
+    "d":"Thức tỉnh Nữ Hoàng Thiên Căn — 14 từ tổng hợp bốn bộ.",
+    "ids":["v35_sea_level", "v35_smog", "v35_solar_panel", "v35_sustainable_living", "v35_drone", "v35_gene_editing", "v35_laser", "v35_machine_learning", "v35_generation_gap", "v35_housewarming", "v35_human_rights", "v35_immigration", "v35_integrity", "v35_introvert"]
+  }
+];
+var SPECIES35=[
+  {
+    "id":"cloudfx",
+    "n":"Cáo Mây",
+    "el":"wind",
+    "rar":"epic",
+    "egg":"cloud",
+    "rate":1.0,
+    "base":{
+      "hp":85,
+      "atk":16,
+      "def":11,
+      "spd":19
+    },
+    "perLv":{
+      "hp":7,
+      "atk":2,
+      "def":1,
+      "spd":1
+    },
+    "stages":[
+      {
+        "n":"Cáo Mây Nhỏ",
+        "img":"v18/v18_cloudfx_s1.png"
+      },
+      {
+        "n":"Cáo Mây",
+        "img":"v18/v18_cloudfx_s2.png"
+      },
+      {
+        "n":"Cáo Mây Thần",
+        "img":"v18/v18_cloudfx_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"foxgale",
+        "n":"Gió Lốc Cáo Mây",
+        "type":"dmg",
+        "val":30,
+        "d":"Gió lốc gây sát thương lớn cho boss."
+      },
+      "p":{
+        "id":"foxstorm",
+        "n":"Bão Gió",
+        "type":"storm",
+        "val":8,
+        "d":"Bị động: khi chuỗi đúng từ 3 trở lên, mỗi câu đúng gây thêm 8 sát thương."
+      },
+      "u":{
+        "id":"foxnova",
+        "n":"Lốc Xoáy Thiên Căn",
+        "type":"dmg",
+        "val":60,
+        "d":"Tuyệt kỹ: lốc xoáy thiên căn gây sát thương rất lớn."
+      }
+    }
+  },
+  {
+    "id":"sproutowl",
+    "n":"Cú Mầm",
+    "el":"nature",
+    "rar":"rare",
+    "egg":"sprout",
+    "rate":1.0,
+    "base":{
+      "hp":85,
+      "atk":16,
+      "def":11,
+      "spd":18
+    },
+    "perLv":{
+      "hp":7,
+      "atk":2,
+      "def":1,
+      "spd":1
+    },
+    "stages":[
+      {
+        "n":"Cú Mầm Nhỏ",
+        "img":"v18/v18_sproutowl_s1.png"
+      },
+      {
+        "n":"Cú Mầm",
+        "img":"v18/v18_sproutowl_s2.png"
+      },
+      {
+        "n":"Cú Mầm Thần",
+        "img":"v18/v18_sproutowl_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"owlheal",
+        "n":"Hồi Phục Mầm Xanh",
+        "type":"heal",
+        "val":70,
+        "d":"Hồi lại khiên đội bằng sức sống mầm xanh."
+      },
+      "p":{
+        "id":"owlwisdom",
+        "n":"Trí Tuệ Cú Mầm",
+        "type":"wisdom",
+        "val":1,
+        "d":"Bị động: mỗi chuỗi 3 câu đúng liên tiếp cho thêm 1 năng lượng."
+      },
+      "u":{
+        "id":"owllight",
+        "n":"Ánh Sáng Tri Thức",
+        "type":"heal",
+        "val":140,
+        "d":"Tuyệt kỹ: hồi lại rất nhiều khiên cho cả đội."
+      }
+    }
+  },
+  {
+    "id":"stormram",
+    "n":"Cừu Bão",
+    "el":"thunder",
+    "rar":"legendary",
+    "egg":"storm",
+    "rate":1.0,
+    "base":{
+      "hp":95,
+      "atk":18,
+      "def":12,
+      "spd":12
+    },
+    "perLv":{
+      "hp":8,
+      "atk":2,
+      "def":1,
+      "spd":0
+    },
+    "stages":[
+      {
+        "n":"Cừu Bão Nhỏ",
+        "img":"v18/v18_stormram_s1.png"
+      },
+      {
+        "n":"Cừu Bão",
+        "img":"v18/v18_stormram_s2.png"
+      },
+      {
+        "n":"Cừu Bão Thần",
+        "img":"v18/v18_stormram_s3.png"
+      }
+    ],
+    "skills":{
+      "a":{
+        "id":"ramshield",
+        "n":"Khiên Bão",
+        "type":"shield",
+        "val":80,
+        "d":"Tạo lá chắn bão hấp thụ sát thương của boss."
+      },
+      "p":{
+        "id":"ramstorm",
+        "n":"Sấm Bão",
+        "type":"storm",
+        "val":8,
+        "d":"Bị động: khi chuỗi đúng từ 3 trở lên, mỗi câu đúng gây thêm 8 sát thương."
+      },
+      "u":{
+        "id":"ramthunder",
+        "n":"Sấm Sét Thiên Căn",
+        "type":"dmg",
+        "val":60,
+        "d":"Tuyệt kỹ: sấm sét thiên căn gây sát thương rất lớn."
+      }
+    }
+  }
+];
+var EGGS35=[
+  {
+    "id":"cloud",
+    "n":"Trứng Mây",
+    "el":"wind",
+    "price":1200,
+    "hatchMin":120,
+    "img":"v18/v18_egg_cloud.png",
+    "d":"Nở ra Cáo Mây — thú hệ Gió của Skyroot Sanctuary."
+  },
+  {
+    "id":"sprout",
+    "n":"Trứng Mầm",
+    "el":"nature",
+    "price":1000,
+    "hatchMin":120,
+    "img":"v18/v18_egg_sprout.png",
+    "d":"Nở ra Cú Mầm — thú hệ Rừng của Skyroot Sanctuary."
+  },
+  {
+    "id":"storm",
+    "n":"Trứng Bão",
+    "el":"thunder",
+    "price":2000,
+    "hatchMin":240,
+    "img":"v18/v18_egg_storm.png",
+    "d":"Nở ra Cừu Bão — thú hệ Sấm của Skyroot Sanctuary."
+  }
+];
+var SET_LABELS35={
+  "climate":"Climate & Environment",
+  "science":"Science & Innovation",
+  "society":"Society & Culture",
+  "mind":"Mind & Character"
+};
+var SET_VI35={
+  "climate":"Khí hậu & Môi trường",
+  "science":"Khoa học & Đổi mới",
+  "society":"Xã hội & Văn hóa",
+  "mind":"Tâm trí & Tính cách"
+};
+var WEAK_EXPLICIT35={
+  "v18_breeze_lynx":{
+    "kind":"skyroot",
+    "key":"climate"
+  },
+  "v18_thornwing_stag":{
+    "kind":"skyroot",
+    "key":"society"
+  },
+  "v18_cloud_serpent":{
+    "kind":"skyroot",
+    "key":"science"
+  },
+  "v18_moss_colossus":{
+    "kind":"skyroot",
+    "key":"mind"
+  },
+  "v18_tempest_harpy":{
+    "kind":"skyroot",
+    "key":"climate"
+  },
+  "v18_crystal_treant":{
+    "kind":"skyroot",
+    "key":"science"
+  },
+  "v18_aurora_griffin":{
+    "kind":"skyroot",
+    "key":"society"
+  },
+  "v18_skyroot_empress":{
+    "kind":"skyroot",
+    "key":"mind"
+  }
+};
+var _byId={};BOSSES35.forEach(function(b){_byId[b.id]=b});
+window.__V35_WORDS=WORDS35;
+window.__V35_DATA={
+  version:'18.0.0',
+  words:WORDS35,bosses:BOSSES35,quests:QUESTS35,
+  species:SPECIES35,eggs:EGGS35,
+  setLabels:SET_LABELS35,setVi:SET_VI35,weakExplicit:WEAK_EXPLICIT35,
+  byId:function(id){return _byId[id]||null},
+  questById:function(id){for(var i=0;i<QUESTS35.length;i++)if(QUESTS35[i].id===id)return QUESTS35[i];return null}
+};
+})();
+
+</script>
+<script id="v35js">
+/* ================================================================
+   Korean & English Vocab Farm — V35 (V18.0 SKYROOT SANCTUARY)
+   Layer V35: additive region layer, version 18.0.0, loads LAST.
+
+   SCOPE (ChatGPT SKYROOT SANCTUARY proposal, adapted):
+   - 8 Skyroot bosses (v18_*) fighting in the V19 Universal Combat
+     Engine (no new engine). Stats AS GIVEN by ChatGPT, on game scale
+     (lv 69-76, hp 760-850), continuing the V19 progression (V17
+     Chrono max lv 68 / hp 750). Elements mapped onto the real V19 EL
+     (Wind->wind, Plant->nature, Water->water, Earth->earth,
+     Thunder->thunder, Crystal->cosmic — no 'crystal' key exists in
+     the V19 EL; V33 precedent Time->cosmic — Light->light,
+     Nature->nature). Skill ids come only from the V19 palette.
+     No boss-specific combat branches (no golem-style shield/heal).
+   - Region gate = GEAR GOLEM (v17_geargolem, the Chrono final boss)
+     defeated in that language — the Chrono region must be complete
+     before Skyroot opens. Wins are read from en19 via __v19.isWon
+     (the UCE); no en35.bosses key is ever created (V17.0 lesson:
+     the V17.0 changelog falsely documented en33.bosses — wins live
+     in en19). Locked state shows the real GEAR GOLEM status per
+     language plus the corrected total win count from __v33 when
+     available (reused, never reimplemented — the V33 corrected count
+     is the only correct one; the buggy bossWinCount() is NOT used).
+   - 3 pet species x 3 stages + 3 eggs, registered into the live
+     __V23_DATA (guarded + idempotent). Elements wind/nature/
+     thunder; 'wind' does not exist in v23 PET_ELEMENTS, so the
+     build adds it explicitly (R-V35-V23DATA-WIND/STONE) — an
+     extension of the existing map, not a parallel system. Skills
+     use existing v23 types only (Cloud Fox: active 'dmg' + passive
+     'storm'; Sprout Owl: active 'heal' + passive 'wisdom'; Storm
+     Ram: active 'shield' + passive 'storm'). Evolution uses the
+     element's stone + feather/fruit/coins per PET_EVO_COST — no new
+     materials. Collection milestones extended with a 54-form
+     milestone (45 + 9 new forms) — the ladder topped out at 45
+     after V33.
+   - 6 story quests via the V27 engine (ONE guarded replacement
+     exports startSession on __v27 — already done by V33). Completion
+     is detected from en27 session records (rec.t >= startedAt,
+     rec.words covers the quest ids, accuracy >= 0.8); rewards are
+     claimed-guarded in en35.quests and come only from real stores
+     (XP via gain15, gems via S.v7.gems). Quest word lists are
+     pairwise disjoint (see gen_v35_data.py).
+   - 240 Skyroot words (4 sets x 60; 120 EN-led + 120 KO-led) enter
+     the shared WORDS array via the V35 block inside buildWords()
+     (V33 precedent) with ids 'v35_<slug>', lib 'skyroot', lv 'B2'.
+     The 'led' field is kept in the data file only; the shared record
+     carries an English headword with a Korean translation for every
+     word (V33 treatment) — no KO deck entries are created. No
+     S.cards entries are ever created — the ko field is display/
+     learning data only.
+   - Boss Weakness: the 8 Skyroot bosses carry kind 'skyroot'
+     weaknesses (one of the 4 Skyroot sets, 2 bosses per set) in
+     __V35_DATA.weakExplicit. v34.js weakFor/weakMatch/weakName are
+     extended by build_v35.py to understand kind 'skyroot'
+     (w.skyrootSet === key). Every set holds 60 B2 words, so every
+     Break meter is fillable (V17.1 lesson: 12 Chrono-era bosses
+     have unfillable meters — not repeated here).
+   - New save key S.v7.en35 (lazy, no migration). Boss wins stay
+     in en19 (UCE); en35 holds quests / region claims / pending
+     launches only. Worst case < 10 KB. Cloud merge branch in
+     v20_sync.js mirrors the en33 branch (quests union MAX,
+     regionClaimed union per-language MAX, created MIN, pending
+     dropped); no rift sub-state exists in V35.
+
+   ENTRY: EN Hub decorator (MutationObserver, V27 precedent) +
+   KO build-time button (V11.1/V27 precedent — injected by the build
+   script, never by this file). Overlay
+   z-index 1500 (above V31 1400, V20 modal 1200, V32 badge 1100).
+
+   RULES (per vocab_farm_versioned_builds skill): IIFE, 'use
+   strict', try/catch around everything, other layers only through
+   window.__vNN with guards, never edit another layer's source,
+   never change a schema, localStorage key, Firestore path, XP/
+   gold/gems, boss/pet/vocab/SRS data, or working game logic. The
+   V6 save object is a top-level `let S` (NOT a window property)
+   — read it via bare S in try/catch, never via a window property
+   (the V11.1 lesson). No new currency, no energy system.
+   ================================================================ */
+(function(){
+'use strict';
+var VERSION='18.0.0';
+var GEAR_GOLEM='v17_geargolem';
+var SKYROOT_IDS=['v18_breeze_lynx','v18_thornwing_stag','v18_cloud_serpent','v18_moss_colossus','v18_tempest_harpy','v18_crystal_treant','v18_aurora_griffin','v18_skyroot_empress'];
+var REGION_XP=150, REGION_GEMS=5, REGION_TITLE='Chúa Tể Thiên Căn';
+var QUEST_XP=20, QUEST_BONUS_XP=10, QUEST_FINAL_GEMS=1, QUEST_MIN_ACC=0.8;
+var FINAL_QUEST='q_empress';
+
+function $(s,r){try{return (r||document).querySelector(s)}catch(e){return null}}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function getS(){try{return S}catch(e){return null}}
+function V15(){try{return window.__v15||null}catch(e){return null}}
+function V19(){try{return window.__v19||null}catch(e){return null}}
+function V23(){try{return window.__v23||null}catch(e){return null}}
+function V27(){try{return window.__v27||null}catch(e){return null}}
+function D35(){try{return window.__V35_DATA||{}}catch(e){return {}}}
+function save35(){try{var v=V15();if(v&&v.save15)v.save15();}catch(e){}}
+function gain35(n){try{var v=V15();if(v&&v.gain15)v.gain15(n);}catch(e){}}
+function pop35(t){try{var v=V15();if(v&&v.pop15){v.pop15(t);return}}catch(e){} try{if(window.console&&console.log)console.log('[V35] '+t)}catch(e){}}
+function addGems(n){try{var s=getS();if(s){s.v7=s.v7||{};s.v7.gems=(s.v7.gems||0)+n}}catch(e){}}
+
+/* ---------- en35 state (lazy, no migration) ---------- */
+function en35(){
+  try{
+    var s=getS();if(!s)return {quests:{},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()};
+    s.v7=s.v7||{};
+    var e=s.v7.en35;
+    if(!e)e=s.v7.en35={quests:{},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()};
+    e.quests=e.quests||{};
+    e.regionClaimed=e.regionClaimed||{en:0,ko:0};e.pending=e.pending||{};
+    return e;
+  }catch(err){return {quests:{},regionClaimed:{en:0,ko:0},pending:{},created:Date.now()}}
+}
+
+/* ---------- region gate: GEAR GOLEM defeated in that language ---------- */
+function gearGolemWon(lang){
+  try{var v=V19();return v?v.isWon(GEAR_GOLEM,lang||ST.lang||'en'):false}catch(e){return false}
+}
+function gateOpen(lang){return gearGolemWon(lang||ST.lang||'en')}
+function totalWins(){
+  /* Display only: reuse the V33 corrected count (the only correct
+     one). Never reimplement it here, never use bossWinCount(). */
+  try{if(window.__v33&&__v33.correctedWinCount)return __v33.correctedWinCount()}catch(e){}
+  return 0;
+}
+
+/* ---------- bosses (records live in en19 via the UCE) ---------- */
+function bossList(){var d=D35();return (d.bosses||[]).slice()}
+function bossById(id){var d=D35();return (d.byId?d.byId(id):null)}
+function isWon35(id,lang){try{var v=V19();return v?v.isWon(id,lang):false}catch(e){return false}}
+function stars35(id,lang){try{var v=V19();return v?v.stars(id,lang):0}catch(e){return 0}}
+function bossUnlocked(id,lang){
+  /* Sequential inside Skyroot + the GEAR GOLEM gate. Called by the
+     V19 bossUnlocked19 replacement for zone 'skyroot' (and by the
+     V35 overlay). Never calls back into __v19.bossUnlocked (no
+     recursion). */
+  lang=lang||ST.lang||'en';
+  if(!gateOpen(lang))return false;
+  var i=SKYROOT_IDS.indexOf(id);
+  if(i<0)return false;
+  if(i===0)return true;
+  return isWon35(SKYROOT_IDS[i-1],lang);
+}
+function regionWon(lang){
+  for(var i=0;i<SKYROOT_IDS.length;i++)if(!isWon35(SKYROOT_IDS[i],lang))return false;
+  return true;
+}
+function claimRegion(lang){
+  lang=lang||ST.lang||'en';
+  var e=en35();
+  if(!regionWon(lang))return {ok:false,msg:'Chưa thắng đủ 8 boss Skyroot bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.'};
+  if(e.regionClaimed[lang])return {ok:false,msg:'Đã nhận thưởng hoàn thành vùng này rồi.'};
+  e.regionClaimed[lang]=1;
+  gain35(REGION_XP);addGems(REGION_GEMS);
+  try{var v=V19();if(v){var e19=v.en19();e19.titles=e19.titles||[];if(e19.titles.indexOf(REGION_TITLE)<0)e19.titles.push(REGION_TITLE)}}catch(err){}
+  save35();
+  return {ok:true,msg:'Hoàn thành Skyroot Sanctuary ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+'): +'+REGION_XP+' XP, +'+REGION_GEMS+' 💎, danh hiệu “'+REGION_TITLE+'”!'};
+}
+function fightBoss(id){
+  var lang=ST.lang||'en';
+  if(!gateOpen(lang)){pop35('Skyroot Sanctuary cần thắng GEAR GOLEM (boss cuối Chrono) bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+' trước.');return false}
+  if(!bossUnlocked(id,lang)){pop35('Boss này chưa mở khóa — thắng boss trước đó trước nhé.');return false}
+  var v=V19();if(!v){pop35('Chưa tải được hệ thống Boss (V19).');return false}
+  try{v.setLang(lang)}catch(e){}
+  closeSkyroot();
+  try{v.fight(id)}catch(e){pop35('Không mở được trận đấu.');return false}
+  return true;
+}
+
+/* ---------- words: attach into the shared WORDS array ---------- */
+function attachSkyroot(){
+  try{
+    if(!window.__V35_WORDS||!window.__V35_WORDS.length)return 0;
+    var v=V15();if(!v||!v.buildWords)return 0;
+    v.buildWords(); /* the V35 block inside buildWords() merges __V35_WORDS */
+    var n=0;
+    (v.words||[]).forEach(function(w){if(w.lib&&w.lib.indexOf('skyroot')>=0)n++});
+    return n;
+  }catch(e){return 0}
+}
+
+/* ---------- pets: register species + eggs into __V23_DATA ---------- */
+function registerPets(){
+  var out={species:0,eggs:0,milestone:false};
+  try{
+    var d=D35(),vd=window.__V23_DATA;
+    if(!vd||!d.species||!d.eggs)return out;
+    vd.species=vd.species||[];vd.eggs=vd.eggs||[];
+    d.species.forEach(function(sp){
+      var has=false;
+      vd.species.forEach(function(x){if(x.id===sp.id)has=true});
+      if(!has){vd.species.push(sp);out.species++}
+    });
+    d.eggs.forEach(function(eg){
+      var has=false;
+      vd.eggs.forEach(function(x){if(x.id===eg.id)has=true});
+      if(!has){vd.eggs.push(eg);out.eggs++}
+    });
+    /* Collection ladder topped out at 45 forms after V33; 9 new
+       forms take the total to 54 — add one milestone (guarded +
+       idempotent). */
+    vd.collectionRewards=vd.collectionRewards||[];
+    var has54=false;
+    vd.collectionRewards.forEach(function(r){if(r.forms===54)has54=true});
+    if(!has54){
+      vd.collectionRewards.push({forms:54,gems:70,mats:{},title:'Bậc Thầy Thiên Căn',
+        d:'Sưu tập đủ 54 hình thái: +70 💎, danh hiệu “Bậc Thầy Thiên Căn”'});
+      out.milestone=true;
+    }
+  }catch(e){}
+  return out;
+}
+
+/* ---------- V27 session plumbing (quests) ---------- */
+function en27rec(){
+  try{var v=V27();return v?v.en27():null}catch(e){return null}
+}
+function findSession(ids,startedAt){
+  /* First en27 session rec at/after startedAt whose words cover all
+     ids (rec.words holds the first 30 ids of the session). Scans all
+     sessions, not just the newest, so a later Smart session does not
+     steal the completion. */
+  var d=en27rec();if(!d||!d.sessions)return null;
+  for(var i=0;i<d.sessions.length;i++){
+    var rec=d.sessions[i];
+    if(!rec||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
+    if(!rec.words||!rec.words.length)continue;
+    var ok=true;
+    for(var j=0;j<ids.length;j++)if(rec.words.indexOf(ids[j])<0){ok=false;break}
+    if(!ok)continue;
+    var tot=(rec.correct||0)+(rec.wrong||0);
+    if(tot<=0)continue;
+    return {rec:rec,acc:rec.correct/tot,total:tot};
+  }
+  return null;
+}
+function launchSession(ids,kind){
+  /* V34 lesson (applied here from day one): end a live Smart session
+     before opening a Skyroot one — endEarly() is a no-op when no
+     Smart session is live, and records the unfinished session
+     honestly (no plan-completion reward for an unfinished plan). */
+  try{if(window.__v27&&__v27.endEarly)__v27.endEarly()}catch(e){}
+  var v=V27();
+  if(!v||!v.startSession){pop35('Chưa tải được Học thông minh (V27).');return false}
+  if(!ids||!ids.length)return false;
+  closeSkyroot();
+  try{v.openSmart('en')}catch(e){}
+  try{return !!v.startSession('en',ids.slice(),kind)}catch(e){return false}
+}
+function questById(qid){var d=D35();return (d.questById?d.questById(qid):null)}
+function startQuest(qid){
+  var q=questById(qid);if(!q){pop35('Không tìm thấy nhiệm vụ.');return false}
+  var e=en35();
+  e.pending['quest:'+qid]={kind:'quest',id:qid,ids:q.ids.slice(),startedAt:Date.now()};
+  save35();
+  return launchSession(q.ids,'quest');
+}
+function checkCompletions(){
+  /* Quest pending launches -> completed states. Runs on every
+     Skyroot overlay open (and after a session ends, when the player
+     reopens Skyroot to claim). Returns newly completed quest ids. */
+  var e=en35(),done=[];
+  try{
+    var pend=e.pending||{},changed=false;
+    Object.keys(pend).forEach(function(key){
+      var p=pend[key];if(!p||!p.ids)return;
+      var hit=findSession(p.ids,p.startedAt||0);
+      if(!hit)return;
+      if(p.kind==='quest'){
+        var q=e.quests[p.id]=e.quests[p.id]||{};
+        /* V33 lesson (B-33-1): completion needs accuracy >= 0.8.
+           A below-threshold run consumes the attempt (pending is
+           deleted below) but does NOT mark the quest done — the
+           player retries with a fresh startQuest, whose startedAt
+           excludes the old rec. */
+        if(!q.done&&hit.acc>=QUEST_MIN_ACC){q.done=1;q.acc=Math.round(hit.acc*100)/100;q.at=hit.rec.t;done.push(p.id)}
+        delete pend[key];changed=true;
+      }
+    });
+    if(changed)save35();
+  }catch(err){}
+  return done;
+}
+function claimQuest(qid){
+  var e=en35(),q=e.quests[qid];
+  if(!q||!q.done)return {ok:false,msg:'Nhiệm vụ chưa hoàn thành.'};
+  if(q.claimed)return {ok:false,msg:'Đã nhận thưởng nhiệm vụ này rồi.'};
+  var xp=QUEST_XP+((q.acc||0)>=0.9?QUEST_BONUS_XP:0);
+  gain35(xp);
+  if(qid===FINAL_QUEST)addGems(QUEST_FINAL_GEMS);
+  q.claimed=1;save35();
+  return {ok:true,msg:'Nhận thưởng nhiệm vụ: +'+xp+' XP'+(qid===FINAL_QUEST?' +'+QUEST_FINAL_GEMS+' 💎':'')+'.'};
+}
+function questState(qid){
+  var e=en35(),q=e.quests[qid]||{};
+  if(q.claimed)return 'claimed';
+  if(q.done)return 'done';
+  if(e.pending['quest:'+qid])return 'active';
+  return 'new';
+}
+
+/* ---------- overlay UI ---------- */
+var ST={lang:'en',tab:'bosses'};
+function elChip(el){
+  try{var els=(window.__V19_DATA&&__V19_DATA.elements)||{};var o=els[el];if(o)return '<span class="v35chip">'+esc(o.ic+' '+o.n)+'</span>'}catch(e){}
+  return '<span class="v35chip">'+esc(el||'')+'</span>';
+}
+function starStr(n){var s='';for(var i=0;i<3;i++)s+=i<(n||0)?'★':'☆';return s}
+function bossCardHTML(b){
+  var lang=ST.lang,un=bossUnlocked(b.id,lang),won=isWon35(b.id,lang),st=stars35(b.id,lang);
+  var el=elChip(b.el);
+  return '<div class="v35boss'+(won?' done':'')+(!un?' locked':'')+'">'
+    +'<img src="'+esc(b.img)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
+    +'<b>'+esc(b.vi)+'</b><span class="v35mut">'+esc(b.n)+' · Lv '+b.lv+'</span>'
+    +'<span>'+el+'</span>'
+    +'<span class="v35mut">HP '+b.hp+' · Thủ '+b.def+' · '+esc(b.mode)+' · '+esc(b.diff)+'</span>'
+    +'<span>'+starStr(st)+(won?' ✅ Đã thắng':'')+'</span>'
+    +'<em>'+(won?'Đã thắng ('+starStr(st)+')':(un?'⚔️ Có thể đánh':'🔒 Thắng boss trước để mở'))+'</em>'
+    +'<p class="v35mut">Kỹ năng: '+esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n)+'</p>'
+    +(un?'<button type="button" class="v35btn pri" onclick="window.__v35.fightBoss(\''+b.id+'\')">Bắt đầu chiến đấu</button>':'')
+    +'</div>';
+}
+function overlayHTML(){
+  var lang=ST.lang,gate=gateOpen(lang),golem=gearGolemWon(lang),n=totalWins();
+  var h='<div class="v35in">'
+    +'<div class="v35head"><div class="v35title"><b>🌿 Skyroot Sanctuary</b><span>Thánh Địa Thiên Căn · V18.0 — đảo trời, rừng cổ, đền gió và Nữ Hoàng Thiên Căn</span></div>'
+    +'<button type="button" class="v35x" onclick="window.__v35.closeSkyroot()" aria-label="Đóng">✕</button></div>'
+    +'<div class="v35lang" role="group" aria-label="Chọn ngôn ngữ chiến đấu">'
+    +'<button type="button" class="v35langbtn'+(lang==='en'?' on':'')+'" onclick="window.__v35.setLang(\'en\')">🇬🇧 Tiếng Anh</button>'
+    +'<button type="button" class="v35langbtn'+(lang==='ko'?' on':'')+'" onclick="window.__v35.setLang(\'ko\')">🇰🇷 Tiếng Hàn</button></div>';
+  /* gate */
+  h+='<div class="v35card"><b>🔒 Cổng Thiên Căn — '+(golem?'✅ GEAR GOLEM đã bị đánh bại':'GEAR GOLEM chưa bị đánh bại')+'</b>'
+    +'<p class="v35mut">Skyroot mở khi bạn thắng GEAR GOLEM (boss cuối Vương Quốc Thời Gian) bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'. '
+    +(gate?'✅ Cổng đã mở — chào mừng đến Thánh Địa Thiên Căn!':'Thắng GEAR GOLEM bằng ngôn ngữ này để mở vùng đất này.')
+    +(n?' Tổng số boss đã thắng: '+n+'/86.':'')+'</p></div>';
+  if(!gate){
+    h+='<div class="v35empty">Thánh Địa Thiên Căn đang khóa. Các boss, nhiệm vụ và thú Skyroot sẽ mở khi bạn thắng GEAR GOLEM bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.</div>';
+  }else{
+    /* bosses */
+    var langLabel=(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh');
+    h+='<div class="v35sec"><h3>⚔️ Boss Skyroot ('+langLabel+')</h3>'
+      +'<p class="v35mut">Thắng lần lượt từ trên xuống dưới. Thắng bằng cả hai ngôn ngữ để nhận danh hiệu “Bậc Thầy Song Ngữ” cho từng boss.</p>'
+      +'<div class="v35bosses">'+bossList().map(bossCardHTML).join('')+'</div></div>';
+    var e=en35();
+    if(regionWon(lang)){
+      h+='<div class="v35card"><b>👑 Hoàn thành vùng ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+')</b><p class="v35mut">Thắng cả 8 boss Skyroot — thưởng một lần: +'+REGION_XP+' XP, +'+REGION_GEMS+' 💎, danh hiệu “'+REGION_TITLE+'”.</p>'
+        +(e.regionClaimed[lang]?'<p>✅ Đã nhận thưởng hoàn thành vùng.</p>'
+          :'<button type="button" class="v35btn pri" onclick="window.__v35.claimRegion()">Nhận thưởng hoàn thành vùng</button>')
+        +'</div>';
+    }
+    /* quests */
+    h+='<div class="v35sec"><h3>📜 Nhiệm Vụ Cốt Truyện</h3><p class="v35mut">Mỗi nhiệm vụ là một buổi học qua Học thông minh (12–14 từ Skyroot). Hoàn thành với độ chính xác ≥ 80% rồi quay lại đây nhận thưởng. Thưởng lần đầu +'+QUEST_XP+' XP, ≥ 90% thêm +'+QUEST_BONUS_XP+' XP; nhiệm vụ cuối thêm +'+QUEST_FINAL_GEMS+' 💎.</p><div class="v35quests">';
+    (D35().quests||[]).forEach(function(q){
+      var st=questState(q.id);
+      h+='<div class="v35quest"><b>'+esc(q.vi)+'</b><span class="v35mut">'+esc(q.n)+' · '+q.ids.length+' từ</span>'
+        +'<p class="v35mut">'+esc(q.d)+'</p>'
+        +'<em>'+(st==='claimed'?'✅ Đã nhận thưởng':st==='done'?'🎉 Hoàn thành — nhận thưởng ngay!':st==='active'?'⏳ Đang làm — hoàn thành buổi học rồi quay lại đây':'📖 Chưa bắt đầu')+'</em>'
+        +(st==='done'?'<button type="button" class="v35btn pri" onclick="window.__v35.claimQuest(\''+q.id+'\')">Nhận thưởng</button>'
+          :st==='claimed'?'':'<button type="button" class="v35btn" onclick="window.__v35.startQuest(\''+q.id+'\')">'+(st==='active'?'Học tiếp':'Bắt đầu nhiệm vụ')+'</button>')
+        +'</div>';
+    });
+    h+='</div></div>';
+    /* pets + words */
+    var skyN=0;try{var v15=V15();if(v15)(v15.words||[]).forEach(function(w){if(w.lib&&w.lib.indexOf('skyroot')>=0)skyN++})}catch(err){}
+    h+='<div class="v35sec"><h3>🐾 Thú Cưng &amp; Từ Vựng Mới</h3>'
+      +'<p class="v35mut">3 thú Skyroot mới — Cáo Mây, Cú Mầm, Cừu Bão — đã có trong Cửa hàng Pet (trứng Mây / Mầm / Bão). 240 từ Skyroot ('+skyN+' đã gắn vào kho từ chung, cấp B2, 4 bộ × 60 từ) dùng được trong mọi chế độ học, ôn SRS và trận boss; xem trong Thư viện, nhóm Skyroot Sanctuary.</p>'
+      +'<button type="button" class="v35btn" onclick="window.__v35.openPetShop()">Mở Cửa hàng Pet</button></div>';
+  }
+  h+='</div>';
+  return h;
+}
+function ensureHub(){
+  var h=$('#v35hub');
+  if(h)return h;
+  h=document.createElement('div');
+  h.id='v35hub';h.className='v35hub';h.style.display='none';
+  h.setAttribute('role','dialog');h.setAttribute('aria-label','Skyroot Sanctuary — Thánh Địa Thiên Căn');
+  document.body.appendChild(h);
+  return h;
+}
+function openSkyroot(lang){
+  try{
+    if(lang==='en'||lang==='ko')ST.lang=lang;
+    checkCompletions();
+    var h=ensureHub();
+    h.innerHTML=overlayHTML();
+    h.style.display='flex';
+    try{document.body.style.overflow='hidden'}catch(e){}
+  }catch(e){}
+}
+function closeSkyroot(){
+  try{
+    var h=$('#v35hub');if(h)h.style.display='none';
+    try{if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel()}catch(e){}
+    try{var hub15=$('#v15hub');if(!hub15||hub15.style.display==='none')document.body.style.overflow=''}catch(e){document.body.style.overflow=''}
+  }catch(e){}
+}
+function setLang35(l){
+  if(l!=='en'&&l!=='ko')return;
+  ST.lang=l;
+  try{var h=$('#v35hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+}
+function claimRegionUI(){
+  var r=claimRegion(ST.lang);
+  pop35(r.msg);
+  try{var h=$('#v35hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+  return r.ok;
+}
+function claimQuestUI(qid){
+  var r=claimQuest(qid);
+  pop35(r.msg);
+  try{var h=$('#v35hub');if(h&&h.style.display!=='none')h.innerHTML=overlayHTML()}catch(e){}
+  return r.ok;
+}
+function openPetShop(){
+  closeSkyroot();
+  try{var v=V23();if(v)v.openHub('shop')}catch(e){}
+}
+
+/* ---------- EN Hub entry: MutationObserver decorator (V27 precedent) ---------- */
+var _decT=null;
+function decorateEN(){
+  try{
+    var hb=document.querySelector('.v15hub-headbtns');
+    if(hb&&!hb.querySelector('.v35hubbtn')){
+      var b=document.createElement('button');
+      b.className='btn sm v35hubbtn';b.type='button';b.textContent='🌿 Skyroot Sanctuary';
+      b.onclick=function(){openSkyroot('en')};
+      var x=hb.querySelector('.v15x');
+      if(x)hb.insertBefore(b,x);else hb.appendChild(b);
+    }
+    var lb=document.querySelector('#v15langbar .v15lb-in');
+    if(lb&&!lb.querySelector('.v35hubbtn')){
+      var b2=document.createElement('button');
+      b2.className='v15lb-hub v35hubbtn';b2.type='button';b2.textContent='🌿 Skyroot Sanctuary';
+      b2.onclick=function(){openSkyroot('en')};
+      lb.appendChild(b2);
+    }
+  }catch(e){}
+}
+function scheduleDecorate(){
+  if(_decT)return;
+  _decT=setTimeout(function(){_decT=null;decorateEN()},60);
+}
+
+/* ---------- init ---------- */
+function init35(){
+  try{registerPets()}catch(e){}
+  try{attachSkyroot()}catch(e){}
+  try{
+    decorateEN();
+    if(window.MutationObserver){
+      var _obs=new MutationObserver(function(){scheduleDecorate()});
+      _obs.observe(document.body,{childList:true,subtree:true});
+    }
+  }catch(e){}
+}
+try{init35()}catch(e){}
+if(typeof document!=='undefined'&&document&&document.readyState==='loading'){try{document.addEventListener('DOMContentLoaded',function(){try{init35()}catch(e){}})}catch(e){}}
+
+window.__v35={
+  version:VERSION,
+  openSkyroot:openSkyroot,closeSkyroot:closeSkyroot,setLang:setLang35,
+  en35:en35,gateOpen:gateOpen,gearGolemWon:gearGolemWon,totalWins:totalWins,
+  bossUnlocked:bossUnlocked,fightBoss:fightBoss,isWon:isWon35,stars:stars35,
+  claimRegion:claimRegionUI,regionWon:regionWon,
+  startQuest:startQuest,claimQuest:claimQuestUI,questState:questState,checkCompletions:checkCompletions,
+  attachSkyroot:attachSkyroot,registerPets:registerPets,openPetShop:openPetShop,
+  _test:{
+    en35:en35,gateOpen:gateOpen,gearGolemWon:gearGolemWon,totalWins:totalWins,
+    bossUnlocked:bossUnlocked,regionWon:regionWon,claimRegion:claimRegion,
+    startQuest:startQuest,claimQuest:claimQuest,questState:questState,checkCompletions:checkCompletions,
+    findSession:findSession,
+    attachSkyroot:attachSkyroot,registerPets:registerPets,
+    overlayHTML:overlayHTML,openSkyroot:openSkyroot,closeSkyroot:closeSkyroot,
+    SKYROOT_IDS:SKYROOT_IDS,GEAR_GOLEM:GEAR_GOLEM,FINAL_QUEST:FINAL_QUEST
+  }
+};
 })();
 
 </script>
