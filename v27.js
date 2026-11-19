@@ -1081,7 +1081,7 @@ try{
     version:VERSION,
     openSmart:openSmart,closeSmart:closeSmart,setTab:setTab,setLang:setLang,goTab:goTab,goWeak:goWeak,
     recordAnswer:recordAnswer,buildPlan:buildPlan,planOf:planOf,
-    startPlan:startPlan,startWeak:startWeak,startWeakWord:startWeakWord,
+    startPlan:startPlan,startSession:startSession,startWeak:startWeak,startWeakWord:startWeakWord,
     setMins:setMins,setCustomMins:setCustomMins,rebuildPlan:rebuildPlan,
     answerMC:answerMC,answerType:answerType,answerFlash:answerFlash,typeHint:typeHint,
     nextQ:nextQ,endEarly:endEarly,

@@ -32,7 +32,7 @@ var AVATARS=[
   {id:'unicorn', name:'Kỳ lân',            wins:60},
   {id:'phoenix', name:'Phượng hoàng',      wins:70}
 ];
-var TOTAL_BOSSES=70; /* 10 old (V15) + 30 (V10) + 30 (V11) */
+var TOTAL_BOSSES=78; /* 10 old (V15) + 30 (V10) + 30 (V11) + 8 (V17 Chrono) */
 
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 function getS(){ try{ return S; }catch(e){ return null; } }

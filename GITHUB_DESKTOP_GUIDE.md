@@ -850,3 +850,108 @@ Repo: **APP-TIENG-HANS**.
   người chơi không bị ảnh hưởng vì V16.4 không đổi tên khóa lưu
   `hanvocab.v1`. File `v32.css`/`v32.js` thừa ra sau khi revert có thể
   xóa khỏi repo (nó không được V16.3 dùng đến).
+
+# Cập nhật lên V17.0 — CHRONO KINGDOM (2026-11-19)
+
+## Chuẩn bị (giống các lần trước)
+1. Giải nén file ZIP V17.0 ra một thư mục trên máy.
+2. Mở **GitHub Desktop**, mở repo của game (nếu chưa có: `File → Clone Repository`).
+3. **Sao lưu trước (khuyên dùng):** trong game đang chạy, mở English Hub →
+   tab **Sao lưu** → **Tải file sao lưu (.json)** và cất file đó ở nơi an toàn.
+   Dữ liệu người chơi nằm trong trình duyệt của từng người dùng, việc cập nhật
+   code trên GitHub **không xóa** dữ liệu đó.
+
+## Cập nhật
+1. Trong thư mục repo trên máy, **ghi đè / thêm** các file từ ZIP V17.0:
+   - `index.html` (mới — đây là file GitHub Pages sẽ chạy)
+   - `v33.js`, `v33.css`, `v33_data.js`
+   - `v19.js`, `v18.js`, `v21.js`, `v27.js`, `v20_sync.js`, `v15.js`
+     (đã gồm 13 replacement V33)
+   - `assets/bosses/v17/` (8 PNG boss mới), `assets/pets/v15/chrono/`
+     (9 PNG form pet mới), `assets/pets/v15/eggs/chrono_egg_*.png`
+     (3 PNG trứng mới) — **không** có thư mục `assets/pets/v17/`
+   - `build_v33.py`, `package_v33.py`
+   - `README_V17_0_CHRONO_KINGDOM.md`, `CHANGELOG_V16_4_to_V17_0.md`,
+     `SMOKE_TEST_V17_0_2026-11-19.md`, `CHANGED_FILES.md`,
+     `GITHUB_DESKTOP_GUIDE.md`
+   - Giữ nguyên mọi file V16.4 và thư mục `assets/` còn lại (ZIP đã chứa
+     đầy đủ).
+2. **Không** ghi đè `firebase-config.js` trên repo bằng file placeholder
+   trong ZIP (file cấu hình thật của Anh nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai: với bản lưu có 70 boss thắng,
+   mở English Hub → nút **⏳ Chrono Kingdom** phải hiện cổng `70/70`
+   và 8 boss; với ít hơn 70 thắng, cổng hiện `x/70` thật và không có nút
+   đánh. Mở tab **⏳ Vương Quốc Thời Gian** trong Korean Hub phải thấy
+   cùng overlay. Dữ liệu người chơi không đổi (cùng khóa `hanvocab.v1`,
+   thêm khóa lười `S.v7.en33`, không migration, không cần đăng nhập lại).
+4. Commit với thông điệp `Upgrade to V17.0: Chrono Kingdom` rồi **Push
+   origin**. Nên push qua nhánh `muse/chrono-kingdom-v17` và mở Draft PR
+   về nhánh `muse/data-safety-v164` (stacked — không merge trực tiếp
+   vào `main`, không force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V17.0 không đổi code Firebase. Đồng bộ/đăng nhập đám mây
+   thật vẫn chưa được kiểm thử live — chạy checklist `FIREBASE_SETUP.md`
+   (mục 6 + V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi
+   đầy đủ offline và panel nói rõ "Chưa cấu hình Firebase".
+
+## Quay lại V16.4 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V17.0 → **Revert this commit**, commit và push. Dữ liệu người
+  chơi không bị ảnh hưởng vì V17.0 chỉ thêm khóa lười `S.v7.en33`
+  (không đổi tên khóa lưu `hanvocab.v1`). File `v33.css`/`v33.js`/
+  `v33_data.js` thừa ra sau khi revert có thể xóa khỏi repo (nó không
+  được V16.4 dùng đến). Dữ liệu `en33` trong bản lưu sẽ nằm im cho tới
+  khi lớp V33 quay lại.
+
+# Cập nhật lên V17.1 — CHRONO COMPLETE (2026-11-19)
+
+## Chuẩn bị (giống các lần trước)
+1. Giải nén file ZIP V17.1 ra một thư mục trên máy.
+2. Mở **GitHub Desktop**, mở repo của game (nếu chưa có: `File → Clone Repository`).
+3. **Sao lưu trước (khuyên dùng):** trong game đang chạy, mở English Hub →
+   tab **Sao lưu** → **Tải file sao lưu (.json)** và cất file đó ở nơi an toàn.
+   Dữ liệu người chơi nằm trong trình duyệt của từng người dùng, việc cập nhật
+   code trên GitHub **không xóa** dữ liệu đó.
+
+## Cập nhật
+1. Trong thư mục repo trên máy, **ghi đè / thêm** các file từ ZIP V17.1:
+   - `index.html` (mới — đây là file GitHub Pages sẽ chạy)
+   - `v34.js`, `v34.css`, `v34_data.js`
+   - `v17.js`, `v25.js`, `v15.js`, `v19.js`, `v18.js`, `v33.js`
+     (đã gồm 36 replacement V34)
+   - `build_v34.py`, `package_v34.py`
+   - `README_V17_1_CHRONO_COMPLETE.md`, `CHANGELOG_V17_0_to_V17_1.md`,
+     `SMOKE_TEST_V17_1_2026-11-19.md`, `CHANGED_FILES.md`,
+     `GITHUB_DESKTOP_GUIDE.md`
+   - Giữ nguyên mọi file V17.0 và thư mục `assets/` còn lại (ZIP đã chứa
+     đầy đủ; V17.1 không thêm ảnh nào).
+2. **Không** ghi đè `firebase-config.js` trên repo bằng file placeholder
+   trong ZIP (file cấu hình thật của Anh nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai:
+   - Mở English Hub → **Thư viện** → nhóm **Chrono Kingdom** phải hiện
+     4 set (Time & Calendar / Space & Astronomy / Machines &
+     Engineering / Change & Sequence, 60 từ mỗi set) + dòng tổng kết;
+     mở một set, tìm kiếm / lọc / flashcards phải chạy; chọn set làm
+     phạm vi ôn tập rồi đánh boss phải dùng đúng từ của set đó.
+   - Đánh một boss (vd Vua Slime Từ Vựng): dưới thanh HP phải có
+     thanh **💥 Điểm yếu** (vd “food-and-drinks — 0/3”); trả lời đúng
+     3 từ thuộc chủ đề điểm yếu phải thấy `💥 BREAK!` và boss mất thêm
+     HP. Với boss B1/B2 có điểm yếu là chủ đề cơ bản (vd Hải Long Vực
+     Sâu — Động vật), thanh phải báo “ngoài phạm vi ôn tập” thay vì
+     `0/3` (giới hạn đã biết, xem README).
+   - Dữ liệu người chơi không đổi (cùng khóa `hanvocab.v1`, **không
+     thêm khóa mới**, không migration, không cần đăng nhập lại).
+4. Commit với thông điệp `Upgrade to V17.1: Chrono Complete` rồi **Push
+   origin**. Nên push qua nhánh `muse/chrono-complete-v171` và mở Draft PR
+   về nhánh `muse/chrono-kingdom-v17` (stacked — không merge trực tiếp
+   vào `main`, không force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V17.1 không đổi code Firebase. Đồng bộ/đăng nhập đám mây
+   thật vẫn chưa được kiểm thử live — chạy checklist `FIREBASE_SETUP.md`
+   (mục 6 + V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi
+   đầy đủ offline và panel nói rõ "Chưa cấu hình Firebase".
+
+## Quay lại V17.0 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V17.1 → **Revert this commit**, commit và push. Dữ liệu người
+  chơi không bị ảnh hưởng vì V17.1 không thêm khóa lưu hay đổi schema
+  (chỉ thêm lớp V34). File `v34.css`/`v34.js`/`v34_data.js` thừa ra sau
+  khi revert có thể xóa khỏi repo (nó không được V17.0 dùng đến).

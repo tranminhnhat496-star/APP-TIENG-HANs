@@ -174,6 +174,30 @@ function buildWords(){
       });
     });
   }catch(e){}
+  /* V33: CHRONO KINGDOM — gắn 240 từ Chrono (data qua
+     window.__V33_WORDS, ids 'v33_<slug>') vào WORDS chung, theo mẫu
+     V22 (Basic Tactics). Từ đã có chỉ được gắn thêm thư viện
+     'chrono'; từ chỉ có trong Chrono nhận id ổn định 'v33_<slug>'
+     và cấp độ 'B2' (boss Chrono là diff B2 nên wordPool gồm chúng).
+     KHÔNG tạo S.cards — trường ko chỉ là dữ liệu hiển thị/học. */
+  try{
+    var ch33=(window.__V33_WORDS||[]);
+    var K2W3={};WORDS.forEach(function(ww){if(!ww.custom)K2W3[ww.en.toLowerCase()]=ww});
+    ch33.forEach(function(a){
+      var key=(a.en||'').toLowerCase();if(!key)return;
+      var ww=K2W3[key];
+      if(ww){
+        ww.lib=ww.lib||[];
+        if(ww.lib.indexOf('chrono')<0)ww.lib.push('chrono');
+        ww.chronoSet=ww.chronoSet||a.set;
+        if(!ww.ko&&a.ko)ww.ko=a.ko;
+      }else{
+        var nw={id:a.id,t:'chrono',en:a.en,vi:a.vi,ipa:a.ipa||'',pos:(function(p){var m={noun:'n',verb:'v',adjective:'adj',adverb:'adv'};return (p||'').split(',').map(function(x){var k=x.trim();return m[k]||k}).join(', ')})(a.pos),ex:a.ex||'',exvi:a.exvi||'',lv:'B2',custom:false,
+          lib:['chrono'],chronoSet:a.set,ko:a.ko||''};
+        WORDS.push(nw);BYID[nw.id]=nw;K2W3[key]=nw;LV[key]='B2';
+      }
+    });
+  }catch(e){}
   /* V16: cập nhật từ có sẵn (override) — giữ nguyên id nên tiến trình
      SRS (box/right/wrong keyed theo id) không bị mất. */
   try{
@@ -275,6 +299,9 @@ function inScope15(w){
     var ll=w.oxLessons||[];
     if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
   }
+  if(sc.lib==='chrono'&&sc.set){
+    if(w.chronoSet!==sc.set)return false;
+  }
   if(sc.lib==='bt'){
     if(sc.unit){
       var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
@@ -314,6 +341,9 @@ function wordsFiltered(o){
       if(sc.lesson){
         var ll=w.oxLessons||[];
         if(ll.indexOf(sc.lesson)<0&&w.oxLesson!==sc.lesson)return false;
+      }
+      if(sc.lib==='chrono'&&sc.set){
+        if(w.chronoSet!==sc.set)return false;
       }
       if(sc.lib==='bt'){
         /* Basic Tactics: lọc theo Unit(s), loại mục từ và trạng thái.
@@ -1220,7 +1250,7 @@ function bossesHTML(){
   +'<div class="v15bosses">'+BOSSES.map(function(b,i){
     var done=e.bosses[b.id]&&e.bosses[b.id].win;
     var un=bossUnlocked(i);
-    return '<div class="v15boss '+(done?'done':'')+'"><img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'"><b>'+(i+1)+'. '+esc(b.n)+'</b><span>'+esc(b.vi)+' · HP '+b.hp+' · '+esc(b.skill)+'</span><span>Thưởng: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)+'</span>'
+    return '<div class="v15boss '+(done?'done':'')+'"><img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'"><b>'+(i+1)+'. '+esc(b.n)+'</b><span>'+esc(b.vi)+' · HP '+b.hp+' · '+esc(b.skill)+'</span>'+(window.__v34&&__v34.weakChipHTML?__v34.weakChipHTML(b):'')+'<span>Thưởng: +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)+'</span>'
     +(done?'<em>Đã thắng ✓ — '+esc(b.reward.item)+' đã nhận</em>':(un?'<button class="btn pri" onclick="__v15.bossFight(\''+b.id+'\')">Khiêu chiến</button>':'<em>🔒 Thắng boss trước để mở khóa</em>'))+'</div>';
   }).join('')+'</div>'+(window.__v18&&__v18.arenasHTML?__v18.arenasHTML():'')+'<div id="v15bossfight"></div>';
 }
@@ -1229,6 +1259,8 @@ function bossFight(id){
   var idx=BOSSES.indexOf(b);
   if(!bossUnlocked(idx)){pop15('Boss này chưa mở khóa.');return}
   B={boss:b,hp:b.hp,maxHp:b.hp,hearts:3,combo:0,score:0,q:0,skillUsed:false,over:null};
+  /* V34: Boss Weakness — per-fight state only (no save change). */
+  try{if(window.__v34){B.weak=__v34.weakFor(b,'en');B.brk=0;B.brkMax=3}}catch(e){}
   nextBossQ();
   renderBossFight();
 }
@@ -1247,8 +1279,8 @@ function nextBossQ(){
   if(mode==='grammar'){B.cur={g:P.grammar[B.q%P.grammar.length]}}
   else if(mode==='read'){var p=P.read[B.q%P.read.length];B.cur={p:p,q:p.qs[B.q%p.qs.length]}}
   else if(mode==='builder'){var s=P.builder[B.q%P.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');B.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
-  else if(mode==='speak'){var w=P.words[B.q%P.words.length];B.cur={w:w,opts:shuffle([w].concat(distractors(w,3)))}}
-  else{var w2=P.words[B.q%P.words.length];var opts=shuffle([w2].concat(distractors(w2,3)));B.cur={w:w2,opts:opts,optsVi:shuffle([w2].concat(distractors(w2,3)))}}
+  else if(mode==='speak'){var w=(window.__v34&&__v34.weakPick?__v34.weakPick(B,P.words,P.words[B.q%P.words.length]):P.words[B.q%P.words.length]);B.cur={w:w,opts:shuffle([w].concat(distractors(w,3)))}}
+  else{var w2=(window.__v34&&__v34.weakPick?__v34.weakPick(B,P.words,P.words[B.q%P.words.length]):P.words[B.q%P.words.length]);var opts=shuffle([w2].concat(distractors(w2,3)));B.cur={w:w2,opts:opts,optsVi:shuffle([w2].concat(distractors(w2,3)))}}
   B.answered=null;B.ok=null;
   startBossTimer();
 }
@@ -1273,7 +1305,7 @@ function renderBossFight(){
   var b=B.boss;
   var h='<div class="v15fight '+(B.shake?'shake':'')+'">'
   +'<div class="v15fight-top"><img class="v15boss-img '+(B.hit?'hit':'')+'" src="'+b.img+'" alt=""><div class="v15fight-info"><b>'+esc(b.n)+'</b><span>'+esc(b.vi)+' · '+esc(b.skill)+'</span>'
-  +'<div class="v15hpbar"><i style="width:'+Math.max(0,B.hp/B.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,B.hp)+'/'+B.maxHp+'</span>'
+  +'<div class="v15hpbar"><i style="width:'+Math.max(0,B.hp/B.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,B.hp)+'/'+B.maxHp+'</span>'+(window.__v34&&__v34.breakBarHTML?__v34.breakBarHTML(B):'')
   +'<div class="v15hearts">Tim của bạn: '+'♥'.repeat(B.hearts)+'♡'.repeat(Math.max(0,3-B.hearts))+' · Combo x'+B.combo+' · Đúng '+B.score+'</div>'
   +(B.left?'<div class="mute">Còn <span id="v15boss-t">'+B.left+'s</span></div>':'')
   +'</div></div>';
@@ -1370,9 +1402,10 @@ function bossAnswer(ok,timeout){
     B.combo++;B.score++;
     var crit=Math.random()<0.1;
     var dmg=12+B.combo*2;if(B.boss.id==='tiger')dmg=Math.round(dmg*1.5);if(crit)dmg*=2;
+    try{B._breakNote='';if(window.__v34){var _bb34=__v34.breakDmg(B);if(_bb34>0){dmg+=_bb34;B._breakNote='💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
     B.hp-=dmg;B.hit=true;
     if(B.cur.w)mark15(true,B.cur.w,'boss');
-    sfx15('ok');pop15((crit?'CHÍ MẠNG! -':'-')+dmg+' HP');
+    sfx15('ok');pop15((crit?'CHÍ MẠNG! -':'-')+dmg+' HP'+(B._breakNote?' · '+B._breakNote:''));
   }else{
     B.combo=0;B.hearts--;B.shake=true;
     if(B.cur.w)mark15(false,B.cur.w,'boss');

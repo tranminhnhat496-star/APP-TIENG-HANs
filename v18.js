@@ -26,7 +26,7 @@ function arenaMeta(id){var a=(B18().arenas||[]);for(var i=0;i<a.length;i++)if(a[
 function bossById(id){return (B18().byId?B18().byId(id):null)}
 function newBosses(){var d=B18();return (d.en||[]).concat(d.el||[],d.leg||[])}
 function v19Bosses(){return (window.__V19_DATA&&__V19_DATA.bosses)||[]}
-function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses())}
+function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]))}
 
 /* ---------- V18 state (new key) ---------- */
 function en18(){
@@ -153,6 +153,7 @@ function collCardHTML(b){
   +'<b>'+esc(b.vi)+'</b><span class="mute">'+esc(b.n)+'</span>'
   +'<span>'+elChip(b)+rarChip(b)+'</span>'
   +'<span class="mute">'+esc(b.zone?arenaName(b.zone):arenaName(b.arena))+' · Lv '+b.lv+' · HP '+b.hp+'</span>'
+  +(window.__v34&&__v34.weakChipHTML?__v34.weakChipHTML(b):'')
   +'<em>'+(won?'✅ Đã thắng':(un?'⚔️ Có thể đánh':'🔒 Đang khóa'))+'</em></div>';
 }
 function collGridHTML(){
@@ -193,7 +194,7 @@ function collSearch(q){CF.q=q;collApply()}
 function collSet(k,v){CF[k]=v;var v15=V15();if(v15)v15.renderTab()}
 function collDetail(id){
   CF.detail=id;
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   var host=$('#v18colldetail');if(!host)return;
   var won=isWon(b),un=bossUnlocked(b);
   var e=en18();
@@ -204,6 +205,7 @@ function collDetail(id){
   +'<p>'+elChip(b)+rarChip(b)+' · Lv '+b.lv+' · '+esc(b.zone?arenaName(b.zone):arenaName(b.arena))+'</p>'
   +'<p>HP '+b.hp+' · Phòng thủ '+b.def+' · Chế độ: '+esc(b.mode)+' · Độ khó: '+esc(b.diff)+' · Ngôn ngữ: '+(b.lang==='both'?'Anh / Hàn (chọn trước trận)':(b.lang==='ko'?'Tiếng Hàn':'Tiếng Anh'))+'</p>'
   +'<p><b>Kỹ năng:</b> '+(b.skill?esc(b.skill.n)+' — '+esc(b.skill.desc):esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n))+'</p>'
+  +(window.__v34&&__v34.weakChipHTML?__v34.weakChipHTML(b):'')
   +'<p><b>Thưởng lần đầu:</b> +'+b.reward.xp+' XP, +'+b.reward.gems+' 💎, '+esc(b.reward.item)
   +(b.reward.stone?', '+esc(b.reward.stone):'')+(b.reward.title?', danh hiệu “'+esc(b.reward.title)+'”':'')+'</p>'
   +'<p><b>Trạng thái:</b> '+(won?'✅ Đã thắng'+(rec&&rec.wins>1?' ('+rec.wins+' lần)':''):(un?'⚔️ Có thể khiêu chiến':'🔒 Đang khóa — '+(b.arena==='old'?'thắng boss trước trong tab Bosses':(b.zone?'thắng boss trước trên bản đồ để mở khóa':esc(arenaNeedText(b.arena)||'thắng boss trước để mở khóa')))))+'</p>'
@@ -214,7 +216,7 @@ function collDetail(id){
 }
 function collCloseDetail(){var host=$('#v18colldetail');if(host)host.innerHTML='';CF.detail=null}
 function challenge(id){
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   if(b.zone){var v19=window.__v19;if(v19){v19.openMap();v19.fight(id)}return}
   if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
   openArena(b.arena);fight(id);
@@ -251,7 +253,7 @@ function wordPool(b){
       if(sl.length>=8)return shuffle(sl);
       /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
          bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
-      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set};
       var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
       if(sl2.length)return shuffle(sl2);
       if(sl.length)return shuffle(sl);
@@ -350,6 +352,8 @@ function startFight(b,lang){
     over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,
     timer:null,left:0,lastDmg:0,crit:false};
+  /* V34: Boss Weakness — per-fight state only (no save change). */
+  try{if(window.__v34){F.weak=__v34.weakFor(b,lang);F.brk=0;F.brkMax=3}}catch(e){}
   /* V23: pet team joins the fight (shield, energy, damage bonus). */
   try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   nextQ();renderFight();
@@ -396,8 +400,8 @@ function nextQ(){
   if(mode==='grammar'){F.cur={g:P.grammar[F.q%P.grammar.length]}}
   else if(mode==='read'){var p=P.read[F.q%P.read.length];F.cur={p:p,q:p.qs[F.q%p.qs.length]}}
   else if(mode==='builder'){var s=P.builder[F.q%P.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');F.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
-  else if(mode==='speak'){var w=P.words[F.q%P.words.length];F.cur={w:w,opts:shuffle([w].concat(distractorsEN(w,3)))}}
-  else{var w2=P.words[F.q%P.words.length];var opts=shuffle([w2].concat(distractorsEN(w2,3)));F.cur={w:w2,opts:opts,optsVi:shuffle([w2].concat(distractorsEN(w2,3)))}}
+  else if(mode==='speak'){var w=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P.words,P.words[F.q%P.words.length]):P.words[F.q%P.words.length]);F.cur={w:w,opts:shuffle([w].concat(distractorsEN(w,3)))}}
+  else{var w2=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P.words,P.words[F.q%P.words.length]):P.words[F.q%P.words.length]);var opts=shuffle([w2].concat(distractorsEN(w2,3)));F.cur={w:w2,opts:opts,optsVi:shuffle([w2].concat(distractorsEN(w2,3)))}}
   F.answered=null;F.ok=null;
   startTimer();
 }
@@ -449,6 +453,7 @@ function answer(ok,timeout){
        pet XP/affection and speeds up the active hatch (onFightCorrect). */
     try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
     if(b.arena==='leg'&&F.phase===2&&b.skill.id==='mountain')dmg=Math.max(2,dmg-3);
+    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){dmg+=_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -564,7 +569,7 @@ function renderFight(){
   +'<div class="v18fight-info"><b>'+esc(b.vi)+'</b> <span class="mute">'+esc(b.n)+' · Lv '+b.lv+'</span>'
   +'<div>'+elChip(b)+rarChip(b)+phaseTxt+'</div>'
   +'<span>'+esc(b.skill.n)+' — '+esc(b.skill.desc)+'</span>'
-  +'<div class="v18hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'
+  +'<div class="v18hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'+(window.__v34&&__v34.breakBarHTML?__v34.breakBarHTML(F):'')
   +'<div class="v18hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
   +(F.left?'<div class="mute">Còn <span id="v18boss-t">'+F.left+'s</span></div>':'')
   +(F.banner?'<div class="v18banner">'+esc(F.banner)+'</div>':'')

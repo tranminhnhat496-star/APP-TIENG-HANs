@@ -85,7 +85,8 @@ function zoneNeedText(zid,lang){
 }
 function bossUnlocked19(id,lang){
   lang=lang||lang19();
-  var b=D19().byId(id);if(!b)return false;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return false;
+  if(b.zone==='chrono'&&window.__v33&&__v33.bossUnlocked)return __v33.bossUnlocked(id,lang);
   if(!zoneOpen(b.zone,lang))return false;
   var list=zoneBosses(b.zone),i=list.indexOf(id);
   if(i<=0)return true;
@@ -205,6 +206,7 @@ function zoneDetail(zid){
       +'<span>'+starStr(st2)+(mast?' 🌐 Song ngữ':'')+'</span>'
       +'<em>'+(won?'✅ Đã thắng ('+starStr(st2)+')':(un?'⚔️ Có thể đánh':'🔒 Thắng boss trước để mở'))+'</em>'
       +'<p class="mute">Kỹ năng: '+esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n)+'</p>'
+      +(window.__v34&&__v34.weakChipHTML?__v34.weakChipHTML(b,lang):'')
       +(un?'<button class="btn pri" onclick="__v19.fight(\''+b.id+'\')">Bắt đầu chiến đấu</button>':'')
       +'</div>';
     }).join('')+'</div>';
@@ -246,7 +248,7 @@ function wordPool(b){
       if(sl.length>=8)return shuffle(sl);
       /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
          bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
-      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set};
       var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
       if(sl2.length)return shuffle(sl2);
       if(sl.length)return shuffle(sl);
@@ -340,7 +342,7 @@ function markKO19(ok){
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
 function fight(id){
-  var b=D19().byId(id);if(!b)return;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
   if(!document.querySelector('#v19fight'))openMap();
   startFight(b,lang19());
@@ -348,12 +350,14 @@ function fight(id){
 function startFight(b,lang){
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
     combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
-    shield:(b.skills.elem.id==='shield'?30:0),cleansed:false,
+    shield:(b.id==='v17_geargolem'?90:(b.skills.elem.id==='shield'?30:0)),cleansed:false,
     over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
     enraged:false,nextTimer:0,nextVeil:false};
+  /* V34: Boss Weakness — per-fight state only (no save change). */
+  try{if(window.__v34){F.weak=__v34.weakFor(b,lang);F.brk=0;F.brkMax=3}}catch(e){}
   /* V23: pet team joins the fight (shield, energy, damage bonus). */
   try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   if(lang==='ko'&&koCount()<8)
@@ -419,8 +423,8 @@ function nextQ(){
   if(mode==='grammar'){F.cur={g:P2.grammar[F.q%P2.grammar.length]}}
   else if(mode==='read'){var p=P2.read[F.q%P2.read.length];F.cur={p:p,q:p.qs[F.q%p.qs.length]}}
   else if(mode==='builder'){var s=P2.builder[F.q%P2.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');F.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
-  else if(mode==='speak'){var w2=P2.words[F.q%P2.words.length];F.cur={w:w2,opts:shuffle([w2].concat(distractorsEN(w2,3)))}}
-  else{var w3=P2.words[F.q%P2.words.length];var opts2=shuffle([w3].concat(distractorsEN(w3,3)));F.cur={w:w3,opts:opts2,optsVi:shuffle([w3].concat(distractorsEN(w3,3)))}}
+  else if(mode==='speak'){var w2=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P2.words,P2.words[F.q%P2.words.length]):P2.words[F.q%P2.words.length]);F.cur={w:w2,opts:shuffle([w2].concat(distractorsEN(w2,3)))}}
+  else{var w3=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P2.words,P2.words[F.q%P2.words.length]):P2.words[F.q%P2.words.length]);var opts2=shuffle([w3].concat(distractorsEN(w3,3)));F.cur={w:w3,opts:opts2,optsVi:shuffle([w3].concat(distractorsEN(w3,3)))}}
   F.answered=null;F.ok=null;
   startTimer();
 }
@@ -456,8 +460,9 @@ function checkPhase(){
     F.phase=2;F.anim='special';
     F.banner='⚡ AWAKENING — '+b.vi+' thức tỉnh! Giai đoạn 2: phòng thủ và kỹ năng mạnh hơn!';
   }
-  if(F.phase===2&&F.hp<=F.maxHp*0.2){
+  if(F.phase===2&&F.hp<=F.maxHp*0.2&&F.boss.id!=='v17_geargolem'){
     /* Berserk begins with the Ultimate: Knowledge Counterattack */
+    /* V33: GEAR GOLEM has no P3 Knowledge Counterattack (2 phases only). */
     F.ultActive=true;F.caQ=0;F.caRight=0;F.anim='special';
     F.banner='⚠️ BOSS ĐANG CHUẨN BỊ TUYỆT KỸ: '+b.skills.ult.n+'! Trả lời đúng 3 câu liên tiếp để phản công!';
   }
@@ -510,6 +515,7 @@ function answer(ok,timeout){
     /* V23: pet team damage bonus + passives (burn / storm); also grants
        pet XP/affection and speeds up the active hatch (onFightCorrect). */
     try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
+    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){dmg+=_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -537,6 +543,8 @@ function answer(ok,timeout){
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
     if(b.skills.pass.id==='vampiric')healBoss(4,'🧛 Hút Sinh Lực: boss hồi 4 HP!');
+    /* V33: GEAR GOLEM time-reversal — wrong answer in P2 heals +10 HP. */
+    if(b.id==='v17_geargolem'&&F.phase===2)healBoss(10,'⏳ Đảo ngược thời gian: GEAR GOLEM hồi 10 HP!');
   }
   var qc=F.qCount;
   if(b.skills.elem.id==='heal'&&qc>0&&qc%4===0)healBoss(6,'🌸 Hồi Phục: boss hồi 6 HP!');
@@ -645,14 +653,14 @@ function renderFight(){
   var host=$('#v19fight');if(!host)return;
   if(!F){host.innerHTML='';return}
   var b=F.boss;
-  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/3'+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
+  var phaseTxt='<span class="v19phase">Giai đoạn '+F.phase+'/'+(F.boss.id==='v17_geargolem'?'2':'3')+(F.phase===1?' — khởi đầu':(F.phase===2?' — Thức tỉnh':' — Cuồng nộ'))+'</span>';
   var sk=b.skills;
   var h='<div class="v19fight '+(F.over==='win'?'win':'')+'">'
   +'<div class="v19fight-top"><img class="v19boss-img anim-'+F.anim+'" src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
   +'<div class="v19fight-info"><b>'+esc(b.vi)+'</b> <span class="mute">'+esc(b.n)+' · Lv '+b.lv+' · '+esc((D19().zoneById(b.zone)||{}).vi||'')+'</span>'
   +'<div>'+elChip19(b)+rarChip19(b)+phaseTxt+'</div>'
   +'<span class="mute">⚔️ '+esc(sk.basic.n)+' · '+esc(sk.elem.n)+' · '+esc(sk.tact.n)+' · '+esc(sk.pass.n)+' · 💥 '+esc(sk.ult.n)+'</span>'
-  +'<div class="v19hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'
+  +'<div class="v19hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'+(window.__v34&&__v34.breakBarHTML?__v34.breakBarHTML(F):'')
   +'<div class="v19hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
   +(F.left?'<div class="mute">Còn <span id="v19boss-t">'+F.left+'s</span></div>':'')
   +(F.ultActive&&F.caQ>0?'<div class="v19banner">⚠️ PHẢN CÔNG BẰNG KIẾN THỨC — Câu '+(Math.min(F.caQ,3))+'/3 · Đúng '+F.caRight+'/3 · Đúng 3/3 phá hoàn toàn tuyệt kỹ!</div>':'')
