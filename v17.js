@@ -36,6 +36,44 @@ function statsOf(list){
 }
 function a1a2Words(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('a1a2')>=0})}
 function oxWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('oxford')>=0})}
+function skyrootSetName(id){
+  var m={climate:'Climate & Environment',science:'Science & Innovation',society:'Society & Culture',mind:'Mind & Character'};
+  return m[id]||id;
+}
+function skyrootWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('skyroot')>=0})}
+function skyrootSets(){
+  var order=['climate','science','society','mind'],map={};
+  skyrootWords().forEach(function(w){
+    var k=w.skyrootSet||'climate';
+    if(!map[k])map[k]={id:k,name:skyrootSetName(k),words:[]};
+    map[k].words.push(w);
+  });
+  return order.filter(function(k){return map[k]}).map(function(k){return map[k]});
+}
+function skyrootSetCard(g){
+  var s=statsOf(g.words);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  return '<div class="v17card"><div class="v17card-t"><b>'+esc(g.name)+'</b><span class="mute">'+g.words.length+' từ</span></div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="mute">'+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn</div>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnSkyrootSet(\''+g.id+'\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewSkyrootSet(\''+g.id+'\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openSkyrootSet(\''+g.id+'\')">Xem từ</button></div></div>';
+}
+function skyrootGroupHTML(){
+  var ws=skyrootWords();
+  var s=statsOf(ws);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  return '<div class="v17group"><div class="v17group-head"><b>🌿 Skyroot Sanctuary — Thánh Địa Thiên Căn</b><span class="mute">'+ws.length+' từ · 4 bộ · trình độ B2</span></div>'
+    +'<p class="mute">Từ vựng Thánh Địa Thiên Căn (V18.0) — học xong mỗi bộ để nhận thưởng, dùng trong trận boss Skyroot. 120 từ dẫn bằng tiếng Hàn (từ Hàn là từ chính trong nguồn) — trong kho từ chung vẫn hiển thị đầu từ tiếng Anh kèm nghĩa Hàn.</p>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnScopeKey(\'skyroot\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewScopeKey(\'skyroot\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openLib(\'skyroot\')">Xem tất cả từ</button></div>'
+    +'<div class="mute">Tổng: '+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn</div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="v17grid">'+skyrootSets().map(skyrootSetCard).join('')+'</div>'
+    +'<p class="mute">Tiếng Hàn: từ Skyroot tiếng Hàn học qua deck tiếng Hàn đã chọn (trận boss / Học thông minh); từ Skyroot trong kho từ chung dùng đầu từ tiếng Anh.</p></div>';
+}
 function chronoSetName(id){
   var m={time:'Time & Calendar',space:'Space & Astronomy',machines:'Machines & Engineering',change:'Change & Sequence'};
   return m[id]||id;
@@ -127,6 +165,7 @@ function currentScope(){
   if(V.lib==='a1a2')return V.topic?{kind:'lib',lib:'a1a2',topic:V.topic}:{kind:'lib',lib:'a1a2'};
   if(V.lib==='oxford')return V.lesson?{kind:'lib',lib:'oxford',lesson:V.lesson}:{kind:'lib',lib:'oxford'};
   if(V.lib==='chrono')return V.set?{kind:'lib',lib:'chrono',set:V.set}:{kind:'lib',lib:'chrono'};
+  if(V.lib==='skyroot')return V.set?{kind:'lib',lib:'skyroot',set:V.set}:{kind:'lib',lib:'skyroot'};
   return null;
 }
 function scopeName(sc){
@@ -151,11 +190,17 @@ function scopeName(sc){
     if(sc.set)return 'Chrono · '+chronoSetName(sc.set);
     return 'Chrono Kingdom';
   }
+  if(sc.lib==='skyroot'){
+    if(sc.set)return 'Skyroot · '+skyrootSetName(sc.set);
+    return 'Skyroot Sanctuary';
+  }
   return '';
 }
 function rewardFor(key){
   if(key==='a1a2:all')return {xp:200,gems:5};
   if(key==='oxford:all')return {xp:300,gems:5};
+  if(key==='skyroot:all')return {xp:200,gems:5};
+  if(key.indexOf('skyroot:')===0)return {xp:50,gems:2};
   if(key==='chrono:all')return {xp:200,gems:5};
   if(key.indexOf('chrono:')===0)return {xp:50,gems:2};
   if(key.indexOf('a1a2:')===0)return {xp:50,gems:2};
@@ -194,6 +239,7 @@ function libraryHTML(){
     +lessonGrid()+'</div>';
   /* Nhóm 2b — Chrono Kingdom (V34, V17.1: 240 từ đã có từ V17.0) */
   h+=chronoGroupHTML();
+  h+=skyrootGroupHTML();
   /* Nhóm 3 — Basic Tactics for Listening (V22, dữ liệu tải lười) */
   h+=(window.__v22&&__v22.groupHTML?__v22.groupHTML():'');
   /* Nhóm 4 — Từ vựng của tôi */
@@ -274,6 +320,11 @@ function lessonHTML(){
     if(!gs)return '<p class="mute">Không tìm thấy bộ từ này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
     list=gs.words;title='Chrono · '+gs.name;key='chrono:'+V.set;
   }else if(V.lib==='chrono'){list=chronoWords();title='Chrono Kingdom — Vương Quốc Thời Gian';key='chrono:all'}
+  else if(V.lib==='skyroot'&&V.set){
+    var gs=skyrootSets().filter(function(x){return x.id===V.set})[0];
+    if(!gs)return '<p class="mute">Không tìm thấy bộ từ này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
+    list=gs.words;title='Skyroot · '+gs.name;key='skyroot:'+V.set;
+  }else if(V.lib==='skyroot'){list=skyrootWords();title='Skyroot Sanctuary — Thánh Địa Thiên Căn';key='skyroot:all'}
   else if(V.lib==='a1a2'){list=a1a2Words();title='A1–A2 Vocabulary';key='a1a2:all'}
   else if(V.lib==='oxford'){list=oxWords();title='Oxford 3000 – Từ vựng thông dụng';key='oxford:all'}
   else return '<p class="mute">Chưa chọn bộ từ nào.</p>';
@@ -335,6 +386,7 @@ function wordCard(w){
   var where='';
   if(V.lib==='a1a2'&&!V.topic)where=topicName(w.a1a2Topic||w.t);
   if(V.lib==='chrono'&&!V.set)where=chronoSetName(w.chronoSet);
+  if(V.lib==='skyroot'&&!V.set)where=skyrootSetName(w.skyrootSet);
   if(V.lib==='oxford'&&!V.lesson)where='Bài '+w.oxLesson;
   var extra=(w.extra||[]).map(function(x){
     var src=x.src==='oxford'?'Oxford 3000':(x.src==='bt'?'Basic Tactics':'A1–A2');
@@ -385,6 +437,9 @@ function openLesson(n){V.view='lesson';V.lib='oxford';V.lesson=n;V.topic=null;V.
 function openSet(id){V.view='lesson';V.lib='chrono';V.set=id;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
 function learnSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});v.tab('learn')}
 function reviewSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});reviewGo(false)}
+function openSkyrootSet(id){V.view='lesson';V.lib='skyroot';V.set=id;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function learnSkyrootSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'skyroot',set:id});v.tab('learn')}
+function reviewSkyrootSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'skyroot',set:id});reviewGo(false)}
 function openLib(lib){V.view='lesson';V.lib=lib;V.topic=null;V.lesson=0;V.set=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
 function learnScopeKey(lib){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:lib});v.tab('learn')}
 function learnTopic(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'a1a2',topic:id});v.tab('learn')}
@@ -454,7 +509,7 @@ function claim(key){
 window.__v17={
   libraryHTML:libraryHTML,scopeBannerHTML:scopeBannerHTML,
   goHome:goHome,openTopic:openTopic,openLesson:openLesson,openLib:openLib,
-  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,
+  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,learnSkyrootSet:learnSkyrootSet,openSkyrootSet:openSkyrootSet,reviewSkyrootSet:reviewSkyrootSet,skyrootWords:skyrootWords,skyrootSets:skyrootSets,
   reviewScopeKey:reviewScopeKey,reviewTopic:reviewTopic,reviewLesson:reviewLesson,
   reviewCurrent:reviewCurrent,reviewWeakCurrent:reviewWeakCurrent,bossCurrent:bossCurrent,
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,

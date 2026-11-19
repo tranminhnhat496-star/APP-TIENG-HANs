@@ -13,7 +13,8 @@ var PET_ELEMENTS={
   water:{n:'Nước',icon:'💧',color:'#4A90E2'},
   thunder:{n:'Sấm',icon:'⚡',color:'#FFD93D'},
   light:{n:'Ánh Sáng',icon:'✨',color:'#FFE66D'},
-  dark:{n:'Bóng Tối',icon:'🌙',color:'#9B59B6'}
+  dark:{n:'Bóng Tối',icon:'🌙',color:'#9B59B6'},
+  wind:{n:'Gió',icon:'🌪️',color:'#8FE3C0'}
 };
 var PET_RARITY={
   common:{n:'Thường',stars:2,color:'#B8C4CC'},
@@ -135,6 +136,7 @@ var PET_MATERIALS=[
  {id:'stone_water',n:'Tinh Thể Nước',el:'water',price:200,d:'Dùng để tiến hóa thú hệ Nước.'},
  {id:'stone_thunder',n:'Tinh Thể Sấm',el:'thunder',price:200,d:'Dùng để tiến hóa thú hệ Sấm.'},
  {id:'stone_light',n:'Tinh Thể Ánh Sáng',el:'light',price:200,d:'Dùng để tiến hóa thú hệ Ánh Sáng.'},
+ {id:'stone_wind',n:'Tinh Thể Gió',el:'wind',price:200,d:'Dùng để tiến hóa thú hệ Gió.'},
  {id:'stone_dark',n:'Tinh Thể Bóng Tối',el:'dark',price:200,d:'Dùng để tiến hóa thú hệ Bóng Tối.'},
  {id:'feather',n:'Lông Vàng',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'},
  {id:'fruit',n:'Trái Phép Thuật',el:null,price:300,d:'Nguyên liệu tiến hóa chung.'}

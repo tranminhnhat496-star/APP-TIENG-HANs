@@ -102,8 +102,12 @@ was never touched).
   (MOVE decision — `v23.js` hardcodes those prefixes; no
   `assets/pets/v17/`, no duplicate bytes in the ZIP).
 - **Save `S.v7.en33`** (lazy, no migration):
-  `{bosses:{}, quests:{qid:{done,claimed,acc,at}}, rift:{day,best:{},
+  `{quests:{qid:{done,claimed,acc,at}}, rift:{day,best:{},
   claimed:{}}, regionClaimed:{en,ko}, pending:{}, created}`.
+  *(Correction 2026-11-19, V18.0: this line previously listed a
+  `bosses:{}` key in `en33`. False — `en33()` in `src/v33.js` never
+  creates one; Chrono boss wins live in `en19` via the V19 UCE.
+  Do not assume `en33.bosses` exists.)*
   Merge branch + `hasProgress` entry in `v20_sync.js` (see Changed).
 
 ## Changed — the 13 build replacements (`build_v33.py`)

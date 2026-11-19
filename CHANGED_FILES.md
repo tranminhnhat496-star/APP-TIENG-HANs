@@ -630,3 +630,50 @@ khóa localStorage mới, không migration, không art mới, không nút mới.
 
 ### Ngoài phạm vi (không làm trong V17.1)
 - Đổi bảng điểm yếu cho 12 boss B1/B2 (quyết định của Anh); nút/link Smart overlay (không có hook sạch trong `v27.js`); V18.0 Skyroot Sanctuary; Claude #3/#4/#5; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.
+
+## V18.0 — Skyroot Sanctuary (2026-11-19)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `Korean_English_Vocab_Farm_V18_0_Skyroot_Sanctuary.zip` | ZIP deploy đầy đủ V18.0 (out/ + docs). |
+| `src/v35.js`, `src/v35.css`, `src/v35_data.js` | Lớp V35 (18.0.0, chèn cuối cùng): overlay Skyroot, cổng GEAR GOLEM, 8 boss, 6 nhiệm vụ, đăng ký pet, `__v35` + `_test` probes. `v35_data.js` sinh bởi `tools/v35/gen_v35_data.py` từ `data/v35_words.json`. |
+| `tools/v35/gen_v35_data.py` | Sinh `src/v35_data.js`: 240 từ, 8 boss, 6 nhiệm vụ (rời nhau), 3 loài pet, 3 trứng, bảng điểm yếu kind `skyroot`. |
+| `build_v35.py`, `package_v35.py` | Script build (29 replacement, cổng hash V17.1, pre-pass anchor) + package (ZIP, kiểm tra V31/V33/V34/V35 fragments). |
+| `README_V18_0_SKYROOT_SANCTUARY.md` | Hướng dẫn V18.0 đầy đủ (boss, từ, nhiệm vụ, pet, điểm yếu, giới hạn). |
+| `CHANGELOG_V17_1_to_V18_0.md` | Changelog đầy đủ V17.1 → V18.0 (29 replacement, bảng điểm yếu, sửa sai `en33.bosses`, B-35-1). |
+| `SMOKE_TEST_V18_0_2026-11-19.md` | Báo cáo kiểm thử V18.0 (build gates; TODO cho test agent độc lập). |
+| `tools/v35/PUSH_MANIFESTS.md` | Manifest push §(b) V18.0 (đường dẫn chính xác; lưu ý art PNG không vào snapshot push text-only). |
+| `assets/bosses/v18/` (8 PNG) | Art boss Skyroot (`v18_breeze_lynx` … `v18_skyroot_empress`), byte-identical với `tools/v35/assets-staging/`. |
+| `assets/pets/v18/` (12 PNG) | Art pet Skyroot: 9 form (`v18_cloudfx/sproutowl/stormram_s1–s3`) + 3 trứng (`v18_egg_cloud/sprout/storm`). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v19.js` | 2 replacement V35: fight lookup fall-through `__V35_DATA.byId`; unlock ủy quyền zone `'skyroot'` cho `__v35.bossUnlocked`. |
+| `v18.js` | 2 replacement V35: `allBosses()` thêm `__V35_DATA.bosses`; `challenge()`/`collDetail()` fall-through `__V35_DATA.byId` (count 2). |
+| `v21.js` | 1 replacement V35: `TOTAL_BOSSES` 78 → **86**. |
+| `v20_sync.js` | 2 replacement V35: `hasProgress` + merge branch cho `en35` (giống en33, không có rift). |
+| `v15.js` | 3 replacement V35: khối `buildWords()` gắn 240 từ Skyroot (lib `'skyroot'`, B2, POS chuẩn hóa); `sc.set` trong `inScope15()` / `wordsFiltered()`. |
+| `v17.js` | 9 replacement V35: `skyrootSetName()` / `skyrootWords()` / `skyrootSets()` / `skyrootSetCard()` / `skyrootGroupHTML()`; scope / scopeName / reward (skyroot:all +200/+5, mỗi set +50/+2); nhóm Skyroot trong `libraryHTML()`; nhánh skyroot trong `lessonHTML()`; `openSkyrootSet()` / `learnSkyrootSet()` / `reviewSkyrootSet()` + exports. |
+| `v25.js` | 2 replacement V35: nhánh `'skyroot'` trong `groupKey()` / `groupStats()` (thanh tiến độ thật cho nhóm). |
+| `v34.js` | 4 replacement V35: `weakFor()` (bảng `__V35_DATA.weakExplicit` + fallback zone skyroot), `weakMatch()` (`w.skyrootSet`), `weakName()` (nhãn set Skyroot). |
+| `v23.js` | 2 replacement V35: `stageImg()` / `eggImgHTML()` hiểu tiền tố `'v18/'` → `assets/pets/v18/` (cũ `assets/pets/v15/` giữ nguyên). |
+| `v23_data.js` | 2 replacement V35: `PET_ELEMENTS` thêm `wind` (Gió); `PET_MATERIALS` thêm `stone_wind` (Tinh Thể Gió). |
+| `index.html` (inlined) | Cùng 29 replacement trên + nút KO `v35kotab` sau `v33kotab` + title V18.0 + lớp V35 chèn cuối cùng. |
+| `CHANGELOG_V16_4_to_V17_0.md` | **Sửa sai tài liệu (docs-only):** bỏ khóa `bosses:{}` khỏi mô tả `en33` + ghi chú sửa sai có ngày (thắng boss Chrono ghi vào `en19`). |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V18.0. |
+
+### Lớp V35 — tóm tắt nội dung (chi tiết trong README_V18_0_SKYROOT_SANCTUARY.md)
+- **Vùng Skyroot Sanctuary:** 8 boss (Lv 69–76, HP 760–850, diff B2), cổng = thắng GEAR GOLEM bằng ngôn ngữ đó; mở khóa lần lượt; thưởng hoàn thành vùng +150 XP/+5 💎/danh hiệu “Chúa Tể Thiên Căn” (mỗi ngôn ngữ, claimed-guarded). Boss tổng 86.
+- **Thư viện nhóm thứ 6:** 4 set Skyroot × 60 từ (Climate & Environment / Science & Innovation / Society & Culture / Mind & Character, B2; 120 EN-led + 120 KO-led); tìm kiếm / lọc POS / lọc trạng thái / yêu thích / flashcards / scope `{kind:'lib',lib:'skyroot',set}`; thưởng +50 XP/+2 💎 mỗi set, +200 XP/+5 💎 tất cả (1 lần, qua `en17.claimed`).
+- **SRS:** không code mới — `mark15` ghi danh từ `v35_` tự động; POS chuẩn hóa tại điểm gắn (bài học V34-BUG-1).
+- **6 nhiệm vụ cốt truyện qua V27** (12–14 từ, rời nhau): hoàn thành ≥ 80% rồi nhận thưởng (+20 XP, ≥ 90% thêm +10 XP, nhiệm vụ cuối +1 💎; claimed-guarded trong `en35.quests`); chạy dưới ngưỡng không tính hoàn thành (bài học B-33-1); guard `__v27.endEarly()` có từ đầu (bài học V34).
+- **3 thú Skyroot:** Cáo Mây (Gió, dmg/storm) · Cú Mầm (Rừng, heal/wisdom) · Cừu Bão (Sấm, shield/storm) — kỹ năng chỉ dùng type v23 có sẵn, quan sát được trong trận boss; trứng Mây 1200/Mầm 1000/Bão 2000; mốc sưu tập 54 form +70 💎/danh hiệu “Bậc Thầy Thiên Căn”.
+- **Điểm Yếu Boss (8 boss Skyroot):** kind `'skyroot'`, 2 boss/set; mỗi set 60 từ B2 nên mọi thanh Break đều đầy được (không lặp lại giới hạn 12 boss Chrono V17.1).
+- **Lưu `S.v7.en35`** (lazy, không migration): `{quests, regionClaimed:{en,ko}, pending, created}` — **không có khóa `bosses`** (thắng boss ghi vào `en19`); merge đám mây giống en33 (không rift).
+- **Đã sửa sau khi sinh dữ liệu lần đầu (B-35-1):** `gen_v35_data.py` lấy nhầm chỉ số tuple (gems thay vì set điểm yếu) — bảng điểm yếu sinh ra `"key":5` cho cả 8 boss; đã sửa thành `b[19]`, sinh lại, kiểm tra 8 mục / 2 mỗi set.
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, Firebase Auth/Sync, login khách, các lớp V6–V34 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0, v27 = 16.0.0, v31 = 16.3.0, v32 = 16.4.0, v33 = 17.0.0, v34 = 17.1.0). Không migration, không tiền tệ mới, không khóa mới ngoài `en35` (lazy). Art mới 20 PNG; không nút mới ngoài nút Skyroot ở hai hub.
+
+### Ngoài phạm vi (không làm trong V18.0)
+- Bộ kiểm thử jsdom `tools/v35/test35.js` (test agent viết tiếp, dùng `__v35._test` probes); Time Echo / Rift cho Skyroot; đổi bảng điểm yếu cho 12 boss B1/B2 Chrono; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.

@@ -84,6 +84,7 @@ function groupKey(head){
   if(t.indexOf('Oxford')>=0)return 'oxford';
   if(t.indexOf('Basic Tactics')>=0)return 'bt';
   if(t.indexOf('Chrono')>=0)return 'chrono';
+  if(t.indexOf('Skyroot')>=0)return 'skyroot';
   return '';
 }
 function groupStats(key){
@@ -102,6 +103,10 @@ function groupStats(key){
   if(key==='chrono'){
     var listC=ws.filter(function(w){return (w.lib||[]).indexOf('chrono')>=0});
     var sC=statsOf(listC);sC.total=listC.length;return sC;
+  }
+  if(key==='skyroot'){
+    var listS=ws.filter(function(w){return (w.lib||[]).indexOf('skyroot')>=0});
+    var sS=statsOf(listS);sS.total=listS.length;return sS;
   }
   if(key==='bt'){
     var v22=V22();

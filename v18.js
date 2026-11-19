@@ -26,7 +26,7 @@ function arenaMeta(id){var a=(B18().arenas||[]);for(var i=0;i<a.length;i++)if(a[
 function bossById(id){return (B18().byId?B18().byId(id):null)}
 function newBosses(){var d=B18();return (d.en||[]).concat(d.el||[],d.leg||[])}
 function v19Bosses(){return (window.__V19_DATA&&__V19_DATA.bosses)||[]}
-function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]))}
+function allBosses(){var d=B18();return (d.old||[]).concat(newBosses(),v19Bosses(),(window.__V33_DATA?__V33_DATA.bosses:[]),(window.__V35_DATA?__V35_DATA.bosses:[]))}
 
 /* ---------- V18 state (new key) ---------- */
 function en18(){
@@ -194,7 +194,7 @@ function collSearch(q){CF.q=q;collApply()}
 function collSet(k,v){CF[k]=v;var v15=V15();if(v15)v15.renderTab()}
 function collDetail(id){
   CF.detail=id;
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
   var host=$('#v18colldetail');if(!host)return;
   var won=isWon(b),un=bossUnlocked(b);
   var e=en18();
@@ -216,7 +216,7 @@ function collDetail(id){
 }
 function collCloseDetail(){var host=$('#v18colldetail');if(host)host.innerHTML='';CF.detail=null}
 function challenge(id){
-  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null);if(!b)return;
+  var b=bossById(id)||(window.__V19_DATA&&__V19_DATA.byId?__V19_DATA.byId(id):null)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
   if(b.zone){var v19=window.__v19;if(v19){v19.openMap();v19.fight(id)}return}
   if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
   openArena(b.arena);fight(id);
