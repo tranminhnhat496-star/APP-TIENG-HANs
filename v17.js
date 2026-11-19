@@ -513,7 +513,7 @@ window.__v17={
   libraryHTML:libraryHTML,scopeBannerHTML:scopeBannerHTML,
   goHome:goHome,openTopic:openTopic,openLesson:openLesson,openLib:openLib,
   learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,learnSkyrootSet:learnSkyrootSet,openSkyrootSet:openSkyrootSet,reviewSkyrootSet:reviewSkyrootSet,skyrootWords:skyrootWords,skyrootSets:skyrootSets,
-  reviewScopeKey:reviewScopeKey,reviewTopic:reviewTopic,reviewLesson:reviewLesson,
+  reviewScopeKey:reviewScopeKey,reviewTopic:reviewTopic,reviewLesson:reviewLesson,topics:topics,lessons:lessons,topicName:topicName,scopeName:scopeName,
   reviewCurrent:reviewCurrent,reviewWeakCurrent:reviewWeakCurrent,bossCurrent:bossCurrent,
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,
   speak:speak,toggleMastered:toggleMastered,toggleFav:toggleFav,copyToPersonal:copyToPersonal,claim:claim,
