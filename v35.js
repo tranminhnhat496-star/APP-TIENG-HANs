@@ -222,7 +222,7 @@ function findSession(ids,startedAt){
   var d=en27rec();if(!d||!d.sessions)return null;
   for(var i=0;i<d.sessions.length;i++){
     var rec=d.sessions[i];
-    if(!rec||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
+    if(!rec||rec.partial||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
     if(!rec.words||!rec.words.length)continue;
     var ok=true;
     for(var j=0;j<ids.length;j++)if(rec.words.indexOf(ids[j])<0){ok=false;break}
@@ -333,7 +333,7 @@ function overlayHTML(){
     +(gate?'✅ Cổng đã mở — chào mừng đến Thánh Địa Thiên Căn!':'Thắng GEAR GOLEM bằng ngôn ngữ này để mở vùng đất này.')
     +(n?' Tổng số boss đã thắng: '+n+'/86.':'')+'</p></div>';
   if(!gate){
-    h+='<div class="v35empty">Thánh Địa Thiên Căn đang khóa. Các boss, nhiệm vụ và thú Skyroot sẽ mở khi bạn thắng GEAR GOLEM bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.</div>';
+    h+='<div class="v35empty">Thánh Địa Thiên Căn đang khóa. Các boss và nhiệm vụ sẽ mở khi bạn thắng GEAR GOLEM bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.</div>';
   }else{
     /* bosses */
     var langLabel=(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh');

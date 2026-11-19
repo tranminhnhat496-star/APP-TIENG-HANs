@@ -1021,3 +1021,68 @@ Repo: **APP-TIENG-HANS**.
   đến sau revert thì nằm yên) và không đổi schema (chỉ thêm lớp V35).
   File `v35.css`/`v35.js`/`v35_data.js` thừa ra sau khi revert có thể
   xóa khỏi repo (nó không được V17.1 dùng đến).
+
+# Cập nhật lên V18.1 — BUG FIXES (2026-11-19)
+
+## Chuẩn bị (giống các lần trước)
+1. Giải nén file ZIP V18.1 ra một thư mục trên máy.
+2. Mở **GitHub Desktop**, mở repo của game (nếu chưa có: `File → Clone Repository`).
+3. **Sao lưu trước (khuyên dùng):** trong game đang chạy, mở English Hub →
+   tab **Sao lưu** → **Tải file sao lưu (.json)** và cất file đó ở nơi an toàn.
+   Dữ liệu người chơi nằm trong trình duyệt của từng người dùng, việc cập nhật
+   code trên GitHub **không xóa** dữ liệu đó.
+
+## Cập nhật
+1. Trong thư mục repo trên máy, **ghi đè / thêm** các file từ ZIP V18.1:
+   - `index.html` (mới — đây là file GitHub Pages sẽ chạy)
+   - `v36.js`, `v36.css` (lớp V36 mới, chèn cuối cùng)
+   - `v12.js`, `v14.js`, `v15.js`, `v17_a1a2.js`, `v18.js`, `v19.js`,
+     `v21.js`, `v23.js`, `v27.js`, `v33.js`, `v35.js`
+     (đã gồm 30 replacement V36 + sửa typo 54×)
+   - `tools/v34/probe_v34.js` (sửa model probe: nhánh Oxford áp dụng
+     diff filter)
+   - `build_v36.py`, `package_v36.py`
+   - `README_V18_1_BUG_FIXES.md`, `CHANGELOG_V18_0_to_V18_1.md`,
+     `SMOKE_TEST_V18_1_2026-11-19.md`, `CHANGED_FILES.md`,
+     `GITHUB_DESKTOP_GUIDE.md`
+   - `tools/v36/` (`test36.js`, `verify-v36c.js`, `probe_toast.js`,
+     `PUSH_MANIFESTS.md`)
+   - Giữ nguyên mọi file V18.0 và thư mục `assets/` còn lại (ZIP đã chứa
+     đầy đủ; **không có art mới trong V18.1**).
+   - **Lưu ý:** 20 PNG V18.0 (`assets/bosses/v18/` + `assets/pets/v18/`)
+     không đi theo snapshot push text-only — xem
+     `tools/v36/PUSH_MANIFESTS.md` (đường đẩy riêng, vẫn chờ Anh chọn).
+2. **Không** ghi đè `firebase-config.js` trên repo bằng file placeholder
+   trong ZIP (file cấu hình thật của Anh nằm trên repo — giữ nguyên).
+3. Kiểm tra nhanh trên trang đã triển khai:
+   - Mở Smart Learning (Học thông minh): overlay phải hiện **trên** mọi
+     modal (đóng/mở được, nút ✕ bấm được); khi Smart đang mở mà có toast
+     (vd +XP), toast phải hiện **trên** overlay, không bị che.
+   - Mở Account Center rồi bấm Escape: panel phải đóng; mở lại rồi bấm
+     Escape lần nữa vẫn đóng đúng một lần.
+   - Mở một boss V18 (vd Slime): đánh thắng bằng team-skill khi boss còn
+     ít HP — trận phải kết thúc thắng ngay, không kẹt; XP nhận đúng bằng
+     phần thưởng boss (không nhân đôi).
+   - Nói (Speaking Practice): đọc đúng một từ mới — XP nhận phải đúng số
+     hiển thị (không còn +15 trong khi UI ghi +5).
+   - Mở kế hoạch Smart, trả lời 2 câu rồi thoát giữa chừng: kế hoạch
+     **không** được tính hoàn thành, không nhận thưởng +20 XP.
+   - Boss có thanh Điểm yếu 0/3 không bao giờ đầy (vd Cú Oxford): phải
+     thấy dòng giải thích thật thay vì thanh 0/3 trơ trọi.
+   - Dữ liệu người chơi không đổi (cùng khóa `hanvocab.v1`; V18.1 không
+     thêm khóa, không migration, không cần đăng nhập lại).
+4. Commit với thông điệp `Upgrade to V18.1: Bug Fixes` rồi **Push
+   origin**. Nên push qua nhánh `muse/bug-fixes-v181` và mở Draft PR
+   về nhánh `muse/skyroot-sanctuary-v180` (stacked — không merge trực tiếp
+   vào `main`, không force-push) — xem link PR trong báo cáo bàn giao.
+5. Firebase: V18.1 không đổi code Firebase. Đồng bộ/đăng nhập đám mây
+   thật vẫn chưa được kiểm thử live — chạy checklist `FIREBASE_SETUP.md`
+   (mục 6 + V13.3) trước khi xác nhận. Khi chưa cấu hình, game vẫn chơi
+   đầy đủ offline và panel nói rõ "Chưa cấu hình Firebase".
+
+## Quay lại V18.0 (nếu cần)
+- Trong GitHub Desktop, vào tab **History**, chuột phải vào commit
+  nâng cấp V18.1 → **Revert this commit**, commit và push. Dữ liệu người
+  chơi không bị ảnh hưởng vì V18.1 không thêm khóa lưu hay đổi schema
+  (chỉ thêm lớp V36). File `v36.css`/`v36.js` thừa ra sau khi revert có thể
+  xóa khỏi repo (nó không được V18.0 dùng đến).

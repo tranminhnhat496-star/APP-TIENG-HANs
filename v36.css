@@ -1,0 +1,64 @@
+/* V36 — V18.1 BUG FIXES (18.1.0). Additive layer, loads LAST (wins the
+   cascade at equal specificity). CSS-only fixes from the V18.1 review:
+   F-06 (z-index), M1 (filter-row overflow at 360px), M2 (44px touch
+   targets). No layout rebuild, no logic change. */
+
+/* --- F-06: intended z-index stack (top -> bottom), documented here ---
+     #v23toast (pet toast) .............. 1700
+     .pp (V6 pop toast, pop15/toast23) ... 1700
+     .v7toast (V7 toast, login gift) ..... 1700
+     #v27hub (Smart Learning overlay) ... 1600
+     #v35hub / #v33hub (region overlays)  1500
+     .v20modal (cloud sync dialog) ...... 1200
+     .v32badge (data-safety badge) ...... 1100
+     .v15modal (English hub modal) ...... 1000
+     #v27hub was 990 (v27.css) — BELOW .v15modal (1000) and .v20modal
+     (1200), so the Smart overlay's toasts/close controls could hide
+     under a modal. Raised to 1600.
+     #v23toast was 970 (v26.css) — below the Smart overlay. Raised to
+     1700 so pet toasts stay visible above it.
+   B-36-2 (found by the Chrome gates, 2026-11-19): the #v23toast rule
+     alone does NOT fix the live toasts. #v23toast is only created by
+     toast23() when __v15.pop15 is unavailable — in the full game
+     pop15 exists, so #v23toast never appears. The toasts the user
+     actually sees are .pp (V6 pop, z-60, created by pop() — the path
+     pop15/toast23 take) and .v7toast (V7 toast, z-95, login gift and
+     V7 flows). Both were still buried under Smart/the hubs. Raised
+     to 1700 here, same as #v23toast.
+   KNOWN BEHAVIOUR (accepted, not fixed): .v20modal lives INSIDE the
+   .v15hub stacking context (z-index 950), so even at 1200 it renders
+   below #v27hub. The sync-conflict dialog is still reachable by
+   closing the Smart overlay first. Moving the node out of .v15hub
+   would be a structural change, not a bug fix. #v21account
+   (Account Center, z-9998) is intentionally above everything,
+   including Smart and the toasts, by design. */
+#v27hub{z-index:1600}
+#v23toast{z-index:1700}
+.pp{z-index:1700}
+.v7toast{z-index:1700}
+
+/* --- M1: Library filter row must not overflow at 360px ---
+   The .v15sel selects had no shrink limit, so a long option list
+   forced the row wider than the viewport. Children may now shrink
+   and the row wraps instead of forcing a horizontal scroll. */
+.v15learn-head>*{min-width:0}
+.v15filters{min-width:0;width:100%}
+.v15filters .v15sel{flex:1 1 140px;min-width:0;max-width:100%}
+.v17filters .v15sel{max-width:100%;min-width:0}
+
+/* --- M2: 44px minimum touch targets (V24 --ui-btn-min-height) ---
+   The V15.3 fix covered .v15x only at <=640px; these controls were
+   still ~19-35px tall at desktop widths. Equal specificity to the
+   v15 rules, so v36 (loaded last) wins. */
+.v15x{min-width:44px;min-height:44px}
+.v15lb-btn,.v15lb-hub{min-height:44px}
+.v15pill{min-height:44px}
+.v15learn-head .v15sel{min-height:44px}
+.v15back{min-height:44px}
+
+/* --- F14/F16b: blocked Break meter (V36 wrapper on __v34.breakBarHTML) ---
+   Scoped to .v34bar.v34blocked — v34.js already uses the bare
+   .v34blocked class on its own out-of-scope label (.v34breaklabel),
+   which this rule must not restyle. */
+.v34bar.v34blocked{opacity:.85}
+.v34bar.v34blocked .mute{font-size:13px;line-height:1.5}

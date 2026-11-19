@@ -1119,9 +1119,10 @@ function speakRecord(){
     var hit=tw.filter(function(t){return gw.indexOf(t)>=0}).length;
     var ratio=tw.length?hit/tw.length:0;
     var ok=ratio>=0.7||got===target;
-    M.result={ok:ok,text:ok?'Khớp tốt ('+Math.round(ratio*100)+'% từ đúng)! +5 XP':'Chưa khớp lắm ('+Math.round(ratio*100)+'% từ đúng). Hãy nghe mẫu và thử lại — đáp án: '+w.en};
-    if(ok){M.score++;gain15(5);mark15(true,w,'speak')}
+    var _sxp36=0;
+    if(ok){M.score++;_sxp36=mark15(true,w,'speak')}
     else mark15(false,w,'speak');
+    M.result={ok:ok,text:ok?'Khớp tốt ('+Math.round(ratio*100)+'% từ đúng)! +'+_sxp36+' XP':'Chưa khớp lắm ('+Math.round(ratio*100)+'% từ đúng). Hãy nghe mẫu và thử lại — đáp án: '+w.en};
     save15();renderMode();
   };
   rec.onerror=function(){M.listening=false;M.result={ok:false,text:'Không nghe được giọng nói. Hãy kiểm tra micro và thử lại.'};renderMode()};

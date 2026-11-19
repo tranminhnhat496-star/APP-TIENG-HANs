@@ -277,13 +277,24 @@ function grammarPool(b){
 function readPool(){return shuffle((window.__V15_DATA&&__V15_DATA.reading)||[])}
 function builderPool(){return shuffle((window.__V15_DATA&&__V15_DATA.builder)||[])}
 function koPool(){
+  /* V36 (F16a): mirror v19 koCardsRaw() (V11.1 fix) — the KO question
+     pool must come from the SELECTED deck (S.deck) when that deck
+     holds >= 8 usable cards, else all cards. v18 never had this
+     scoping: every V10-arena KO fight asked from all cards, so the
+     V34 'selected deck' rule was false for the whole arena. */
   var cards=[];try{cards=(S&&S.cards)||[]}catch(e){}
   cards=cards.filter(function(c){return c&&c.h&&c.m});
+  var deck='';try{deck=(S&&S.deck)||''}catch(e){}
+  if(deck){
+    var dc=cards.filter(function(c){return c.d===deck});
+    if(dc.length>=8)return shuffle(dc);
+  }
   return shuffle(cards);
 }
 function distractorsKO(c,n){
-  var cards=[];try{cards=(S&&S.cards)||[]}catch(e){}
-  var pool=cards.filter(function(x){return x.id!==c.id&&x.h&&x.m});
+  /* V36 (F16a): distractors come from the same deck-scoped pool as
+     the questions (mirror v19, which reads koCardsRaw()). */
+  var pool=koPool().filter(function(x){return x.id!==c.id&&x.h&&x.m});
   return shuffle(pool).slice(0,n);
 }
 
@@ -418,7 +429,7 @@ function startTimer(){
   },1000);
 }
 function healBoss(n,msg){
-  if(!F||F.over)return;
+  if(!F||F.over||F.hp<=0)return;
   F.hp=Math.min(F.maxHp,F.hp+n);
   F.banner=(F.banner?F.banner+' ':'')+msg;
 }
@@ -453,7 +464,7 @@ function answer(ok,timeout){
        pet XP/affection and speeds up the active hatch (onFightCorrect). */
     try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
     if(b.arena==='leg'&&F.phase===2&&b.skill.id==='mountain')dmg=Math.max(2,dmg-3);
-    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){dmg+=_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
+    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){var _bd36=dmg;dmg+=_bb34;var _bq36=(F.shield>0)?(Math.ceil(dmg/2)-Math.ceil(_bd36/2)):_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bq36+' sát thương!';}}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -490,6 +501,20 @@ function answer(ok,timeout){
   save18();renderFight();
   if(F&&!F.over){var f=F;setTimeout(function(){if(F===f&&!F.over){F.anim='idle';var h=$('#v18fight');if(h)renderFight()}},450)}
 }
+function resolveLethal(Ff){
+  /* V36 (V17-2): a lethal team-skill blow must resolve the fight at
+     once. castSkillInFight() (v23) could drop a boss to 0 HP while
+     the fight stayed open — the next answers could even resurrect it
+     (healBoss) or LOSE a fight already won by damage. Mirrors the win
+     path of the answer() final check: identity-check the live fight,
+     clear the timer, set win, pay the reward once, save + re-render.
+     (v18 has no ultimate phase, so no ultActive line.) Returns true
+     only when it resolved this fight. */
+  if(!Ff||Ff!==F||F.over)return false;
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  F.hp=0;F.over='win';F.anim='defeat';F.answered=1;
+  winReward();save18();renderFight();return true;
+}
 function winReward(){
   var b=F.boss,e=en18();
   var rec=e.bosses[b.id]||{};
@@ -504,7 +529,7 @@ function winReward(){
     var petBonus=0;
     try{if(window.__v23)petBonus=Math.round(b.reward.xp*__v23.learnXpBonus())}catch(e){}
     gain18(b.reward.xp+petBonus);
-    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
+    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light',wind:'stone_wind'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
     try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
     if(b.reward.stone)e.stones[b.reward.stone]=(e.stones[b.reward.stone]||0)+1;
     if(b.reward.title&&e.titles.indexOf(b.reward.title)<0)e.titles.push(b.reward.title);
@@ -678,7 +703,7 @@ window.__v18={
   get bosses(){return B18()},
   _petRefresh:function(){try{renderFight()}catch(e){}},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
-    fight:fight,close:close,next:next,en18:en18,legDiff:legDiff},
+    fight:fight,close:close,next:next,en18:en18,legDiff:legDiff,resolveLethal:resolveLethal},
   version:'15.0.0'
 };
 })();

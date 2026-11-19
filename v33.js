@@ -232,7 +232,7 @@ function findSession(ids,startedAt){
   var d=en27rec();if(!d||!d.sessions)return null;
   for(var i=0;i<d.sessions.length;i++){
     var rec=d.sessions[i];
-    if(!rec||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
+    if(!rec||rec.partial||rec.lang!=='en'||(rec.t||0)<startedAt)continue;
     if(!rec.words||!rec.words.length)continue;
     var ok=true;
     for(var j=0;j<ids.length;j++)if(rec.words.indexOf(ids[j])<0){ok=false;break}

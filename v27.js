@@ -518,14 +518,14 @@ function answerCurrent(ok){
   else{var c=wordById('ko',id);if(c)answerKO(c,ok)}
   showFeedback(ok);
 }
-function finishSession(){
+function finishSession(partial){
   if(!SES)return;
   var mins=Math.max(0,(Date.now()-SES.startedAt)/60000);
   var answered=SES.correct+SES.wrong;
   var weakFixed=0;
   Object.keys(SES.weakSet).forEach(function(id){if(SES.everCorrect[id])weakFixed++});
   var d=en27();
-  var rec={t:Date.now(),lang:SES.lang,total:answered,correct:SES.correct,wrong:SES.wrong,xp:SES.xp,
+  var rec={t:Date.now(),lang:SES.lang,partial:!!partial,total:answered,correct:SES.correct,wrong:SES.wrong,xp:SES.xp,
     mins:Math.round(mins*10)/10,weakFixed:weakFixed,words:SES.allIds.slice(0,30)};
   d.sessions.unshift(rec);
   if(d.sessions.length>30)d.sessions.length=30;
@@ -537,13 +537,15 @@ function finishSession(){
     var p=d.plan[SES.lang];
     if(p&&p.d===todayStr()){
       var doneAll=p.ids.length>0&&p.ids.every(function(id){return p.doneIds.indexOf(id)>=0});
-      p.goals.complete=doneAll;
+      /* V36 (F13): a PARTIAL (abandoned) session must not mark the plan
+         complete or pay the plan bonus — only finished sessions do. */
+      if(!partial)p.goals.complete=doneAll;
       p.goals.acc80=answered>0&&(SES.correct/answered>=0.8);
       p.goals.weak5=weakFixed>=5;
-      if(doneAll)bonus=claimPlanBonus(SES.lang);
+      if(!partial&&doneAll)bonus=claimPlanBonus(SES.lang);
     }
   }
-  gem=claimStreak7(SES.lang); /* chuỗi 7 ngày: mọi buổi Smart đều có thể chạm mốc, chống nhận trùng bằng claimed */
+  if(!partial)gem=claimStreak7(SES.lang); /* chuỗi 7 ngày: mọi buổi Smart đều có thể chạm mốc, chống nhận trùng bằng claimed */
   saveSoon();
   var s=SES;SES=null;
   if(_elapsedIv){clearInterval(_elapsedIv);_elapsedIv=null}
@@ -563,8 +565,15 @@ function nextQ(){
 }
 function endEarly(){
   if(!SES)return;
-  if(SES.phase==='main'&&SES.reask.length&&SES.idx>=SES.list.length){finishSession();return}
-  finishSession();
+  /* V36 (F13): an early-ended session is PARTIAL unless it already
+     answered every question — finishSession(true) records it honestly
+     (rec.partial) and pays no plan/streak rewards, so quests cannot
+     complete and the plan bonus cannot pay for an abandoned session.
+     Done-ness is phase-aware: in 'reask' the list IS the reask list
+     (idx reset to 0 on entry); in 'main' the session is done only
+     when the main list is exhausted AND no reask questions remain. */
+  var _done36=(SES.phase==='reask')?(SES.idx>=SES.list.length):(SES.idx>=SES.list.length&&(!SES.reask||!SES.reask.length));
+  finishSession(!_done36);
 }
 
 /* ---------- question rendering ---------- */
