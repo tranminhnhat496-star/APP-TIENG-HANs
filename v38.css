@@ -1,0 +1,11 @@
+/* V38 — V18.3 BOSS WORD SETS (18.3.0). Additive layer, loads LAST (wins the
+   cascade at equal specificity). The picker reuses the existing controls
+   (.v15sel select, .v15pill chips, .v22chips wrap row) — this file only
+   guarantees the new sub-selection area keeps the V15.3/V36 mobile
+   rules: 44px minimum touch targets, wrapping chips, no horizontal
+   overflow at 360px. The Oxford lesson <select> sits inside the chips
+   row so it inherits the row's wrap; it is capped at the container
+   width so a long "Toàn bộ 136 bài" label cannot push the page wide. */
+#v22bs-sub .v22chips{min-width:0}
+#v22bs-sub .v15sel{min-height:44px;max-width:100%;box-sizing:border-box}
+#v22bs-sub .v15pill{min-height:44px;box-sizing:border-box}

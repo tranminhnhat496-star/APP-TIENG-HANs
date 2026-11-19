@@ -125,6 +125,12 @@ function unitStats(n,map){
 function starStr(n){return '★'.repeat(n)+'☆'.repeat(Math.max(0,3-n))}
 function scopeName22(sc){
   if(!sc||sc.kind!=='lib')return 'Tất cả từ vựng';
+  /* V38 (V18.3): reuse the Library's scopeName() — it already names
+     every library set (A1–A2 topic, Oxford lesson, Chrono/Skyroot set,
+     BT units/type/status). Fall back to the local BT formatter when
+     __v17 is unavailable; 'Bộ từ khác' only for a scope this picker
+     cannot produce. */
+  try{var v17=V17();if(v17&&v17.scopeName){var n=v17.scopeName(sc);if(n)return n}}catch(e){}
   if(sc.lib!=='bt')return 'Bộ từ khác';
   var u='';
   if(sc.unit){var us=Array.isArray(sc.unit)?sc.unit:[sc.unit];
@@ -521,35 +527,135 @@ function speakEntryByText(unit,idx,stage){
   var e=list&&list[idx];if(e)speak22(e.en);
 }
 
+/* ---------- V38 (V18.3): chọn bộ từ đánh boss cho MỌI bộ Thư viện ----------
+   V18.2 trở về trước, picker chỉ có Basic Tactics. Các bộ còn lại
+   (A1–A2, Oxford, Chrono, Skyroot) đã có scope {kind:'lib',...} mà
+   engine V15 hỗ trợ (inScope15/wordsFiltered) — chỉ picker là không
+   tạo được chúng. "Từ vựng của tôi" KHÔNG có ở đây: từ tự thêm không
+   có trường lib (v15.js tạo custom words không kèm lib) nên không có
+   scope nào chọn được chúng. Loại từ (word/phrase) và trạng thái
+   (chưa thuộc/cần ôn) chỉ engine mới áp dụng cho BT (btMap + khối
+   if(sc.lib==='bt') trong inScope15/wordsFiltered) nên hai dropdown
+   đó chỉ hiện khi chọn BT. */
+function bossLibs(){
+  return [
+    {v:'',n:'Tất cả từ vựng'},
+    {v:'a1a2',n:'A1–A2 Vocabulary'},
+    {v:'oxford',n:'Oxford 3000'},
+    {v:'chrono',n:'Chrono Kingdom'},
+    {v:'skyroot',n:'Skyroot Sanctuary'},
+    {v:'all',n:'Basic Tactics — Toàn bộ 24 Units'},
+    {v:'units',n:'Basic Tactics — Chọn Units…'}
+  ];
+}
+function bossLibOf(sc){
+  if(!sc||sc.kind!=='lib')return '';
+  if(sc.lib==='bt')return sc.unit?'units':'all';
+  if(sc.lib==='a1a2'||sc.lib==='oxford'||sc.lib==='chrono'||sc.lib==='skyroot')return sc.lib;
+  return '';
+}
+function bossTopics(){try{var v17=V17();return v17&&v17.topics?v17.topics():[]}catch(e){return []}}
+function bossLessons(){try{var v17=V17();return v17&&v17.lessons?v17.lessons():[]}catch(e){return []}}
+function bossChronoSets(){try{var v17=V17();return v17&&v17.chronoSets?v17.chronoSets():[]}catch(e){return []}}
+function bossSkyrootSets(){try{var v17=V17();return v17&&v17.skyrootSets?v17.skyrootSets():[]}catch(e){return []}}
+function bossTopicName(id){try{var v17=V17();return v17&&v17.topicName?v17.topicName(id):id}catch(e){return id}}
+/* Vùng chọn con theo bộ. sc=null nghĩa là "toàn bộ" cho bộ đó. */
+function bossSubHTML(lib,sc){
+  if(!lib)return '';
+  if(lib==='a1a2'){
+    var ts=bossTopics();
+    if(!ts.length)return '<p class="mute">Không tải được danh sách chủ đề — sẽ dùng toàn bộ A1–A2.</p>';
+    var cur=sc&&sc.topic?sc.topic:null;
+    return '<div class="v22chips" id="v22bs-chips">'
+      +'<button type="button" class="v15pill'+(!cur?' on':'')+'" data-all="1" onclick="__v22.bossSubPick(this)">Tất cả chủ đề</button>'
+      +ts.map(function(g){
+        return '<button type="button" class="v15pill'+(cur===g.id?' on':'')+'" data-t="'+esc(g.id)+'" title="'+esc(g.name)+' · '+g.words.length+' từ" onclick="__v22.bossSubPick(this)">'+esc(g.name)+'</button>';
+      }).join('')+'</div>';
+  }
+  if(lib==='oxford'){
+    var ls=bossLessons(),nums=ls.length?ls.map(function(x){return x.n}):[];
+    if(!nums.length){for(var i=1;i<=136;i++)nums.push(i)}
+    var curL=sc&&sc.lesson?sc.lesson:0;
+    return '<div class="v22chips" id="v22bs-chips"><select class="v15sel" id="v22bs-lesson" aria-label="Chọn bài Oxford">'
+      +'<option value="">Toàn bộ '+nums.length+' bài</option>'
+      +nums.map(function(n){return '<option value="'+n+'"'+(curL===n?' selected':'')+'>Bài '+n+'</option>'}).join('')
+      +'</select></div>';
+  }
+  if(lib==='chrono'||lib==='skyroot'){
+    var sets=lib==='chrono'?bossChronoSets():bossSkyrootSets();
+    if(!sets.length)return '<p class="mute">Không tải được danh sách bộ từ — sẽ dùng toàn bộ '+(lib==='chrono'?'Chrono Kingdom':'Skyroot Sanctuary')+'.</p>';
+    var curS=sc&&sc.set?sc.set:null;
+    return '<div class="v22chips" id="v22bs-chips">'
+      +'<button type="button" class="v15pill'+(!curS?' on':'')+'" data-all="1" onclick="__v22.bossSubPick(this)">Tất cả 4 bộ</button>'
+      +sets.map(function(g){
+        return '<button type="button" class="v15pill'+(curS===g.id?' on':'')+'" data-s="'+esc(g.id)+'" title="'+esc(g.name)+' · '+g.words.length+' từ" onclick="__v22.bossSubPick(this)">'+esc(g.name)+'</button>';
+      }).join('')+'</div>';
+  }
+  /* BT: giữ nguyên chips Unit 1–24 đa chọn (hành vi V18.2). */
+  var units=null,isBT=sc&&sc.kind==='lib'&&sc.lib==='bt';
+  if(sc&&sc.unit)units=Array.isArray(sc.unit)?sc.unit.slice():[sc.unit];
+  return '<div class="v22chips" id="v22bs-chips">'+BT_META.map(function(m){
+    var on=!isBT||!units||units.indexOf(m.n)>=0;
+    return '<button class="v15pill '+(on?'on':'')+'" data-u="'+m.n+'" onclick="this.classList.toggle(\'on\')">Unit '+m.n+'</button>';
+  }).join('')+'</div>';
+}
+/* Đổi bộ trong dropdown: vẽ lại vùng chọn con (về "toàn bộ") và chỉ hiện
+   dropdown loại từ/trạng thái + nút chọn tất cả khi đang chọn BT. */
+function bossLibChange(){
+  var sel=document.querySelector('#v22bs-lib');if(!sel)return;
+  var lib=sel.value||'';
+  var sub=document.querySelector('#v22bs-sub');if(sub)sub.innerHTML=bossSubHTML(lib,null);
+  var isBT=(lib==='all'||lib==='units');
+  var ts=document.querySelector('#v22bs-ts');if(ts)ts.style.display=isBT?'':'none';
+  var pa=document.querySelector('#v22bs-pickall');if(pa)pa.style.display=isBT?'':'none';
+}
+/* Chọn một chip đơn chọn (chủ đề A1–A2 / bộ Chrono / bộ Skyroot). Bấm lại
+   chip đang chọn thì về "Tất cả". */
+function bossSubPick(el){
+  if(!el)return;
+  var chips=document.querySelectorAll('#v22bs-chips .v15pill');
+  var wasOn=el.classList.contains('on');
+  for(var i=0;i<chips.length;i++)chips[i].classList.remove('on');
+  if(el.getAttribute('data-all')){el.classList.add('on');return}
+  if(!wasOn){el.classList.add('on');return}
+  for(var j=0;j<chips.length;j++){if(chips[j].getAttribute('data-all'))chips[j].classList.add('on')}
+}
+/* Chip đơn chọn đang bật (bỏ qua nút "Tất cả"): trả về data-t / data-s. */
+function bossSelectedSub(attr){
+  var chips=document.querySelectorAll('#v22bs-chips .v15pill.on');
+  for(var i=0;i<chips.length;i++){
+    if(chips[i].getAttribute('data-all'))continue;
+    var val=chips[i].getAttribute('data-'+attr);
+    if(val)return val;
+  }
+  return null;
+}
+
 /* ---------- chọn bộ từ trước khi đánh boss ---------- */
 function bossScopeHTML(){
   var v=V15();if(!v)return '';
   var sc=null;try{sc=v.en15().scope}catch(e){}
-  var isBT=sc&&sc.kind==='lib'&&sc.lib==='bt';
-  var units=isBT&&sc.unit?(Array.isArray(sc.unit)?sc.unit.slice():[sc.unit]):null;
+  var lib=bossLibOf(sc);
+  var isBT=(lib==='all'||lib==='units');
   var h='<div class="v22bscope"><b>🎧 Bộ từ đánh boss</b> <span class="mute">Chỉ áp dụng cho trận tiếng Anh — câu hỏi tiếng Hàn không đổi. <span id="v22bs-current">Đang chọn: <b>'+esc(scopeName22(sc))+'</b></span></span>'
     +'<div class="acts">'
-    +'<select class="v15sel" id="v22bs-lib">'
-    +'<option value="">Tất cả từ vựng</option>'
-    +'<option value="all"'+(isBT&&!sc.unit?' selected':'')+'>Basic Tactics — Toàn bộ 24 Units</option>'
-    +'<option value="units"'+(isBT&&sc.unit?' selected':'')+'>Basic Tactics — Chọn Units…</option>'
+    +'<select class="v15sel" id="v22bs-lib" onchange="__v22.bossLibChange()">'
+    +bossLibs().map(function(o){return '<option value="'+o.v+'"'+(lib===o.v?' selected':'')+'>'+o.n+'</option>'}).join('')
     +'</select>'
+    +'<span id="v22bs-ts" style="display:'+(isBT?'':'none')+'">'
     +'<select class="v15sel" id="v22bs-type">'
     +'<option value="">Từ đơn + Cụm từ</option>'
-    +'<option value="word"'+(isBT&&sc.type==='word'?' selected':'')+'>Chỉ từ đơn</option>'
-    +'<option value="phrase"'+(isBT&&sc.type==='phrase'?' selected':'')+'>Chỉ cụm từ</option>'
+    +'<option value="word"'+(isBT&&sc&&sc.type==='word'?' selected':'')+'>Chỉ từ đơn</option>'
+    +'<option value="phrase"'+(isBT&&sc&&sc.type==='phrase'?' selected':'')+'>Chỉ cụm từ</option>'
     +'</select>'
     +'<select class="v15sel" id="v22bs-status">'
     +'<option value="">Mọi trạng thái</option>'
-    +'<option value="unlearned"'+(isBT&&sc.status==='unlearned'?' selected':'')+'>Chỉ mục chưa thuộc</option>'
-    +'<option value="due"'+(isBT&&sc.status==='due'?' selected':'')+'>Chỉ mục cần ôn</option>'
-    +'</select>'
+    +'<option value="unlearned"'+(isBT&&sc&&sc.status==='unlearned'?' selected':'')+'>Chỉ mục chưa thuộc</option>'
+    +'<option value="due"'+(isBT&&sc&&sc.status==='due'?' selected':'')+'>Chỉ mục cần ôn</option>'
+    +'</select></span>'
     +'<button class="btn sm pri" onclick="__v22.applyBossScope()">Áp dụng</button></div>'
-    +'<div class="v22chips" id="v22bs-chips">'+BT_META.map(function(m){
-      var on=!isBT||!units||units.indexOf(m.n)>=0;
-      return '<button class="v15pill '+(on?'on':'')+'" data-u="'+m.n+'" onclick="this.classList.toggle(\'on\')">Unit '+m.n+'</button>';
-    }).join('')+'</div>'
-    +'<div class="acts"><button class="btn sm" onclick="__v22.bossPickAll(true)">Chọn tất cả Units</button><button class="btn sm" onclick="__v22.bossPickAll(false)">Bỏ chọn tất cả</button></div>'
+    +'<div id="v22bs-sub">'+bossSubHTML(lib,sc)+'</div>'
+    +'<div class="acts" id="v22bs-pickall" style="display:'+(isBT?'':'none')+'"><button class="btn sm" onclick="__v22.bossPickAll(true)">Chọn tất cả Units</button><button class="btn sm" onclick="__v22.bossPickAll(false)">Bỏ chọn tất cả</button></div>'
     +'</div>';
   return h;
 }
@@ -559,25 +665,46 @@ function bossPickAll(on){
 }
 function applyBossScope(){
   var lib=(document.querySelector('#v22bs-lib')||{}).value||'';
-  var type=(document.querySelector('#v22bs-type')||{}).value||'';
-  var status=(document.querySelector('#v22bs-status')||{}).value||'';
-  var units=[];
-  var chips=document.querySelectorAll('#v22bs-chips .v15pill.on');
-  for(var i=0;i<chips.length;i++){var n=parseInt(chips[i].getAttribute('data-u'),10);if(n)units.push(n)}
-  ensureData().then(function(){
-    var v=V15();if(!v)return;
-    if(!lib){v.clearScope()}
-    else{
-      var sc={kind:'lib',lib:'bt'};
-      if(lib==='units'&&units.length&&units.length<24)sc.unit=units.length===1?units[0]:units;
-      if(type)sc.type=type;
-      if(status)sc.status=status;
-      v.setScope(sc);
-    }
+  var v=V15();if(!v)return;
+  var sc=null;
+  if(lib==='a1a2'){
+    sc={kind:'lib',lib:'a1a2'};
+    var topic=bossSelectedSub('t');
+    if(topic)sc.topic=topic;
+  }else if(lib==='oxford'){
+    sc={kind:'lib',lib:'oxford'};
+    var lsEl=document.querySelector('#v22bs-lesson');
+    var lesson=lsEl?parseInt(lsEl.value,10):0;
+    if(lesson)sc.lesson=lesson;
+  }else if(lib==='chrono'||lib==='skyroot'){
+    sc={kind:'lib',lib:lib};
+    var set=bossSelectedSub('s');
+    if(set)sc.set=set;
+  }else if(lib==='all'||lib==='units'){
+    var type=(document.querySelector('#v22bs-type')||{}).value||'';
+    var status=(document.querySelector('#v22bs-status')||{}).value||'';
+    var units=[];
+    var chips=document.querySelectorAll('#v22bs-chips .v15pill.on');
+    for(var i=0;i<chips.length;i++){var u=parseInt(chips[i].getAttribute('data-u'),10);if(u)units.push(u)}
+    sc={kind:'lib',lib:'bt'};
+    if(lib==='units'&&units.length&&units.length<24)sc.unit=units.length===1?units[0]:units;
+    if(type)sc.type=type;
+    if(status)sc.status=status;
+  }
+  /* lib==='' (Tất cả từ vựng): sc giữ null -> bỏ chọn phạm vi. */
+  var done=function(){
+    if(sc)v.setScope(sc);else v.clearScope();
     var cur=document.querySelector('#v22bs-current');
     if(cur)cur.innerHTML='Đang chọn: <b>'+esc(scopeName22(v.en15().scope))+'</b>';
     pop22('Đã chọn bộ từ đánh boss: '+scopeName22(v.en15().scope));
-  }).catch(function(){pop22(DATA_ERR||'Không tải được dữ liệu Basic Tactics.')});
+  };
+  if(lib==='all'||lib==='units'){
+    ensureData().then(function(){done()}).catch(function(){pop22(DATA_ERR||'Không tải được dữ liệu Basic Tactics.')});
+  }else{
+    /* Các bộ Thư viện khác không cần dữ liệu BT — áp dụng ngay, kể cả
+       khi đang bỏ chọn (trước đây bỏ chọn cũng chờ tải BT xong). */
+    done();
+  }
 }
 function clearBossScope(){
   var v=V15();if(!v)return;
@@ -603,7 +730,7 @@ window.__v22={
   openQuest:openQuest,questStartMission:questStartMission,questReveal:questReveal,
   questLearnNext:questLearnNext,questSkipLearn:questSkipLearn,questSpeak:questSpeak,
   questPick:questPick,questNext:questNext,speakEntryByText:speakEntryByText,
-  bossScopeHTML:bossScopeHTML,bossPickAll:bossPickAll,applyBossScope:applyBossScope,clearBossScope:clearBossScope,
+  bossScopeHTML:bossScopeHTML,bossPickAll:bossPickAll,applyBossScope:applyBossScope,clearBossScope:clearBossScope,scopeName22:scopeName22,bossLibChange:bossLibChange,bossSubPick:bossSubPick,bossSubHTML:bossSubHTML,bossSelectedSub:bossSelectedSub,
   ensureData:ensureData,attachBT:function(){var v=V15();return v?v.attachBT():0},
   get data(){return DATA},get meta(){return BT_META},
   get state(){return ST},get en22(){return en22()},
