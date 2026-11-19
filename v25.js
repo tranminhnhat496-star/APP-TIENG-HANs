@@ -83,6 +83,7 @@ function groupKey(head){
   if(t.indexOf('A1')>=0)return 'a1a2';
   if(t.indexOf('Oxford')>=0)return 'oxford';
   if(t.indexOf('Basic Tactics')>=0)return 'bt';
+  if(t.indexOf('Chrono')>=0)return 'chrono';
   return '';
 }
 function groupStats(key){
@@ -97,6 +98,10 @@ function groupStats(key){
     var total2=(window.__V17_OXFORD||[]).length||0;
     var list2=ws.filter(function(w){return (w.lib||[]).indexOf('oxford')>=0});
     var s2=statsOf(list2);s2.total=total2||list2.length;return s2;
+  }
+  if(key==='chrono'){
+    var listC=ws.filter(function(w){return (w.lib||[]).indexOf('chrono')>=0});
+    var sC=statsOf(listC);sC.total=listC.length;return sC;
   }
   if(key==='bt'){
     var v22=V22();

@@ -1,0 +1,14 @@
+/* ===== V34 — CHRONO COMPLETION (V17.1) =====
+   Only new classes for the Boss Weakness Break bar + weakness chip.
+   Existing bars/buttons are never restyled. --ui-* design tokens
+   (V15.1), WCAG AA contrast, no text under 12px, no overflow at
+   360–430px. The bar is display-only (no touch target needed). */
+.v34breakbar{box-sizing:border-box;height:10px;min-height:10px;background:rgba(255,255,255,.14);border:1px solid var(--ui-border,#A78BFA);border-radius:999px;overflow:hidden;margin:6px 0 2px}
+.v34breakbar i{display:block;height:100%;background:linear-gradient(90deg,#FFD76A 0%,#FF8A3D 100%);border-radius:999px;transition:width .25s ease}
+.v34breaklabel{box-sizing:border-box;font-size:13px;line-height:1.4;color:var(--ui-text-secondary,#E4DDF1);margin:2px 0 6px}
+.v34breaklabel.v34blocked{color:var(--ui-text-secondary,#E4DDF1);font-style:italic}
+.v34weakchip{display:inline-block;box-sizing:border-box;font-size:12px;line-height:1.4;padding:2px 8px;margin-top:4px;border:1px solid var(--ui-border,#A78BFA);border-radius:999px;color:var(--ui-title-gold,#FFD76A);background:rgba(255,215,106,.08);white-space:normal}
+@media (max-width:430px){
+  .v34breaklabel{font-size:12px}
+  .v34weakchip{font-size:12px}
+}

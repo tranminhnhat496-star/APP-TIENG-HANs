@@ -10,7 +10,7 @@
 'use strict';
 var V15=function(){return window.__v15||null};
 var esc=function(s){var v=V15();return v?v.esc(s):String(s==null?'':s)};
-var V={view:'home',lib:null,topic:null,lesson:0,q:'',pos:'',status:'all',page:0,oxPage:0,oxQ:'',oxPos:''};
+var V={view:'home',lib:null,topic:null,lesson:0,set:null,q:'',pos:'',status:'all',page:0,oxPage:0,oxQ:'',oxPos:''};
 
 /* ---------- dữ liệu ---------- */
 function WORDS(){var v=V15();return v?v.words:[]}
@@ -36,6 +36,48 @@ function statsOf(list){
 }
 function a1a2Words(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('a1a2')>=0})}
 function oxWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('oxford')>=0})}
+function chronoSetName(id){
+  var m={time:'Time & Calendar',space:'Space & Astronomy',machines:'Machines & Engineering',change:'Change & Sequence'};
+  return m[id]||id;
+}
+function chronoWords(){return WORDS().filter(function(w){return (w.lib||[]).indexOf('chrono')>=0})}
+function chronoSets(){
+  var order=['time','space','machines','change'],map={};
+  chronoWords().forEach(function(w){
+    var k=w.chronoSet||'time';
+    if(!map[k])map[k]={id:k,name:chronoSetName(k),words:[]};
+    map[k].words.push(w);
+  });
+  return order.filter(function(k){return map[k]}).map(function(k){return map[k]});
+}
+function chronoSetCard(g){
+  var s=statsOf(g.words);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  var ret='';
+  try{if(window.__v34&&__v34.setStats){var st=__v34.setStats(g.id);if(st&&st.attempts>0)ret=' · nhớ đúng '+st.retention;}}catch(e){}
+  return '<div class="v17card"><div class="v17card-t"><b>'+esc(g.name)+'</b><span class="mute">'+g.words.length+' từ</span></div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="mute">'+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn'+ret+'</div>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnSet(\''+g.id+'\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewSet(\''+g.id+'\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openSet(\''+g.id+'\')">Xem từ</button></div></div>';
+}
+function chronoGroupHTML(){
+  var ws=chronoWords();
+  var s=statsOf(ws);
+  var pct=s.total?Math.round(s.learned/s.total*100):0;
+  var ret='';
+  try{if(window.__v34&&__v34.chronoAnalytics){var a=__v34.chronoAnalytics();if(a&&a.total&&a.total.attempts>0)ret=' · nhớ đúng '+a.total.retention;}}catch(e){}
+  return '<div class="v17group"><div class="v17group-head"><b>⏳ Chrono Kingdom — Vương Quốc Thời Gian</b><span class="mute">'+ws.length+' từ · 4 bộ · trình độ B2</span></div>'
+    +'<p class="mute">Từ vựng Vương Quốc Thời Gian (V17.0) — học xong mỗi bộ để nhận thưởng, dùng trong trận boss Chrono.</p>'
+    +'<div class="acts"><button class="btn sm pri" onclick="__v17.learnScopeKey(\'chrono\')">Học ngay</button>'
+    +'<button class="btn sm" onclick="__v17.reviewScopeKey(\'chrono\')">Ôn tập</button>'
+    +'<button class="btn sm" onclick="__v17.openLib(\'chrono\')">Xem tất cả từ</button></div>'
+    +'<div class="mute">Tổng: '+s.learned+' đã học · '+s.mastered+' đã thuộc · '+s.due+' cần ôn'+ret+'</div>'
+    +'<div class="v17bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="v17grid">'+chronoSets().map(chronoSetCard).join('')+'</div>'
+    +'<p class="mute">Tiếng Hàn: Chưa có từ Chrono tiếng Hàn — từ Chrono hiện chỉ có bản tiếng Anh (kèm nghĩa tiếng Hàn hiển thị).</p></div>';
+}
 /* tổng số mục từ trong nguồn (kể cả từ trùng đầu từ ở hai chủ đề/bài) */
 function a1a2Total(){return (window.__V17_A1A2||[]).length||a1a2Words().length}
 function oxTotal(){return (window.__V17_OXFORD||[]).length||oxWords().length}
@@ -84,6 +126,7 @@ function hasPos(w,pos){
 function currentScope(){
   if(V.lib==='a1a2')return V.topic?{kind:'lib',lib:'a1a2',topic:V.topic}:{kind:'lib',lib:'a1a2'};
   if(V.lib==='oxford')return V.lesson?{kind:'lib',lib:'oxford',lesson:V.lesson}:{kind:'lib',lib:'oxford'};
+  if(V.lib==='chrono')return V.set?{kind:'lib',lib:'chrono',set:V.set}:{kind:'lib',lib:'chrono'};
   return null;
 }
 function scopeName(sc){
@@ -104,11 +147,17 @@ function scopeName(sc){
     if(sc.lesson)return 'Oxford 3000 · Bài '+sc.lesson;
     return 'Oxford 3000';
   }
+  if(sc.lib==='chrono'){
+    if(sc.set)return 'Chrono · '+chronoSetName(sc.set);
+    return 'Chrono Kingdom';
+  }
   return '';
 }
 function rewardFor(key){
   if(key==='a1a2:all')return {xp:200,gems:5};
   if(key==='oxford:all')return {xp:300,gems:5};
+  if(key==='chrono:all')return {xp:200,gems:5};
+  if(key.indexOf('chrono:')===0)return {xp:50,gems:2};
   if(key.indexOf('a1a2:')===0)return {xp:50,gems:2};
   return {xp:25,gems:1};
 }
@@ -143,6 +192,8 @@ function libraryHTML(){
     +'<div class="v17ox-tools"><input class="v15input" placeholder="Tìm từ trong Oxford 3000…" value="'+esc(V.oxQ)+'" oninput="__v17.oxSearch(this.value)">'
     +posSelect('oxPos',V.oxPos)+'</div>'
     +lessonGrid()+'</div>';
+  /* Nhóm 2b — Chrono Kingdom (V34, V17.1: 240 từ đã có từ V17.0) */
+  h+=chronoGroupHTML();
   /* Nhóm 3 — Basic Tactics for Listening (V22, dữ liệu tải lười) */
   h+=(window.__v22&&__v22.groupHTML?__v22.groupHTML():'');
   /* Nhóm 4 — Từ vựng của tôi */
@@ -218,7 +269,12 @@ function lessonHTML(){
     var ls=lessons().filter(function(x){return x.n===V.lesson})[0];
     if(!ls)return '<p class="mute">Không tìm thấy bài này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
     list=ls.words;title='Oxford 3000 · Bài '+V.lesson;key='oxford:'+V.lesson;
-  }else if(V.lib==='a1a2'){list=a1a2Words();title='A1–A2 Vocabulary';key='a1a2:all'}
+  }else if(V.lib==='chrono'&&V.set){
+    var gs=chronoSets().filter(function(x){return x.id===V.set})[0];
+    if(!gs)return '<p class="mute">Không tìm thấy bộ từ này.</p><div class="acts"><button class="btn" onclick="__v17.goHome()">← Thư viện</button></div>';
+    list=gs.words;title='Chrono · '+gs.name;key='chrono:'+V.set;
+  }else if(V.lib==='chrono'){list=chronoWords();title='Chrono Kingdom — Vương Quốc Thời Gian';key='chrono:all'}
+  else if(V.lib==='a1a2'){list=a1a2Words();title='A1–A2 Vocabulary';key='a1a2:all'}
   else if(V.lib==='oxford'){list=oxWords();title='Oxford 3000 – Từ vựng thông dụng';key='oxford:all'}
   else return '<p class="mute">Chưa chọn bộ từ nào.</p>';
   var s=statsOf(list);
@@ -278,6 +334,7 @@ function wordCard(w){
   var b=boxOf(w.id),fav=en17().fav.indexOf(w.id)>=0;
   var where='';
   if(V.lib==='a1a2'&&!V.topic)where=topicName(w.a1a2Topic||w.t);
+  if(V.lib==='chrono'&&!V.set)where=chronoSetName(w.chronoSet);
   if(V.lib==='oxford'&&!V.lesson)where='Bài '+w.oxLesson;
   var extra=(w.extra||[]).map(function(x){
     var src=x.src==='oxford'?'Oxford 3000':(x.src==='bt'?'Basic Tactics':'A1–A2');
@@ -322,10 +379,13 @@ function refocus(sel){
 function renderTab(){var v=V15();if(v)v.renderTab()}
 
 /* ---------- hành động ---------- */
-function goHome(){V.view='home';V.lib=null;V.topic=null;V.lesson=0;V.q='';V.page=0;renderTab()}
-function openTopic(id){V.view='lesson';V.lib='a1a2';V.topic=id;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
-function openLesson(n){V.view='lesson';V.lib='oxford';V.lesson=n;V.topic=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
-function openLib(lib){V.view='lesson';V.lib=lib;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function goHome(){V.view='home';V.lib=null;V.topic=null;V.lesson=0;V.set=null;V.q='';V.page=0;renderTab()}
+function openTopic(id){V.view='lesson';V.lib='a1a2';V.topic=id;V.lesson=0;V.set=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function openLesson(n){V.view='lesson';V.lib='oxford';V.lesson=n;V.topic=null;V.set=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function openSet(id){V.view='lesson';V.lib='chrono';V.set=id;V.topic=null;V.lesson=0;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
+function learnSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});v.tab('learn')}
+function reviewSet(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'chrono',set:id});reviewGo(false)}
+function openLib(lib){V.view='lesson';V.lib=lib;V.topic=null;V.lesson=0;V.set=null;V.q='';V.pos='';V.status='all';V.page=0;renderTab()}
 function learnScopeKey(lib){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:lib});v.tab('learn')}
 function learnTopic(id){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'a1a2',topic:id});v.tab('learn')}
 function learnLesson(n){var v=V15();if(!v)return;v.setScope({kind:'lib',lib:'oxford',lesson:n});v.tab('learn')}
@@ -394,7 +454,7 @@ function claim(key){
 window.__v17={
   libraryHTML:libraryHTML,scopeBannerHTML:scopeBannerHTML,
   goHome:goHome,openTopic:openTopic,openLesson:openLesson,openLib:openLib,
-  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,
+  learnScopeKey:learnScopeKey,learnTopic:learnTopic,learnLesson:learnLesson,learnCurrent:learnCurrent,learnSet:learnSet,openSet:openSet,reviewSet:reviewSet,chronoWords:chronoWords,chronoSets:chronoSets,
   reviewScopeKey:reviewScopeKey,reviewTopic:reviewTopic,reviewLesson:reviewLesson,
   reviewCurrent:reviewCurrent,reviewWeakCurrent:reviewWeakCurrent,bossCurrent:bossCurrent,
   clearScope:clearScope,search:search,oxSearch:oxSearch,setPosSel:setPosSel,setStatus:setStatus,setPageKey:setPageKey,
