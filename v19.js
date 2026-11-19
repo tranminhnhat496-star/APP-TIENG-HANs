@@ -206,6 +206,7 @@ function zoneDetail(zid){
       +'<span>'+starStr(st2)+(mast?' 🌐 Song ngữ':'')+'</span>'
       +'<em>'+(won?'✅ Đã thắng ('+starStr(st2)+')':(un?'⚔️ Có thể đánh':'🔒 Thắng boss trước để mở'))+'</em>'
       +'<p class="mute">Kỹ năng: '+esc(b.skills.elem.n)+' · Tuyệt kỹ: '+esc(b.skills.ult.n)+'</p>'
+      +(window.__v34&&__v34.weakChipHTML?__v34.weakChipHTML(b,lang):'')
       +(un?'<button class="btn pri" onclick="__v19.fight(\''+b.id+'\')">Bắt đầu chiến đấu</button>':'')
       +'</div>';
     }).join('')+'</div>';
@@ -247,7 +248,7 @@ function wordPool(b){
       if(sl.length>=8)return shuffle(sl);
       /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
          bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
-      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type};
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set};
       var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
       if(sl2.length)return shuffle(sl2);
       if(sl.length)return shuffle(sl);
@@ -355,6 +356,8 @@ function startFight(b,lang){
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
     enraged:false,nextTimer:0,nextVeil:false};
+  /* V34: Boss Weakness — per-fight state only (no save change). */
+  try{if(window.__v34){F.weak=__v34.weakFor(b,lang);F.brk=0;F.brkMax=3}}catch(e){}
   /* V23: pet team joins the fight (shield, energy, damage bonus). */
   try{if(window.__v23)__v23.battleStart(F)}catch(e){}
   if(lang==='ko'&&koCount()<8)
@@ -420,8 +423,8 @@ function nextQ(){
   if(mode==='grammar'){F.cur={g:P2.grammar[F.q%P2.grammar.length]}}
   else if(mode==='read'){var p=P2.read[F.q%P2.read.length];F.cur={p:p,q:p.qs[F.q%p.qs.length]}}
   else if(mode==='builder'){var s=P2.builder[F.q%P2.builder.length];var toks=s.s.replace(/([.!?])$/,'').split(' ');var wrong=[];for(var k=0;k<3;k++){var sh=shuffle(toks);if(sh.join(' ')!==toks.join(' '))wrong.push(sh.join(' ')+' .')}while(wrong.length<3)wrong.push(shuffle(toks).join(' ')+' .');F.cur={s:s,opts:shuffle([s.s].concat(wrong))}}
-  else if(mode==='speak'){var w2=P2.words[F.q%P2.words.length];F.cur={w:w2,opts:shuffle([w2].concat(distractorsEN(w2,3)))}}
-  else{var w3=P2.words[F.q%P2.words.length];var opts2=shuffle([w3].concat(distractorsEN(w3,3)));F.cur={w:w3,opts:opts2,optsVi:shuffle([w3].concat(distractorsEN(w3,3)))}}
+  else if(mode==='speak'){var w2=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P2.words,P2.words[F.q%P2.words.length]):P2.words[F.q%P2.words.length]);F.cur={w:w2,opts:shuffle([w2].concat(distractorsEN(w2,3)))}}
+  else{var w3=(window.__v34&&__v34.weakPick?__v34.weakPick(F,P2.words,P2.words[F.q%P2.words.length]):P2.words[F.q%P2.words.length]);var opts2=shuffle([w3].concat(distractorsEN(w3,3)));F.cur={w:w3,opts:opts2,optsVi:shuffle([w3].concat(distractorsEN(w3,3)))}}
   F.answered=null;F.ok=null;
   startTimer();
 }
@@ -512,6 +515,7 @@ function answer(ok,timeout){
     /* V23: pet team damage bonus + passives (burn / storm); also grants
        pet XP/affection and speeds up the active hatch (onFightCorrect). */
     try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
+    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){dmg+=_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -656,7 +660,7 @@ function renderFight(){
   +'<div class="v19fight-info"><b>'+esc(b.vi)+'</b> <span class="mute">'+esc(b.n)+' · Lv '+b.lv+' · '+esc((D19().zoneById(b.zone)||{}).vi||'')+'</span>'
   +'<div>'+elChip19(b)+rarChip19(b)+phaseTxt+'</div>'
   +'<span class="mute">⚔️ '+esc(sk.basic.n)+' · '+esc(sk.elem.n)+' · '+esc(sk.tact.n)+' · '+esc(sk.pass.n)+' · 💥 '+esc(sk.ult.n)+'</span>'
-  +'<div class="v19hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'
+  +'<div class="v19hpbar"><i style="width:'+Math.max(0,F.hp/F.maxHp*100)+'%"></i></div><span>HP '+Math.max(0,F.hp)+'/'+F.maxHp+(F.shield>0?' · 🛡️ Lá chắn: '+F.shield:'')+'</span>'+(window.__v34&&__v34.breakBarHTML?__v34.breakBarHTML(F):'')
   +'<div class="v19hearts">Tim của bạn: '+'♥'.repeat(F.hearts)+'♡'.repeat(Math.max(0,F.maxHearts-F.hearts))+' · Combo x'+F.combo+' · Đúng '+F.score+(F.lang==='ko'?' · 🇰🇷 Tiếng Hàn':'')+'</div>'
   +(F.left?'<div class="mute">Còn <span id="v19boss-t">'+F.left+'s</span></div>':'')
   +(F.ultActive&&F.caQ>0?'<div class="v19banner">⚠️ PHẢN CÔNG BẰNG KIẾN THỨC — Câu '+(Math.min(F.caQ,3))+'/3 · Đúng '+F.caRight+'/3 · Đúng 3/3 phá hoàn toàn tuyệt kỹ!</div>':'')

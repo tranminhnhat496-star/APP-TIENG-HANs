@@ -585,3 +585,48 @@ này lấy số 17.0.0 cho CHRONO KINGDOM.
 
 ### Ngoài phạm vi (không làm trong V17.0)
 - Tích hợp Library (nhóm thứ 5) cho từ Chrono; gõ bàn phím Hangul trong boss fight; Claude #3/#4/#5; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.
+
+## V17.1 — CHRONO COMPLETE (2026-11-19)
+
+Hoàn thiện tích hợp Chrono của V17.0: nhóm Library thứ 5, SRS đã xác
+minh (không cần code mới), Analytics suy ra từ dữ liệu SRS, hệ thống
+Điểm Yếu Boss cho cả 78 boss, và guard Smart mid-flight. Không thêm
+khóa localStorage mới, không migration, không art mới, không nút mới.
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `src/v34.js`, `src/v34.css`, `src/v34_data.js` | Lớp V34 mới, version 17.1.0, nạp CUỐI (sau V33): bảng điểm yếu (`__V34_DATA`), `__v34` (`weakFor` / `weakMatch` / `breakBonus` / `breakDmg` / `weakPick` / `scopeBlocked` / `breakBarHTML` / `weakChipHTML` / analytics), CSS chỉ class mới `.v34breakbar` / `.v34breaklabel` / `.v34weakchip`, token `--ui-*`, 44 px. |
+| `build_v34.py` | Script build V17.1: kiểm tra base là V17.0 nguyên vẹn (sha256 `b04179cf…`), áp dụng đúng 36 replacement (V17 ×13, V25 ×2, V15 ×7, V19 ×6, V18 ×7, V33 ×1), đổi title V17.1, chèn lớp V34 cuối cùng, assert marker/thứ tự/version/V31+V32+V33 fragment/KO không đổi/không có marker ngoài phạm vi, `node --check` 8 file. Chạy 5 lần (2 lỗi script bắt bởi `node --check`, 1 lỗi assert validation, 1 bản sửa B-34-1 sau probe — mỗi lần đều restore base nguyên vẹn từ ZIP V17.0 rồi chạy lại, không patch tại chỗ). |
+| `package_v34.py` | Script đóng gói ZIP V17.1 + kiểm tra `index.html`, `v34.js`, `v34.css`, `v34_data.js`, `build_v34.py`, `package_v34.py`, `tools/v34/probe_v34.js` trong ZIP; marker V34 cuối cùng; fragment V31 + V33 + V34 còn đủ (kèm dòng sửa B-34-1); PNG V10 30 / V11 30 / V17 8 / pet v15 53; không có `assets/pets/v17/`; KO 1× v33kotab; `firebase-config.js` trong ZIP là placeholder. Chưa chạy tới cuối — coordinator chạy sau khi test agent xong. |
+| `README_V17_1_CHRONO_COMPLETE.md` | Hướng dẫn V17.1: nhóm Library thứ 5, SRS, Analytics, bảng điểm yếu đầy đủ, guard Smart, giới hạn 12 boss + B-34-1. |
+| `CHANGELOG_V17_0_to_V17_1.md` | Changelog đầy đủ V17.0 → V17.1 (bảng điểm yếu đầy đủ, ghi chú sửa sai `en33.bosses`, guard Smart, trạng thái trống KO, giới hạn 12 boss, danh sách 36 replacement). |
+| `SMOKE_TEST_V17_1_2026-11-19.md` | Báo cáo kiểm thử V17.1 (build gates; probe 106/0/0 ×3; B-34-1; TODO cho test agent độc lập). |
+| `tools/v34/` | Bộ kiểm thử V17.1: `probe_v34.js` (Node vm, 106 check, chạy trên `out/`; cờ debug `V34_DEBUG_TOPICS` / `V34_DUMP_POOL`). |
+| `tools/v34_restore_v17.py`, `tools/v34_check_anchors.py` | Script restore base V17.0 nguyên vẹn từ ZIP (chứng minh bằng cách áp lại replacement) + kiểm tra anchor trước build. |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v17.js` | 13 replacement V34: `set` trong `V` state; `chronoWords()` / `chronoSets()` / `chronoSetName()` / `chronoSetCard()` / `chronoGroupHTML()`; `currentScope()` / `scopeName()` / `rewardFor()` (chrono +50/+2 mỗi set, +200/+5 tất cả); nhóm Chrono trong `libraryHTML()`; nhánh chrono trong `lessonHTML()`; `V.set` reset trong `openLesson` / `openLib` / `openTopic` / `goHome`. |
+| `v25.js` | 2 replacement V34: nhánh `chrono` trong `groupKey()` / `groupStats()` (thanh tiến độ thật cho nhóm). |
+| `v15.js` | 7 replacement V34: `sc.set` trong `inScope15()` / `wordsFiltered()`; init `B.weak` / `brk` / `brkMax` trong `bossFight`; bias `weakPick` trong `nextBossQ()`; `breakDmg` trong `bossAnswer()`; thanh Break trong `renderBossFight()`; chip điểm yếu trong `bossesHTML()`. |
+| `v19.js` | 6 replacement V34: `sc2` thêm `set:sc.set`; init `F.weak` / `brk` / `brkMax` trong `startFight`; bias `weakPick` trong `nextQ()`; `breakDmg` trong `answer()`; thanh Break trong `renderFight()`; chip điểm yếu trong zone-detail. |
+| `v18.js` | 7 replacement V34: như V19 (sc2, init, bias, break, bar) + chip điểm yếu trong Collection card + detail. |
+| `v33.js` | 1 replacement V34: guard `__v27.endEarly()` ở đầu `launchSession()`. |
+| `index.html` (inlined) | Cùng 36 replacement trên + title V17.1 + lớp V34 chèn cuối cùng. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V17.1. |
+
+### Lớp V34 — tóm tắt nội dung (chi tiết trong README_V17_1_CHRONO_COMPLETE.md)
+- **Library nhóm thứ 5:** 4 set Chrono × 60 từ, tìm kiếm / lọc POS / lọc trạng thái / yêu thích / flashcards / scope `{kind:'lib',lib:'chrono',set}` dùng chung cho mode, SRS, boss fight; thưởng +50 XP/+2 💎 mỗi set, +200 XP/+5 💎 tất cả (1 lần, qua `en17.claimed`).
+- **SRS:** đã xác minh qua probe — `mark15` ghi danh từ `v33_` tự động, tới hạn ôn đúng, Smart `classifyEN`/plan đều thấy từ. Không code mới, không thưởng mới.
+- **Analytics (chỉ suy ra, không lưu):** mỗi set + tổng nhóm — đã học (box ≥ 1), chưa học, thành thạo (box ≥ 5), tới hạn, retention = Σđúng/(Σđúng+Σsai) (`—` khi 0 lần thử). KO Chrono: trạng thái trống trung thực (không có từ Chrono tiếng Hàn — `ko` chỉ là nghĩa hiển thị). Link Smart chỉ ở Library (không có hook sạch trong `v27.js`); hàm `__v34` đã expose cho tương lai.
+- **Điểm Yếu Boss (78 boss):** bảng đầy đủ trong README/changelog (Chrono 8 riêng; V19 theo zone z1–z10; V18 theo diff/element; V15 chung `t:'time'`). Đúng đáp án với từ điểm yếu → meter +1; 3/3 → cộng thêm `breakBonus(maxHp)` = clamp(round(maxHp×0.10),10,50), reset, banner `💥 BREAK!`; cộng trước bước chia đôi khiên. Bias p≈0.5 trong `nextQ` khi meter chưa đầy. KO: điểm yếu = deck tiếng Hàn đã chọn; chưa chọn deck → meter ẩn. Pool 0 từ điểm yếu → thanh báo “ngoài phạm vi ôn tập — đổi phạm vi để dùng”, không bao giờ đầy.
+- **Guard Smart:** `launchSession()` gọi `__v27.endEarly()` có guard trước — session Smart đang chạy được kết thúc-ghi nhận thay vì bị thay lặng lẽ; `endEarly()` là no-op khi không có session.
+- **Giới hạn đã biết (dữ liệu, không phải code):** 12 boss B1/B2 có điểm yếu là chủ đề A1–A2 cơ bản (`animals` / `vehicles` / `clothes-and-accessories` / `fruit-and-vegetables` / `food-and-drinks`) — các chủ đề này không có từ B1/B2 nào nên meter không bao giờ đầy (thanh báo blocked trung thực). 66/78 boss còn lại đầy bình thường. Bảng điểm yếu giữ nguyên theo spec; đổi bảng là quyết định của Anh.
+- **Đã sửa sau build đầu (B-34-1):** `scopeBlocked()` lúc đầu chỉ chặn khi có scope Library — 12 boss trên hiện meter `0/3` không bao giờ đầy mà không giải thích. Nay chặn khi pool thực tế có 0 từ điểm yếu, có scope hay không. Đã trong bản build cuối (`out/index.html` sha256 `0b766dad…`).
+- **Sửa sai changelog V17.0 (ghi chú, không sửa file V17.0):** `en33` KHÔNG có khóa `bosses` — thắng boss Chrono ghi vào `en19`. Đừng giả định `en33.bosses` tồn tại.
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, Firebase Auth/Sync, login khách, các lớp V6–V33 (version giữ nguyên: v15/v18/v19/v23 = 15.0.0, v17 = 10.0.0, v20 = 12.0.0, v20_sync/v21 = 13.0.0, v22 = 14.0.0, v24 = 15.1.0, v25 = 15.2.0, v26 = 15.3.0, v27 = 16.0.0, v31 = 16.3.0, v32 = 16.4.0, v33 = 17.0.0). Không migration, không tiền tệ mới, không khóa mới. Không art mới, không nút mới.
+
+### Ngoài phạm vi (không làm trong V17.1)
+- Đổi bảng điểm yếu cho 12 boss B1/B2 (quyết định của Anh); nút/link Smart overlay (không có hook sạch trong `v27.js`); V18.0 Skyroot Sanctuary; Claude #3/#4/#5; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.

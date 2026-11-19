@@ -244,6 +244,11 @@ function findSession(ids,startedAt){
   return null;
 }
 function launchSession(ids,kind){
+  /* V34: kết thúc buổi Smart đang chạy (nếu có) trước khi mở buổi
+     Chrono — endEarly() là no-op khi không có buổi nào, và ghi lại
+     buổi dở dang một cách trung thực (không thưởng hoàn thành kế
+     hoạch khi chưa học hết). */
+  try{if(window.__v27&&__v27.endEarly)__v27.endEarly()}catch(e){}
   var v=V27();
   if(!v||!v.startSession){pop33('Chưa tải được Học thông minh (V27).');return false}
   if(!ids||!ids.length)return false;
