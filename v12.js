@@ -17,7 +17,7 @@ var FB={
       skills:['Bubble Prison','Ocean Wave','Abyssal Tide'],
       unlock:'Hạ ít nhất 3 boss',title:'Nữ Hoàng Đại Dương',
       desc:'Nữ hoàng san hô của biển sâu.'},
-  N11:{name:'Quạ Bóng Đêm Pháp Sư',el:'Bóng Đêm',icon:'moon.png',col:'#6B4C9A',col2:'#E8445F',
+  N11:{name:'Quạ Bóng Đêm Pháp Sư',el:'Bóng Đêm',icon:'moon.svg',col:'#6B4C9A',col2:'#E8445F',
       skills:['Shadow Feather','Dark Curse','Eclipse'],
       unlock:'Hạ ít nhất 5 boss',title:'Chúa Tể Bóng Đêm',
       desc:'Pháp sư quạ của màn đêm.'},

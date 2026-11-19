@@ -764,6 +764,15 @@ function castSkillInFight(){
     _fightF.hp=Math.max(0,(_fightF.hp||0)-r.dmg);
     try{if(_fightF&&typeof _fightF.render==='function')_fightF.render()}catch(e){}
   }
+  /* V36 (V17-2): a lethal team skill must resolve the fight at once —
+     route through the engine's win path (resolveLethal) instead of
+     leaving a 0-HP boss "alive" for the next answers, which could
+     even resurrect it (healBoss) or lose a fight already won. */
+  if(_fightF&&_fightF.hp<=0&&!_fightF.over){
+    var _done36=false;
+    try{if(W.__v19&&__v19._test&&__v19._test.resolveLethal)_done36=__v19._test.resolveLethal(_fightF)}catch(e){}
+    if(!_done36){try{if(W.__v18&&__v18._test&&__v18._test.resolveLethal)_done36=__v18._test.resolveLethal(_fightF)}catch(e){}}
+  }
   try{if(W.__v18&&__v18._petRefresh)__v18._petRefresh()}catch(e){}
   try{if(W.__v19&&__v19._petRefresh)__v19._petRefresh()}catch(e){}
 }

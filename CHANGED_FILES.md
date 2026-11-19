@@ -677,3 +677,53 @@ khóa localStorage mới, không migration, không art mới, không nút mới.
 
 ### Ngoài phạm vi (không làm trong V18.0)
 - Bộ kiểm thử jsdom `tools/v35/test35.js` (test agent viết tiếp, dùng `__v35._test` probes); Time Echo / Rift cho Skyroot; đổi bảng điểm yếu cho 12 boss B1/B2 Chrono; V9 word fixes; V14.1; PR #7 follow-ups; F-12 full-wipe (vẫn chờ Anh) — chưa sửa.
+
+## V18.1 — Bug Fixes (2026-11-19)
+
+### File mới
+| File | Nội dung |
+|---|---|
+| `Korean_English_Vocab_Farm_V18_1_Bug_Fixes.zip` | ZIP deploy đầy đủ V18.1 (out/ + docs). |
+| `src/v36.js`, `src/v36.css` | Lớp V36 (18.1.0, chèn cuối cùng): wrapper `__v34.breakBarHTML` (thanh Break bị chặn — mode/KO-deck<8), CSS F-06/M1/M2, `__v36` + `wrapped` flag. Không chạm localStorage, không dùng `window.S`. |
+| `build_v36.py`, `package_v36.py` | Script build (30 replacement, cổng hash V18.0 `eb7dcbdd…`, backup trước khi sửa vào `tools/v36/backup-v18.0/`) + package (ZIP, kiểm tra V31/V33/V34/V35/V36 fragments + typo 0×). |
+| `README_V18_1_BUG_FIXES.md` | Hướng dẫn V18.1: từng lỗi (file + dòng + bằng chứng + mức độ), cách sửa, mục cố tình không sửa + lý do, test, giới hạn. |
+| `CHANGELOG_V18_0_to_V18_1.md` | Changelog đầy đủ V18.0 → V18.1 (30 replacement, lớp V36, B-36-1/B-36-2, sửa sai số lượng boss bị chặn 12 → 13 pool + 15 mode). |
+| `SMOKE_TEST_V18_1_2026-11-19.md` | Báo cáo kiểm thử V18.1 (build gates 9 lần chạy; test36 172/0/8 ×4; Chrome gates V36-A–G PASS, 0 console error). |
+| `tools/v36/test36.js` | Bộ kiểm thử V18.1 (Node vm, 180 check: §0/§L/§171/§172/§173/§WIND/§F13/§F14/§F16a/§F17/§F09F10/§CSS/§R/§V/§C). |
+| `tools/v36/verify-v36c.js` | Chrome gates V36-A–G (CDP, Chrome 157): layering, 360px, lethal skill, partial session, ids/Escape, avatar/speak, regression. |
+| `tools/v36/probe_toast.js` | Probe toast (xác minh đường toast thật: pop15 → `.pp` z-60, `.v7toast` z-95, `#v23toast` không bao giờ xuất hiện). |
+| `tools/v36/PUSH_MANIFESTS.md` | Manifest push V18.1 (26 đường dẫn; base `muse/skyroot-sanctuary-v180` @ `d354d015`, target `muse/bug-fixes-v181`, draft PR base `muse/skyroot-sanctuary-v180`). |
+
+### File sửa
+| File | Thay đổi |
+|---|---|
+| `v21.js` | 4 replacement V36: R-V171-A/B (`bossWinCount` + `summarizeSave` đếm cả win V18 flat — V17-1); R-F09A/B (nút welcome `v21email` → `v21emailbtn` + binding — F-09); R-F10A/B (handler Escape tên `_esc21` + `removeEventListener` trong `closeAccount` — F-10). |
+| `v15.js` | 1 replacement V36: R-V173-SPEAK — bỏ `gain15(5)` trong speak, thông báo hiện XP thật từ `mark15` (`_sxp36`) — V17-3. |
+| `v18.js` | 7 replacement V36: R-WIND-18 (`wind:'stone_wind'`); R-V172C/D (`resolveLethal` v18); R-V172F (`healBoss` chặn `hp<=0`); R-F16A1/A2 (`koPool`/`distractorsKO` đọc deck đã chọn); R-F17A (banner BREAK sau khiên). |
+| `v19.js` | 7 replacement V36: R-WIND-19 (`wind:'stone_wind'`); R-V172A/B (`resolveLethal` v19 + export); R-V172G (`healBoss` chặn `hp<=0`); R-F17B (banner BREAK sau khiên). |
+| `v23.js` | 1 replacement V36: R-V172E — `castSkillInFight()` gọi `resolveLethal` sau khi trừ HP (v19 trước, v18 sau) — V17-2. |
+| `v27.js` | 5 replacement V36: R-F13A–E — `finishSession(partial)` + `endEarly()` tính xong theo phase + bỏ plan bonus / gem streak-7 / `goals.complete` khi partial — F13. |
+| `v33.js` | 1 replacement V36: R-F13F — `findSession` bỏ qua `rec.partial`. |
+| `v35.js` | 2 replacement V36: R-V35COPY (overlay Skyroot bỏ câu "và thú Skyroot" — pet không bị khóa vùng); R-F13G — `findSession` bỏ qua `rec.partial`. |
+| `v14.js` | 1 replacement V36 (OUT_ONLY): R-F04A — `enIcon('flame.png')` → `'flame.svg'` — F-04. |
+| `v12.js` | 1 replacement V36 (OUT_ONLY): R-F04B — `icon:'moon.png'` → `'moon.svg'` — F-04. |
+| `v17_a1a2.js` | Sửa typo V17-4: `NGHỀNGHIỆP` → `NGHỀ NGHIỆP` (54 lần; cùng sửa trong `data/v17_a1a2.json` + `out/v17_a1a2.js` + inlined index.html). |
+| `tools/v34/probe_v34.js` | Sửa model probe: nhánh Oxford của `poolOf()` áp dụng diff filter như `wordPool` thật; danh sách unfillable kỳ vọng 12 → 13 (thêm `v10_owl`). |
+| `index.html` (inlined) | Cùng 30 replacement trên + typo 54× + title V18.1 + lớp V36 chèn cuối cùng. |
+| `CHANGED_FILES.md`, `GITHUB_DESKTOP_GUIDE.md` | Thêm mục V18.1. |
+
+### Lớp V36 — tóm tắt nội dung (chi tiết trong README_V18_1_BUG_FIXES.md)
+- **Sửa SEVERE:** V17-2 (team-skill đánh chết boss nhưng trận không kết thúc — `resolveLethal` + chặn `healBoss` hồi sinh boss 0 HP); B-36-1 (wrapper Break-bar của chính V36 đệ quy tới crash — bắt stock bar một lần vào `_orig`).
+- **Sửa MAJOR:** V17-1 (đếm thiếu win V18 flat — avatar kỳ lân/phượng hoàng không mở được); V17-3 (Speaking trả XP gấp đôi +15 thay vì +5); F13 (phiên Smart bỏ dở bị ghi thành hoàn thành — quest/plan bonus trả oan); F16a (trận KO V18 không đọc deck đã chọn).
+- **Sửa MINOR:** đá tiến hóa gió (`wind:'stone_wind'` — Breeze Lynx + Stormeagle); copy overlay Skyroot (pet không bị khóa vùng); banner BREAK sau khiên; F-06 (Smart 1600, toast 1700 — gồm B-36-2: toast thật là `.pp`/`.v7toast`, không phải `#v23toast`); F-09 (id trùng `v21email`); F-10 (listener Escape tích lũy); M1 (tràn filter-row 360px); M2 (6 nút <44px → 44px); V17-4 (typo `NGHỀNGHIỆP`); wrapper thanh Break bị chặn (15 mode-blocked + KO-deck<8).
+- **Sửa sai số liệu:** danh sách boss điểm yếu không bao giờ đầy: pool-blocked **13** (thêm `v10_owl`), mode-blocked **15**, riêng biệt **26/86** (60 đầy bình thường). Bảng điểm yếu giữ nguyên (chờ Anh quyết định).
+- **Không đổi:** khóa `hanvocab.v1`, mọi dữ liệu người chơi, điều kiện mở vùng, phần thưởng, số liệu boss, Firebase Auth/Sync, login khách, các lớp V6–V35 (version giữ nguyên). Không migration, không tiền tệ mới, không khóa localStorage mới. Không art mới.
+
+### Ngoài phạm vi (không làm trong V18.1 — cần Anh quyết định)
+- Thu hoạch farm +35 XP thay vì +25 (`v15.js:1236-1239`) — có thể là thiết kế cố ý; chờ Anh.
+- Icon bubble.png / shop.png (F-04) — cần lời của Anh (flame/moon đã sửa).
+- Bảng điểm yếu (26 boss bị chặn) — quyết định thiết kế, chờ Anh.
+- `legDiff()` counts-getter bug (`v18.js:244`) — sửa sẽ đổi độ khó Legendary.
+- Bẫy stacking `.v20modal` (nằm trong `.v15hub` z-950) — hành vi đã biết, chấp nhận; đóng Smart trước là tới được.
+- F-05 / F-07 observers — cần đo hiệu năng live. F-12 resetEN scope — chờ Anh.
+- V9 word fixes; V14.1; PR #7 follow-ups; 20 PNG V18.0 (đường đẩy riêng, chờ Anh) — chưa làm.

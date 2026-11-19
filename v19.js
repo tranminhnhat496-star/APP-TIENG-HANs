@@ -442,7 +442,7 @@ function startTimer(){
   },1000);
 }
 function healBoss(n,msg){
-  if(!F||F.over)return;
+  if(!F||F.over||F.hp<=0)return;
   F.hp=Math.min(F.maxHp,F.hp+n);
   F.banner=(F.banner?F.banner+' ':'')+msg;
 }
@@ -467,6 +467,19 @@ function checkPhase(){
     F.ultActive=true;F.caQ=0;F.caRight=0;F.anim='special';
     F.banner='⚠️ BOSS ĐANG CHUẨN BỊ TUYỆT KỸ: '+b.skills.ult.n+'! Trả lời đúng 3 câu liên tiếp để phản công!';
   }
+}
+function resolveLethal(Ff){
+  /* V36 (V17-2): a lethal team-skill blow must resolve the fight at
+     once. castSkillInFight() (v23) could drop a boss to 0 HP while
+     the fight stayed open — the next answers could even resurrect it
+     (healBoss) or LOSE a fight already won by damage. Mirrors the win
+     path of resolveUltimate(): identity-check the live fight, clear
+     the timer, clear the ultimate, set win, pay the reward once, save
+     + re-render. Returns true only when it resolved this fight. */
+  if(!Ff||Ff!==F||F.over)return false;
+  if(F.timer){clearInterval(F.timer);F.timer=null}
+  F.ultActive=false;F.hp=0;F.over='win';F.anim='defeat';F.answered=1;
+  winReward();save19();renderFight();return true;
 }
 function resolveUltimate(){
   /* 3/3: phá hoàn toàn + phản 40 sát thương · 2/3: phản 15, mất 1 tim
@@ -516,7 +529,7 @@ function answer(ok,timeout){
     /* V23: pet team damage bonus + passives (burn / storm); also grants
        pet XP/affection and speeds up the active hatch (onFightCorrect). */
     try{if(window.__v23&&F.pet){var ex=__v23.onFightCorrect(F);dmg=Math.max(2,Math.round(dmg*(1+F.pet.dmgBonus/100))+ex)}}catch(e){}
-    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){dmg+=_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bb34+' sát thương!';}}}catch(e){}
+    try{if(window.__v34){var _bb34=__v34.breakDmg(F);if(_bb34>0){var _bd36=dmg;dmg+=_bb34;var _bq36=(F.shield>0)?(Math.ceil(dmg/2)-Math.ceil(_bd36/2)):_bb34;F.banner=(F.banner?F.banner+' ':'')+'💥 BREAK! Điểm yếu bị phá vỡ! +'+_bq36+' sát thương!';}}}catch(e){}
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
@@ -580,7 +593,7 @@ function winReward(){
     var petBonus=0;
     try{if(window.__v23)petBonus=Math.round(b.reward.xp*__v23.learnXpBonus())}catch(e){}
     gain19(b.reward.xp+petBonus);
-    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
+    try{if(window.__v23&&b.el&&S.v7&&S.v7.en23){var _map={fire:'stone_fire',ice:'stone_ice',nature:'stone_nature',earth:'stone_nature',water:'stone_water',thunder:'stone_thunder',light:'stone_light',dark:'stone_dark',cosmic:'stone_light',wind:'stone_wind'};var _mk=_map[b.el];if(_mk)S.v7.en23.mats[_mk]=(S.v7.en23.mats[_mk]||0)+2}}catch(err){}
     try{S.v7.gems=(S.v7.gems||0)+b.reward.gems}catch(err){}
     F.rewardNote='Phần thưởng lần đầu ('+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'): +'+(b.reward.xp+petBonus)+' XP, +'+b.reward.gems+' 💎, '+b.reward.item
       +(b.reward.title?', danh hiệu “'+b.reward.title+'”':'')+'.';
@@ -777,7 +790,7 @@ window.__v19={
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
-    resolveUltimate:resolveUltimate},
+    resolveUltimate:resolveUltimate,resolveLethal:resolveLethal},
   version:'15.0.0'
 };
 })();
