@@ -1,0 +1,8 @@
+/* V40 — V18.5 BUG FIXES II (18.5.0). Additive layer, loads LAST (wins the
+   cascade at equal specificity). No new UI is added: every fix here is a
+   logic/merge/label correction in existing components (the BT loading
+   state is a plain <p class="mute">, the KO warning banner, the Break
+   bar, the Collection detail and the picker toast are all existing
+   components). This file only restates the V15.3/V36 mobile rules for
+   the picker toast area: no horizontal overflow at 360px. */
+.v22bscope{box-sizing:border-box}

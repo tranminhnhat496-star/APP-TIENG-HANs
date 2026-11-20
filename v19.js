@@ -249,8 +249,8 @@ function wordPool(b){
       var sl=v.wordsFiltered({level:'ALL'});
       if(sl.length>=8)return shuffle(sl);
       /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
-         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
-      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set};
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/chủ đề/bài/loại từ (V40: topic/lesson trước đây bị rơi) */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set,topic:sc.topic,lesson:sc.lesson};
       var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
       if(sl2.length)return shuffle(sl2);
       if(sl.length)return shuffle(sl);
@@ -367,8 +367,13 @@ function startFight(b,lang){
   try{if(window.__v34){F.weak=__v34.weakFor(b,lang);F.brk=0;F.brkMax=3}}catch(e){}
   /* V23: pet team joins the fight (shield, energy, damage bonus). */
   try{if(window.__v23)__v23.battleStart(F)}catch(e){}
-  if(lang==='ko'&&koCount()<8)
-    F.banner='⚠️ Bạn mới có '+koCount()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
+  /* V40 (A-N1/A-F2): compute the count once (koCount() re-shuffles
+     the pool on every call) and keep it on F.koWarn so next() can
+     restore the warning for the whole fight instead of clearing it. */
+  var _kc40=koCount();
+  F.koWarn=null;
+  if(lang==='ko'&&_kc40<8)
+    F.banner=F.koWarn='⚠️ Bạn mới có '+_kc40+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
   nextQ();renderFight();
 }
 function timerFor(){
@@ -640,7 +645,7 @@ function pick(i){
 function next(){
   if(!F||F.over)return;
   if(F.ultActive){F.answered=null;F.ok=null;nextQ();renderFight();return}
-  F.q++;F.banner=null;nextQ();renderFight();
+  F.q++;F.banner=F.koWarn||null;nextQ();renderFight();
 }
 function close(){
   if(F&&F.timer)clearInterval(F.timer);
@@ -796,7 +801,7 @@ window.__v19={
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
     fight:fight,close:close,next:next,en19:en19,zoneOpen:zoneOpen,
     setLang:setLang19,openMapFor:openMapFor,mapOrigin:mapOrigin,koCardsRaw:koCardsRaw,koCount:koCount,
-    resolveUltimate:resolveUltimate,resolveLethal:resolveLethal},
+    resolveUltimate:resolveUltimate,resolveLethal:resolveLethal,checkPhase:checkPhase},
   version:'15.0.0'
 };
 })();

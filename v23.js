@@ -759,11 +759,29 @@ var _fightF=null;
 function castSkillInFight(){
   if(!_fightF||!_fightF.pet)return;
   var r=castTeamSkill(_fightF);
-  toast23(r.msg);
   if(r.ok&&r.dmg>0){
-    _fightF.hp=Math.max(0,(_fightF.hp||0)-r.dmg);
+    /* V40 (C-02): team-skill damage goes through the boss shield
+       exactly like a correct answer (halved while the shield holds;
+       the shield absorbs the dealt damage). Before, it bypassed the
+       shield entirely — a 50-dmg skill hit a 30-shield boss for 50
+       while the shield stayed at 30. */
+    var dealt=r.dmg;
+    if((_fightF.shield||0)>0){dealt=Math.max(1,Math.ceil(r.dmg/2));_fightF.shield=Math.max(0,_fightF.shield-dealt)}
+    if(dealt<r.dmg)r.msg=r.msg.replace('Gây '+r.dmg+' sát thương','Gây '+dealt+' sát thương')+' (Khiên boss chặn một nửa.)';
+    _fightF.hp=Math.max(0,(_fightF.hp||0)-dealt);
     try{if(_fightF&&typeof _fightF.render==='function')_fightF.render()}catch(e){}
+    /* A non-lethal skill can drop the boss below a phase threshold —
+       re-run the owning engine's phase check so P2/P3 (and the V19
+       Knowledge Counterattack) trigger at once, like a correct
+       answer does. Map bosses (b.zone) belong to V19, arenas to V18. */
+    if(_fightF.hp>0&&!_fightF.over){
+      try{
+        if(_fightF.boss&&_fightF.boss.zone){if(W.__v19&&__v19._test&&__v19._test.checkPhase)__v19._test.checkPhase()}
+        else if(W.__v18&&__v18._test&&__v18._test.checkPhase)__v18._test.checkPhase();
+      }catch(e){}
+    }
   }
+  toast23(r.msg);
   /* V36 (V17-2): a lethal team skill must resolve the fight at once —
      route through the engine's win path (resolveLethal) instead of
      leaving a 0-HP boss "alive" for the next answers, which could

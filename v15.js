@@ -603,6 +603,13 @@ function levelTopicBar(){
   return '<div class="v15filters">'+lv+tp+'</div>';
 }
 function learnHTML(){
+  /* V40 (B-8): prefetch the lazy BT data while the user is on the
+     learn tab with a BT scope active, so the mode they pick next
+     usually starts without waiting. Memoised + fire-and-forget. */
+  try{
+    var sc40=en15().scope;
+    if(sc40&&sc40.kind==='lib'&&sc40.lib==='bt'&&window.__v22&&__v22.ensureData&&!window.__V22_BT)__v22.ensureData().catch(function(){});
+  }catch(e){}
   var e=en15();
   return '<div class="v15learn-head"><div><h3>Chọn chế độ học</h3><p class="mute">Trả lời đúng để nhận XP, tưới cây trong farm và tích combo. Từ sai sẽ quay lại ôn sớm (SRS).</p></div>'+levelTopicBar()+'</div>'
   +'<div class="v15modes">'+MODES.map(function(m){
@@ -612,6 +619,29 @@ function learnHTML(){
   +'<div class="v15note">Muốn dùng các chế độ tiếng Anh cũ của V6 (Trắc nghiệm, Gõ từ, Ghép cặp, Điền câu, Xếp chữ, Nghe, Đua 60s, Flashcard, Ôn tập)? Đóng hub này và chọn chế độ <b>Tiếng Anh (EN–VI)</b> trong mục Học — toàn bộ vẫn hoạt động với 1.000+ từ mới.</div>';
 }
 function startMode(id){
+  /* V40 (B-8): a BT scope needs the lazy BT data (basic_tactics_
+     vocabulary.json, fetched by __v22.ensureData + attachBT). On a
+     fresh load the data is not attached yet and pickPool falls back
+     to "no words" — load it first, then start the mode. Guarded
+     against the user leaving the tab while loading. */
+  try{
+    var sc40=en15().scope;
+    if(sc40&&sc40.kind==='lib'&&sc40.lib==='bt'&&window.__v22&&__v22.ensureData&&!window.__V22_BT){
+      HUB.mode=id;
+      var b40=document.querySelector('#v15body');
+      if(b40)b40.innerHTML='<p class="mute">Đang tải bộ từ Basic Tactics…</p>';
+      __v22.ensureData().then(function(){
+        if(HUB.mode!==id||HUB.tab!=='learn')return;
+        startMode(id);
+      }).catch(function(){
+        if(HUB.mode!==id||HUB.tab!=='learn')return;
+        HUB.mode=null;
+        var b=document.querySelector('#v15body');
+        if(b)b.innerHTML='<p class="mute">Không tải được dữ liệu Basic Tactics. Thử mở Thư viện rồi quay lại.</p><div class="acts"><button class="btn" onclick="__v15.backToLearn()">← Tất cả chế độ</button></div>';
+      });
+      return;
+    }
+  }catch(e){}
   HUB.mode=id;M={mode:id,q:0,score:0,total:0,answered:null,ok:null,started:Date.now()};
   if(id==='flash')startFlash();
   else if(id==='mc')startMC();
@@ -1491,6 +1521,16 @@ function reviewHTML(){
   return h;
 }
 function reviewStart(weakOnly){
+  /* V40 (B-8): same lazy-BT guard as startMode — a BT scope on a
+     fresh load has no words attached yet; load the data first. */
+  try{
+    var sc40=en15().scope;
+    if(sc40&&sc40.kind==='lib'&&sc40.lib==='bt'&&window.__v22&&__v22.ensureData&&!window.__V22_BT){
+      pop15('Đang tải bộ từ Basic Tactics…');
+      __v22.ensureData().then(function(){reviewStart(weakOnly)}).catch(function(){pop15('Không tải được dữ liệu Basic Tactics.')});
+      return;
+    }
+  }catch(e){}
   var e=en15(),now=Date.now();
   var list;
   /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ ôn từ trong bộ đó */
