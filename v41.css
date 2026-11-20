@@ -1,0 +1,16 @@
+/* ===== V41 — BUG FIXES III (V18.6) =====
+   C-R2-2 (MINOR, bottom nav at 360px): the base <=640px rule crushes
+   the fixed bottom-nav tabs to min-width:0 + padding 6px 2px, so 11
+   tabs share ~344px (~31px each) and the nowrap labels overflow into
+   each other ("Học thông minh" x246-279 overlaps "Chrono" x274-317;
+   "Chrono" overlaps "Skyroot" x306-351; "Skyroot" cut at the edge).
+   The row is ALREADY overflow-x:auto by design (.tabs / :root .tabs),
+   so restore a real minimum width and let it scroll horizontally
+   instead of overlapping: every label stays whole, every button stays
+   >=44px tall and tappable. At 390px the same rule applies (the row
+   was jammed there too). No label text is changed; no layout above
+   640px is touched. */
+@media(max-width:640px){
+  :root .tabs{scrollbar-width:thin}
+  :root .tab{flex:0 0 auto;min-width:64px;padding:6px 8px;font-size:10px}
+}

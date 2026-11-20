@@ -189,6 +189,12 @@ function importFile(input, fallback){
       alert('File sao lưu không hợp lệ: '+v.errors.slice(0,3).join(', ')+'. Dữ liệu hiện tại không thay đổi.');
       return;
     }
+    /* V41 (F3): flush the pending debounced save BEFORE the
+       snapshot — the snapshot reads localStorage, and a change
+       still inside the ~800 ms debounce window would otherwise
+       be missed (undo would restore the stale bytes and the
+       dirty change would be lost). */
+    try{ flush(); }catch(e){}
     var cur=''; try{ cur=localStorage.getItem(SAVE_KEY)||''; }catch(e){}
     snapshot('hanvocab.v12.preimport-'+Date.now(), cur);
     var stamp=(j.v7&&j.v7.meta&&j.v7.meta.saveVersion)||11;
