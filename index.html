@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V18.7 — Unlock Shortcuts — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V18.8 — Boss-Fight Readability — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -26821,6 +26821,155 @@ window.__v42={
     CHRONO_IDS:CHRONO_IDS,GOLEM_ID:GOLEM_ID
   }
 };
+})();
+
+</script>
+
+<style id="v43">
+/* ===== V43 — Boss-fight readability (V18.8, layer V43) =====
+   ROOT CAUSE (measured in real Chrome 157, light theme — repro
+   tools/v43/repro/logs/r43-results.json): the V19 fight panel is
+   FIXED dark (.v19fight rgba(24,18,48,.92), .v19qcard #241b42,
+   .v19passage/.v19explain #1c1533) but its text INHERITS the theme
+   ink/mute, which in the light (day) theme are DARK (--ink #3A2E22,
+   --mute #7C6B58): question word 1.22:1, boss name 1.12:1, mute
+   lines 2.89-3.13:1, hearts/HP 1.12:1. In the dark theme the same
+   inheritance is light-on-dark and passes — that is why the bug
+   only showed on Anh's (light-theme) laptop. The V19 answer
+   buttons already declare color:#fff (14.03:1, PASS) — they were
+   never the failing part; the unreadable card is the question word
+   + romanization line + top bar on the dark panel.
+   V18's fight is theme-var-driven (bg var(--bg)/var(--sf), text
+   var(--ink)/var(--mute)) so its Q&A passes in both themes, but
+   its warn banner (dark text on #4a2b00), feedback line
+   (var(--ok)/var(--bad) 3.48/3.99:1 on the light card) and the
+   V34 break bar (light label on the light card) fail in the light
+   theme. Both engines share one more failure: the pet team-skill
+   button DISABLED (energy < cost) renders at opacity .45 over the
+   dark bar — blended dark-on-dark 1.5:1 in BOTH themes.
+   FIX (this file only, loaded LAST so same-specificity rules win):
+   explicit light text on the fixed-dark V19 panel; explicit
+   theme-pinned text on the V18 panel; theme-aware overrides only
+   where the background itself changes with the theme (V18 feedback
+   lines, V34 break chip). Colours reuse the V24 tokens
+   (--ui-text-primary/secondary/muted-dark, --ui-title-gold) where
+   they fit. No fight logic, reward, XP, SRS, pet or save change;
+   no layout change; dark fight cards stay dark — only the text
+   gets light. WCAG AA target: >=4.5:1 normal text, >=3:1 large. */
+
+/* ---- V19 (fixed dark panel: same colours in both themes) ---- */
+.v19fight .v19qword{color:#fff}
+.v19fight .v19qcard .mute{color:var(--ui-text-muted-dark,#C4B9E2)}
+.v19fight .v19fight-info>b{color:#fff}
+.v19fight .v19fight-info .mute{color:var(--ui-text-muted-dark,#C4B9E2)}
+.v19fight .v19fight-info>span:not(.mute){color:#fff}
+.v19fight .v19hearts{color:#fff}
+.v19fight .v19opt{color:#fff}
+.v19fight .v19opt:hover,.v19fight .v19opt:focus-visible{background:#3a2f6e;color:#fff;border-color:#8a7bd8}
+.v19fight .v19opt.right{color:#fff}
+.v19fight .v19opt.wrong{color:#fff}
+.v19fight .v19passage{color:#fff}
+.v19fight .v19passage p{color:var(--ui-text-secondary,#E5DEF5)}
+.v19fight .v19explain .mute{color:var(--ui-text-muted-dark,#C4B9E2)}
+/* Feedback line: inline style color:var(--ok)/var(--bad). The ok
+   value already passes on the dark explain card in both themes
+   (4.92 light / 9.11 dark); the bad value fails in the light theme
+   (4.29:1), so only the bad state is overridden — with the dark
+   theme's own --bad value, which is a no-op there. !important is
+   required: nothing else beats an inline style. */
+.v19fight .v19explain[style*="--bad"]{color:#FF8A78 !important}
+.v19fight .v19done p{color:#fff}
+.v19fight .v19done .mute{color:var(--ui-text-muted-dark,#C4B9E2)}
+/* Phase chip: white on #7B61FF is 4.2:1 — just under AA. */
+.v19fight .v19phase{background:#5B3FD4;color:#fff}
+/* Blocked break bar (v36.js: the boss's mode — read/speak — or a
+   <8-card KO pool can never break the weakness): the title inherits
+   the theme ink — dark-on-dark in the light theme — and the inner
+   .mute sits under the bar's steady .85 opacity, so it needs the
+   muted-dark token (still 6.1:1 at .85 opacity on the dark panel). */
+.v19fight .v34bar-t{color:#fff}
+.v19fight .v34bar.v34blocked .mute{color:var(--ui-text-muted-dark,#C4B9E2)}
+/* Element/rarity chips: white text on color-mix(--ec 75%, #000)
+   fails for the bright element colours (ice 3.22:1, light 2.7:1).
+   Darken the mix to 45% — the tint still shows the element. */
+.v19fight .v19chip{background:color-mix(in srgb,var(--ec,#888) 45%,#000);color:#fff}
+
+/* ---- V18 (theme-var panel: pin the theme pair explicitly) ---- */
+.v18fight .v18qword{color:var(--ink)}
+.v18fight .v18qcard .mute{color:var(--mute)}
+.v18fight .v18fight-info>b{color:var(--ink)}
+.v18fight .v18fight-info .mute{color:var(--mute)}
+.v18fight .v18fight-info>span:not(.mute){color:var(--ink)}
+.v18fight .v18hearts{color:var(--ink)}
+.v18fight .v18opt{color:var(--ink)}
+.v18fight .v18opt:hover,.v18fight .v18opt:focus-visible{border-color:var(--blue);color:var(--ink)}
+.v18fight .v18opt.right{color:#fff}
+.v18fight .v18opt.wrong{color:#fff}
+.v18fight .v18passage{color:var(--ink)}
+.v18fight .v18passage p{color:var(--ink)}
+/* Warn banner: fixed #4a2b00 background, text inherited the theme
+   ink — dark-on-dark in the light theme. Gold text, as in V19. */
+.v18fight .v18warn{color:#FFE066}
+.v18fight .v18explain .mute{color:var(--mute)}
+/* Feedback line (inline style, see V19 note): on the LIGHT card the
+   theme ok/bad fail in the light theme (3.48/3.99:1), so override
+   with the darker original --ok/--bad values; the dark-theme rules
+   below restore the theme values, which pass on the dark card. */
+.v18fight .v18explain[style*="--ok"]{color:#1B7F5A !important}
+.v18fight .v18explain[style*="--bad"]{color:#C23A30 !important}
+.v18fight .v18done p{color:var(--ink)}
+/* Phase chip (legendary only): white on the light end of the
+   gradient (#B388FF) is 2.64:1 — darken both stops. */
+.v18fight .v18phase{background:linear-gradient(90deg,#6D28D9,#C1121F);color:#fff}
+/* Element/rarity chips: bare --ec text on the (light) fight card
+   fails in the light theme for every bright element colour (ice
+   1.9:1, thunder 1.4:1). Same darkened-chip treatment as V19. */
+.v18fight .v18chip{color:#fff;background:color-mix(in srgb,var(--ec,#999) 45%,#000);border-color:transparent}
+/* V34 break bar inside a V18 fight: its label/chip were designed
+   for the dark V19 panel; on the light V18 card they fail. */
+.v18fight .v34breaklabel{color:var(--ink)}
+.v18fight .v34breakbar{background:color-mix(in srgb,var(--ink) 14%,transparent);border-color:var(--line)}
+.v18fight .v34weakchip{color:#7A5B00;border-color:#7A5B00;background:rgba(122,91,0,.08)}
+/* Blocked break bar (v36.js, opacity:.85 steady state): the inner
+   .mute in the theme --mute fails at .85 opacity on the light card
+   (3.71:1), so it takes the ink colour instead (9.6:1 at .85); the
+   title is pinned to the ink for the same reason. The bar keeps its
+   dimmed "blocked" look — only the text is strengthened. */
+.v18fight .v34bar-t{color:var(--ink)}
+.v18fight .v34bar.v34blocked .mute{color:var(--ink)}
+
+/* ---- Pet battle bar (shared by both engines) ---- */
+/* Team-skill button DISABLED (energy < cost): opacity .45 over the
+   dark bar blends dark text onto darkened gold (1.5:1, both
+   themes — opacity alone can never fix it, text and background
+   fade together). Muted solid gold-grey, full opacity: it still
+   reads as disabled, but at 5.94:1. */
+.v23bar-fight .v23bf-skill:disabled{opacity:1;background:#6E5F3E;color:#FFF8E1;border-color:#8A7A52;cursor:not-allowed}
+
+/* ---- Dark-theme restorations (only where the light-theme
+   override above would be wrong on a dark card) ---- */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .v18fight .v18explain[style*="--ok"]{color:var(--ok) !important}
+  :root:not([data-theme="light"]) .v18fight .v18explain[style*="--bad"]{color:var(--bad) !important}
+  :root:not([data-theme="light"]) .v18fight .v34weakchip{color:var(--ui-title-gold,#FFD76A);border-color:var(--ui-border,#A78BFA);background:rgba(255,215,106,.08)}
+}
+:root[data-theme="dark"] .v18fight .v18explain[style*="--ok"]{color:var(--ok) !important}
+:root[data-theme="dark"] .v18fight .v18explain[style*="--bad"]{color:var(--bad) !important}
+:root[data-theme="dark"] .v18fight .v34weakchip{color:var(--ui-title-gold,#FFD76A);border-color:var(--ui-border,#A78BFA);background:rgba(255,215,106,.08)}
+
+</style>
+<script id="v43js">
+/* ===== V43 — Boss-fight readability (V18.8, layer V43) =====
+   CSS-only fix (see src/v43.css): explicit high-contrast text
+   colours on the boss-fight Q&A in both combat renderers (V18
+   arenas + V19 Boss Map), both themes, all question types, all
+   answer states, plus the pet battle bar and the fight top bar.
+   No logic, no save/schema change, no new save key.
+   This file exists only as the version marker for the layer,
+   following the V42 pattern. */
+(function(){
+  var VERSION='18.8.0';
+  window.__v43={version:VERSION};
 })();
 
 </script>
