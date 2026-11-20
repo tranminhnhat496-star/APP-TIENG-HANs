@@ -398,7 +398,8 @@ function overlayHTML(){
   h+='<div class="v33card"><b>🔒 Cổng Thời Gian — '+n+'/'+GATE_TOTAL+' boss đã thắng</b>'
     +'<div class="v33bar"><i style="width:'+Math.min(100,Math.round(n/GATE_TOTAL*100))+'%"></i></div>'
     +'<p class="v33mut">Boss cũ (V15): '+bd.en15+'/10 · Boss V10 (V18): '+bd.en18+'/30 · Boss V11 (V19): '+bd.en19+'/30. '
-    +(gate?'✅ Cổng đã mở — chào mừng đến Vương Quốc Thời Gian!':'Thắng đủ 70 boss để mở vùng đất này. Không có đường tắt — số liệu là thật, đếm từ chính bản lưu của bạn.')+'</p></div>';
+    +(gate?'✅ Cổng đã mở — chào mừng đến Vương Quốc Thời Gian!':'Thắng đủ 70 boss để mở vùng đất này — số liệu là thật, đếm từ chính bản lưu của bạn.')+'</p>'
+    +(window.__v42?window.__v42.chronoGateHTML(lang,gate):'')+'</div>';
   if(!gate){
     h+='<div class="v33empty">Vương Quốc Thời Gian đang khóa. Các boss, nhiệm vụ, Time Echo và Khe Nứt Thời Gian sẽ mở khi bạn thắng đủ 70 boss.</div>';
   }else{

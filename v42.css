@@ -1,0 +1,7 @@
+/* ===== V42 — UNLOCK SHORTCUTS (V18.7) =====
+   Only the shortcut button sizing: the host overlay's own
+   .v33btn/.v35btn + .pri supply the colours, padding and font.
+   The button is full-width inside the gate card and stays >=44px
+   tall (touch target). */
+.v42btn{min-height:44px;width:100%;margin-top:8px;box-sizing:border-box}
+.v42mut{margin:6px 0 0}
