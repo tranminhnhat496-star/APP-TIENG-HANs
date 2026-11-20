@@ -12,8 +12,9 @@
    Shared wallet: XP via __v15.gain15(), gems via S.v7.gems — same as V15.
    EN word SRS: mark18() mirrors V15 mark15() exactly (box/right/wrong/
    review/due/intv, 10-minute anti-farm XP rule) so boss fights feed the
-   same SRS boxes. KO answers only touch en18.koStats — the Korean deck
-   (S.cards) is never modified by V18.
+   same SRS boxes. KO answers feed Smart Learning too (markKO calls
+   __v27.recordAnswer('ko',...) for right/wrong/cw/cr/last); the Korean
+   deck (S.cards) is still never modified by V18.
 */
 (function(){
 'use strict';
@@ -291,6 +292,12 @@ function koPool(){
   }
   return shuffle(cards);
 }
+function koCount18(){
+  /* V39 (V18.4): koPool().length — the count for the <8 KO warning
+     banner in startFight(). koPool() already applies the V36 F16a
+     deck scoping, so the count matches the pool the fight uses. */
+  return koPool().length;
+}
 function distractorsKO(c,n){
   /* V36 (F16a): distractors come from the same deck-scoped pool as
      the questions (mirror v19, which reads koCardsRaw()). */
@@ -334,9 +341,14 @@ function mark18(ok,w){
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
   save18();
 }
-function markKO(ok){
+function markKO(ok,k){
   var e=en18();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
+     recordAnswer('ko',...) records right/wrong/cw/cr/last for the
+     card. Called BEFORE save18() so the record rides the same V20
+     flush. The Korean deck itself is still never modified by V18. */
+  try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss18')}catch(e){}
   save18();
 }
 
@@ -367,6 +379,12 @@ function startFight(b,lang){
   try{if(window.__v34){F.weak=__v34.weakFor(b,lang);F.brk=0;F.brkMax=3}}catch(e){}
   /* V23: pet team joins the fight (shield, energy, damage bonus). */
   try{if(window.__v23)__v23.battleStart(F)}catch(e){}
+  /* V39 (V18.4): mirror the V19 <8 KO warning — a KO fight with fewer
+     than 8 usable Korean cards falls back to English questions (see
+     nextQ); say so honestly instead of silently. The fight is NOT
+     blocked (V19 precedent: banner + English fallback). */
+  if(lang==='ko'&&koCount18()<8)
+    F.banner='⚠️ Bạn mới có '+koCount18()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
   nextQ();renderFight();
 }
 function timerFor(){
@@ -469,7 +487,7 @@ function answer(ok,timeout){
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
     if(F.cur&&F.cur.w)mark18(true,F.cur.w);
-    if(F.cur&&F.cur.k)markKO(true);
+    if(F.cur&&F.cur.k)markKO(true,F.cur.k);
     pop18((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
   }else{
     var cost=1;
@@ -486,7 +504,7 @@ function answer(ok,timeout){
     F.hearts-=cost;F.anim='attack';F.wrongCount++;
     if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
     if(F.cur&&F.cur.w)mark18(false,F.cur.w);
-    if(F.cur&&F.cur.k)markKO(false);
+    if(F.cur&&F.cur.k)markKO(false,F.cur.k);
     if(b.skill.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skill.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
   }

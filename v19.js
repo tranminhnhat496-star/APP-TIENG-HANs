@@ -16,8 +16,9 @@
    {en:{win,wins,stars,best}, ko:{...}}}, titles:[], zoneClaimed:{},
    koStats:{right,wrong}, created}. First-win rewards are once-only PER
    LANGUAGE; replay wins give +10 XP. EN answers feed the same SRS boxes
-   (mark19 mirrors mark15/mark18); KO answers only touch en19.koStats —
-   the Korean deck (S.cards) is never modified by V19.
+   (mark19 mirrors mark15/mark18); KO answers feed Smart Learning too
+   (markKO19 calls __v27.recordAnswer('ko',...) for right/wrong/cw/
+   cr/last); the Korean deck (S.cards) is still never modified by V19.
 */
 (function(){
 'use strict';
@@ -334,9 +335,14 @@ function mark19(ok,w){
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}
   save19();
 }
-function markKO19(ok){
+function markKO19(ok,k){
   var e=en19();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
+     recordAnswer('ko',...) records right/wrong/cw/cr/last for the
+     card. Called BEFORE save19() so the record rides the same V20
+     flush. The Korean deck itself is still never modified by V19. */
+  try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss19')}catch(e){}
   save19();
 }
 
@@ -512,7 +518,7 @@ function answer(ok,timeout){
     /* counterattack questions: score only, no boss damage / no heart loss yet */
     if(ok){F.caRight++;F.right++}else F.wrong++;
     if(F.cur&&F.cur.w)mark19(ok,F.cur.w);
-    if(F.cur&&F.cur.k)markKO19(ok);
+    if(F.cur&&F.cur.k)markKO19(ok,F.cur.k);
     renderFight();
     return;
   }
@@ -534,7 +540,7 @@ function answer(ok,timeout){
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
     if(F.cur&&F.cur.w)mark19(true,F.cur.w);
-    if(F.cur&&F.cur.k)markKO19(true);
+    if(F.cur&&F.cur.k)markKO19(true,F.cur.k);
     pop19((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
   }else{
     var cost=1;
@@ -553,7 +559,7 @@ function answer(ok,timeout){
     F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
     if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
     if(F.cur&&F.cur.w)mark19(false,F.cur.w);
-    if(F.cur&&F.cur.k)markKO19(false);
+    if(F.cur&&F.cur.k)markKO19(false,F.cur.k);
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
     if(b.skills.pass.id==='vampiric')healBoss(4,'🧛 Hút Sinh Lực: boss hồi 4 HP!');
