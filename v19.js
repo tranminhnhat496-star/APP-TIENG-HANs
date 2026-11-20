@@ -495,7 +495,9 @@ function resolveLethal(Ff){
 function resolveUltimate(){
   /* 3/3: phá hoàn toàn + phản 40 sát thương · 2/3: phản 15, mất 1 tim
      1/3: mất 1 tim · 0/3: mất 2 tim (sát thương tối đa, có giới hạn) */
-  var b=F.boss,r=F.caRight;
+  /* V41 (R1 belt-and-braces): clamp so an out-of-range count can
+     never fall into the 0/3 failure branch again. */
+  var b=F.boss,r=Math.min(3,F.caRight);
   F.ultActive=false;F.ultUsed=true;F.phase=3;F.anim='special';
   if(r===3){
     F.hp=Math.max(0,F.hp-40);
@@ -519,7 +521,15 @@ function answer(ok,timeout){
   if(F.timer){clearInterval(F.timer);F.timer=null}
   F.answered=timeout?'timeout':1;F.ok=ok;
   var b=F.boss;
-  if(F.ultActive){
+  /* V41 (R1): take the CA path ONLY when the current question IS
+     a CA question (qmode 'ca-*'). checkPhase() (V40 C-02) can
+     start the Counterattack while a normal question is still on
+     screen; keying off ultActive alone counted that in-flight
+     normal answer as a CA answer (caRight 4 after a perfect run
+     -> resolveUltimate's 0/3 failure branch: -2 hearts, no
+     reflect). The in-flight answer now takes the normal path
+     (damage, hearts, checkPhase is a no-op while ultActive). */
+  if(F.ultActive&&(F.qmode||'').indexOf('ca-')===0){
     /* counterattack questions: score only, no boss damage / no heart loss yet */
     if(ok){F.caRight++;F.right++}else F.wrong++;
     if(F.cur&&F.cur.w)mark19(ok,F.cur.w);
@@ -632,7 +642,12 @@ function winReward(){
 }
 function pick(i){
   if(!F||F.answered!==null||F.over)return;
-  var mode=F.ultActive?F.caMode:F.qmode,ok=false;
+  /* V41 (R1/R2): same CA gate as answer() — a normal question on
+     screen when the CA starts keeps its own mode. qHTML already
+     falls back with F.caMode||F.qmode; pick() had no fallback,
+     so a grammar cur (no optsVi) threw TypeError under
+     mode=undefined. */
+  var mode=(F.ultActive&&(F.qmode||'').indexOf('ca-')===0)?(F.caMode||F.qmode):F.qmode,ok=false;
   if(mode==='grammar')ok=(i===F.cur.g.a);
   else if(mode==='read')ok=(i===F.cur.q.a);
   else if(mode==='builder')ok=(F.cur.opts[i]===F.cur.s.s);
@@ -763,7 +778,10 @@ function qHTML(){
 /* ---------- test hooks (used by the jsdom suite; harmless in production) ---------- */
 function pickCorrect(){
   if(!F||F.answered!==null||F.over)return false;
-  var mode=F.ultActive?F.caMode:F.qmode,idx=-1;
+  /* V41 (R1/R2): same CA gate as answer()/pick() — pickCorrect()
+     and pickWrong() share this anchor (count 2) and the same
+     throw on a grammar/read/builder question. */
+  var mode=(F.ultActive&&(F.qmode||'').indexOf('ca-')===0)?(F.caMode||F.qmode):F.qmode,idx=-1;
   if(mode==='grammar')idx=F.cur.g.a;
   else if(mode==='read')idx=F.cur.q.a;
   else if(mode==='builder')idx=F.cur.opts.indexOf(F.cur.s.s);
@@ -776,7 +794,10 @@ function pickCorrect(){
 }
 function pickWrong(){
   if(!F||F.answered!==null||F.over)return false;
-  var mode=F.ultActive?F.caMode:F.qmode,idx=-1;
+  /* V41 (R1/R2): same CA gate as answer()/pick() — pickCorrect()
+     and pickWrong() share this anchor (count 2) and the same
+     throw on a grammar/read/builder question. */
+  var mode=(F.ultActive&&(F.qmode||'').indexOf('ca-')===0)?(F.caMode||F.qmode):F.qmode,idx=-1;
   if(mode==='grammar')idx=(F.cur.g.a+1)%F.cur.g.o.length;
   else if(mode==='read')idx=(F.cur.q.a+1)%F.cur.q.o.length;
   else if(mode==='builder')idx=F.cur.opts.findIndex(function(o){return o!==F.cur.s.s});

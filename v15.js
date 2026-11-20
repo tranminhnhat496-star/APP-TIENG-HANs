@@ -1230,6 +1230,13 @@ function farmPlant(i){
   renderTab();
 }
 function farmPlotTap(i){
+  /* V41 (F2): drop any stale harvest-quiz div first — the
+     correct-harvest branch only re-renders and relies on a
+     1200 ms timer's renderTab() to clean up, so a second tap
+     within the window created a duplicate id="v15farmquiz"
+     and the stale card resurfaced when the new one was
+     dismissed. */
+  var old=$('#v15farmquiz');if(old)old.remove();
   var e=en15(),p=e.farm.plots[i];if(!p||!p.wordId)return;
   var w=BYID[p.wordId],st=farmStage(p);
   if(st>=4&&p.water>=2){
@@ -1721,6 +1728,11 @@ function backupImport(input){
     try{
       var j=JSON.parse(rd.result);
       if(!j||!Array.isArray(j.cards))throw new Error('bad save');
+      /* V41 (F3): flush the pending debounced save BEFORE the
+         snapshot (same race as importFile in v20.js — the
+         snapshot below reads localStorage, not the in-memory
+         save). */
+      try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
       try{ var _s20=window.__v20sync; if(_s20&&_s20.validateSave){ var _v=_s20.validateSave(j); if(!_v.ok) throw new Error('invalid save: '+(_v.errors||[]).slice(0,3).join(', ')); if(_s20.snapshot){ var _cur=''; try{ _cur=localStorage.getItem('hanvocab.v1')||''; }catch(e){} _s20.snapshot('hanvocab.v12.preimport-'+Date.now(), _cur); } } }catch(_ve){ if(_ve&&String(_ve.message||'').indexOf('invalid save')===0) throw _ve; }
       if(!confirm('Khôi phục bản lưu này? Dữ liệu hiện tại sẽ bị thay thế.'))return;
       try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
