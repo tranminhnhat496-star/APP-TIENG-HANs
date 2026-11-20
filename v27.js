@@ -538,10 +538,15 @@ function finishSession(partial){
     if(p&&p.d===todayStr()){
       var doneAll=p.ids.length>0&&p.ids.every(function(id){return p.doneIds.indexOf(id)>=0});
       /* V36 (F13): a PARTIAL (abandoned) session must not mark the plan
-         complete or pay the plan bonus — only finished sessions do. */
-      if(!partial)p.goals.complete=doneAll;
-      p.goals.acc80=answered>0&&(SES.correct/answered>=0.8);
-      p.goals.weak5=weakFixed>=5;
+         complete or pay the plan bonus — only finished sessions do.
+         V40 (C-10): acc80/weak5 are plan goals like complete, so
+         they move inside the same guard; before, a partial session
+         ticked them. */
+      if(!partial){
+        p.goals.complete=doneAll;
+        p.goals.acc80=answered>0&&(SES.correct/answered>=0.8);
+        p.goals.weak5=weakFixed>=5;
+      }
       if(!partial&&doneAll)bonus=claimPlanBonus(SES.lang);
     }
   }

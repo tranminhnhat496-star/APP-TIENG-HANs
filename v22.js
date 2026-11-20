@@ -686,6 +686,12 @@ function applyBossScope(){
     var units=[];
     var chips=document.querySelectorAll('#v22bs-chips .v15pill.on');
     for(var i=0;i<chips.length;i++){var u=parseInt(chips[i].getAttribute('data-u'),10);if(u)units.push(u)}
+    /* V40 (C-12): "Bỏ chọn tất cả" + Áp dụng previously applied the
+       WHOLE BT library — the opposite of what the button promised.
+       Refuse until at least one Unit is picked. (lib==='all' goes
+       through the same branch with no chips on purpose and is
+       unaffected — this guard only fires for 'units'.) */
+    if(lib==='units'&&!units.length){pop22('Chọn ít nhất 1 Unit.');return}
     sc={kind:'lib',lib:'bt'};
     if(lib==='units'&&units.length&&units.length<24)sc.unit=units.length===1?units[0]:units;
     if(type)sc.type=type;

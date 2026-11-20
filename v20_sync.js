@@ -302,7 +302,30 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           ['en','ko'].forEach(function(lg){ var a=(l27.streak&&l27.streak[lg])||{}, b=(c27.streak&&c27.streak[lg])||{}, nw=(newer.v7&&newer.v7.en27&&newer.v7.en27.streak&&newer.v7.en27.streak[lg])||{}; m27.streak[lg]={d:nw.d||a.d||b.d||'', n:Math.max(a.n||0,b.n||0)}; });
           m27.claimed=unionTrue(l27.claimed, c27.claimed);
           var n27p=(newer.v7&&newer.v7.en27)||{}, o27p=(older.v7&&older.v7.en27)||{};
-          m27.plan=n27p.plan!==undefined?n27p.plan:(o27p.plan||{en:{},ko:{}});
+          /* V40 (C-07): the plan is per-language — merge en/ko
+             independently instead of taking the newer save's plan for
+             BOTH languages (the older side's plan + doneIds were
+             dropped). Same-day plans union ids/doneIds and OR the
+             goals (complete recomputed from coverage); otherwise
+             newer-wins per language. claimed stays unioned above, so
+             no double payment. */
+          (function(){
+            var np=n27p.plan||{}, op=o27p.plan||{};
+            var mp={};
+            ['en','ko'].forEach(function(lg){
+              var a=np[lg]||{}, b=op[lg]||{};
+              if(a.d&&b.d&&a.d===b.d){
+                var ids=Array.from(new Set([].concat(a.ids||[],b.ids||[])));
+                var done=Array.from(new Set([].concat(a.doneIds||[],b.doneIds||[])));
+                var gA=a.goals||{}, gB=b.goals||{};
+                var complete=ids.length>0&&ids.every(function(id){return done.indexOf(id)>=0});
+                mp[lg]={d:a.d,mins:Math.max(a.mins||0,b.mins||0),newN:Math.max(a.newN||0,b.newN||0),dueN:Math.max(a.dueN||0,b.dueN||0),weakN:Math.max(a.weakN||0,b.weakN||0),ids:ids,doneIds:done,goals:{complete:complete,acc80:!!(gA.acc80||gB.acc80),weak5:!!(gA.weak5||gB.weak5)}};
+              }else if(a.d){mp[lg]=a}
+              else if(b.d){mp[lg]=b}
+              else{mp[lg]={}}
+            });
+            m27.plan=mp;
+          })();
           m27.uiLang=n27p.uiLang||o27p.uiLang||'en';
           v7.en27=m27;
         }
@@ -356,6 +379,21 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m35.regionClaimed={en:Math.max(rcL35.en||0,rcC35.en||0),ko:Math.max(rcL35.ko||0,rcC35.ko||0)};
           m35.pending={};
           v7.en35=m35;
+        }
+        else if(kk==='ko16'){
+          /* V40 (C-01): ko16 = {levels:{cardId:level}} (Smart Import,
+             v16) had no merge branch and fell to newer-wins, dropping
+             the older side's imported-word levels (and downgrading
+             levels the newer save had not learned yet). Merge per-key
+             MAX like the en branch; other ko16 keys fill-if-missing. */
+          var l16k=(localS.v7&&localS.v7.ko16)||{}, c16k=(cloudS.v7&&cloudS.v7.ko16)||{};
+          var m16k={};
+          for(var k16k in l16k) m16k[k16k]=l16k[k16k];
+          for(var k16k2 in c16k){
+            if(k16k2==='levels') m16k.levels=maxMap(l16k.levels, c16k.levels);
+            else if(m16k[k16k2]===undefined) m16k[k16k2]=c16k[k16k2];
+          }
+          v7.ko16=m16k;
         }
         else if(v7[kk]===undefined) v7[kk]=newer.v7[kk]!==undefined?newer.v7[kk]:older.v7[kk];
       }

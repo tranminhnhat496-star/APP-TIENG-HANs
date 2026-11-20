@@ -185,7 +185,7 @@ function breakBarHTML(F){
       if(!koDeckSet())return '';
       var pctK=Math.round(cur/max*100);
       return '<div class="v34breakbar"><i style="width:'+pctK+'%"></i></div>'
-        +'<div class="v34breaklabel">💥 Điểm yếu: bộ từ tiếng Hàn đã chọn — '+cur+'/'+max+'</div>';
+        +'<div class="v34breaklabel">💥 Điểm yếu: từ tiếng Hàn của bạn — '+cur+'/'+max+'</div>';
     }
     if(scopeBlocked(F)){
       return '<div class="v34breaklabel v34blocked">💥 Điểm yếu ngoài phạm vi ôn tập — đổi phạm vi để dùng</div>';

@@ -90,7 +90,7 @@ function arenasHTML(){
     +(open?'<button class="btn pri" onclick="__v18.openArena(\''+a.id+'\')">Vào đấu trường</button>':'<em>🔒 '+esc(arenaNeedText(a.id))+'</em>')
     +'</div>';
   });
-  h+='</div><div class="acts"><button class="btn" onclick="__v18.openCollection()">🏆 Xem Bộ Sưu Tập Boss (40 boss)</button></div><div id="v18fight"></div></div>';
+  h+='</div><div class="acts"><button class="btn" onclick="__v18.openCollection()">🏆 Xem Bộ Sưu Tập Boss ('+allBosses().length+' boss)</button></div><div id="v18fight"></div></div>';
   return h;
 }
 function openCollection(){var v=V15();if(v)v.tab('collection')}
@@ -169,7 +169,7 @@ function collectionHTML(){
   var els=B18().elements||{},rars=B18().rarities||{};
   var tot19=allBosses().length;
   var h='<h3>🏆 Bộ Sưu Tập Boss — '+tot19+' boss</h3>'
-  +'<p class="mute">Boss gốc (10), 30 boss đấu trường (V10)'+(tot19>40?' và 30 boss bản đồ (V11)':'')+'. Bấm vào một boss để xem chi tiết. Phần thưởng lần đầu chỉ nhận một lần.</p>'
+  +'<p class="mute">Boss gốc (10), 30 boss đấu trường (V10)'+(tot19>40?' và 30 boss bản đồ (V11)':'')+(tot19>70?' + 8 boss Chrono Kingdom (V17) và 8 boss Skyroot Sanctuary (V18)':'')+'. Bấm vào một boss để xem chi tiết. Phần thưởng lần đầu chỉ nhận một lần.</p>'
   +'<div class="v18filters"><input id="v18coll-q" type="search" placeholder="Tìm boss…" value="'+esc(CF.q)+'" oninput="__v18.collSearch(this.value)">'
   +'<select onchange="__v18.collSet(\'arena\',this.value)">'
   +'<option value="all">Tất cả đấu trường</option>'
@@ -199,7 +199,16 @@ function collDetail(id){
   var host=$('#v18colldetail');if(!host)return;
   var won=isWon(b),un=bossUnlocked(b);
   var e=en18();
-  var rec=b.arena==='old'?null:(e.bosses[b.id]||null);
+  /* V40 (C-04): map bosses keep wins in en19 (per language), not
+     en18 — read the right record so the detail can show the replay
+     count (en + ko wins summed). Old-arena wins live in
+     en15().bosses and carry no wins count, so they still show no
+     number. */
+  var rec=null;
+  if(b.zone){
+    try{var r19=window.__v19&&__v19.en19?__v19.en19().bosses[b.id]:null;
+      if(r19)rec={wins:((r19.en&&r19.en.wins)||0)+((r19.ko&&r19.ko.wins)||0)};}catch(e40){}
+  }else if(b.arena!=='old'){rec=e.bosses[b.id]||null;}
   var h='<div class="v18detail"><button class="v15x" onclick="__v18.collCloseDetail()" aria-label="Đóng">✕</button>'
   +'<img src="'+b.img+'" alt="" onerror="this.style.display=\'none\'">'
   +'<div><h3>'+esc(b.vi)+' <span class="mute">'+esc(b.n)+'</span></h3>'
@@ -253,8 +262,8 @@ function wordPool(b){
       var sl=v.wordsFiltered({level:'ALL'});
       if(sl.length>=8)return shuffle(sl);
       /* phạm vi quá nhỏ (vd 'chỉ cần ôn' trên một Unit ít từ) — nới
-         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/loại từ */
-      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set};
+         bộ lọc trạng thái nhưng giữ nguyên lựa chọn Unit/chủ đề/bài/loại từ (V40: topic/lesson trước đây bị rơi) */
+      var sc2={kind:'lib',lib:sc.lib,unit:sc.unit,type:sc.type,set:sc.set,topic:sc.topic,lesson:sc.lesson};
       var sl2=v.wordsFiltered({scope:sc2,level:'ALL'});
       if(sl2.length)return shuffle(sl2);
       if(sl.length)return shuffle(sl);
@@ -383,8 +392,13 @@ function startFight(b,lang){
      than 8 usable Korean cards falls back to English questions (see
      nextQ); say so honestly instead of silently. The fight is NOT
      blocked (V19 precedent: banner + English fallback). */
-  if(lang==='ko'&&koCount18()<8)
-    F.banner='⚠️ Bạn mới có '+koCount18()+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
+  /* V40 (A-N1/A-F2): compute the count once (koCount18() re-shuffles
+     the pool on every call) and keep it on F.koWarn so next() can
+     restore the warning for the whole fight instead of clearing it. */
+  var _kc40=koCount18();
+  F.koWarn=null;
+  if(lang==='ko'&&_kc40<8)
+    F.banner=F.koWarn='⚠️ Bạn mới có '+_kc40+'/8 thẻ tiếng Hàn — trận này dùng câu hỏi tiếng Anh cho đến khi đủ thẻ.';
   nextQ();renderFight();
 }
 function timerFor(){
@@ -571,7 +585,7 @@ function pick(i){
 }
 function next(){
   if(!F||F.over)return;
-  F.q++;F.banner=null;nextQ();renderFight();
+  F.q++;F.banner=F.koWarn||null;nextQ();renderFight();
 }
 function close(){
   if(F&&F.timer)clearInterval(F.timer);
@@ -721,7 +735,7 @@ window.__v18={
   get bosses(){return B18()},
   _petRefresh:function(){try{renderFight()}catch(e){}},
   _test:{F:function(){return F},pickCorrect:pickCorrect,pickWrong:pickWrong,
-    fight:fight,close:close,next:next,en18:en18,legDiff:legDiff,resolveLethal:resolveLethal},
+    fight:fight,close:close,next:next,en18:en18,legDiff:legDiff,resolveLethal:resolveLethal,checkPhase:checkPhase},
   version:'15.0.0'
 };
 })();
