@@ -1,0 +1,8 @@
+/* V39 — V18.4 KOREAN BOSSES (18.4.0). Additive layer, loads LAST (wins the
+   cascade at equal specificity). No new UI is added: the EN/KO pick screen
+   (showLangPick), the KO warning banner (.v18banner) and the Break bar are
+   all existing components. This file only guarantees the pick screen keeps
+   the V15.3/V36 mobile rules: 44px minimum touch targets, wrapping
+   buttons, no horizontal overflow at 360px. */
+#v18fight .v18fight .acts .btn{min-height:44px;box-sizing:border-box}
+#v18fight .v18banner{box-sizing:border-box}
