@@ -331,7 +331,8 @@ function overlayHTML(){
   h+='<div class="v35card"><b>🔒 Cổng Thiên Căn — '+(golem?'✅ GEAR GOLEM đã bị đánh bại':'GEAR GOLEM chưa bị đánh bại')+'</b>'
     +'<p class="v35mut">Skyroot mở khi bạn thắng GEAR GOLEM (boss cuối Vương Quốc Thời Gian) bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'. '
     +(gate?'✅ Cổng đã mở — chào mừng đến Thánh Địa Thiên Căn!':'Thắng GEAR GOLEM bằng ngôn ngữ này để mở vùng đất này.')
-    +(n?' Tổng số boss đã thắng: '+n+'/86.':'')+'</p></div>';
+    +(n?' Tổng số boss đã thắng: '+n+'/86.':'')+'</p>'
+    +(window.__v42?window.__v42.skyrootGateHTML(lang,gate):'')+'</div>';
   if(!gate){
     h+='<div class="v35empty">Thánh Địa Thiên Căn đang khóa. Các boss và nhiệm vụ sẽ mở khi bạn thắng GEAR GOLEM bằng '+(lang==='ko'?'tiếng Hàn':'tiếng Anh')+'.</div>';
   }else{
