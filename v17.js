@@ -395,7 +395,10 @@ function wordCard(w){
   }).join('');
   var lvLabel=w.lv==='OX'?'Oxford 3000':(w.lv||'');
   return '<div class="v17word">'
-    +'<div class="v17word-main"><b>'+esc(w.en)+'</b> <span class="mute">'+esc(w.pos||'')+'</span>'
+    /* V47 (C-R3-3): sense label — the two Library cards for one
+       headword must be distinguishable (display only; w.en
+       stays the bare headword). */
+    +'<div class="v17word-main"><b>'+esc(labelOf(w))+'</b> <span class="mute">'+esc(w.pos||'')+'</span>'
     +'<div class="v17ipa">'+(w.ipa?esc(w.ipa):'<span class="v17nodata">Chưa có phiên âm</span>')+'</div>'
     +'<div>'+esc(w.vi)+'</div>'+extra
     +(w.ex?'<div class="v17ex">“'+esc(w.ex)+'”<br><span class="mute">'+esc(w.exvi||'')+'</span></div>':'')

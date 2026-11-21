@@ -240,6 +240,15 @@ function buildWords(){
       }
     });
   }catch(e){}
+  /* V47 (C-R3-3): split the three kept second senses into
+     WORDS-only twin records (src/v47.js). The hook sits HERE,
+     inside buildWords() after the V17b/V22/V33/V35 attach
+     blocks and the V16 override loop — not as a wrapper on
+     the __v15 export, because buildWords() is also called
+     through its closure from init15/add/delete/reset/attachBT
+     and the V33/V35 ensureData paths, which a wrapper would
+     miss. A failed split is console.warn-ed, never swallowed. */
+  try{if(window.__v47&&__v47.splitDuplicateSenses)__v47.splitDuplicateSenses(WORDS,BYID)}catch(e){try{if(typeof console!=='undefined'&&console.warn)console.warn('[V47] splitDuplicateSenses failed:',e&&e.message||e)}catch(_){}}
   return WORDS;
 }
 function topicName(t){
@@ -691,17 +700,30 @@ function finishRound(title){
 function pickPool(n,onlyDue){
   var list=wordsFiltered({level:en15().level,topic:en15().topic,onlyDue:onlyDue});
   if(!list.length)list=wordsFiltered({level:'ALL'});
-  return shuffle(list).slice(0,n);
+  /* V47 (C-R3-3): dedupe the session list by lowercased headword
+     (keep first). Matching shows all six EN tiles at once, so
+     two senses of one headword would be an unanswerable pair
+     of identical tiles with different VI partners. Sequential
+     modes are unaffected (each question is distractor-guarded). */
+  var seen={},ded=[];
+  list.forEach(function(w){var k=(w.en||'').toLowerCase();if(!seen[k]){seen[k]=1;ded.push(w)}});
+  return shuffle(ded).slice(0,n);
 }
 function distractors(w,n){
-  var pool=WORDS.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V47 (C-R3-3): same-headword exclusion — a twin sense must
+     never appear as a distractor. In EN-text options (Listen,
+     boss speak/listen/spelling) the twin would render as a
+     second identical button, one right and one wrong by
+     invisible id; in VI-text options it would be a competing
+     distractor, which Claude's decision forbids. */
+  var pool=WORDS.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&(x.t===w.t||x.lv===w.lv)});
   /* V22: khi đang chọn phạm vi Thư viện (vd Basic Tactics), đáp án nhiễu
      lấy trong cùng phạm vi — lọc chủ đề/cấp độ trước làm cạn nguồn vì
      từ BT trùng với V14/V15 giữ t/lv cũ, còn từ BT-only có t='bt'. */
   try{
     var sc=en15().scope;
     if(sc&&sc.kind==='lib'){
-      var inSc=WORDS.filter(function(x){return x.id!==w.id&&inScope15(x)});
+      var inSc=WORDS.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&inScope15(x)});
       if(inSc.length>=n)pool=inSc;
     }
   }catch(e){}
@@ -748,7 +770,7 @@ function mcHTML(){
   var c=M.cur;if(!c)return '<p class="mute">Đang chuẩn bị câu hỏi…</p>';
   var w=c.w;
   var h=modeHead('Multiple Choice','Chọn nghĩa đúng của từ');
-  h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.pos)+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe phát âm</button></div></div>';
+  h+='<div class="v15qcard"><div class="v15qword">'+esc(labelOf(w))+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.pos)+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe phát âm</button></div></div>';
   h+='<div class="v15opts">'+c.opts.map(function(o,i){
     var cl='';if(M.answered!==null)cl=(o.id===w.id?'right':(o.id===M.answered?'wrong':''));
     return '<button class="v15opt '+cl+'" '+(M.answered!==null?'disabled':'')+' onclick="__v15.mcPick(\''+o.id+'\')">'+(i+1)+'. '+esc(o.vi)+'</button>';
@@ -1055,7 +1077,7 @@ function speedHTML(){
   if(!M.cur||!M.cur.w)return '<p class="mute">Không có từ nào cho bộ lọc này. Hãy đổi cấp độ / chủ đề.</p>'+'<div class="acts"><button class="btn" onclick="__v15.backToLearn()">Quay lại</button></div>';
   var c=M.cur,w=c.w;
   var h=modeHead('Speed Vocabulary','Trả lời càng nhanh càng tốt · còn <span id="v15-speed-t">'+M.left+'s</span> · combo x'+(M.combo||0));
-  h+='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+'</div></div>';
+  h+='<div class="v15qcard"><div class="v15qword">'+esc(labelOf(w))+'</div><div class="mute">'+esc(w.ipa)+'</div></div>';
   h+='<div class="v15opts">'+c.opts.map(function(o,i){
     var cl='';if(M.answered!==null)cl=(o.id===w.id?'right':(o.id===M.answered?'wrong':''));
     return '<button class="v15opt '+cl+'" '+(M.answered!==null?'disabled':'')+' onclick="__v15.speedPick(\''+o.id+'\')">'+esc(o.vi)+'</button>';
@@ -1451,7 +1473,7 @@ function bossQHTML(){
       return '<button class="v15opt '+cl+'" '+(B.answered!==null?'disabled':'')+' onclick="__v15.bossPick('+i+')">'+esc(o.en)+'</button>';
     }).join('')+'</div>'+bossFeedback('');
   }
-  return '<div class="v15qcard"><div class="v15qword">'+esc(w2.en)+'</div><div class="mute">'+esc(w2.ipa)+' · Chọn nghĩa đúng</div></div><div class="v15opts">'+c.optsVi.map(function(o,i){
+  return '<div class="v15qcard"><div class="v15qword">'+esc(labelOf(w2))+'</div><div class="mute">'+esc(w2.ipa)+' · Chọn nghĩa đúng</div></div><div class="v15opts">'+c.optsVi.map(function(o,i){
     var cl='';if(B.answered!==null)cl=(o.id===w2.id?'right':(i===B.answered?'wrong':''));
     return '<button class="v15opt '+cl+'" '+(B.answered!==null?'disabled':'')+' onclick="__v15.bossPick('+i+')">'+esc(o.vi)+'</button>';
   }).join('')+'</div>'+bossFeedback('');
@@ -1574,7 +1596,7 @@ function renderReview(){
     gain15(R.score*2);save15();return;
   }
   var c=R.cur,w=c.w;
-  host.innerHTML='<div class="v15qcard"><div class="v15qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · câu '+(R.idx+1)+'/'+R.list.length+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe</button></div></div>'
+  host.innerHTML='<div class="v15qcard"><div class="v15qword">'+esc(labelOf(w))+'</div><div class="mute">'+esc(w.ipa)+' · câu '+(R.idx+1)+'/'+R.list.length+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe</button></div></div>'
   +'<div class="v15opts">'+c.opts.map(function(o,i){
     var cl='';if(R.answered!==null)cl=(o.id===w.id?'right':(o.id===R.answered?'wrong':''));
     return '<button class="v15opt '+cl+'" '+(R.answered!==null?'disabled':'')+' onclick="__v15.reviewPick(\''+o.id+'\')">'+esc(o.vi)+'</button>';

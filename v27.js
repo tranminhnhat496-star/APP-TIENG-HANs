@@ -392,14 +392,18 @@ function distractorsEN(w,n){
   var pool=[];
   try{
     var v=v15();if(!v||!v.words)return [];
-    pool=v.words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+    /* V47 (C-R3-3): same-headword exclusion (see v15.js). */
+    pool=v.words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&(x.t===w.t||x.lv===w.lv)});
     var sc=v.en15().scope;
     if(sc&&sc.kind==='lib'){
-      var inSc=v.words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      var inSc=v.words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&v.inScope(x)});
       if(inSc.length>=n)pool=inSc;
     }
     if(pool.length<n){
-      var rest=v.words.filter(function(x){return x.id!==w.id&&pool.indexOf(x)<0});
+      /* V47 (C-R3-3): the short-pool fallback must carry the
+         same exclusion, or the guard is bypassed exactly when
+         the pool is small (when the twin is most likely drawn). */
+      var rest=v.words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&pool.indexOf(x)<0});
       pool=pool.concat(rest);
     }
   }catch(e){}
@@ -608,7 +612,7 @@ function renderQuestion(){
       var ds=distractorsEN(w,3);
       if(ds.length<1)kind='flash';
       else{
-        var q=kind==='mc-ev'?w.en:w.vi, isEv=kind==='mc-ev';
+        var q=kind==='mc-ev'?labelOf(w):w.vi, isEv=kind==='mc-ev';
         var opts=shuffle([w].concat(ds));
         html+='<div class="v27q"><div class="v27q-prompt">'+esc(q)+'</div>'
           +(isEv&&w.ipa?'<div class="v27q-ipa">/'+esc(w.ipa)+'/</div>':'')

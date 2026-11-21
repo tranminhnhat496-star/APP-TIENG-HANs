@@ -227,7 +227,8 @@ function challenge(id){fight(id)}
 /* ---------- question pools (same sources as V18; shared ruleset) ---------- */
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
-  var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V47 (C-R3-3): same-headword exclusion (see v15.js). */
+  var pool=words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&(x.t===w.t||x.lv===w.lv)});
   /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
      trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
      từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
@@ -237,7 +238,7 @@ function distractorsEN(w,n){
   try{
     var sc=v&&v.en15().scope;
     if(sc&&sc.kind==='lib'&&v.inScope){
-      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      var inSc=words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&v.inScope(x)});
       if(inSc.length>=n)pool=inSc;
     }
   }catch(e){}
@@ -802,7 +803,7 @@ function qHTML(){
   if(mode==='type'){
     return '<div class="v19qcard"><div class="v19qword vi">'+esc(w2.vi)+'</div><div class="mute">Chọn cách viết đúng của từ này</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
   }
-  return '<div class="v19qcard"><div class="v19qword">'+esc(w2.en)+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v19opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  return '<div class="v19qcard"><div class="v19qword">'+esc(labelOf(w2))+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v19opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
 }
 
 /* ---------- test hooks (used by the jsdom suite; harmless in production) ---------- */
