@@ -112,12 +112,18 @@ function listSystemSnapshots(){
 /* ---------- C8 restore / undo (snapshot first, validate, confirm) ---------- */
 var _reloadCalled=false;
 function reloadPage(){ _reloadCalled=true; try{ location.reload(); }catch(e){} }
+var _snapSeq45=0; /* V45 (V19.0, C-R3-4): per-process snapshot counter — part of the unique suffix below. */
 function snapshotCurrent(){
   try{
     var s=window.__v20sync;
     if(s&&s.snapshot){
       var cur=lsGet('hanvocab.v1')||'';
-      var k='hanvocab.v12.preimport-'+Date.now();
+      /* V45 (V19.0, C-R3-4): the key was 'hanvocab.v12.preimport-<ms>'
+         alone, so two snapshots in the same millisecond overwrote each
+         other. The counter + random suffix make every key unique; the
+         leading ms number is kept so newestPreRestoreKey()'s parseInt
+         still resolves the newest snapshot. */
+      var k='hanvocab.v12.preimport-'+Date.now()+'-'+(++_snapSeq45)+'-'+Math.random().toString(36).slice(2,8);
       s.snapshot(k, cur);
       recordBackupEvent('pre-restore', cur.length, hashOf(cur), k, true, 'Ảnh chụp trước khi khôi phục');
       return k;
@@ -128,14 +134,16 @@ function snapshotCurrent(){
 function restoreRaw(raw, sourceLabel){
   /* Validate -> flush pending in-memory changes -> snapshot current ->
      write -> record -> reload. Returns {ok} / {ok:false, reason}. */
+  var s=window.__v20sync;
+  /* V45 (V19.0, lead): size-check BEFORE parsing — a >10 MB file was
+     parsed into memory first and only then refused as file-too-large. */
+  if((raw||'').length>((s&&s.MAX_IMPORT_BYTES)||10485760)) return {ok:false, reason:'file-too-large'};
   var j=null;
   try{ j=JSON.parse(raw); }catch(e){ return {ok:false, reason:'bad-json'}; }
-  var s=window.__v20sync;
   if(s&&s.validateSave){
     var v=s.validateSave(j);
     if(!v.ok) return {ok:false, reason:'invalid', errors:(v.errors||[])};
   } else if(!j||!Array.isArray(j.cards)) return {ok:false, reason:'bad-save'};
-  if((raw||'').length>((s&&s.MAX_IMPORT_BYTES)||10485760)) return {ok:false, reason:'file-too-large'};
   try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   snapshotCurrent();
   try{ localStorage.setItem('hanvocab.v1', JSON.stringify(j)); }catch(e){ return {ok:false, reason:'write-failed'}; }
@@ -179,7 +187,11 @@ function undoRestore(){
 }
 function deleteHistoryEntry(at){
   try{
-    var h=readHistory().filter(function(e){ return e.at!==at; });
+    /* V45 (V19.0, lead): delete ONE entry, not every entry sharing the
+       timestamp — two backup-history events recorded in the same
+       millisecond were both deleted. */
+    var h=readHistory(),removed=false;
+    h=h.filter(function(e){ if(!removed&&e.at===at){removed=true;return false} return true; });
     writeHistory(h);
     return {ok:true};
   }catch(e){ return {ok:false}; }

@@ -30,7 +30,8 @@ function statsOf(list){
     var b=boxOf(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if((e.due[w.id]||0)<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)s.due++;
   });
   return s;
 }
@@ -369,7 +370,7 @@ function filterWords(list){
     if(V.status==='new'&&b!==0)return false;
     if(V.status==='learning'&&(b<1||b>=5))return false;
     if(V.status==='mastered'&&b<5)return false;
-    if(V.status==='due'&&(e.due[w.id]||0)>now)return false;
+    if(V.status==='due'&&(b<1||b>4||(e.due[w.id]||0)>now))return false;
     if(V.status==='fav'&&favs.indexOf(w.id)<0)return false;
     return true;
   });

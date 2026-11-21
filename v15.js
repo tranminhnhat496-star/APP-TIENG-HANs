@@ -348,7 +348,7 @@ function inScope15(w){
     if(sc.status){
       var old2=enOld(),e2=en15();
       if(sc.status==='unlearned'&&(old2.box[w.id]||0)>0)return false;
-      if(sc.status==='due'&&(e2.due[w.id]||0)>Date.now())return false;
+      if(sc.status==='due'&&((old2.box[w.id]||0)<1||(old2.box[w.id]||0)>4||(e2.due[w.id]||0)>Date.now()))return false;
     }
   }
   return true;
@@ -394,13 +394,13 @@ function wordsFiltered(o){
           if(!anyT2)return false;
         }
         if(sc.status==='unlearned'&&(old.box[w.id]||0)>0)return false;
-        if(sc.status==='due'&&(e.due[w.id]||0)>Date.now())return false;
+        if(sc.status==='due'&&((old.box[w.id]||0)<1||(old.box[w.id]||0)>4||(e.due[w.id]||0)>Date.now()))return false;
       }
     }else{
       if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
       if(o.topic&&w.t!==o.topic)return false;
     }
-    if(o.onlyDue){var due=e.due[w.id]||0;if(due>Date.now())return false}
+    if(o.onlyDue){var _b45=(old.box[w.id]||0);if(_b45<1||_b45>4||(e.due[w.id]||0)>Date.now())return false}
     if(o.onlyWeak){if(!((old.wrong[w.id]||0)>(old.right[w.id]||0)))return false}
     if(o.onlyNew){if((old.box[w.id]||0)>0)return false}
     return true;
@@ -453,17 +453,27 @@ function mark15(ok,w,mode){
   return xp;
 }
 function dueTodayCount(){
-  var e=en15(),n=0,now=Date.now();
-  WORDS.forEach(function(w){if((e.due[w.id]||0)<=now)n++});
+  var e=en15(),old=enOld(),n=0,now=Date.now();
+  WORDS.forEach(function(w){var b=old.box[w.id]||0;if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)n++});
   return n;
 }
 function counts15(){
+  /* V45 (V19.0, C-R3-1): "due" means box 1-4 AND due<=now — a word is
+     only "cần ôn" once it has been learned (box>=1) and is not yet
+     mastered (box 5). This matches Smart Learning's REVIEW definition
+     (v27 classifyEN/KO: box>=1&&box<=4&&due<=now). Before, every due
+     counter used (due||0)<=now alone, so a fresh player was told all
+     4,889 words "need review today" and Review sessions taught brand-
+     new words under the "review" label. Box 5 stays excluded on purpose:
+     mastered words are "đã thuộc" (shown separately); V27 classifies
+     them MASTERED even past due, and the dashboard dueN below uses the
+     same 1-4 range so all counters agree. */
   var c={total:WORDS.length,'new':0,learning:0,mastered:0,due:0,weak:0};
   var old=enOld(),e=en15(),now=Date.now();
   WORDS.forEach(function(w){
     var b=old.box[w.id]||0;
     if(b===0)c['new']++;else if(b>=5)c.mastered++;else c.learning++;
-    if((e.due[w.id]||0)<=now)c.due++;
+    if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)c.due++;
     if((old.wrong[w.id]||0)>(old.right[w.id]||0))c.weak++;
   });
   return c;
@@ -1515,9 +1525,9 @@ function bossSpeak(){
 /* ---------- SRS REVIEW ---------- */
 var R=null;
 function reviewHTML(){
-  var e=en15(),now=Date.now();
+  var e=en15(),now=Date.now(),_o45=enOld();
   /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ đếm/ôn từ trong bộ đó */
-  var due=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
+  var due=WORDS.filter(function(w){var _b45=(_o45.box[w.id]||0);return inScope15(w)&&_b45>=1&&_b45<=4&&(e.due[w.id]||0)<=now});
   var weak=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)}).slice(0,10);
   var h='<h3>Ôn tập thông minh (Spaced Repetition)</h3>'
   +'<p class="mute">Từ trả lời sai quay lại sau 10 phút. Từ đã thuộc được giãn dần: 1 → 3 → 7 → 14 → 30 ngày. Ôn tập ở đây dùng dữ liệu tiếng Anh riêng, không chạm tới từ tiếng Hàn.</p>'
@@ -1538,11 +1548,15 @@ function reviewStart(weakOnly){
       return;
     }
   }catch(e){}
-  var e=en15(),now=Date.now();
+  var e=en15(),now=Date.now(),_o45=enOld();
   var list;
   /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ ôn từ trong bộ đó */
   if(weakOnly)list=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)});
-  else list=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
+  else list=WORDS.filter(function(w){var _b45=(_o45.box[w.id]||0);return inScope15(w)&&_b45>=1&&_b45<=4&&(e.due[w.id]||0)<=now});
+  /* V45 (V19.0, C-R3-1): with 0 truly-due words the list is empty and
+     reviewStart shows the honest "Không có từ nào cần ôn hôm nay."
+     pop — it must NOT fall back to all words (pickPool's silent
+     fallback to ALL words is the trap that hid this bug). */
   if(!list.length){pop15(weakOnly?'Không có từ yếu nào. Tuyệt vời!':'Không có từ nào cần ôn hôm nay.');return}
   R={list:shuffle(list).slice(0,10),idx:0,score:0,cur:null,answered:null,ok:null};
   reviewNextQ();

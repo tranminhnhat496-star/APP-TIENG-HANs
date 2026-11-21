@@ -139,6 +139,10 @@ function claimHatch(){
 function speedHatch(){
   var e=en23();if(!e||!e.hatch)return{ok:false,msg:'Không có trứng nào đang ấp.'};
   var H=D.hatch||{};
+  /* V45 (V19.0, lead): check the remaining time BEFORE spending gems —
+     a hatch that was already ready still charged 5 gems for nothing
+     (the button hides when ready, but a direct call / race paid anyway). */
+  if((e.hatch.endsAt||0)<=Date.now())return{ok:false,msg:'Trứng đã ấp xong — nhận thú cưng ngay!'};
   if(!spendGems23(H.speedGems||5))return{ok:false,msg:'Không đủ kim cương (cần '+(H.speedGems||5)+' 💎).'};
   e.hatch.endsAt=Math.max(Date.now(),(e.hatch.endsAt||0)-(H.speedMin||30)*60000);
   save23();return{ok:true,msg:'Đã tăng tốc ấp trứng -'+(H.speedMin||30)+' phút!'};
