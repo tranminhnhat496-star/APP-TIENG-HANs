@@ -90,9 +90,10 @@ function zoneNeedText(zid,lang){
 }
 function bossUnlocked19(id,lang){
   lang=lang||lang19();
-  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return false;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null)||(window.__V48_DATA&&__V48_DATA.byId?__V48_DATA.byId(id):null);if(!b)return false;
   if(b.zone==='chrono'&&window.__v33&&__v33.bossUnlocked)return __v33.bossUnlocked(id,lang);
   if(b.zone==='skyroot'&&window.__v35&&__v35.bossUnlocked)return __v35.bossUnlocked(id,lang);
+  if(b.zone==='golem'&&window.__v48&&__v48.bossUnlocked)return __v48.bossUnlocked(id,lang);
   if(!zoneOpen(b.zone,lang))return false;
   var list=zoneBosses(b.zone),i=list.indexOf(id);
   if(i<=0)return true;
@@ -227,7 +228,8 @@ function challenge(id){fight(id)}
 /* ---------- question pools (same sources as V18; shared ruleset) ---------- */
 function distractorsEN(w,n){
   var v=V15();var words=(v&&v.words)||[];
-  var pool=words.filter(function(x){return x.id!==w.id&&(x.t===w.t||x.lv===w.lv)});
+  /* V47 (C-R3-3): same-headword exclusion (see v15.js). */
+  var pool=words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&(x.t===w.t||x.lv===w.lv)});
   /* V22 (sửa): khi đang chọn phạm vi Thư viện, đáp án nhiễu phải lấy
      trong cùng phạm vi. Lọc theo chủ đề/cấp độ TRƯỚC làm cạn nguồn —
      từ BT trùng với V14/V15 giữ t/lv cũ nên từ BT-only (t='bt') bị
@@ -237,7 +239,7 @@ function distractorsEN(w,n){
   try{
     var sc=v&&v.en15().scope;
     if(sc&&sc.kind==='lib'&&v.inScope){
-      var inSc=words.filter(function(x){return x.id!==w.id&&v.inScope(x)});
+      var inSc=words.filter(function(x){return x.id!==w.id&&(x.en||'').toLowerCase()!==(w.en||'').toLowerCase()&&v.inScope(x)});
       if(inSc.length>=n)pool=inSc;
     }
   }catch(e){}
@@ -379,7 +381,7 @@ function markKO19(ok,k){
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
 function fight(id){
-  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null);if(!b)return;
+  var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null)||(window.__V48_DATA&&__V48_DATA.byId?__V48_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
   if(!document.querySelector('#v19fight'))openMap();
   startFight(b,lang19());
@@ -802,7 +804,7 @@ function qHTML(){
   if(mode==='type'){
     return '<div class="v19qcard"><div class="v19qword vi">'+esc(w2.vi)+'</div><div class="mute">Chọn cách viết đúng của từ này</div></div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
   }
-  return '<div class="v19qcard"><div class="v19qword">'+esc(w2.en)+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v19opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
+  return '<div class="v19qcard"><div class="v19qword">'+esc(labelOf(w2))+'</div><div class="mute">'+(F.hideIpa?'Chọn nghĩa đúng':esc(w2.ipa)+' · Chọn nghĩa đúng')+'</div></div><div class="v19opts">'+c.optsVi.map(function(o,i){return optBtn(esc(o.vi),i,o.id===w2.id)}).join('')+'</div>'+feedback('');
 }
 
 /* ---------- test hooks (used by the jsdom suite; harmless in production) ---------- */

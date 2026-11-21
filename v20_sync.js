@@ -81,6 +81,11 @@ function hasProgress(S){
   if(v7.en33&&v7.en33.regionClaimed){ for(var rc33 in v7.en33.regionClaimed){ if(v7.en33.regionClaimed[rc33]) return true; } }
   if(v7.en35&&v7.en35.quests){ for(var q35 in v7.en35.quests){ if(v7.en35.quests[q35]) return true; } }
   if(v7.en35&&v7.en35.regionClaimed){ for(var rc35 in v7.en35.regionClaimed){ if(v7.en35.regionClaimed[rc35]) return true; } }
+  if(v7.en48&&v7.en48.forge&&(v7.en48.forge.correct||0)>0) return true;
+  if(v7.en48&&v7.en48.dojo&&(v7.en48.dojo.attempts||0)>0) return true;
+  if(v7.en48&&v7.en48.dojoUnlocked) return true;
+  if(v7.en48&&v7.en48.tree&&v7.en48.tree.claimed){ for(var tr48 in v7.en48.tree.claimed){ if(v7.en48.tree.claimed[tr48]) return true; } }
+  if(v7.en48&&v7.en48.bounty&&v7.en48.bounty.claimed){ for(var bc48 in v7.en48.bounty.claimed){ if(v7.en48.bounty.claimed[bc48]) return true; } }
   return false;
 }
 function validateSave(obj){
@@ -379,6 +384,34 @@ function mergeSaves(localS, cloudS, localTime, cloudTime){
           m35.regionClaimed={en:Math.max(rcL35.en||0,rcC35.en||0),ko:Math.max(rcL35.ko||0,rcC35.ko||0)};
           m35.pending={};
           v7.en35=m35;
+        }
+        else if(kk==='en48'){
+          /* V48 (V19.3 Sentence Forge): forge counters MAX (correct /
+             bestStreak / sessions / per-day maps), bonusClaimed union
+             (1/absent), dojo counters MAX + per-day attempts MAX,
+             tree.claimed per-key MAX (timestamps), bounty.claimed
+             union (period keys are unique per day/week), bounty
+             streak from the NEWER save (a day-streak is a timeline,
+             not a MAX), dojoUnlocked MAX, flags newer-wins (a kill
+             switch turned OFF must stay off), created MIN. XP/gems
+             are never summed (MAX at the top level, as everywhere
+             else). Pending launches are session-local and dropped. */
+          var l48=(localS.v7&&localS.v7.en48)||{}, c48=(cloudS.v7&&cloudS.v7.en48)||{};
+          var m48={};
+          m48.created=Math.min(l48.created||Infinity, c48.created||Infinity);
+          if(!isFinite(m48.created)) m48.created=(l48.created||c48.created||Date.now());
+          var lf48=l48.forge||{}, cf48=c48.forge||{};
+          var m48f={correct:Math.max(lf48.correct||0,cf48.correct||0),streak:Math.max(lf48.streak||0,cf48.streak||0),bestStreak:Math.max(lf48.bestStreak||0,cf48.bestStreak||0),sessions:Math.max(lf48.sessions||0,cf48.sessions||0),lastDay:(newer.v7&&newer.v7.en48&&newer.v7.en48.forge&&newer.v7.en48.forge.lastDay)||(older.v7&&older.v7.en48&&older.v7.en48.forge&&older.v7.en48.forge.lastDay)||'',correctByDay:maxMap(lf48.correctByDay, cf48.correctByDay),dayBestStreak:maxMap(lf48.dayBestStreak, cf48.dayBestStreak),bonusClaimed:unionTrue(lf48.bonusClaimed, cf48.bonusClaimed)};
+          m48.forge=m48f;
+          var ld48=l48.dojo||{}, cd48=c48.dojo||{};
+          m48.dojo={attempts:Math.max(ld48.attempts||0,cd48.attempts||0),good:Math.max(ld48.good||0,cd48.good||0),selfOk:Math.max(ld48.selfOk||0,cd48.selfOk||0),attemptsByDay:maxMap(ld48.attemptsByDay, cd48.attemptsByDay)};
+          m48.tree={claimed:maxMap((l48.tree&&l48.tree.claimed)||{}, (c48.tree&&c48.tree.claimed)||{})};
+          var n48b=(newer.v7&&newer.v7.en48&&newer.v7.en48.bounty)||{}, o48b=(older.v7&&older.v7.en48&&older.v7.en48.bounty)||{};
+          m48.bounty={claimed:unionTrue((l48.bounty&&l48.bounty.claimed)||{}, (c48.bounty&&c48.bounty.claimed)||{}),streak:(n48b.streak&&n48b.streak.d)?{d:n48b.streak.d,n:n48b.streak.n||0}:{d:(o48b.streak&&o48b.streak.d)||'',n:(o48b.streak&&o48b.streak.n)||0}};
+          m48.dojoUnlocked=Math.max(l48.dojoUnlocked||0, c48.dojoUnlocked||0);
+          var nf48=(newer.v7&&newer.v7.en48&&newer.v7.en48.flags)||(older.v7&&older.v7.en48&&older.v7.en48.flags)||{forge:1,bounty:1,tree:1,dojo:1,boss:1};
+          m48.flags={forge:(nf48.forge===0?0:1),bounty:(nf48.bounty===0?0:1),tree:(nf48.tree===0?0:1),dojo:(nf48.dojo===0?0:1),boss:(nf48.boss===0?0:1)};
+          v7.en48=m48;
         }
         else if(kk==='ko16'){
           /* V40 (C-01): ko16 = {levels:{cardId:level}} (Smart Import,
