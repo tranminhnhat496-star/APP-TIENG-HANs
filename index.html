@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V19.0 — Round-3 Bug Fixes — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V19.0.1 — Legendary Scaling &amp; KO Boss XP — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -7675,6 +7675,10 @@ function en18(){
   if(!e){e=S.v7.en18={bosses:{},stones:{},titles:[],koStats:{right:0,wrong:0},created:Date.now()};}
   e.bosses=e.bosses||{};e.stones=e.stones||{};e.titles=e.titles||[];
   e.koStats=e.koStats||{right:0,wrong:0};
+  /* V46 (V19.0.1, C-R2-1): KO streak for the shared boss-answer XP rule
+     (+5 every 5th consecutive correct KO answer, exactly like EN).
+     New optional field, defaulted — no save-schema change. */
+  e.koStreak=e.koStreak||0;
   return e;
 }
 function save18(){var v=V15();if(v)v.save15()}
@@ -7890,7 +7894,7 @@ function distractorsEN(w,n){
   }catch(e){}
   return shuffle(pool).slice(0,n);
 }
-function legDiff(){var m=0;try{m=V15().counts().mastered}catch(e){}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
+function legDiff(){var m=0;try{var c=V15().counts;if(c&&typeof c.mastered==='number')m=c.mastered;else throw new Error('V46 legDiff: V15().counts.mastered is not a number')}catch(e){try{if(typeof console!=='undefined'&&console.warn)console.warn('[V46 legDiff] mastered read failed, falling back to A2/B1:',e&&e.message||e)}catch(_){}}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
   /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng mọi bộ lọc
@@ -7984,28 +7988,54 @@ function mark18(ok,w){
     if(old.review.indexOf(id)<0)old.review.push(id);
     e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
   }
+  /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
+     v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
+     below runs ONLY if the V46 layer failed to load, and is the original
+     block verbatim, so EN XP can never silently regress to 0. */
   var xp=0;
-  if(ok&&old.box[id]>before){
-    var last=old.xpAt[id]||0;
-    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  if(window.__v46&&__v46.awardBossAnswerXP){
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+  }else{
+    if(ok&&old.box[id]>before){
+      var last=old.xpAt[id]||0;
+      if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+    }
+    if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+    if(xp>0)gain18(xp);
+    var dn=dayNo18();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+    e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+    if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
+    if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
-  if(xp>0)gain18(xp);
-  var dn=dayNo18();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
-  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
-  if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
-  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
   save18();
 }
 function markKO(ok,k){
   var e=en18();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V46 (V19.0.1, C-R2-1): KO correct answers now pay the same XP as EN,
+     through the ONE shared rule __v46.awardBossAnswerXP (src/v46.js).
+     KO has no SRS box (the Korean deck is never modified by V18 — V39),
+     so a correct answer is itself XP-eligible; the 10-minute per-card
+     cooldown ('ko:'+card id, inside the same old.xpAt map EN uses) is
+     the throttle, and 'koStreak' carries the +5-every-5th streak exactly
+     like EN. First-win/replay rewards are untouched (they do not go
+     through this function). */
+  e.koStreak=e.koStreak||0;
+  if(ok)e.koStreak++;else e.koStreak=0;
   /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
      recordAnswer('ko',...) records right/wrong/cw/cr/last for the
      card. Called BEFORE save18() so the record rides the same V20
      flush. The Korean deck itself is still never modified by V18. */
   try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss18')}catch(e){}
+  if(k&&k.id){
+    try{
+      var _v15=V15();
+      if(_v15){var _old=_v15.enOld(),_en=_v15.en15();_old.xpAt=_old.xpAt||{};
+        if(window.__v46&&__v46.awardBossAnswerXP)__v46.awardBossAnswerXP({ok:ok,id:__v46.koXpKey(k.id),boxUp:!!ok,streakObj:e,streakKey:'koStreak',xpAt:_old.xpAt,gain:gain18,hist:_en.hist,daily:_en.daily});
+      }
+    }catch(_e46){}
+  }
   save18();
 }
 
@@ -8687,6 +8717,10 @@ function en19(){
   if(!e){e=S.v7.en19={lang:'en',bosses:{},titles:[],zoneClaimed:{},koStats:{right:0,wrong:0},created:Date.now()};}
   e.bosses=e.bosses||{};e.titles=e.titles||[];e.zoneClaimed=e.zoneClaimed||{};
   e.koStats=e.koStats||{right:0,wrong:0};
+  /* V46 (V19.0.1, C-R2-1): KO streak for the shared boss-answer XP rule
+     (+5 every 5th consecutive correct KO answer, exactly like EN).
+     New optional field, defaulted — no save-schema change. */
+  e.koStreak=e.koStreak||0;
   if(!e.lang)e.lang='en';
   return e;
 }
@@ -8970,28 +9004,54 @@ function mark19(ok,w){
     if(old.review.indexOf(id)<0)old.review.push(id);
     e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
   }
+  /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
+     v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
+     below runs ONLY if the V46 layer failed to load, and is the original
+     block verbatim, so EN XP can never silently regress to 0. */
   var xp=0;
-  if(ok&&old.box[id]>before){
-    var last=old.xpAt[id]||0;
-    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  if(window.__v46&&__v46.awardBossAnswerXP){
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain19,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+  }else{
+    if(ok&&old.box[id]>before){
+      var last=old.xpAt[id]||0;
+      if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+    }
+    if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+    if(xp>0)gain19(xp);
+    var dn=dayNo19();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+    e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+    if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
+    if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
-  if(xp>0)gain19(xp);
-  var dn=dayNo19();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
-  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
-  if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
-  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}
   save19();
 }
 function markKO19(ok,k){
   var e=en19();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V46 (V19.0.1, C-R2-1): KO correct answers now pay the same XP as EN,
+     through the ONE shared rule __v46.awardBossAnswerXP (src/v46.js).
+     KO has no SRS box (the Korean deck is never modified by V19 — V39),
+     so a correct answer is itself XP-eligible; the 10-minute per-card
+     cooldown ('ko:'+card id, inside the same old.xpAt map EN uses) is
+     the throttle, and 'koStreak' carries the +5-every-5th streak exactly
+     like EN. First-win/replay rewards are untouched (they do not go
+     through this function). */
+  e.koStreak=e.koStreak||0;
+  if(ok)e.koStreak++;else e.koStreak=0;
   /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
      recordAnswer('ko',...) records right/wrong/cw/cr/last for the
      card. Called BEFORE save19() so the record rides the same V20
      flush. The Korean deck itself is still never modified by V19. */
   try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss19')}catch(e){}
+  if(k&&k.id){
+    try{
+      var _v15=V15();
+      if(_v15){var _old=_v15.enOld(),_en=_v15.en15();_old.xpAt=_old.xpAt||{};
+        if(window.__v46&&__v46.awardBossAnswerXP)__v46.awardBossAnswerXP({ok:ok,id:__v46.koXpKey(k.id),boxUp:!!ok,streakObj:e,streakKey:'koStreak',xpAt:_old.xpAt,gain:gain19,hist:_en.hist,daily:_en.daily});
+      }
+    }catch(_e46){}
+  }
   save19();
 }
 
@@ -21702,6 +21762,9 @@ window.__V34_DATA={
       shield-halving step). Wrong answers never drain the meter (v1).
       KO fights: weakness = the selected Korean deck; no deck selected
       means the meter is hidden and never fills (honest, never fake).
+      V46 (V19.0.1): weakFor() consults __V46_DATA.weakExplicit FIRST —
+      23 per-boss overrides (13 pool-blocked + 10 Legendary) on topics
+      the live data proves fillable in each boss's pool.
    5) Smart mid-flight guard — one guarded endEarly() call in
       v33.js launchSession() (patched by build_v34.py); endEarly() is
       a no-op when no Smart session is live.
@@ -21721,6 +21784,13 @@ function weakFor(b,lang){
     if(lang==='ko')return {kind:'ko'};
     var d=D34();
     var id=b.id||'';
+    /* V46 (V19.0.1): redesigned weakness table — per-boss overrides for
+       the 23 bosses whose Break meter could not fill (13 pool-blocked +
+       10 Legendary, which legDiff scaling would block). Consulted first
+       so it overrides zone/el/diff for exactly these ids; the other 63
+       bosses keep their existing weakness. Table: __V46_DATA (v46_data.js). */
+    var d46=window.__V46_DATA||null;
+    if(d46&&d46.weakExplicit&&d46.weakExplicit[id])return d46.weakExplicit[id];
     if(d&&d.weakExplicit&&d.weakExplicit[id])return d.weakExplicit[id];
     var d35=window.__V35_DATA||null;
     if(d35&&d35.weakExplicit&&d35.weakExplicit[id])return d35.weakExplicit[id];
@@ -27156,6 +27226,208 @@ window.__v42={
       setTimeout(function(){_warn45('⚠️ Không đọc được bản lưu cũ và không giữ được bản gốc (bộ nhớ đầy?) — bắt đầu với dữ liệu mới.')},800);
     }
   }catch(e){}
+})();
+
+</script>
+
+<script id="v46data">
+/* ===== V46 DATA — V19.0.1 (layer V46): Boss Weakness redesign =====
+   Per-boss weakness overrides for the 23 bosses whose Break meter could
+   not fill (13 pool-blocked on V19.0 + the 10 Legendary bosses, which
+   become pool-blocked the moment legDiff() is fixed — see v46.js).
+   Every entry below is a REAL weakness kind/key from the existing v34
+   system (kind 'a1a2' + a real A1–A2 topic slug; weakMatch/weakName
+   already handle it, and the Vietnamese labels already exist in
+   __V34_DATA.a1a2Labels). No word, IPA, or meaning is invented here:
+   each topic was chosen ONLY because the live word data proves it has
+   words inside that boss's question pool (counts measured on the
+   pristine V19.0 base — tools/v46/logs-analysis.txt):
+     - Legendary pools change with mastered words (legDiff): a topic is
+       usable for a Legendary boss ONLY if it has words at ALL THREE
+       bands — A2+B1 (<200 mastered), B1-only (200–599), B2-only (>=600).
+       Only four A1–A2 topics qualify, with (m0 / m200 / m600) counts:
+       education 19/19/13, nature 42/20/14, travel 36/17/12,
+       emotions-and-feelings 10/7/7. (Chrono/Skyroot sets have 60 B2
+       words each but ZERO A2/B1 words, so they cannot serve a Legendary
+       boss below 600 mastered; body-parts and leisure-time have zero
+       words at every band.)
+     - B1-only pools (250 words): education 19, nature 20, travel 17,
+       emotions 7 — same four topics.
+     - B2-only pools (630 words): education 13, nature 14, travel 12,
+       emotions 7 (+ Chrono/Skyroot 60 each — not used here, to keep EN
+       bosses on English-vocabulary topics).
+     - v10_owl's pool is Oxford-only B1 (149 words): education 13,
+       nature 6, travel 6, emotions 5 — education is the fattest.
+   Assignments spread the 10 Legendary bosses across the four topics
+   (3 nature / 3 travel / 3 emotions / 1 education) with a loose element
+   fit where one exists (sea/earth/tree -> nature; fire/light/dark
+   feeling -> emotions; ice/fire journey -> travel); the 13 older
+   pool-blocked bosses take the thematically nearest fillable topic
+   (z6 sea animals -> nature; z8 vehicles -> travel; owl/wizard/fox/
+   dict learning -> education; tiger speed -> travel; octopus/fairy
+   water & nature -> nature; king -> travel).
+   The 15 mode-blocked bosses (grammar/read/builder-only modes) are NOT
+   touched: their meter cannot fill because their fights ask no word
+   questions at all, and changing their mode would change fight
+   mechanics — out of scope for this balance version. After this table,
+   pool-blocked = 0 at mastered 0/200/600/700 and distinct blocked = 15
+   (mode only), down from 26. See tools/v46/analysis-boss-tables.json
+   for the per-boss before/after proof (test46 §46B recomputes it live).
+   weakFor() (src/v34.js, patched by build_v46.py) consults this table
+   FIRST — after the KO-deck rule, before the v34/v35 explicit tables —
+   so it overrides zoneWeak / elWeak / diffWeak for exactly these 23
+   boss ids and changes nothing for the other 63 bosses. */
+(function(){
+'use strict';
+var WEAK_EXPLICIT46={
+  /* Legendary (10) — old: B1 -> clothes-and-accessories, B2 -> fruit-and-vegetables (diffWeak). */
+  'v10_firedragon':{kind:'a1a2',key:'emotions-and-feelings'},
+  'v10_icewolf':{kind:'a1a2',key:'travel'},
+  'v10_thunderlion':{kind:'a1a2',key:'education'},
+  'v10_seaoctopus':{kind:'a1a2',key:'nature'},
+  'v10_titan':{kind:'a1a2',key:'travel'},
+  'v10_phoenix':{kind:'a1a2',key:'emotions-and-feelings'},
+  'v10_voidghost':{kind:'a1a2',key:'emotions-and-feelings'},
+  'v10_godturtle':{kind:'a1a2',key:'nature'},
+  'v10_ninetails':{kind:'a1a2',key:'travel'},
+  'v10_ancienttree':{kind:'a1a2',key:'nature'},
+  /* Boss Map zones (5) — old: z6 -> animals, z8 -> vehicles (zoneWeak). */
+  'v11_seadragon':{kind:'a1a2',key:'nature'},
+  'v11_sharkking':{kind:'a1a2',key:'nature'},
+  'v11_timemachine':{kind:'a1a2',key:'travel'},
+  'v11_golem':{kind:'a1a2',key:'travel'},
+  'v11_goldephant':{kind:'a1a2',key:'travel'},
+  /* English Challenge + Elemental, B1 pool (5) — old: clothes (diffWeak B1),
+     fruit (elWeak nature), food-and-drinks (elWeak water). */
+  'v10_owl':{kind:'a1a2',key:'education'},
+  'v10_tiger':{kind:'a1a2',key:'travel'},
+  'v10_wizard':{kind:'a1a2',key:'education'},
+  'v10_fox':{kind:'a1a2',key:'education'},
+  'v10_octopus':{kind:'a1a2',key:'nature'},
+  /* English Challenge + Elemental, B2 pool (3) — old: fruit-and-vegetables
+     (diffWeak B2 / elWeak nature). */
+  'v10_dict':{kind:'a1a2',key:'education'},
+  'v10_king':{kind:'a1a2',key:'travel'},
+  'v10_fairy':{kind:'a1a2',key:'nature'}
+};
+window.__V46_DATA={
+  version:'19.0.1',
+  weakExplicit:WEAK_EXPLICIT46
+};
+})();
+
+</script>
+<script id="v46js">
+/* ===== V46 — V19.0.1: Legendary scaling + weakness redesign + KO boss XP =====
+   BALANCE change (Claude-directed DO), not a bug-fix round. Two changes,
+   both gameplay-visible — see CHANGELOG_V19_0_to_V19_0_1.md.
+   1) Legendary difficulty scaling (legDiff, src/v18.js) + weakness-table
+      redesign (src/v34.js weakFor + this layer's data in src/v46_data.js):
+      legDiff() read V15().counts() as a function, but counts is a getter
+      (src/v15.js:1787), so the call threw, the try/catch swallowed it,
+      m stayed 0, and legDiff() ALWAYS returned ['A2','B1'] — Legendary
+      difficulty never scaled despite the arena card promising "Độ khó
+      câu hỏi tăng theo tiến trình học của bạn". The read is now
+      V15().counts.mastered (getter read, not called); thresholds are
+      UNCHANGED (<200 -> ['A2','B1'], <600 -> ['B1'], else ['B2']); a
+      failed read is console.warn-ed (never silently swallowed) and falls
+      back to ['A2','B1'] — the logged fallback, not a silent default.
+      The weakness table is redesigned in the SAME version so the
+      blocked-boss count does not grow 26 -> 36: 23 per-boss overrides
+      (src/v46_data.js) put every previously pool-blocked boss and every
+      Legendary boss on a topic the live data proves fillable in its pool
+      at every mastered band. Recomputed: pool-blocked 0, distinct
+      blocked 15 (the 15 mode-blocked bosses, whose grammar/read/builder
+      fights ask no word questions — untouched by design).
+   2) Korean boss XP (C-R2-1): correct KO answers paid 0 XP while EN
+      paid up to +10 for identical effort, in both engines. The ONE
+      shared XP-award function below now serves mark18/markKO (v18.js)
+      and mark19/markKO19 (v19.js) — same rule, same amounts, no drift:
+        +10 on a "box-up" correct answer, once per item per 10 minutes
+          (old.xpAt cooldown, exactly as EN had it);
+        +5 every 5th consecutive correct answer (streak % 5 === 0);
+        0 on a wrong answer; hist/daily bookkeeping identical.
+      EN calls it with boxUp = (box rose) and streakKey 'streak' on the
+      EN SRS state — byte-identical XP to V19.0 (verified in test46 §46D
+      and Chrome gate G5: same cooldown, same streak cadence, same
+      fight totals). KO calls it with boxUp = true on a correct answer
+      (KO has no SRS box — the Korean deck is never modified by boss
+      fights, V39 — so eligibility is the correct answer itself, and
+      the 10-minute per-card cooldown is the throttle) and streakKey
+      'koStreak' on the engine state (en18()/en19(), defaulted ||0;
+      a new optional field, no save-schema change — same pattern as
+      koStats). KO cooldown keys are namespaced 'ko:'+cardId inside the
+      SAME old.xpAt map EN uses (KO card ids are random 10-char strings
+      like 'a9msh4om92'; the prefix makes collision with EN word ids
+      impossible by construction). First-win (+50 XP/+1 gem) and replay
+      (+10 XP) rewards are NOT routed through this function and are
+      UNCHANGED in both languages and both engines.
+   Guards: every cross-layer read goes through window.__v46 with a
+   guard + try/catch; if this layer ever failed to load, the EN mark
+   functions fall back to their original inline XP block (kept verbatim
+   in v18.js/v19.js, marked fallback-only) so EN XP can never regress
+   to 0, and KO falls back to its V19.0 behaviour (0 XP). The live path
+   is always this shared function (test46 §46C spies on it). */
+(function(){
+'use strict';
+var VERSION='19.0.1';
+/* ONE shared boss-answer XP rule for EN + KO, v18 + v19.
+   o: {ok, id, boxUp, streakObj, streakKey, xpAt, gain, hist, daily}
+   - ok: the answer was correct. id: cooldown key (EN word id, or
+     'ko:'+card id for KO — see koXpKey). boxUp: EN = the SRS box rose
+     for this word; KO = true on a correct answer (no box exists).
+   - streakObj/streakKey: the consecutive-correct counter holder
+     (EN: enOld(), 'streak'; KO: en18()/en19(), 'koStreak').
+   - xpAt: the per-item 10-minute cooldown map (enOld().xpAt, shared).
+   - gain: gain18/gain19. hist/daily: en15().hist / en15().daily.
+   Returns the XP awarded (0 on wrong / cooldown / no streak bonus).
+   The two lines below are the whole rule — identical for both
+   languages by construction, so they cannot drift apart again. */
+function awardBossAnswerXP(o){
+  if(!o)return 0;
+  var xp=0;
+  try{
+    if(o.ok&&o.boxUp&&o.xpAt&&o.id){
+      var last=o.xpAt[o.id]||0;
+      if(Date.now()-last>600000){xp=10;o.xpAt[o.id]=Date.now();}
+    }
+    if(o.ok&&o.streakObj){
+      var st=o.streakObj[o.streakKey]||0;
+      if(st>0&&st%5===0)xp+=5;
+    }
+    if(xp>0&&o.gain){try{o.gain(xp)}catch(e){}}
+  }catch(e){}
+  /* hist/daily bookkeeping — identical to the mark18/mark19 block this
+     replaces (same day number, same rollover, same counters). */
+  try{
+    var dn=Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5);
+    if(o.hist){
+      o.hist[dn]=o.hist[dn]||{c:0,t:0,xp:0};
+      o.hist[dn].t++;if(o.ok)o.hist[dn].c++;o.hist[dn].xp+=xp;
+    }
+    if(o.daily){
+      var today=new Date().toDateString();
+      /* Reset IN PLACE, never reassign o.daily: o.daily is the caller's
+         en15().daily object, and replacing it here would orphan the
+         caller's reference (the rollover would silently discard the
+         day's counters — caught by test46 §46C). The original mark18
+         block could reassign e.daily because e IS the state object. */
+      if(o.daily.d!==today){o.daily.d=today;o.daily.correct=0;o.daily.wrong=0;o.daily.xp=0;}
+      if(o.ok){o.daily.correct++;o.daily.xp+=xp;}else o.daily.wrong++;
+    }
+  }catch(e){}
+  return xp;
+}
+/* KO cooldown key: namespaced inside the shared xpAt map. */
+function koXpKey(id){return 'ko:'+(id||'?')}
+try{
+  window.__v46={
+    version:VERSION,
+    awardBossAnswerXP:awardBossAnswerXP,
+    koXpKey:koXpKey,
+    _test:{awardBossAnswerXP:awardBossAnswerXP,koXpKey:koXpKey}
+  };
+}catch(e){}
 })();
 
 </script>
