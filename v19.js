@@ -38,6 +38,10 @@ function en19(){
   if(!e){e=S.v7.en19={lang:'en',bosses:{},titles:[],zoneClaimed:{},koStats:{right:0,wrong:0},created:Date.now()};}
   e.bosses=e.bosses||{};e.titles=e.titles||[];e.zoneClaimed=e.zoneClaimed||{};
   e.koStats=e.koStats||{right:0,wrong:0};
+  /* V46 (V19.0.1, C-R2-1): KO streak for the shared boss-answer XP rule
+     (+5 every 5th consecutive correct KO answer, exactly like EN).
+     New optional field, defaulted — no save-schema change. */
+  e.koStreak=e.koStreak||0;
   if(!e.lang)e.lang='en';
   return e;
 }
@@ -321,28 +325,54 @@ function mark19(ok,w){
     if(old.review.indexOf(id)<0)old.review.push(id);
     e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
   }
+  /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
+     v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
+     below runs ONLY if the V46 layer failed to load, and is the original
+     block verbatim, so EN XP can never silently regress to 0. */
   var xp=0;
-  if(ok&&old.box[id]>before){
-    var last=old.xpAt[id]||0;
-    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  if(window.__v46&&__v46.awardBossAnswerXP){
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain19,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+  }else{
+    if(ok&&old.box[id]>before){
+      var last=old.xpAt[id]||0;
+      if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+    }
+    if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+    if(xp>0)gain19(xp);
+    var dn=dayNo19();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+    e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+    if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
+    if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
-  if(xp>0)gain19(xp);
-  var dn=dayNo19();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
-  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
-  if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
-  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}
   save19();
 }
 function markKO19(ok,k){
   var e=en19();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V46 (V19.0.1, C-R2-1): KO correct answers now pay the same XP as EN,
+     through the ONE shared rule __v46.awardBossAnswerXP (src/v46.js).
+     KO has no SRS box (the Korean deck is never modified by V19 — V39),
+     so a correct answer is itself XP-eligible; the 10-minute per-card
+     cooldown ('ko:'+card id, inside the same old.xpAt map EN uses) is
+     the throttle, and 'koStreak' carries the +5-every-5th streak exactly
+     like EN. First-win/replay rewards are untouched (they do not go
+     through this function). */
+  e.koStreak=e.koStreak||0;
+  if(ok)e.koStreak++;else e.koStreak=0;
   /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
      recordAnswer('ko',...) records right/wrong/cw/cr/last for the
      card. Called BEFORE save19() so the record rides the same V20
      flush. The Korean deck itself is still never modified by V19. */
   try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss19')}catch(e){}
+  if(k&&k.id){
+    try{
+      var _v15=V15();
+      if(_v15){var _old=_v15.enOld(),_en=_v15.en15();_old.xpAt=_old.xpAt||{};
+        if(window.__v46&&__v46.awardBossAnswerXP)__v46.awardBossAnswerXP({ok:ok,id:__v46.koXpKey(k.id),boxUp:!!ok,streakObj:e,streakKey:'koStreak',xpAt:_old.xpAt,gain:gain19,hist:_en.hist,daily:_en.daily});
+      }
+    }catch(_e46){}
+  }
   save19();
 }
 

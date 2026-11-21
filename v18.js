@@ -36,6 +36,10 @@ function en18(){
   if(!e){e=S.v7.en18={bosses:{},stones:{},titles:[],koStats:{right:0,wrong:0},created:Date.now()};}
   e.bosses=e.bosses||{};e.stones=e.stones||{};e.titles=e.titles||[];
   e.koStats=e.koStats||{right:0,wrong:0};
+  /* V46 (V19.0.1, C-R2-1): KO streak for the shared boss-answer XP rule
+     (+5 every 5th consecutive correct KO answer, exactly like EN).
+     New optional field, defaulted — no save-schema change. */
+  e.koStreak=e.koStreak||0;
   return e;
 }
 function save18(){var v=V15();if(v)v.save15()}
@@ -251,7 +255,7 @@ function distractorsEN(w,n){
   }catch(e){}
   return shuffle(pool).slice(0,n);
 }
-function legDiff(){var m=0;try{m=V15().counts().mastered}catch(e){}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
+function legDiff(){var m=0;try{var c=V15().counts;if(c&&typeof c.mastered==='number')m=c.mastered;else throw new Error('V46 legDiff: V15().counts.mastered is not a number')}catch(e){try{if(typeof console!=='undefined'&&console.warn)console.warn('[V46 legDiff] mastered read failed, falling back to A2/B1:',e&&e.message||e)}catch(_){}}if(m<200)return ['A2','B1'];if(m<600)return ['B1'];return ['B2']}
 function wordPool(b){
   var v=V15();var words=(v&&v.words)||[];
   /* V22: phạm vi Thư viện đang chọn (vd Basic Tactics) thắng mọi bộ lọc
@@ -345,28 +349,54 @@ function mark18(ok,w){
     if(old.review.indexOf(id)<0)old.review.push(id);
     e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
   }
+  /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
+     v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
+     below runs ONLY if the V46 layer failed to load, and is the original
+     block verbatim, so EN XP can never silently regress to 0. */
   var xp=0;
-  if(ok&&old.box[id]>before){
-    var last=old.xpAt[id]||0;
-    if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+  if(window.__v46&&__v46.awardBossAnswerXP){
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+  }else{
+    if(ok&&old.box[id]>before){
+      var last=old.xpAt[id]||0;
+      if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
+    }
+    if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
+    if(xp>0)gain18(xp);
+    var dn=dayNo18();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
+    e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
+    if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
+    if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  if(ok&&old.streak>0&&old.streak%5===0)xp+=5;
-  if(xp>0)gain18(xp);
-  var dn=dayNo18();e.hist[dn]=e.hist[dn]||{c:0,t:0,xp:0};
-  e.hist[dn].t++;if(ok)e.hist[dn].c++;e.hist[dn].xp+=xp;
-  if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
-  if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
   save18();
 }
 function markKO(ok,k){
   var e=en18();
   if(ok)e.koStats.right++;else e.koStats.wrong++;
+  /* V46 (V19.0.1, C-R2-1): KO correct answers now pay the same XP as EN,
+     through the ONE shared rule __v46.awardBossAnswerXP (src/v46.js).
+     KO has no SRS box (the Korean deck is never modified by V18 — V39),
+     so a correct answer is itself XP-eligible; the 10-minute per-card
+     cooldown ('ko:'+card id, inside the same old.xpAt map EN uses) is
+     the throttle, and 'koStreak' carries the +5-every-5th streak exactly
+     like EN. First-win/replay rewards are untouched (they do not go
+     through this function). */
+  e.koStreak=e.koStreak||0;
+  if(ok)e.koStreak++;else e.koStreak=0;
   /* V39 (V18.4): KO boss answers also feed Smart Learning (V27) —
      recordAnswer('ko',...) records right/wrong/cw/cr/last for the
      card. Called BEFORE save18() so the record rides the same V20
      flush. The Korean deck itself is still never modified by V18. */
   try{if(window.__v27&&k&&k.id)__v27.recordAnswer('ko',k.id,ok,'boss18')}catch(e){}
+  if(k&&k.id){
+    try{
+      var _v15=V15();
+      if(_v15){var _old=_v15.enOld(),_en=_v15.en15();_old.xpAt=_old.xpAt||{};
+        if(window.__v46&&__v46.awardBossAnswerXP)__v46.awardBossAnswerXP({ok:ok,id:__v46.koXpKey(k.id),boxUp:!!ok,streakObj:e,streakKey:'koStreak',xpAt:_old.xpAt,gain:gain18,hist:_en.hist,daily:_en.daily});
+      }
+    }catch(_e46){}
+  }
   save18();
 }
 
