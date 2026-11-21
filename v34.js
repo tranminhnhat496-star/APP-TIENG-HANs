@@ -13,6 +13,9 @@
       shield-halving step). Wrong answers never drain the meter (v1).
       KO fights: weakness = the selected Korean deck; no deck selected
       means the meter is hidden and never fills (honest, never fake).
+      V46 (V19.0.1): weakFor() consults __V46_DATA.weakExplicit FIRST —
+      23 per-boss overrides (13 pool-blocked + 10 Legendary) on topics
+      the live data proves fillable in each boss's pool.
    5) Smart mid-flight guard — one guarded endEarly() call in
       v33.js launchSession() (patched by build_v34.py); endEarly() is
       a no-op when no Smart session is live.
@@ -32,6 +35,13 @@ function weakFor(b,lang){
     if(lang==='ko')return {kind:'ko'};
     var d=D34();
     var id=b.id||'';
+    /* V46 (V19.0.1): redesigned weakness table — per-boss overrides for
+       the 23 bosses whose Break meter could not fill (13 pool-blocked +
+       10 Legendary, which legDiff scaling would block). Consulted first
+       so it overrides zone/el/diff for exactly these ids; the other 63
+       bosses keep their existing weakness. Table: __V46_DATA (v46_data.js). */
+    var d46=window.__V46_DATA||null;
+    if(d46&&d46.weakExplicit&&d46.weakExplicit[id])return d46.weakExplicit[id];
     if(d&&d.weakExplicit&&d.weakExplicit[id])return d.weakExplicit[id];
     var d35=window.__V35_DATA||null;
     if(d35&&d35.weakExplicit&&d35.weakExplicit[id])return d35.weakExplicit[id];
@@ -220,7 +230,8 @@ function statsForList(list){
       var r=right[w.id]||0,wr=wrong[w.id]||0;
       if(b>=1)s.learned++;else s.notLearned++;
       if(b>=5)s.mastered++;
-      if((due[w.id]||0)<=now)s.due++;
+      /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+      if(b>=1&&b<=4&&(due[w.id]||0)<=now)s.due++;
       s.right+=r;s.wrong+=wr;
     });
     s.attempts=s.right+s.wrong;
