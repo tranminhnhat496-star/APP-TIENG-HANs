@@ -42,12 +42,17 @@ function weakFor(b,lang){
        bosses keep their existing weakness. Table: __V46_DATA (v46_data.js). */
     var d46=window.__V46_DATA||null;
     if(d46&&d46.weakExplicit&&d46.weakExplicit[id])return d46.weakExplicit[id];
+    /* V48 (V19.3): Hangul Golem weakness — listen-mode questions. */
+    var d48=window.__V48_DATA||null;
+    if(d48&&d48.weakExplicit&&d48.weakExplicit[id])return d48.weakExplicit[id];
     if(d&&d.weakExplicit&&d.weakExplicit[id])return d.weakExplicit[id];
     var d35=window.__V35_DATA||null;
     if(d35&&d35.weakExplicit&&d35.weakExplicit[id])return d35.weakExplicit[id];
     /* Chrono zone (V33 bosses not in the explicit table — safety net). */
     if(b.zone==='chrono')return {kind:'chrono',key:'change'};
     if(b.zone==='skyroot')return {kind:'skyroot',key:'climate'};
+    /* V48: golem zone safety net when __V48_DATA is missing. */
+    if(b.zone==='golem')return {kind:'listen'};
     /* z10 Vô Cực maps to the Chrono 'change' set, not an A1–A2 topic. */
     if(b.zone==='z10')return {kind:'chrono',key:'change'};
     if(b.zone&&d&&d.zoneWeak&&d.zoneWeak[b.zone])return {kind:'a1a2',key:d.zoneWeak[b.zone]};
@@ -92,6 +97,7 @@ function weakName(weak){
       return weak.key;
     }
     if(weak.kind==='ko')return 'Bộ từ tiếng Hàn đã chọn';
+    if(weak.kind==='listen')return 'Câu hỏi nghe';
     if(weak.kind==='a1a2'){
       if(d&&d.a1a2Labels&&d.a1a2Labels[weak.key])return d.a1a2Labels[weak.key];
       try{var v=window.__v15;if(v&&v.topicName){var n=v.topicName('a1_'+weak.key);if(n&&n!=='a1_'+weak.key)return n}}catch(e){}
@@ -130,7 +136,7 @@ function weakCountInPool(weak,words){
    reflects any scope relaxation). */
 function scopeBlocked(F){
   try{
-    if(!F||!F.weak||F.weak.kind==='ko')return false;
+    if(!F||!F.weak||F.weak.kind==='ko'||F.weak.kind==='listen')return false;
     var pool=F.pools&&F.pools.words;
     if(!pool||!pool.length)return false;
     return weakCountInPool(F.weak,pool)===0;
@@ -153,9 +159,17 @@ function breakDmg(F){
     }else{
       if(!(F.cur&&F.cur.w))return 0;
       if(!F.weak)return 0;
-      if(scopeBlocked(F))return 0;
-      if(!weakMatch(F.cur.w,F.weak))return 0;
-      F.brk=Math.min(3,(F.brk||0)+1);
+      if(F.weak.kind==='listen'){
+        /* V48: Hangul Golem is weak to LISTENING questions — a
+           correct answer on a listen-mode question fills the meter;
+           word pools cannot express it, so weakMatch is skipped. */
+        if(F.qmode!=='listen'&&F.qmode!=='ca-listen')return 0;
+        F.brk=Math.min(3,(F.brk||0)+1);
+      }else{
+        if(scopeBlocked(F))return 0;
+        if(!weakMatch(F.cur.w,F.weak))return 0;
+        F.brk=Math.min(3,(F.brk||0)+1);
+      }
     }
     if((F.brk||0)>=3){
       F.brk=0;
