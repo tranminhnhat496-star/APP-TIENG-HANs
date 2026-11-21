@@ -31,7 +31,8 @@ function statsOf(list){
     var b=boxOf(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if(dueOf(w.id)<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&dueOf(w.id)<=now)s.due++;
   });
   return s;
 }

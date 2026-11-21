@@ -861,7 +861,10 @@ function renderDashboard(){
       if(c.box>=1)learned++;
       if(c.cls==='MASTERED')masteredN++;
       if(c.cls==='WEAK')weakN++;
-      if(c.box>=1&&c.due<=now)dueN++;
+      /* V45 (V19.0, C-R3-1): dashboard dueN now uses the same box 1-4
+         range as classifyEN's REVIEW class (was box>=1, so mastered
+         words past due were counted here but never in Review). */
+      if(c.box>=1&&c.box<=4&&c.due<=now)dueN++;
     });
     /* độ chính xác 7 ngày (mọi chế độ EN) từ hist có sẵn */
     try{
@@ -879,7 +882,8 @@ function renderDashboard(){
       if(cc.box>=1)learned++;
       if(cc.cls==='MASTERED')masteredN++;
       if(cc.cls==='WEAK')weakN++;
-      if(cc.box>=1&&cc.due<=now)dueN++;
+      /* V45 (V19.0, C-R3-1): same box 1-4 alignment as the EN side. */
+      if(cc.box>=1&&cc.box<=4&&cc.due<=now)dueN++;
     });
     /* KO: chỉ có dữ liệu Học thông minh (days) — chưa có thì nói rõ */
     try{

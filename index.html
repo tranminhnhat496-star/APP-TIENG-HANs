@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V18.9 — Legendary Freeze Fix — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V19.0 — Round-3 Bug Fixes — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -922,7 +922,15 @@ function toCards(rows){
   return rows.map(r=>r.map(x=>typeof x=='string'?x.trim():x)).filter((r,i)=>r[0]&&r[1]&&!(i==0&&HDR.test(String(r[0]))))
     .map(r=>({id:uid(),dn:String(r[7]||''),h:String(r[0]),m:String(r[1]),p:r[2]||'',e:r[3]||'',g:r[4]||'',box:+r[5]||0,due:+r[6]||0}))}
 
-function load(){try{const j=JSON.parse(localStorage.getItem(KEY));if(j&&j.cards){/* V41 (F1): default S.opt — a stored save without opt threw TypeError (reading 'group') in startSession on every boot and left #app empty; defaulting here covers both boot and validated import. */if(!j.opt)j.opt={mode:'card',dir:'kv',group:'',due:false};return j}}catch(e){}
+function load(){var _raw45=null,_reason45=null;try{_raw45=localStorage.getItem(KEY);const j=JSON.parse(_raw45);if(j&&j.cards){/* V41 (F1): default S.opt — a stored save without opt threw TypeError (reading 'group') in startSession on every boot and left #app empty; defaulting here covers both boot and validated import. */if(!j.opt)j.opt={mode:'card',dir:'kv',group:'',due:false};return j}_reason45='no-cards'}catch(e){if(_reason45===null)_reason45='bad-json'}
+  /* V45 (V19.0, C-R3-2): a corrupt or card-less save used to be silently
+     destroyed here — load() returned a fresh sample and boot-time
+     dailyLogin()->save() overwrote the original bytes, with no warning
+     and no backup holding them. Quarantine the raw bytes FIRST (unique
+     key, never overwritten by a later boot) and flag it for the V45
+     layer, which shows the user an honest warning. First boot (no save
+     stored) has _raw45 null/empty and is never quarantined. */
+  if(_raw45&&_reason45){try{var _qk45='hanvocab.v12.corrupt-'+Date.now()+'-'+Math.random().toString(36).slice(2,8);localStorage.setItem(_qk45,_raw45);window.__V45_CORRUPT={key:_qk45,reason:_reason45,quarantined:true}}catch(_e45){try{window.__V45_CORRUPT={key:null,reason:_reason45,quarantined:false}}catch(_e452){}}}
   return{cards:toCards(parseTable(SAMPLE)),opt:{mode:'card',dir:'kv',group:'',due:false}}}
 let S=load();S.rem=S.rem||{on:false,time:'20:00',last:''};
 S.decks=S.decks&&S.decks.length?S.decks:[{id:'d0',name:'Bộ mặc định'}];
@@ -3143,7 +3151,7 @@ function speakEN(t){
 
 /* ---- UI ---- */
 var EXTABS=[['card','Flashcard'],['choice','Trắc nghiệm'],['type','Gõ từ'],['match','Ghép cặp'],['fill','Điền câu'],['scramble','Xếp chữ'],['listen','Nghe'],['race','Đua 60s'],['review','Ôn tập'],['topics','Chủ đề'],['vocab','Từ vựng']];
-function enIcon(name){ return '<img src="assets/icons/v6/'+name+'" style="width:18px;height:18px;vertical-align:-4px" alt="">'; }
+function enIcon(name){ /* V45 (V19.0, NEW-1): no icon -> no <img> (was: assets/icons/v6/undefined). No icon is invented or assigned. */ if(!name)return ''; return '<img src="assets/icons/v6/'+name+'" style="width:18px;height:18px;vertical-align:-4px" alt="">'; }
 function detailsHTML(w){
   return '<div class="enmeta"><span>'+esc14(w.ipa)+'</span> · <span>'+(POS[w.pos]||w.pos)+'</span> · <span>'+esc14((topicOf(w.t)||{vi:w.t}).vi)+'</span></div>'
     +(w.ex?'<div class="enex">“'+esc14(w.ex)+'”<br><span class="mute">'+esc14(w.exvi)+'</span></div>':'');
@@ -4265,7 +4273,7 @@ function inScope15(w){
     if(sc.status){
       var old2=enOld(),e2=en15();
       if(sc.status==='unlearned'&&(old2.box[w.id]||0)>0)return false;
-      if(sc.status==='due'&&(e2.due[w.id]||0)>Date.now())return false;
+      if(sc.status==='due'&&((old2.box[w.id]||0)<1||(old2.box[w.id]||0)>4||(e2.due[w.id]||0)>Date.now()))return false;
     }
   }
   return true;
@@ -4311,13 +4319,13 @@ function wordsFiltered(o){
           if(!anyT2)return false;
         }
         if(sc.status==='unlearned'&&(old.box[w.id]||0)>0)return false;
-        if(sc.status==='due'&&(e.due[w.id]||0)>Date.now())return false;
+        if(sc.status==='due'&&((old.box[w.id]||0)<1||(old.box[w.id]||0)>4||(e.due[w.id]||0)>Date.now()))return false;
       }
     }else{
       if(o.level&&o.level!=='ALL'&&w.lv!==o.level)return false;
       if(o.topic&&w.t!==o.topic)return false;
     }
-    if(o.onlyDue){var due=e.due[w.id]||0;if(due>Date.now())return false}
+    if(o.onlyDue){var _b45=(old.box[w.id]||0);if(_b45<1||_b45>4||(e.due[w.id]||0)>Date.now())return false}
     if(o.onlyWeak){if(!((old.wrong[w.id]||0)>(old.right[w.id]||0)))return false}
     if(o.onlyNew){if((old.box[w.id]||0)>0)return false}
     return true;
@@ -4370,17 +4378,27 @@ function mark15(ok,w,mode){
   return xp;
 }
 function dueTodayCount(){
-  var e=en15(),n=0,now=Date.now();
-  WORDS.forEach(function(w){if((e.due[w.id]||0)<=now)n++});
+  var e=en15(),old=enOld(),n=0,now=Date.now();
+  WORDS.forEach(function(w){var b=old.box[w.id]||0;if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)n++});
   return n;
 }
 function counts15(){
+  /* V45 (V19.0, C-R3-1): "due" means box 1-4 AND due<=now — a word is
+     only "cần ôn" once it has been learned (box>=1) and is not yet
+     mastered (box 5). This matches Smart Learning's REVIEW definition
+     (v27 classifyEN/KO: box>=1&&box<=4&&due<=now). Before, every due
+     counter used (due||0)<=now alone, so a fresh player was told all
+     4,889 words "need review today" and Review sessions taught brand-
+     new words under the "review" label. Box 5 stays excluded on purpose:
+     mastered words are "đã thuộc" (shown separately); V27 classifies
+     them MASTERED even past due, and the dashboard dueN below uses the
+     same 1-4 range so all counters agree. */
   var c={total:WORDS.length,'new':0,learning:0,mastered:0,due:0,weak:0};
   var old=enOld(),e=en15(),now=Date.now();
   WORDS.forEach(function(w){
     var b=old.box[w.id]||0;
     if(b===0)c['new']++;else if(b>=5)c.mastered++;else c.learning++;
-    if((e.due[w.id]||0)<=now)c.due++;
+    if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)c.due++;
     if((old.wrong[w.id]||0)>(old.right[w.id]||0))c.weak++;
   });
   return c;
@@ -5432,9 +5450,9 @@ function bossSpeak(){
 /* ---------- SRS REVIEW ---------- */
 var R=null;
 function reviewHTML(){
-  var e=en15(),now=Date.now();
+  var e=en15(),now=Date.now(),_o45=enOld();
   /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ đếm/ôn từ trong bộ đó */
-  var due=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
+  var due=WORDS.filter(function(w){var _b45=(_o45.box[w.id]||0);return inScope15(w)&&_b45>=1&&_b45<=4&&(e.due[w.id]||0)<=now});
   var weak=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)}).slice(0,10);
   var h='<h3>Ôn tập thông minh (Spaced Repetition)</h3>'
   +'<p class="mute">Từ trả lời sai quay lại sau 10 phút. Từ đã thuộc được giãn dần: 1 → 3 → 7 → 14 → 30 ngày. Ôn tập ở đây dùng dữ liệu tiếng Anh riêng, không chạm tới từ tiếng Hàn.</p>'
@@ -5455,11 +5473,15 @@ function reviewStart(weakOnly){
       return;
     }
   }catch(e){}
-  var e=en15(),now=Date.now();
+  var e=en15(),now=Date.now(),_o45=enOld();
   var list;
   /* V17: khi đang chọn một bộ từ trong Thư viện, chỉ ôn từ trong bộ đó */
   if(weakOnly)list=WORDS.filter(function(w){var o=enOld();return inScope15(w)&&(o.wrong[w.id]||0)>(o.right[w.id]||0)});
-  else list=WORDS.filter(function(w){return inScope15(w)&&(e.due[w.id]||0)<=now});
+  else list=WORDS.filter(function(w){var _b45=(_o45.box[w.id]||0);return inScope15(w)&&_b45>=1&&_b45<=4&&(e.due[w.id]||0)<=now});
+  /* V45 (V19.0, C-R3-1): with 0 truly-due words the list is empty and
+     reviewStart shows the honest "Không có từ nào cần ôn hôm nay."
+     pop — it must NOT fall back to all words (pickPool's silent
+     fallback to ALL words is the trap that hid this bug). */
   if(!list.length){pop15(weakOnly?'Không có từ yếu nào. Tuyệt vời!':'Không có từ nào cần ôn hôm nay.');return}
   R={list:shuffle(list).slice(0,10),idx:0,score:0,cur:null,answered:null,ok:null};
   reviewNextQ();
@@ -6928,7 +6950,8 @@ function statsOf(list){
     var b=boxOf(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if((e.due[w.id]||0)<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&(e.due[w.id]||0)<=now)s.due++;
   });
   return s;
 }
@@ -7267,7 +7290,7 @@ function filterWords(list){
     if(V.status==='new'&&b!==0)return false;
     if(V.status==='learning'&&(b<1||b>=5))return false;
     if(V.status==='mastered'&&b<5)return false;
-    if(V.status==='due'&&(e.due[w.id]||0)>now)return false;
+    if(V.status==='due'&&(b<1||b>4||(e.due[w.id]||0)>now))return false;
     if(V.status==='fav'&&favs.indexOf(w.id)<0)return false;
     return true;
   });
@@ -11985,7 +12008,8 @@ function unitStats(n,map){
     var b=boxOfId(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if(((v.en15().due)||{})[w.id]<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&((v.en15().due)||{})[w.id]<=now)s.due++;
   });
   return s;
 }
@@ -12085,7 +12109,7 @@ function filterEntries(list,map){
     if(ST.status==='new'&&b!==0)return false;
     if(ST.status==='learning'&&(b<1||b>=5))return false;
     if(ST.status==='mastered'&&b<5)return false;
-    if(ST.status==='due'&&w&&(dueMap[w.id]||0)>now)return false;
+    if(ST.status==='due'&&w&&(b<1||b>4||(dueMap[w.id]||0)>now))return false;
     if(ST.status==='fav'&&(!w||favs.indexOf(w.id)<0))return false;
     return true;
   });
@@ -13090,6 +13114,10 @@ function claimHatch(){
 function speedHatch(){
   var e=en23();if(!e||!e.hatch)return{ok:false,msg:'Không có trứng nào đang ấp.'};
   var H=D.hatch||{};
+  /* V45 (V19.0, lead): check the remaining time BEFORE spending gems —
+     a hatch that was already ready still charged 5 gems for nothing
+     (the button hides when ready, but a direct call / race paid anyway). */
+  if((e.hatch.endsAt||0)<=Date.now())return{ok:false,msg:'Trứng đã ấp xong — nhận thú cưng ngay!'};
   if(!spendGems23(H.speedGems||5))return{ok:false,msg:'Không đủ kim cương (cần '+(H.speedGems||5)+' 💎).'};
   e.hatch.endsAt=Math.max(Date.now(),(e.hatch.endsAt||0)-(H.speedMin||30)*60000);
   save23();return{ok:true,msg:'Đã tăng tốc ấp trứng -'+(H.speedMin||30)+' phút!'};
@@ -14432,7 +14460,8 @@ function statsOf(list){
     var b=boxOf(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if(dueOf(w.id)<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&dueOf(w.id)<=now)s.due++;
   });
   return s;
 }
@@ -16054,7 +16083,10 @@ function renderDashboard(){
       if(c.box>=1)learned++;
       if(c.cls==='MASTERED')masteredN++;
       if(c.cls==='WEAK')weakN++;
-      if(c.box>=1&&c.due<=now)dueN++;
+      /* V45 (V19.0, C-R3-1): dashboard dueN now uses the same box 1-4
+         range as classifyEN's REVIEW class (was box>=1, so mastered
+         words past due were counted here but never in Review). */
+      if(c.box>=1&&c.box<=4&&c.due<=now)dueN++;
     });
     /* độ chính xác 7 ngày (mọi chế độ EN) từ hist có sẵn */
     try{
@@ -16072,7 +16104,8 @@ function renderDashboard(){
       if(cc.box>=1)learned++;
       if(cc.cls==='MASTERED')masteredN++;
       if(cc.cls==='WEAK')weakN++;
-      if(cc.box>=1&&cc.due<=now)dueN++;
+      /* V45 (V19.0, C-R3-1): same box 1-4 alignment as the EN side. */
+      if(cc.box>=1&&cc.box<=4&&cc.due<=now)dueN++;
     });
     /* KO: chỉ có dữ liệu Học thông minh (days) — chưa có thì nói rõ */
     try{
@@ -16454,12 +16487,18 @@ function listSystemSnapshots(){
 /* ---------- C8 restore / undo (snapshot first, validate, confirm) ---------- */
 var _reloadCalled=false;
 function reloadPage(){ _reloadCalled=true; try{ location.reload(); }catch(e){} }
+var _snapSeq45=0; /* V45 (V19.0, C-R3-4): per-process snapshot counter — part of the unique suffix below. */
 function snapshotCurrent(){
   try{
     var s=window.__v20sync;
     if(s&&s.snapshot){
       var cur=lsGet('hanvocab.v1')||'';
-      var k='hanvocab.v12.preimport-'+Date.now();
+      /* V45 (V19.0, C-R3-4): the key was 'hanvocab.v12.preimport-<ms>'
+         alone, so two snapshots in the same millisecond overwrote each
+         other. The counter + random suffix make every key unique; the
+         leading ms number is kept so newestPreRestoreKey()'s parseInt
+         still resolves the newest snapshot. */
+      var k='hanvocab.v12.preimport-'+Date.now()+'-'+(++_snapSeq45)+'-'+Math.random().toString(36).slice(2,8);
       s.snapshot(k, cur);
       recordBackupEvent('pre-restore', cur.length, hashOf(cur), k, true, 'Ảnh chụp trước khi khôi phục');
       return k;
@@ -16470,14 +16509,16 @@ function snapshotCurrent(){
 function restoreRaw(raw, sourceLabel){
   /* Validate -> flush pending in-memory changes -> snapshot current ->
      write -> record -> reload. Returns {ok} / {ok:false, reason}. */
+  var s=window.__v20sync;
+  /* V45 (V19.0, lead): size-check BEFORE parsing — a >10 MB file was
+     parsed into memory first and only then refused as file-too-large. */
+  if((raw||'').length>((s&&s.MAX_IMPORT_BYTES)||10485760)) return {ok:false, reason:'file-too-large'};
   var j=null;
   try{ j=JSON.parse(raw); }catch(e){ return {ok:false, reason:'bad-json'}; }
-  var s=window.__v20sync;
   if(s&&s.validateSave){
     var v=s.validateSave(j);
     if(!v.ok) return {ok:false, reason:'invalid', errors:(v.errors||[])};
   } else if(!j||!Array.isArray(j.cards)) return {ok:false, reason:'bad-save'};
-  if((raw||'').length>((s&&s.MAX_IMPORT_BYTES)||10485760)) return {ok:false, reason:'file-too-large'};
   try{ if(window.__v20&&__v20.flush) __v20.flush(); }catch(e){}
   snapshotCurrent();
   try{ localStorage.setItem('hanvocab.v1', JSON.stringify(j)); }catch(e){ return {ok:false, reason:'write-failed'}; }
@@ -16521,7 +16562,11 @@ function undoRestore(){
 }
 function deleteHistoryEntry(at){
   try{
-    var h=readHistory().filter(function(e){ return e.at!==at; });
+    /* V45 (V19.0, lead): delete ONE entry, not every entry sharing the
+       timestamp — two backup-history events recorded in the same
+       millisecond were both deleted. */
+    var h=readHistory(),removed=false;
+    h=h.filter(function(e){ if(!removed&&e.at===at){removed=true;return false} return true; });
     writeHistory(h);
     return {ok:true};
   }catch(e){ return {ok:false}; }
@@ -21864,7 +21909,8 @@ function statsForList(list){
       var r=right[w.id]||0,wr=wrong[w.id]||0;
       if(b>=1)s.learned++;else s.notLearned++;
       if(b>=5)s.mastered++;
-      if((due[w.id]||0)<=now)s.due++;
+      /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+      if(b>=1&&b<=4&&(due[w.id]||0)<=now)s.due++;
       s.right+=r;s.wrong+=wr;
     });
     s.attempts=s.right+s.wrong;
@@ -27004,6 +27050,112 @@ window.__v42={
 (function(){
   var VERSION='18.9.0';
   window.__v44={version:VERSION};
+})();
+
+</script>
+
+<style id="v45">
+/* ===== V45 — Round-3 bug fixes (V19.0, layer V45) =====
+   .v34weakchip in boss LIST rows (v15boss rows, v18coll cards, v19zboss
+   zone cards, coll detail) inherits the V34 base rule: gold #FFD76A
+   text on a light card — 1.33:1 in the light theme, unreadable. The
+   dark theme already passes (8.69:1) and is kept.
+   FIX (this file only, loaded after v43 so same-specificity rules win;
+   the V43 fight-screen rules stay more specific and are untouched):
+   explicit dark-amber text/border on a pale amber wash in the light
+   theme (the same colours V18.8 used inside the fight); gold text in
+   the dark theme, following the V43 theme pattern (dark override inside
+   @media (prefers-color-scheme:dark) with :not([data-theme="light"]),
+   plus the explicit :root[data-theme="dark"] rule — a bare
+   :not([data-theme="light"]) outside the media query would wrongly
+   match a light theme with no data-theme attribute). CSS only — no
+   logic, reward, XP, SRS, pet or save change. WCAG AA target: >=4.5:1
+   normal text. Measured in real Chrome 157: light list rows 1.33:1 ->
+   ~5.9:1; dark stays 8.69:1.
+   EXCEPTION (found by the Chrome gate, run 1): the V19 zone cards
+   (.v19zboss) have a HARDCODED dark background (#241b42, v19.css:44)
+   in BOTH themes — the light dark-amber text fails there (2.41:1).
+   The zone cards keep GOLD text in both themes (the rule below beats
+   the base rule by specificity and matches the dark-theme values).
+   The other list surfaces (.v15boss rows, .v18coll cards, .v18detail)
+   use the themed --sf surface, light in the light theme, so the base
+   rule is correct for them. */
+.v34weakchip{color:#7A5B00;border-color:#7A5B00;background:rgba(122,91,0,.08)}
+.v19zboss .v34weakchip{color:var(--ui-title-gold,#FFD76A);border-color:var(--ui-border,#A78BFA);background:rgba(255,215,106,.08)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .v34weakchip{color:var(--ui-title-gold,#FFD76A);border-color:var(--ui-border,#A78BFA);background:rgba(255,215,106,.08)}
+}
+:root[data-theme="dark"] .v34weakchip{color:var(--ui-title-gold,#FFD76A);border-color:var(--ui-border,#A78BFA);background:rgba(255,215,106,.08)}
+
+</style>
+<script id="v45js">
+/* ===== V45 — Round-3 bug fixes (V19.0, layer V45) =====
+   Bug-fix build only — no new features, no schema change, no new save
+   key. The fixes themselves live in the src files they touch (see the
+   V45 comments there) and in two index-only replacements (load() +
+   enIcon(), applied by build_v45.py — the V6 core has no src file):
+   - C-R3-1 (MAJOR): "due" is now box 1-4 AND due<=now everywhere
+     (counts15, dueTodayCount, reviewHTML/reviewStart, wordsFiltered
+     onlyDue + BT status filters, v17 statsOf/filterWords, v22
+     unitStats/filterEntries, v25 statsOf, v34 statsForList, v27
+     dashboard dueN) — matching Smart Learning's REVIEW definition
+     (v27 classifyEN/KO). Fresh players are no longer told 4,889 words
+     "need review today"; Review with 0 truly-due words shows the honest
+     empty state instead of silently teaching new words.
+   - C-R3-2 (SEVERE): load() quarantines a corrupt / card-less save
+     (hanvocab.v12.corrupt-<ms>-<n>-<rand>) BEFORE any save overwrites
+     it, and sets window.__V45_CORRUPT. This file (running last) shows
+     the honest warning — no fake success, no silent data loss.
+   - C-R3-4 (MINOR): snapshotCurrent() keys are unique (ms + counter +
+     random) — two snapshots in the same ms no longer overwrite.
+   - NEW-1 (MINOR): enIcon() emits no <img> when there is no icon —
+     the 20 topic cards (19 A1-A2 + Oxford, + BT) no longer render
+     assets/icons/v6/undefined. No icon is invented or assigned.
+   - .v34weakchip (Claude-directed DO): list-row contrast fixed in
+     src/v45.css (light #7A5B00 like V18.8; dark keeps gold #FFD76A).
+   - Leads fixed with vm repros: restoreRaw() size-checks before
+     parsing; speedHatch() checks remaining time before spending gems;
+     deleteHistoryEntry() deletes ONE same-ms entry, not all of them.
+   DELIBERATELY NOT FIXED HERE (pending decisions — see the V19.0
+   changelog): C-R3-3 duplicate headwords (4 pairs, distinct senses);
+   legDiff scaling + weakness table + KO boss 0 XP (Claude: DO, but in
+   the separate V19.0.1 / layer V46 after V19.0); all 13 pass-B items. */
+(function(){
+  var VERSION='19.0.0';
+  window.__v45={version:VERSION};
+  /* Show an 8 s warning. The V6 toast() lives inside the v7js closure
+     and is NOT a global (verified in real Chrome: typeof toast is not
+     'function' here, so the first version of this layer fell back to
+     pop15 — a .pp that vanishes after 1.1 s, far too brief for a
+     data-loss warning, and behind the farm-chooser modal). So: use the
+     global toast() when it exists, else build the same .v7toast div
+     directly (same class toast() uses, same 8 s life), else pop15. */
+  function _warn45(msg){
+    try{ if(typeof toast==='function'){toast(msg,8000);return;} }catch(e){}
+    try{
+      var d=document.createElement('div');
+      d.className='v7toast';d.textContent=msg;
+      document.body.appendChild(d);
+      setTimeout(function(){try{d.remove()}catch(e){}},8000);
+      return;
+    }catch(e){}
+    try{ if(window.__v15&&__v15.pop15)__v15.pop15(msg); }catch(e2){}
+  }
+  /* C-R3-2 warning: load() set window.__V45_CORRUPT when it quarantined
+     an unreadable save. Show it once, after the app has rendered, as a
+     long toast (8 s) — not a fake success, and the quarantine key is
+     named so the player (or support) can find the original bytes. */
+  try{
+    var c=window.__V45_CORRUPT;
+    if(c&&c.key){
+      window.__v45corruptShown={key:c.key,reason:c.reason,quarantined:true};
+      var msg='⚠️ Không đọc được bản lưu cũ ('+(c.reason==='no-cards'?'thiếu dữ liệu thẻ':'file hỏng')+') — đã giữ bản gốc tại '+c.key+'. Bắt đầu với dữ liệu mới; khôi phục từ Sao lưu nếu cần.';
+      setTimeout(function(){_warn45(msg)},800);
+    }else if(c&&c.key===null){
+      window.__v45corruptShown={key:null,reason:c.reason,quarantined:false};
+      setTimeout(function(){_warn45('⚠️ Không đọc được bản lưu cũ và không giữ được bản gốc (bộ nhớ đầy?) — bắt đầu với dữ liệu mới.')},800);
+    }
+  }catch(e){}
 })();
 
 </script>

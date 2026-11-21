@@ -220,7 +220,8 @@ function statsForList(list){
       var r=right[w.id]||0,wr=wrong[w.id]||0;
       if(b>=1)s.learned++;else s.notLearned++;
       if(b>=5)s.mastered++;
-      if((due[w.id]||0)<=now)s.due++;
+      /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+      if(b>=1&&b<=4&&(due[w.id]||0)<=now)s.due++;
       s.right+=r;s.wrong+=wr;
     });
     s.attempts=s.right+s.wrong;

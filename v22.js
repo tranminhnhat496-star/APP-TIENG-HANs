@@ -118,7 +118,8 @@ function unitStats(n,map){
     var b=boxOfId(w.id);
     if(b>=1)s.learned++;
     if(b>=5)s.mastered++;
-    if(((v.en15().due)||{})[w.id]<=now)s.due++;
+    /* V45 (V19.0, C-R3-1): due = box 1-4 AND due<=now (see counts15). */
+    if(b>=1&&b<=4&&((v.en15().due)||{})[w.id]<=now)s.due++;
   });
   return s;
 }
@@ -218,7 +219,7 @@ function filterEntries(list,map){
     if(ST.status==='new'&&b!==0)return false;
     if(ST.status==='learning'&&(b<1||b>=5))return false;
     if(ST.status==='mastered'&&b<5)return false;
-    if(ST.status==='due'&&w&&(dueMap[w.id]||0)>now)return false;
+    if(ST.status==='due'&&w&&(b<1||b>4||(dueMap[w.id]||0)>now))return false;
     if(ST.status==='fav'&&(!w||favs.indexOf(w.id)<0))return false;
     return true;
   });
