@@ -269,10 +269,16 @@ function wordPool(b){
       if(sl.length)return shuffle(sl);
     }
   }catch(e){}
+  /* V44 (V18.9): legDiff() was called once PER WORD inside this filter —
+     each call runs V15().counts(), a full WORDS scan (~4,889 items), so
+     a Legendary fight start blocked the main thread for seconds (O(n^2)).
+     legDiff() depends only on the mastered count, which cannot change
+     mid-filter, so compute it ONCE here. Same levels, same pool. */
+  var lv=b.arena==='leg'?legDiff():null;
   var list=words.filter(function(w){
     if(b.lib==='a1a2'&&(!w.lib||w.lib.indexOf('a1a2')<0))return false;
     if(b.lib==='oxford'&&(!w.lib||w.lib.indexOf('oxford')<0))return false;
-    if(b.arena==='leg'){var lv=legDiff();if(lv.indexOf(w.lv)<0)return false}
+    if(b.arena==='leg'){if(lv.indexOf(w.lv)<0)return false}
     else if(b.diff&&w.lv!==b.diff)return false;
     return true;
   });
@@ -281,7 +287,10 @@ function wordPool(b){
 }
 function grammarPool(b){
   var g=(window.__V15_DATA&&__V15_DATA.grammar)||[];
-  var list=g.filter(function(x){return b.arena==='leg'?legDiff().indexOf(x.lv)>=0:x.lv===b.diff});
+  /* V44 (V18.9): same hoist as wordPool — legDiff() once per pool build,
+     not once per grammar item (48 items x a full WORDS scan each). */
+  var lv=b.arena==='leg'?legDiff():null;
+  var list=g.filter(function(x){return b.arena==='leg'?lv.indexOf(x.lv)>=0:x.lv===b.diff});
   return shuffle(list.length?list:g);
 }
 function readPool(){return shuffle((window.__V15_DATA&&__V15_DATA.reading)||[])}
