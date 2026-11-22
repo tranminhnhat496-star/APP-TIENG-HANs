@@ -1,0 +1,8 @@
+/* V49 — Boss Mic Fix (V19.4): listening indicator + error box for boss
+   speak questions. Solid dark chips with light text, so they stay
+   readable on both the fixed-dark V19 fight panel and the
+   theme-driven V18 fight panel, in light and dark themes. */
+.v49listen{box-sizing:border-box;display:flex;align-items:center;gap:8px;min-height:44px;margin:8px 0;padding:8px 12px;border-radius:10px;background:#1e3a5f;color:#fff;font-weight:600}
+.v49dot{flex:0 0 auto;width:12px;height:12px;border-radius:50%;background:#ff5252;animation:v49pulse 1.1s ease-in-out infinite}
+@keyframes v49pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.55}}
+.v49err{box-sizing:border-box;margin:8px 0;padding:10px 12px;border-radius:10px;background:#4a1f1f;border:1px solid rgba(255,82,82,.45);color:#ffd7d7;min-height:44px}
