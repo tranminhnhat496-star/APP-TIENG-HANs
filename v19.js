@@ -390,7 +390,7 @@ function startFight(b,lang){
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
     combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
     shield:(b.id==='v17_geargolem'?90:(b.skills.elem.id==='shield'?30:0)),cleansed:false,
-    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,
+    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,listening:false,rec:null,speakToken:0,speakErr:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
@@ -424,6 +424,10 @@ function timerFor(){
 }
 function nextQ(){
   if(!F)return;
+  /* V49 (V19.4): a new question owns a fresh speak state — the previous
+     question's "Máy nghe được" line, listening flag and error never leak
+     into this question. */
+  F.listening=false;F.rec=null;F.heard=null;F.speakErr=null;
   if(F.ultActive){
     /* Knowledge Counterattack: 3 quick questions, no normal combat effects */
     if(F.caQ>=3){resolveUltimate();return}
@@ -474,6 +478,11 @@ function nextQ(){
 }
 function startTimer(){
   if(F.timer){clearInterval(F.timer);F.timer=null}
+  /* V49 (V19.4): no timer ever runs on a speak question — a timed boss
+     used to be able to time out mid-speech and drop the late result.
+     No speak question is timed in shipped data, so this changes no
+     live fight; it is defense in depth for a future timed speak boss. */
+  if(F.qmode==='speak'){F.left=0;return}
   var limit=timerFor();
   if(!limit){F.left=0;return}
   F.left=limit;
@@ -691,30 +700,76 @@ function pick(i){
 }
 function next(){
   if(!F||F.over)return;
+  stopSpeak();
   if(F.ultActive){F.answered=null;F.ok=null;nextQ();renderFight();return}
   F.q++;F.banner=F.koWarn||null;nextQ();renderFight();
 }
 function close(){
+  stopSpeak();
   if(F&&F.timer)clearInterval(F.timer);
   F=null;
   var host=$('#v19fight');if(host)host.innerHTML='';
   renderMap();
 }
 function speakWord(id){var v=V15();if(v)v.speakWord(id)}
+function stopSpeak(){
+  /* V49 (V19.4): stop any live boss speech recognition and invalidate
+     its per-question token, so a late result can never answer a later
+     question. Safe to call when nothing is listening. */
+  if(!F)return;
+  try{if(F.rec)F.rec.abort()}catch(e){}
+  F.listening=false;F.rec=null;F.speakToken=(F.speakToken||0)+1;
+}
 function bossSpeak(){
+  /* V49 (V19.4): handlers are attached BEFORE start() (a result or
+     error fired inside start() used to be lost); the card shows a
+     listening state; start() failures and recognition errors surface
+     a specific message with a retry; onend with no result is not a
+     freeze; a per-question token guards late results. */
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR||!F)return;
-  var w=F.cur.w;if(!w)return;
+  if(F.qmode!=='speak'||F.answered!==null||F.over)return;
+  var w=F.cur&&F.cur.w;if(!w)return;
+  if(F.listening)return;
+  var token=(F.speakToken||0)+1;F.speakToken=token;
   var rec=new SR();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=3;
-  try{rec.start()}catch(e){return}
+  F.listening=true;F.speakErr=null;F.heard=null;F.rec=rec;
   rec.onresult=function(ev){
+    if(!F||token!==F.speakToken)return;
+    F.listening=false;F.rec=null;
     var heard='';try{heard=ev.results[0][0].transcript||''}catch(e){}
     F.heard=heard;
     var norm=function(s){return (s||'').toLowerCase().replace(/[^a-z0-9\s']/g,'').replace(/\s+/g,' ').trim()};
     var ok=norm(heard)===norm(w.en)||norm(heard).indexOf(norm(w.en))>=0;
     answer(ok,false);
   };
-  rec.onerror=function(){F.heard='(không nghe được)';renderFight()};
+  rec.onerror=function(ev){
+    if(!F||token!==F.speakToken)return;
+    F.listening=false;F.rec=null;
+    var code=(ev&&ev.error)||'unknown';
+    F.speakErr=(window.__v49&&__v49.speakErrMsg?__v49.speakErrMsg(code):'Không nghe được giọng nói. Hãy kiểm tra micro rồi bấm “Nói” thử lại.');
+    renderFight();
+  };
+  rec.onend=function(){
+    if(!F||token!==F.speakToken)return;
+    if(F.listening){
+      F.listening=false;F.rec=null;
+      if(F.answered===null){
+        F.speakErr=(window.__v49&&__v49.speakErrMsg?__v49.speakErrMsg('no-speech'):'Máy không nghe thấy gì. Hãy nói to và rõ hơn, rồi bấm “Nói” thử lại.');
+        renderFight();
+      }
+    }
+  };
+  try{rec.start()}catch(e){
+    F.listening=false;F.rec=null;
+    F.speakErr=(window.__v49&&__v49.speakErrMsg?__v49.speakErrMsg('start-failed'):'Không mở được micro. Hãy kiểm tra micro rồi bấm “Nói” thử lại.');
+    renderFight();return;
+  }
+  renderFight();
+}
+function speakState(){
+  if(!F)return null;
+  return {listening:!!F.listening,token:F.speakToken||0,heard:F.heard||null,err:F.speakErr||null,answered:F.answered};
 }
 function speakKO(text){
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
@@ -788,7 +843,14 @@ function qHTML(){
     var w=c.w,supported=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
     var h='<div class="v19qcard"><div class="v19qword">'+esc(w.en)+'</div><div class="mute">'+esc(w.ipa)+' · '+esc(w.vi)+'</div><div class="acts"><button class="btn sm" onclick="__v15.speakWord(\''+w.id+'\')">Nghe mẫu</button></div></div>';
     if(supported){
-      h+='<p class="mute">Bấm “Nói” và đọc to từ trên. Máy sẽ so khớp phát âm của bạn.</p><div class="acts"><button class="btn pri" onclick="__v19.bossSpeak()">Nói</button></div>';
+      /* V49 (V19.4): listening state + specific error box; the "Nói"
+         button is disabled while the mic is live. */
+      if(F.listening){
+        h+='<p class="v49listen"><span class="v49dot"></span>Đang nghe… hãy nói: <b>'+esc(w.en)+'</b></p><div class="acts"><button class="btn pri" disabled>Nói</button></div>';
+      }else{
+        h+='<p class="mute">Bấm “Nói” và đọc to từ trên. Máy sẽ so khớp phát âm của bạn.</p><div class="acts"><button class="btn pri" onclick="__v19.bossSpeak()">Nói</button></div>';
+      }
+      if(F.speakErr)h+='<div class="v49err">'+esc(F.speakErr)+'</div>';
       if(F.heard)h+='<div class="v19explain">Máy nghe được: “<b>'+esc(F.heard)+'</b>”</div>';
     }else{
       h+='<div class="v19warn"><b>Trình duyệt không hỗ trợ nhận dạng giọng nói.</b> Chế độ thay thế: nghe mẫu rồi chọn từ bạn nghe được — không chấm điểm phát âm.</div><div class="v19opts">'+c.opts.map(function(o,i){return optBtn(esc(o.en),i,o.id===w.id)}).join('')+'</div>';
@@ -844,7 +906,7 @@ function pickWrong(){
 window.__v19={
   mapHTML:mapHTML,renderMap:renderMap,openMap:openMap,openMapFor:openMapFor,mapOrigin:mapOrigin,
   zoneDetail:zoneDetail,zoneClose:zoneClose,challenge:challenge,
-  fight:fight,pick:pick,next:next,close:close,speakWord:speakWord,bossSpeak:bossSpeak,
+  fight:fight,pick:pick,next:next,close:close,speakWord:speakWord,bossSpeak:bossSpeak,speakState:speakState,
   speakKO:speakKO,en19:en19,setLang:setLang19,lang:lang19,
   isWon:isWon19,isWonAny:isWonAny19,isMastered:isMastered19,stars:stars19,
   zoneOpen:zoneOpen,zoneState:zoneState,bossUnlocked:bossUnlocked19,
