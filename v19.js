@@ -380,6 +380,11 @@ function markKO19(ok,k){
 
 /* ---------- Universal Combat Engine (UCE) ---------- */
 var F=null;
+/* V50 (V19.5, F-1): monotonically increasing speech-token sequence
+   across fights. startFight() calls stopSpeak() BEFORE creating the
+   new F, and the new F starts from the running sequence — so a
+   restarted fight can never reuse an orphaned rec's token value. */
+var _speakSeq50=0;
 function fight(id){
   var b=D19().byId(id)||(window.__V33_DATA&&__V33_DATA.byId?__V33_DATA.byId(id):null)||(window.__V35_DATA&&__V35_DATA.byId?__V35_DATA.byId(id):null)||(window.__V48_DATA&&__V48_DATA.byId?__V48_DATA.byId(id):null);if(!b)return;
   if(!bossUnlocked19(id)){pop19('Boss này chưa mở khóa.');return}
@@ -387,10 +392,15 @@ function fight(id){
   startFight(b,lang19());
 }
 function startFight(b,lang){
+  /* V50 (F-1): stop any live recognition from the previous fight
+     BEFORE the new F object is created — stopSpeak() aborts the old
+     rec and bumps the token sequence, so the orphan can never pass
+     the new fight's token guard. Safe when nothing is listening. */
+  stopSpeak();
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:5,maxHearts:5,
     combo:0,score:0,q:0,qCount:0,right:0,wrong:0,wrongCount:0,phase:1,
     shield:(b.id==='v17_geargolem'?90:(b.skills.elem.id==='shield'?30:0)),cleansed:false,
-    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,listening:false,rec:null,speakToken:0,speakErr:null,
+    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,listening:false,rec:null,speakToken:_speakSeq50,speakErr:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,stars:0,
     timer:null,left:0,lastDmg:0,crit:false,
     ultUsed:false,ultActive:false,caQ:0,caRight:0,
@@ -719,6 +729,9 @@ function stopSpeak(){
   if(!F)return;
   try{if(F.rec)F.rec.abort()}catch(e){}
   F.listening=false;F.rec=null;F.speakToken=(F.speakToken||0)+1;
+  /* V50 (F-1): keep the module-level sequence at the highest token
+     used, so the next fight starts above every orphaned token. */
+  _speakSeq50=F.speakToken;
 }
 function bossSpeak(){
   /* V49 (V19.4): handlers are attached BEFORE start() (a result or

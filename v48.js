@@ -107,15 +107,15 @@ function isoWeek(d){
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 
 /* ---------- en48 state (lazy, no migration) ---------- */
-function defEn48(){return {created:Date.now(),forge:{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{}},dojo:{attempts:0,good:0,selfOk:0,attemptsByDay:{}},tree:{claimed:{}},bounty:{claimed:{},streak:{d:'',n:0}},dojoUnlocked:0,flags:{forge:1,bounty:1,tree:1,dojo:1,boss:1}}}
+function defEn48(){return {created:Date.now(),forge:{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{},scoreTotal:0,bestScore:0},dojo:{attempts:0,good:0,selfOk:0,attemptsByDay:{}},tree:{claimed:{}},bounty:{claimed:{},streak:{d:'',n:0}},dojoUnlocked:0,flags:{forge:1,bounty:1,tree:1,dojo:1,boss:1}}}
 function en48(){
   try{
     var s=getS();if(!s)return defEn48();
     s.v7=s.v7||{};
     var e=s.v7.en48;
     if(!e)e=s.v7.en48=defEn48();
-    e.forge=e.forge||{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{}};
-    e.forge.correctByDay=e.forge.correctByDay||{};e.forge.dayBestStreak=e.forge.dayBestStreak||{};e.forge.bonusClaimed=e.forge.bonusClaimed||{};
+    e.forge=e.forge||{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{},scoreTotal:0,bestScore:0};
+    e.forge.correctByDay=e.forge.correctByDay||{};e.forge.dayBestStreak=e.forge.dayBestStreak||{};e.forge.bonusClaimed=e.forge.bonusClaimed||{};e.forge.scoreTotal=e.forge.scoreTotal||0;e.forge.bestScore=e.forge.bestScore||0;
     e.dojo=e.dojo||{attempts:0,good:0,selfOk:0,attemptsByDay:{}};e.dojo.attemptsByDay=e.dojo.attemptsByDay||{};
     e.tree=e.tree||{claimed:{}};e.tree.claimed=e.tree.claimed||{};
     e.bounty=e.bounty||{claimed:{},streak:{d:'',n:0}};e.bounty.claimed=e.bounty.claimed||{};e.bounty.streak=e.bounty.streak||{d:'',n:0};
@@ -204,7 +204,7 @@ function startForgeSession(lang){
   var g=forgeGate(lang);
   if(!g.ok)return {ok:false,gate:g};
   var items=shuffle(g.pool.items).slice(0,FORGE_SESSION_N);
-  FS={lang:lang,list:items,i:0,built:[],used:{},right:0,streak:0,checked:false,ok:null,sessionId:'f'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36),done:false,bonusPaid:0};
+  FS={lang:lang,list:items,i:0,built:[],used:{},right:0,streak:0,score:0,checked:false,ok:null,sessionId:'f'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36),done:false,bonusPaid:0};
   return {ok:true,session:FS};
 }
 function forgeCurrent(){return FS&&FS.list?FS.list[FS.i]:null}
@@ -224,8 +224,13 @@ function forgeCheck(){
   var ok=built===cur.text;
   FS.checked=true;FS.ok=ok;
   var e=en48();
+  /* V50 (C-R5-3): the per-answer score was computed but never kept —
+     accumulate it on the session (FS.score) so the end screen and the
+     save can show it. No XP/SRS change. */
+  var sc=0;
   if(ok){
     FS.right++;FS.streak++;
+    sc=scoreSentence(cur.tokens.length,cur.tier);FS.score=(FS.score||0)+sc;
     if(FS.streak>(e.forge.bestStreak||0))e.forge.bestStreak=FS.streak;
     var dk=dayKey();
     e.forge.correct++;
@@ -242,7 +247,7 @@ function forgeCheck(){
     FS.streak=0;
   }
   save48();
-  return {ok:ok,built:built,target:cur.text,score:ok?scoreSentence(cur.tokens.length,cur.tier):0};
+  return {ok:ok,built:built,target:cur.text,score:sc};
 }
 function forgeNext(){
   if(!FS)return null;
@@ -250,13 +255,17 @@ function forgeNext(){
     FS.done=true;
     var e=en48();
     e.forge.sessions++;
+    /* V50 (C-R5-3): persist the session score once, at session end
+       (best = best single session; total = all sessions summed). */
+    e.forge.scoreTotal=(e.forge.scoreTotal||0)+(FS.score||0);
+    if((e.forge.bestScore||0)<(FS.score||0))e.forge.bestScore=FS.score;
     var bonus=0;
     if(FS.right>=FORGE_BONUS_MIN&&!e.forge.bonusClaimed['sess:'+FS.sessionId]){
       e.forge.bonusClaimed['sess:'+FS.sessionId]=1;
       gain48(FORGE_BONUS_XP);bonus=FORGE_BONUS_XP;FS.bonusPaid=bonus;
     }
     save48();
-    return {done:true,right:FS.right,total:FS.list.length,bonus:bonus};
+    return {done:true,right:FS.right,total:FS.list.length,bonus:bonus,score:FS.score||0};
   }
   FS.i++;FS.built=[];FS.used={};FS.tiles=null;FS.checked=false;FS.ok=null;
   return {done:false};
@@ -585,12 +594,12 @@ function forgeHTML(){
     var e0=en48();
     return '<div class="v48card"><b>🔨 Lò Rèn Câu ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+')</b>'
       +'<p class="v48mut">Xếp các mảnh từ thành câu đúng thứ tự. Điểm = số từ × hệ số độ khó. Mỗi câu đúng +'+FORGE_CORRECT_XP+' XP; đúng ≥'+FORGE_BONUS_MIN+'/'+FORGE_SESSION_N+' câu trong một buổi thêm +'+FORGE_BONUS_XP+' XP (một lần mỗi buổi).</p>'
-      +'<p class="v48mut">Đã học: '+g.pool.learned+' từ · Đúng tổng: '+e0.forge.correct+' · Chuỗi ngày rèn: '+(e0.bounty.streak.n||0)+' · Câu đúng kỷ lục liên tiếp: '+(e0.forge.bestStreak||0)+'</p>'
+      +'<p class="v48mut">Đã học: '+g.pool.learned+' từ · Đúng tổng: '+e0.forge.correct+' · Điểm cao nhất: '+(e0.forge.bestScore||0)+' điểm · Chuỗi ngày rèn: '+(e0.bounty.streak.n||0)+' · Câu đúng kỷ lục liên tiếp: '+(e0.forge.bestStreak||0)+'</p>'
       +'<button type="button" class="v48btn pri" onclick="window.__v48.startForge()">Bắt đầu rèn ('+FORGE_SESSION_N+' câu)</button></div>';
   }
   if(FS.done){
     return '<div class="v48card"><b>🎉 Xong buổi rèn!</b>'
-      +'<p class="v48mut">Đúng '+FS.right+'/'+FS.list.length+' câu'+(FS.bonusPaid?' · Thưởng buổi: +'+FS.bonusPaid+' XP':'')+'.</p>'
+      +'<p class="v48mut">Đúng '+FS.right+'/'+FS.list.length+' câu · Điểm buổi: '+(FS.score||0)+' điểm · Điểm cao nhất: '+(en48().forge.bestScore||0)+' điểm'+(FS.bonusPaid?' · Thưởng buổi: +'+FS.bonusPaid+' XP':'')+'.</p>'
       +'<button type="button" class="v48btn pri" onclick="window.__v48.startForge()">Rèn buổi mới</button></div>';
   }
   var cur=forgeCurrent();

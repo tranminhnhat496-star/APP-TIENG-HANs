@@ -403,6 +403,11 @@ function markKO(ok,k){
 
 /* ---------- fight engine ---------- */
 var F=null;
+/* V50 (V19.5, F-1): monotonically increasing speech-token sequence
+   across fights. startFight() calls stopSpeak() BEFORE creating the
+   new F, and the new F starts from the running sequence — so a
+   restarted fight can never reuse an orphaned rec's token value. */
+var _speakSeq50=0;
 function fight(id,lang){
   var b=bossById(id);if(!b)return;
   if(b.arena==='old'){var v=V15();if(v){v.tab('bosses');v.bossFight(id)}return}
@@ -417,11 +422,16 @@ function showLangPick(b){
   host.scrollIntoView&&host.scrollIntoView();
 }
 function startFight(b,lang){
+  /* V50 (F-1): stop any live recognition from the previous fight
+     BEFORE the new F object is created — stopSpeak() aborts the old
+     rec and bumps the token sequence, so the orphan can never pass
+     the new fight's token guard. Safe when nothing is listening. */
+  stopSpeak();
   var hearts=b.arena==='leg'?5:(b.arena==='el'?4:3);
   F={boss:b,lang:lang,hp:b.hp,maxHp:b.hp,hearts:hearts,maxHearts:hearts,
     combo:0,score:0,q:0,qCount:0,wrongCount:0,phase:1,
     shield:(b.skill.id==='shield'?30:0),cleansed:false,reborn:false,
-    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,listening:false,rec:null,speakToken:0,speakErr:null,
+    over:null,pools:null,cur:null,answered:null,ok:null,heard:null,listening:false,rec:null,speakToken:_speakSeq50,speakErr:null,
     anim:'idle',banner:null,hideIpa:false,rewardNote:'',firstWin:false,
     timer:null,left:0,lastDmg:0,crit:false};
   /* V34: Boss Weakness — per-fight state only (no save change). */
@@ -654,6 +664,9 @@ function stopSpeak(){
   if(!F)return;
   try{if(F.rec)F.rec.abort()}catch(e){}
   F.listening=false;F.rec=null;F.speakToken=(F.speakToken||0)+1;
+  /* V50 (F-1): keep the module-level sequence at the highest token
+     used, so the next fight starts above every orphaned token. */
+  _speakSeq50=F.speakToken;
 }
 function bossSpeak(){
   /* V49 (V19.4): handlers are attached BEFORE start() (a result or
