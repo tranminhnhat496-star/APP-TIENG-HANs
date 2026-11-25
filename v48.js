@@ -435,6 +435,9 @@ function dojoGate(lang,advanced){
   return {ok:true,pool:advanced?adv:base};
 }
 function speakText(text,lang){
+  /* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body
+     kept as the fallback if __v52 failed to load. */
+  if(window.__v52&&__v52.speak){return __v52.speak(text,(lang==='ko'?'ko-KR':'en-US'),.85,function(code){pop48('Không phát được âm thanh — bấm Nghe lại.');});}
   try{
     if(typeof speechSynthesis==='undefined')return false;
     speechSynthesis.cancel();

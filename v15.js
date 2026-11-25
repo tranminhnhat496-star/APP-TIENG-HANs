@@ -23,7 +23,10 @@ function sfx15(k){try{if(typeof sfx==='function')sfx(k)}catch(e){}}
 function pop15(t,long){try{if(typeof pop==='function')pop(t,long);else if(typeof toast==='function')toast(t)}catch(e){}}
 function save15(){try{if(typeof save==='function')save()}catch(e){}}
 function coins15(){try{if(typeof coins==='function')return coins()}catch(e){}return (S.xp||0)-(S.spent||0)}
-function speak15(text,lang){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+/* V52 (V19.5.1): Android TTS fix — speak through the shared __v52
+   helper (waits for voices, picks a matching voice, honest error on
+   failure). Old body kept as the fallback if __v52 failed to load. */
+function speak15(text,lang){if(window.__v52&&__v52.speak){__v52.speak(text,lang||'en-US',.85,function(code){pop15('Không phát được âm thanh — bấm Nghe lại.');});return;}try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
 function icon15(name){return '<img src="assets/icons/v6/'+name+'" class="v15ic" alt="">'}
 function dl(name,text,type){var b=new Blob([text],{type:type||'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 

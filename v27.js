@@ -424,7 +424,11 @@ function distractorsKO(c,n){
 function speakEN(id){
   try{if(window.__v15&&__v15.speakWord)__v15.speakWord(id)}catch(e){}
 }
+/* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). v27 has no
+   pop of its own, so the error goes through V15's pop15 like pop22.
+   Old body kept as the fallback if __v52 failed to load. */
 function speakKO(text){
+  if(window.__v52&&__v52.speak){__v52.speak(text,'ko-KR',.85,function(code){var v=V15();if(v&&v.pop15)v.pop15('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.85;speechSynthesis.speak(u)}catch(e){}
 }
 function speakWord(lang,id){
