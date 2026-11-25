@@ -248,7 +248,10 @@ function noWrong30(last,cw,wrong){
 }
 function prioOf(box,cw,wrong,right,due,mastered){
   var now=Date.now();
-  var overdue=box>0?Math.max(0,(now-(due||0))/864e5):0;
+  /* V50 (C-R5-2): a due-less learned word (due 0 / missing) must NOT
+     read as "overdue since the epoch" (~20,779 days). No due date
+     means "due today", never an invented lateness. */
+  var overdue=(box>0&&due)?Math.max(0,(now-due)/864e5):0;
   var p=cw*10+Math.max(0,wrong-right)*3+Math.min(overdue,30)+(box===0?1:0);
   if(mastered)p-=100;
   return {prio:p,overdue:overdue};
@@ -266,7 +269,7 @@ function classifyEN(w){
   var cls,reason;
   if(weak){cls='WEAK';reason=cw>=2?('Sai '+cw+' lần liên tiếp'):('Sai '+wr+' / đúng '+r+' lần')}
   else if(mastered){cls='MASTERED';reason='Đã thuộc — ôn nhắc lại'}
-  else if(dueNow){cls='REVIEW';var od=Math.floor(Math.max(0,(now-due)/864e5));reason=od>0?('Đến hạn '+od+' ngày'):('Đến hạn hôm nay')}
+  else if(dueNow){cls='REVIEW';var od=due?Math.floor(Math.max(0,(now-due)/864e5)):0;reason=od>0?('Đến hạn '+od+' ngày'):('Đến hạn hôm nay')}
   else if(box===0&&r===0&&wr===0){cls='NEW';reason='Từ mới — chưa học'}
   else{cls='LEARNING';reason='Đang học — box '+box+'/5'}
   var pr=prioOf(box,cw,wr,r,due,mastered);
@@ -286,7 +289,7 @@ function classifyKO(c){
   var cls,reason;
   if(weak){cls='WEAK';reason=cw>=2?('Sai '+cw+' lần liên tiếp'):(w>=3&&kw===0?('Sai '+w+' lần (trước khi dùng Học thông minh)'):('Sai '+kw+' / đúng '+kr+' lần (từ khi dùng Học thông minh)'))}
   else if(mastered){cls='MASTERED';reason='Đã thuộc — ôn nhắc lại'}
-  else if(dueNow){cls='REVIEW';var od=Math.floor(Math.max(0,(now-due)/864e5));reason=od>0?('Đến hạn '+od+' ngày'):('Đến hạn hôm nay')}
+  else if(dueNow){cls='REVIEW';var od=due?Math.floor(Math.max(0,(now-due)/864e5)):0;reason=od>0?('Đến hạn '+od+' ngày'):('Đến hạn hôm nay')}
   else if(box===0&&!w&&!hasHist){cls='NEW';reason='Từ mới — chưa học'}
   else{cls='LEARNING';reason='Đang học — box '+box+'/5'}
   /* priority KO: wrong hiệu dụng = max(số sai V27, bộ đếm w của thẻ) */

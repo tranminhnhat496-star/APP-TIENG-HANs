@@ -1,0 +1,28 @@
+/* ===== V50 — KO Hub touch targets (V19.5, C-R5-4) =====
+   ROOT CAUSE (measured in real Chrome 157 at 360x800, round-5 Pass C
+   probe p12a): 11 buttons on the KO home measured under the 44px
+   touch-target minimum — header "Giao diện nông trại" / "Âm thanh"
+   34px, "Người chơi" (account) 40px, HUD/farm row buttons 42px.
+   FIX (this file only, loaded LAST so same-specificity rules win):
+   min-height:44px on exactly those buttons. No other layout change:
+   the buttons only grow 2-10px taller; the HUD/farm rows wrap, the
+   header is a plain block, the account button is inline-flex, and
+   the bottom tab bar is fixed — none of them overflow at 320-430px.
+   The 11th unlisted button in the probe count is a bottom-nav tab
+   (the probe's small-button list was sliced to 10), so the tab rule
+   below covers it at the widths where the tabs are short.
+   Two follow-ups found by the v50c gate on a fresh profile: the base
+   ":root #sk,:root #sn" rule beats a bare "#sk,#sn" on specificity,
+   so the header rule mirrors the base selector; and the first-run
+   farm chooser "Để sau" link (.v15link, 17px) gets the same 44px. */
+.v7btn{min-height:44px}
+/* NOTE: the base rule is ":root #sk,:root #sn{...min-height:34px}"
+   (specificity 1,1,0) — a bare "#sk,#sn" (1,0,0) LOSES to it. Mirror
+   the base selector so equal specificity + last-in-document wins. */
+:root #sk,:root #sn{min-height:44px}
+#v21avatarbtn{min-height:44px}
+/* First-run farm chooser "Để sau" (.v15link, single use site,
+   src/v15.js:526): a 17px text-link button on the KO home at 360px —
+   same defect class, found by the v50c gate on a fresh profile. */
+.v15link{min-height:44px}
+@media(max-width:640px){:root .tabs .tab{min-height:44px}}
