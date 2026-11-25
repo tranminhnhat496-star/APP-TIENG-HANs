@@ -1,0 +1,5 @@
+/* V53 (V19.6.1 KO Sentence Forge) — additive layer styles. */
+.v53new{display:inline-block;background:#6b3a00;color:#fff;border-radius:999px;padding:2px 8px;font-size:12px;line-height:1.6;margin-left:8px;white-space:nowrap;font-weight:700;vertical-align:middle}
+/* Specificity (0,2,1) beats .v48card p (0,1,1), which otherwise paints the
+   notice in the muted secondary colour instead of gold. */
+.v48card p.v53note{color:#ffd76a}

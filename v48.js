@@ -165,18 +165,33 @@ function forgePool(lang){
   var out={items:[],learned:0,koSent:0};
   try{
     if(lang==='ko'){
-      var cards=learnedKO();out.learned=cards.length;
-      /* V51 (V19.6): prefer the selected KO deck (S.deck) when set —
-         deck cards first, the rest after; no Korean is ever invented. */
-      try{if(window.__v51&&__v51.koDeckFirst)cards=__v51.koDeckFirst(cards)}catch(e){}
-      cards.forEach(function(c){
-        var e=String(c.e||'');
-        if(!/[\uAC00-\uD7A3]/.test(e))return;
-        var tk=tokensOf(e);
-        if(tk.length<2)return;
-        out.koSent++;
-        out.items.push({text:stripPunct(e),vi:c.m||'',hint:(c.p||''),tier:tierKO(tk.length),tokens:tk,src:'ko:'+(c.id||'?'),cardId:c.id});
-      });
+      /* V53 (V19.6.1): expanded KO pool — learned examples first,
+         then same group / selected deck, then other unlearned
+         examples (marked "chưa học"); quality filter on every
+         example; koSent counts the EXPANDED pool. No Korean is
+         ever invented — every sentence stays verbatim card.e.
+         Falls back to the old learned-only path if __v53 is absent. */
+      var ko53=null;
+      try{if(window.__v53&&__v53.koPool53)ko53=__v53.koPool53()}catch(e){ko53=null}
+      if(ko53&&ko53.items){
+        out.items=ko53.items;out.learned=ko53.learned;out.koSent=ko53.koSent;
+        out.notice=ko53.notice||null;out.primary=ko53.primary;
+        out.learnedItems=ko53.learnedItems;out.unlearnedItems=ko53.unlearnedItems;
+        out.supplemented=!!(ko53.notice&&ko53.notice.supplemented);
+      }else{
+        var cards=learnedKO();out.learned=cards.length;
+        /* V51 (V19.6): prefer the selected KO deck (S.deck) when set —
+           deck cards first, the rest after; no Korean is ever invented. */
+        try{if(window.__v51&&__v51.koDeckFirst)cards=__v51.koDeckFirst(cards)}catch(e){}
+        cards.forEach(function(c){
+          var e=String(c.e||'');
+          if(!/[\uAC00-\uD7A3]/.test(e))return;
+          var tk=tokensOf(e);
+          if(tk.length<2)return;
+          out.koSent++;
+          out.items.push({text:stripPunct(e),vi:c.m||'',hint:(c.p||''),tier:tierKO(tk.length),tokens:tk,src:'ko:'+(c.id||'?'),cardId:c.id,learned:true,origin:'learned'});
+        });
+      }
     }else{
       out.learned=learnedEN().length;
       /* V51 (V19.6): auto-generated sentences from the active word
@@ -216,8 +231,17 @@ var FS=null;
 function startForgeSession(lang){
   var g=forgeGate(lang);
   if(!g.ok)return {ok:false,gate:g};
-  var items=shuffle(g.pool.items).slice(0,FORGE_SESSION_N);
-  FS={lang:lang,list:items,i:0,built:[],used:{},right:0,streak:0,score:0,checked:false,ok:null,sessionId:'f'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36),done:false,bonusPaid:0};
+  var items;
+  if(lang==='ko'){
+    /* V53 (V19.6.1): KO session draws priority-first (learned → same
+       group/deck → other unlearned) and orders the 5 by the token
+       ladder 2–3 → 4–5 → 6+ (easier first). Falls back to shuffle. */
+    try{if(window.__v53&&__v53.koOrderSession)items=__v53.koOrderSession(g.pool.items,FORGE_SESSION_N)}catch(e){items=null}
+    if(!items||!items.length)items=shuffle(g.pool.items).slice(0,FORGE_SESSION_N);
+  }else{
+    items=shuffle(g.pool.items).slice(0,FORGE_SESSION_N);
+  }
+  FS={lang:lang,list:items,i:0,built:[],used:{},right:0,streak:0,score:0,checked:false,ok:null,sessionId:'f'+Date.now().toString(36)+Math.floor(Math.random()*1e6).toString(36),done:false,bonusPaid:0,notice:(g.pool&&g.pool.notice)||null};
   return {ok:true,session:FS};
 }
 function forgeCurrent(){return FS&&FS.list?FS.list[FS.i]:null}
@@ -611,19 +635,23 @@ function forgeHTML(){
     return '<div class="v48card"><b>🔨 Lò Rèn Câu ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+')</b>'
       +'<p class="v48mut">Xếp các mảnh từ thành câu đúng thứ tự. Điểm = số từ × hệ số độ khó. Mỗi câu đúng +'+FORGE_CORRECT_XP+' XP; đúng ≥'+FORGE_BONUS_MIN+'/'+FORGE_SESSION_N+' câu trong một buổi thêm +'+FORGE_BONUS_XP+' XP (một lần mỗi buổi).</p>'
       +'<p class="v48mut">Đã học: '+g.pool.learned+' từ · Đúng tổng: '+e0.forge.correct+' · Điểm cao nhất: '+(e0.forge.bestScore||0)+' điểm · Chuỗi ngày rèn: '+(e0.bounty.streak.n||0)+' · Câu đúng kỷ lục liên tiếp: '+(e0.forge.bestStreak||0)+'</p>'
+      +(lang==='ko'?'<p class="v48mut">Câu ví dụ thật: '+g.pool.koSent+' câu'+(g.pool.unlearnedItems?' · trong đó '+g.pool.unlearnedItems+' câu từ từ chưa học (đánh dấu “chưa học”)':'')+'.</p>':'')
+      +(lang==='ko'&&g.pool.notice&&g.pool.notice.supplemented?'<p class="v48mut v53note">⚠️ Bộ từ đang học chỉ có '+g.pool.notice.primary+' câu ví dụ (cần ~'+FORGE_SESSION_N+') — đã bổ sung '+g.pool.notice.added+' câu từ các từ chưa học / bộ khác.</p>':'')
       +(g.pool.genCount?'<p class="v48mut">📚 Bộ từ: <b>'+esc(g.pool.scopeName||'Tất cả từ vựng')+'</b> · Câu tạo tự động từ bộ từ ('+g.pool.genCount+' câu) — câu nào không tạo được sẽ lấy từ ngân hàng câu mẫu.</p>':'')
       +'<button type="button" class="v48btn pri" onclick="window.__v48.startForge()">Bắt đầu rèn ('+FORGE_SESSION_N+' câu)</button></div>';
   }
   if(FS.done){
     return '<div class="v48card"><b>🎉 Xong buổi rèn!</b>'
       +'<p class="v48mut">Đúng '+FS.right+'/'+FS.list.length+' câu · Điểm buổi: '+(FS.score||0)+' điểm · Điểm cao nhất: '+(en48().forge.bestScore||0)+' điểm'+(FS.bonusPaid?' · Thưởng buổi: +'+FS.bonusPaid+' XP':'')+'.</p>'
+      +(FS.notice&&FS.notice.supplemented?'<p class="v48mut v53note">Buổi này có '+FS.list.filter(function(it){return it.learned===false}).length+' câu từ từ chưa học (đã đánh dấu “chưa học”).</p>':'')
       +'<button type="button" class="v48btn pri" onclick="window.__v48.startForge()">Rèn buổi mới</button></div>';
   }
   var cur=forgeCurrent();
   if(!cur)return '<div class="v48empty">Hết câu — bắt đầu buổi mới nhé.</div>';
   if(!FS.tiles)FS.tiles=shuffle(cur.tokens.map(function(t,i){return {t:t,k:i}}));
-  var h='<div class="v48card"><b>Câu '+(FS.i+1)+'/'+FS.list.length+' · Độ khó ×'+cur.tier+(cur.lv?' · '+esc(cur.lv):'')+'</b>'
+  var h='<div class="v48card"><b>Câu '+(FS.i+1)+'/'+FS.list.length+' · Độ khó ×'+cur.tier+(cur.lv?' · '+esc(cur.lv):'')+'</b>'+(cur.learned===false?'<span class="v53new">chưa học</span>':'')
     +(cur.gen?'<p class="v48mut"><span class="v51gen">Câu tạo tự động</span> Bộ từ: '+esc(cur.scopeName||'')+' · Từ khóa: <b>'+esc(cur.word?cur.word.en:'')+'</b>'+(cur.word&&cur.word.vi?' ('+esc(cur.word.vi)+')':'')+'</p>':'')
+    +(FS.i===0&&FS.notice&&FS.notice.supplemented?'<p class="v48mut v53note">⚠️ Đã bổ sung '+FS.notice.added+' câu từ từ chưa học / bộ khác (bộ đang học chỉ có '+FS.notice.primary+' câu).</p>':'')
     +'<p class="v48mut">Nghĩa: '+esc(cur.vi||'(chưa có nghĩa)')+(cur.hint?' · Đọc: '+esc(cur.hint):'')+'</p>'
     +'<div class="v48built">'+(FS.built.length?FS.built.map(esc).join(' '):'<span class="v48mut">Chạm vào các mảnh từ bên dưới để xếp câu…</span>')+'</div>'
     +'<div class="v48tiles">';
