@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Korean &amp; English Vocab Farm V19.5 — Round5 Bug Fixes — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
+<title>Korean &amp; English Vocab Farm V19.5.1 — Round5 Patch — Học từ vựng tiếng Hàn &amp; tiếng Anh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&family=Jua&display=swap" rel="stylesheet">
 <style>
@@ -3948,7 +3948,10 @@ function sfx15(k){try{if(typeof sfx==='function')sfx(k)}catch(e){}}
 function pop15(t,long){try{if(typeof pop==='function')pop(t,long);else if(typeof toast==='function')toast(t)}catch(e){}}
 function save15(){try{if(typeof save==='function')save()}catch(e){}}
 function coins15(){try{if(typeof coins==='function')return coins()}catch(e){}return (S.xp||0)-(S.spent||0)}
-function speak15(text,lang){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+/* V52 (V19.5.1): Android TTS fix — speak through the shared __v52
+   helper (waits for voices, picks a matching voice, honest error on
+   failure). Old body kept as the fallback if __v52 failed to load. */
+function speak15(text,lang){if(window.__v52&&__v52.speak){__v52.speak(text,lang||'en-US',.85,function(code){pop15('Không phát được âm thanh — bấm Nghe lại.');});return;}try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang=lang||'en-US';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
 function icon15(name){return '<img src="assets/icons/v6/'+name+'" class="v15ic" alt="">'}
 function dl(name,text,type){var b=new Blob([text],{type:type||'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)}
 
@@ -7995,34 +7998,57 @@ function distractorsKO(c,n){
 /* ---------- SRS marking (mirrors V15 mark15; no farm watering — V15-internal) ---------- */
 function dayNo18(){return Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)}
 function todayStr18(){return new Date().toDateString()}
-function mark18(ok,w){
-  if(!w)return;
+/* V52 (V19.5.1, C-R5-1): stable per-item key for wordless boss answers
+   (grammar/sentence). Same question text -> same key, so the 10-minute
+   per-item cooldown mirrors words; different items pay separately.
+   Null when the current question carries a word or a KO card. */
+function wordlessKey18(){
+  if(!F||!F.cur)return null;
+  if(F.cur.w||F.cur.k)return null;
+  if(F.cur.g)return 'g:'+F.cur.g.q;
+  if(F.cur.s)return 's:'+F.cur.s.s;
+  if(F.cur.p&&F.cur.q)return 'r:'+F.cur.p.title+'|'+F.cur.q.q;
+  return null;
+}
+function mark18(ok,w,qkey){
+  if(!w&&!qkey)return;
   var v=V15();if(!v)return;
-  var old=v.enOld(),e=v.en15(),id=w.id,before=old.box[id]||0;
+  var old=v.enOld(),e=v.en15(),id=w?w.id:qkey,before=w?(old.box[id]||0):0;
   old.box=old.box||{};old.right=old.right||{};old.wrong=old.wrong||{};
   old.review=old.review||[];old.xpAt=old.xpAt||{};
   if(ok){
-    old.right[id]=(old.right[id]||0)+1;
+    /* Word steps stay behind if(w): SRS box/right/review/intv/due are
+       word data and must never be written for a wordless answer. */
+    if(w){
+      old.right[id]=(old.right[id]||0)+1;
+      old.box[id]=Math.min(5,before+1);
+      var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
+      var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
+      e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
+    }
     old.streak=(old.streak||0)+1;
-    old.box[id]=Math.min(5,before+1);
-    var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
-    var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
-    e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
   }else{
-    old.wrong[id]=(old.wrong[id]||0)+1;
-    old.streak=0;old.box[id]=0;
-    if(old.review.indexOf(id)<0)old.review.push(id);
-    e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    if(w){
+      old.wrong[id]=(old.wrong[id]||0)+1;
+      old.box[id]=0;
+      if(old.review.indexOf(id)<0)old.review.push(id);
+      e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    }
+    old.streak=0;
   }
   /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
      v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
      below runs ONLY if the V46 layer failed to load, and is the original
-     block verbatim, so EN XP can never silently regress to 0. */
+     block verbatim, so EN XP can never silently regress to 0.
+     V52 (V19.5.1, C-R5-1): wordless answers (grammar/sentence, qkey)
+     pay through the SAME shared function with boxUp=true on a correct
+     answer — the question itself is the item, and the 10-minute
+     per-item cooldown is the throttle (same rule as KO). */
   var xp=0;
   if(window.__v46&&__v46.awardBossAnswerXP){
-    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:w?(old.box[id]>before):!!ok,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
   }else{
-    if(ok&&old.box[id]>before){
+    if(ok&&(w?old.box[id]>before:true)){
       var last=old.xpAt[id]||0;
       if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
     }
@@ -8033,7 +8059,9 @@ function mark18(ok,w){
     if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
     if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
+  /* V52: recordAnswer is a word step — never record a wordless answer
+     (the qkey is not a word id and must not enter Smart Learning). */
+  if(w){try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}}
   save18();
 }
 function markKO(ok,k){
@@ -8223,7 +8251,7 @@ function answer(ok,timeout){
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
-    if(F.cur&&F.cur.w)mark18(true,F.cur.w);
+    mark18(true,F.cur&&F.cur.w,wordlessKey18());
     if(F.cur&&F.cur.k)markKO(true,F.cur.k);
     pop18((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
   }else{
@@ -8240,7 +8268,7 @@ function answer(ok,timeout){
     }}catch(e){}}
     F.hearts-=cost;F.anim='attack';F.wrongCount++;
     if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
-    if(F.cur&&F.cur.w)mark18(false,F.cur.w);
+    mark18(false,F.cur&&F.cur.w,wordlessKey18());
     if(F.cur&&F.cur.k)markKO(false,F.cur.k);
     if(b.skill.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skill.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
@@ -8385,7 +8413,10 @@ function speakState(){
 }
 
 /* ---------- fight rendering ---------- */
+/* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body kept
+   as the fallback if __v52 failed to load. */
 function speakKO(text){
+  if(window.__v52&&__v52.speak){__v52.speak(text,'ko-KR',.8,function(code){pop18('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
 }
 function renderFight(){
@@ -9088,34 +9119,57 @@ function koCount(){return koCardsRaw().length}
 /* ---------- SRS marking (mirrors V15 mark15 / V18 mark18) ---------- */
 function dayNo19(){return Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)}
 function todayStr19(){return new Date().toDateString()}
-function mark19(ok,w){
-  if(!w)return;
+/* V52 (V19.5.1, C-R5-1): stable per-item key for wordless boss answers
+   (grammar/sentence). Same question text -> same key, so the 10-minute
+   per-item cooldown mirrors words; different items pay separately.
+   Null when the current question carries a word or a KO card. */
+function wordlessKey19(){
+  if(!F||!F.cur)return null;
+  if(F.cur.w||F.cur.k)return null;
+  if(F.cur.g)return 'g:'+F.cur.g.q;
+  if(F.cur.s)return 's:'+F.cur.s.s;
+  if(F.cur.p&&F.cur.q)return 'r:'+F.cur.p.title+'|'+F.cur.q.q;
+  return null;
+}
+function mark19(ok,w,qkey){
+  if(!w&&!qkey)return;
   var v=V15();if(!v)return;
-  var old=v.enOld(),e=v.en15(),id=w.id,before=old.box[id]||0;
+  var old=v.enOld(),e=v.en15(),id=w?w.id:qkey,before=w?(old.box[id]||0):0;
   old.box=old.box||{};old.right=old.right||{};old.wrong=old.wrong||{};
   old.review=old.review||[];old.xpAt=old.xpAt||{};
   if(ok){
-    old.right[id]=(old.right[id]||0)+1;
+    /* Word steps stay behind if(w): SRS box/right/review/intv/due are
+       word data and must never be written for a wordless answer. */
+    if(w){
+      old.right[id]=(old.right[id]||0)+1;
+      old.box[id]=Math.min(5,before+1);
+      var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
+      var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
+      e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
+    }
     old.streak=(old.streak||0)+1;
-    old.box[id]=Math.min(5,before+1);
-    var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
-    var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
-    e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
   }else{
-    old.wrong[id]=(old.wrong[id]||0)+1;
-    old.streak=0;old.box[id]=0;
-    if(old.review.indexOf(id)<0)old.review.push(id);
-    e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    if(w){
+      old.wrong[id]=(old.wrong[id]||0)+1;
+      old.box[id]=0;
+      if(old.review.indexOf(id)<0)old.review.push(id);
+      e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    }
+    old.streak=0;
   }
   /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
      v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
      below runs ONLY if the V46 layer failed to load, and is the original
-     block verbatim, so EN XP can never silently regress to 0. */
+     block verbatim, so EN XP can never silently regress to 0.
+     V52 (V19.5.1, C-R5-1): wordless answers (grammar/sentence, qkey)
+     pay through the SAME shared function with boxUp=true on a correct
+     answer — the question itself is the item, and the 10-minute
+     per-item cooldown is the throttle (same rule as KO). */
   var xp=0;
   if(window.__v46&&__v46.awardBossAnswerXP){
-    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain19,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:w?(old.box[id]>before):!!ok,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain19,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
   }else{
-    if(ok&&old.box[id]>before){
+    if(ok&&(w?old.box[id]>before:true)){
       var last=old.xpAt[id]||0;
       if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
     }
@@ -9126,7 +9180,9 @@ function mark19(ok,w){
     if(e.daily.d!==todayStr19())e.daily={d:todayStr19(),correct:0,wrong:0,xp:0};
     if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}
+  /* V52: recordAnswer is a word step — never record a wordless answer
+     (the qkey is not a word id and must not enter Smart Learning). */
+  if(w){try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss19')}catch(e){}}
   save19();
 }
 function markKO19(ok,k){
@@ -9363,7 +9419,7 @@ function answer(ok,timeout){
   if(F.ultActive&&(F.qmode||'').indexOf('ca-')===0){
     /* counterattack questions: score only, no boss damage / no heart loss yet */
     if(ok){F.caRight++;F.right++}else F.wrong++;
-    if(F.cur&&F.cur.w)mark19(ok,F.cur.w);
+    mark19(ok,F.cur&&F.cur.w,wordlessKey19());
     if(F.cur&&F.cur.k)markKO19(ok,F.cur.k);
     renderFight();
     return;
@@ -9385,7 +9441,7 @@ function answer(ok,timeout){
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
-    if(F.cur&&F.cur.w)mark19(true,F.cur.w);
+    mark19(true,F.cur&&F.cur.w,wordlessKey19());
     if(F.cur&&F.cur.k)markKO19(true,F.cur.k);
     pop19((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
   }else{
@@ -9404,7 +9460,7 @@ function answer(ok,timeout){
     }}catch(e){}}
     F.hearts-=cost;F.anim='attack';F.wrongCount++;F.wrong++;
     if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
-    if(F.cur&&F.cur.w)mark19(false,F.cur.w);
+    mark19(false,F.cur&&F.cur.w,wordlessKey19());
     if(F.cur&&F.cur.k)markKO19(false,F.cur.k);
     if(b.skills.elem.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skills.elem.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
@@ -9564,7 +9620,10 @@ function speakState(){
   if(!F)return null;
   return {listening:!!F.listening,token:F.speakToken||0,heard:F.heard||null,err:F.speakErr||null,answered:F.answered};
 }
+/* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body kept
+   as the fallback if __v52 failed to load. */
 function speakKO(text){
+  if(window.__v52&&__v52.speak){__v52.speak(text,'ko-KR',.8,function(code){pop19('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
 }
 
@@ -12250,6 +12309,9 @@ function ttsAvailable(){
 }
 function speak22(text){
   SPOKEN_LOG.push(text);
+  /* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body
+     kept as the fallback if __v52 failed to load. */
+  if(window.__v52&&__v52.speak){__v52.speak(text,'en-US',.85,function(code){pop22('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{
     speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(text);
@@ -15917,7 +15979,11 @@ function distractorsKO(c,n){
 function speakEN(id){
   try{if(window.__v15&&__v15.speakWord)__v15.speakWord(id)}catch(e){}
 }
+/* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). v27 has no
+   pop of its own, so the error goes through V15's pop15 like pop22.
+   Old body kept as the fallback if __v52 failed to load. */
 function speakKO(text){
+  if(window.__v52&&__v52.speak){__v52.speak(text,'ko-KR',.85,function(code){var v=V15();if(v&&v.pop15)v.pop15('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.85;speechSynthesis.speak(u)}catch(e){}
 }
 function speakWord(lang,id){
@@ -28350,6 +28416,9 @@ function dojoGate(lang,advanced){
   return {ok:true,pool:advanced?adv:base};
 }
 function speakText(text,lang){
+  /* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body
+     kept as the fallback if __v52 failed to load. */
+  if(window.__v52&&__v52.speak){return __v52.speak(text,(lang==='ko'?'ko-KR':'en-US'),.85,function(code){pop48('Không phát được âm thanh — bấm Nghe lại.');});}
   try{
     if(typeof speechSynthesis==='undefined')return false;
     speechSynthesis.cancel();
@@ -28835,6 +28904,160 @@ window.__v48={
 (function(){
   var VERSION='19.5.0';
   window.__v50={version:VERSION};
+})();
+
+</script>
+
+<script id="v52js">
+/* ===== V52 — V19.5.1: shared TTS speak helper (Android voice fix) =====
+   BUG (user report 2026-11-24, live game): every "Nghe" button is silent
+   on Android phones while it works on desktop. Root cause, verified from
+   source: the game NEVER selected a voice — zero occurrences of
+   getVoices / voiceschanged anywhere. Every speak path (speak15 v15.js,
+   speakKO v18.js/v19.js/v27.js, speak22 v22.js, speakText v48.js) did
+   speechSynthesis.cancel() then new SpeechSynthesisUtterance, set only
+   .lang (+ .rate), called speak(), and swallowed all errors. On Android
+   Chrome the voice list loads asynchronously and is often EMPTY when the
+   page first speaks, so an utterance with only .lang set and no matching
+   voice is silently dropped — no error, no sound.
+   FIX: ONE shared helper, used by ALL speak paths (each keeps its old
+   body as a fallback if this layer ever fails to load):
+     (a) waits for voices to load — a 'voiceschanged' listener PLUS a
+         getVoices() poll every 250 ms, bounded at 2000 ms;
+     (b) picks a matching voice by lang — exact lang match, then
+         lang-prefix match, then the platform default voice — NEVER a
+         voice for the wrong language; if voices exist but none matches
+         and there is no default, the call fails honestly instead of
+         speaking with a wrong voice;
+     (c) attaches utterance.onerror and shows an honest user-facing
+         message ("Không phát được âm thanh — bấm Nghe lại.") with a
+         retry button instead of silent failure ('canceled' /
+         'interrupted' from our own cancel() are ignored);
+     (d) cancel() runs ONLY when something is actually speaking or
+         pending, and the utterance is spoken on the next tick after a
+         cancel — cancel-then-speak in the same tick can drop the
+         utterance on Android;
+     (e) auto-play paths (v15/v22 250 ms, v27 200 ms setTimeout speaks)
+         go through the same queue: if the first attempt finds no voice
+         yet, the utterance speaks automatically as soon as voices load
+         (or errors honestly after the bound) — and the existing
+         "Nghe lại" buttons retry on the next user tap.
+   No new save key, no XP/SRS/pet/schema change, no new permissions.
+   HONEST GAP: real Android TTS end-to-end cannot be verified in headless
+   Chrome (no voices, no audio) — it needs the user's real Android phone.
+   The vm suite (test52 §52B) and the Chrome gates (verify-v52c G6) prove
+   the helper's behaviour against stubbed voices (delayed / no-match /
+   never-loads), not real audio. */
+(function(){
+'use strict';
+var VERSION='19.5.1';
+var WAIT_MS=2000, POLL_MS=250;
+var _pending=null; /* {text,lang,rate,onErr} waiting for voices; latest wins */
+var _listening=false; /* a voiceschanged listener is attached */
+var ERR_MSG='Không phát được âm thanh — bấm Nghe lại.';
+function _voices(){
+  try{
+    if(typeof speechSynthesis==='undefined'||!speechSynthesis)return null;
+    if(typeof speechSynthesis.getVoices!=='function')return [];
+    return speechSynthesis.getVoices()||[];
+  }catch(e){ return null; }
+}
+/* Voice pick, per the task contract: exact lang -> lang prefix ->
+   platform default -> null (never a wrong-language voice). */
+function _pickVoice(lang){
+  var vs=_voices();
+  if(!vs||!vs.length)return null;
+  var want=String(lang||'en-US').toLowerCase();
+  var prefix=want.split('-')[0];
+  var i,v;
+  for(i=0;i<vs.length;i++){v=vs[i];if(v&&v.lang&&String(v.lang).toLowerCase()===want)return v;}
+  for(i=0;i<vs.length;i++){v=vs[i];if(v&&v.lang&&String(v.lang).toLowerCase().indexOf(prefix)===0)return v;}
+  for(i=0;i<vs.length;i++){v=vs[i];if(v&&v.default)return v;}
+  return null;
+}
+function _doSpeak(text,lang,rate,onErr){
+  var v=_pickVoice(lang||'en-US');
+  if(!v){ if(onErr)onErr('no-voice'); return false; }
+  var u;
+  try{ u=new SpeechSynthesisUtterance(text); }
+  catch(e){ if(onErr)onErr('unsupported'); return false; }
+  u.lang=lang||'en-US';
+  if(rate)u.rate=rate;
+  u.voice=v;
+  u.onerror=function(ev){
+    var code=ev&&ev.error?String(ev.error):'';
+    if(code==='canceled'||code==='interrupted')return; /* our own cancel() */
+    if(onErr)onErr('error');
+  };
+  try{
+    if(speechSynthesis.speaking||speechSynthesis.pending){
+      speechSynthesis.cancel();
+      setTimeout(function(){
+        try{ speechSynthesis.speak(u); }catch(e){ if(onErr)onErr('error'); }
+      },100);
+    }else{
+      speechSynthesis.speak(u);
+    }
+  }catch(e){ if(onErr)onErr('error'); return false; }
+  return true;
+}
+function _flushPending(){
+  if(!_pending)return;
+  var p=_pending;_pending=null;
+  var vs=_voices();
+  if(vs&&vs.length){ _doSpeak(p.text,p.lang,p.rate,p.onErr); return; }
+  if(p.onErr)p.onErr('no-voice');
+}
+function _waitForVoices(p){
+  _pending=p;
+  var done=false;
+  function finish(){ if(done)return; done=true; _flushPending(); }
+  try{
+    if(speechSynthesis.addEventListener){
+      if(!_listening){
+        _listening=true;
+        speechSynthesis.addEventListener('voiceschanged',function(){
+          _listening=false; finish();
+        });
+      }
+    }else if('onvoiceschanged' in speechSynthesis){
+      speechSynthesis.onvoiceschanged=function(){ finish(); };
+    }
+  }catch(e){}
+  var t0=Date.now();
+  (function poll(){
+    if(done)return;
+    var vs=_voices();
+    if(vs&&vs.length){ finish(); return; }
+    if(Date.now()-t0>=WAIT_MS){ finish(); return; }
+    setTimeout(poll,POLL_MS);
+  })();
+}
+/* speak(text, lang, rate, onErr) — onErr(code) with code in
+   'unsupported' | 'no-voice' | 'error'. Returns true when the utterance
+   was spoken or queued, false on an immediate honest failure. */
+function speak(text,lang,rate,onErr){
+  if(typeof text!=='string'||!text)return false;
+  if(typeof speechSynthesis==='undefined'||!speechSynthesis||typeof SpeechSynthesisUtterance==='undefined'){
+    if(onErr)onErr('unsupported'); return false;
+  }
+  var vs=_voices();
+  if(vs&&vs.length){ return _doSpeak(text,lang,rate,onErr); }
+  _waitForVoices({text:text,lang:lang,rate:rate,onErr:onErr});
+  return true;
+}
+window.__v52={
+  version:VERSION,
+  speak:speak,
+  errMsg:ERR_MSG,
+  _test:{
+    pickVoice:_pickVoice,
+    voices:_voices,
+    pending:function(){ return _pending; },
+    flush:_flushPending,
+    waitMs:WAIT_MS
+  }
+};
 })();
 
 </script>

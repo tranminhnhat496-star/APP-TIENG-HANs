@@ -89,6 +89,9 @@ function ttsAvailable(){
 }
 function speak22(text){
   SPOKEN_LOG.push(text);
+  /* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body
+     kept as the fallback if __v52 failed to load. */
+  if(window.__v52&&__v52.speak){__v52.speak(text,'en-US',.85,function(code){pop22('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{
     speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(text);

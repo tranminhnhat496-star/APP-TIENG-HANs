@@ -331,34 +331,57 @@ function distractorsKO(c,n){
 /* ---------- SRS marking (mirrors V15 mark15; no farm watering — V15-internal) ---------- */
 function dayNo18(){return Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)}
 function todayStr18(){return new Date().toDateString()}
-function mark18(ok,w){
-  if(!w)return;
+/* V52 (V19.5.1, C-R5-1): stable per-item key for wordless boss answers
+   (grammar/sentence). Same question text -> same key, so the 10-minute
+   per-item cooldown mirrors words; different items pay separately.
+   Null when the current question carries a word or a KO card. */
+function wordlessKey18(){
+  if(!F||!F.cur)return null;
+  if(F.cur.w||F.cur.k)return null;
+  if(F.cur.g)return 'g:'+F.cur.g.q;
+  if(F.cur.s)return 's:'+F.cur.s.s;
+  if(F.cur.p&&F.cur.q)return 'r:'+F.cur.p.title+'|'+F.cur.q.q;
+  return null;
+}
+function mark18(ok,w,qkey){
+  if(!w&&!qkey)return;
   var v=V15();if(!v)return;
-  var old=v.enOld(),e=v.en15(),id=w.id,before=old.box[id]||0;
+  var old=v.enOld(),e=v.en15(),id=w?w.id:qkey,before=w?(old.box[id]||0):0;
   old.box=old.box||{};old.right=old.right||{};old.wrong=old.wrong||{};
   old.review=old.review||[];old.xpAt=old.xpAt||{};
   if(ok){
-    old.right[id]=(old.right[id]||0)+1;
+    /* Word steps stay behind if(w): SRS box/right/review/intv/due are
+       word data and must never be written for a wordless answer. */
+    if(w){
+      old.right[id]=(old.right[id]||0)+1;
+      old.box[id]=Math.min(5,before+1);
+      var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
+      var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
+      e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
+    }
     old.streak=(old.streak||0)+1;
-    old.box[id]=Math.min(5,before+1);
-    var ri=old.review.indexOf(id);if(ri>=0)old.review.splice(ri,1);
-    var iv=[1,3,7,14,30][Math.min(4,old.box[id]-1)]||1;
-    e.intv[id]=iv;e.due[id]=Date.now()+iv*864e5;
   }else{
-    old.wrong[id]=(old.wrong[id]||0)+1;
-    old.streak=0;old.box[id]=0;
-    if(old.review.indexOf(id)<0)old.review.push(id);
-    e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    if(w){
+      old.wrong[id]=(old.wrong[id]||0)+1;
+      old.box[id]=0;
+      if(old.review.indexOf(id)<0)old.review.push(id);
+      e.intv[id]=0;e.due[id]=Date.now()+10*60*1000;
+    }
+    old.streak=0;
   }
   /* V46 (V19.0.1, C-R2-1): ONE shared boss-answer XP rule (EN + KO,
      v18 + v19) — __v46.awardBossAnswerXP (src/v46.js). The fallback
      below runs ONLY if the V46 layer failed to load, and is the original
-     block verbatim, so EN XP can never silently regress to 0. */
+     block verbatim, so EN XP can never silently regress to 0.
+     V52 (V19.5.1, C-R5-1): wordless answers (grammar/sentence, qkey)
+     pay through the SAME shared function with boxUp=true on a correct
+     answer — the question itself is the item, and the 10-minute
+     per-item cooldown is the throttle (same rule as KO). */
   var xp=0;
   if(window.__v46&&__v46.awardBossAnswerXP){
-    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:old.box[id]>before,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
+    try{xp=__v46.awardBossAnswerXP({ok:ok,id:id,boxUp:w?(old.box[id]>before):!!ok,streakObj:old,streakKey:'streak',xpAt:old.xpAt,gain:gain18,hist:e.hist,daily:e.daily});}catch(_e46){xp=0;}
   }else{
-    if(ok&&old.box[id]>before){
+    if(ok&&(w?old.box[id]>before:true)){
       var last=old.xpAt[id]||0;
       if(Date.now()-last>600000){xp=10;old.xpAt[id]=Date.now()}
     }
@@ -369,7 +392,9 @@ function mark18(ok,w){
     if(e.daily.d!==todayStr18())e.daily={d:todayStr18(),correct:0,wrong:0,xp:0};
     if(ok){e.daily.correct++;e.daily.xp+=xp}else e.daily.wrong++;
   }
-  try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}
+  /* V52: recordAnswer is a word step — never record a wordless answer
+     (the qkey is not a word id and must not enter Smart Learning). */
+  if(w){try{if(window.__v27)__v27.recordAnswer('en',id,ok,'boss18')}catch(e){}}
   save18();
 }
 function markKO(ok,k){
@@ -559,7 +584,7 @@ function answer(ok,timeout){
     var dealt=dmg;
     if(F.shield>0){dealt=Math.max(1,Math.ceil(dmg/2));F.shield=Math.max(0,F.shield-dealt)}
     F.hp-=dealt;F.anim='hit';F.lastDmg=dealt;F.crit=crit;
-    if(F.cur&&F.cur.w)mark18(true,F.cur.w);
+    mark18(true,F.cur&&F.cur.w,wordlessKey18());
     if(F.cur&&F.cur.k)markKO(true,F.cur.k);
     pop18((crit?'CHÍ MẠNG! -':'-')+dealt+' HP');
   }else{
@@ -576,7 +601,7 @@ function answer(ok,timeout){
     }}catch(e){}}
     F.hearts-=cost;F.anim='attack';F.wrongCount++;
     if(cost>0&&!petAbsorbed){try{if(window.__v23&&F.pet)__v23.onHeartLost(F)}catch(e){}}
-    if(F.cur&&F.cur.w)mark18(false,F.cur.w);
+    mark18(false,F.cur&&F.cur.w,wordlessKey18());
     if(F.cur&&F.cur.k)markKO(false,F.cur.k);
     if(b.skill.id==='burn')healBoss(8,'🔥 Thiêu Đốt: boss hồi 8 HP!');
     if(b.skill.id==='regen'&&F.wrongCount%2===0)healBoss(10,'💧 Dòng Chảy: boss hồi 10 HP!');
@@ -721,7 +746,10 @@ function speakState(){
 }
 
 /* ---------- fight rendering ---------- */
+/* V52 (V19.5.1): Android TTS fix — see speak15 (v15.js). Old body kept
+   as the fallback if __v52 failed to load. */
 function speakKO(text){
+  if(window.__v52&&__v52.speak){__v52.speak(text,'ko-KR',.8,function(code){pop18('Không phát được âm thanh — bấm Nghe lại.');});return;}
   try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.8;speechSynthesis.speak(u)}catch(e){}
 }
 function renderFight(){
