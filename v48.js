@@ -107,7 +107,7 @@ function isoWeek(d){
 function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 
 /* ---------- en48 state (lazy, no migration) ---------- */
-function defEn48(){return {created:Date.now(),forge:{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{},scoreTotal:0,bestScore:0},dojo:{attempts:0,good:0,selfOk:0,attemptsByDay:{}},tree:{claimed:{}},bounty:{claimed:{},streak:{d:'',n:0}},dojoUnlocked:0,flags:{forge:1,bounty:1,tree:1,dojo:1,boss:1}}}
+function defEn48(){return {created:Date.now(),forge:{correct:0,streak:0,bestStreak:0,sessions:0,lastDay:'',correctByDay:{},dayBestStreak:{},bonusClaimed:{},scoreTotal:0,bestScore:0},dojo:{attempts:0,good:0,selfOk:0,attemptsByDay:{}},tree:{claimed:{}},bounty:{claimed:{},streak:{d:'',n:0}},dojoUnlocked:0,flags:{forge:1,bounty:1,tree:1,dojo:1,boss:1,forgeAuto:1}}}
 function en48(){
   try{
     var s=getS();if(!s)return defEn48();
@@ -119,13 +119,13 @@ function en48(){
     e.dojo=e.dojo||{attempts:0,good:0,selfOk:0,attemptsByDay:{}};e.dojo.attemptsByDay=e.dojo.attemptsByDay||{};
     e.tree=e.tree||{claimed:{}};e.tree.claimed=e.tree.claimed||{};
     e.bounty=e.bounty||{claimed:{},streak:{d:'',n:0}};e.bounty.claimed=e.bounty.claimed||{};e.bounty.streak=e.bounty.streak||{d:'',n:0};
-    e.flags=e.flags||{forge:1,bounty:1,tree:1,dojo:1,boss:1};
+    e.flags=e.flags||{forge:1,bounty:1,tree:1,dojo:1,boss:1,forgeAuto:1};
     return e;
   }catch(err){return defEn48()}
 }
 function flagOn(name){try{var e=en48();return e.flags[name]!==0}catch(err){return true}}
 function setFlag(name,on){
-  var names=['forge','bounty','tree','dojo','boss'];
+  var names=['forge','bounty','tree','dojo','boss','forgeAuto'];
   if(names.indexOf(name)<0)return false;
   try{var e=en48();e.flags[name]=on?1:0;save48();return true}catch(err){return false}
 }
@@ -166,6 +166,9 @@ function forgePool(lang){
   try{
     if(lang==='ko'){
       var cards=learnedKO();out.learned=cards.length;
+      /* V51 (V19.6): prefer the selected KO deck (S.deck) when set —
+         deck cards first, the rest after; no Korean is ever invented. */
+      try{if(window.__v51&&__v51.koDeckFirst)cards=__v51.koDeckFirst(cards)}catch(e){}
       cards.forEach(function(c){
         var e=String(c.e||'');
         if(!/[\uAC00-\uD7A3]/.test(e))return;
@@ -176,6 +179,16 @@ function forgePool(lang){
       });
     }else{
       out.learned=learnedEN().length;
+      /* V51 (V19.6): auto-generated sentences from the active word
+         set (scope / learned words) when the forgeAuto flag is on;
+         any failure or empty result falls back to the fixed bank
+         below — never a fabricated sentence. */
+      try{
+        if(window.__v51&&__v51.flagOn&&__v51.flagOn()&&window.__v51.genPool){
+          var g=__v51.genPool();
+          if(g&&g.items&&g.items.length){out.items=g.items;out.scopeName=g.scopeName;out.genCount=g.items.filter(function(it){return !!it.gen}).length;return out}
+        }
+      }catch(e){}
       var bank=(window.__V15_DATA&&__V15_DATA.builder)||[];
       bank.forEach(function(b){
         if(!b||!b.s)return;
@@ -598,6 +611,7 @@ function forgeHTML(){
     return '<div class="v48card"><b>🔨 Lò Rèn Câu ('+(lang==='ko'?'🇰🇷 Tiếng Hàn':'🇬🇧 Tiếng Anh')+')</b>'
       +'<p class="v48mut">Xếp các mảnh từ thành câu đúng thứ tự. Điểm = số từ × hệ số độ khó. Mỗi câu đúng +'+FORGE_CORRECT_XP+' XP; đúng ≥'+FORGE_BONUS_MIN+'/'+FORGE_SESSION_N+' câu trong một buổi thêm +'+FORGE_BONUS_XP+' XP (một lần mỗi buổi).</p>'
       +'<p class="v48mut">Đã học: '+g.pool.learned+' từ · Đúng tổng: '+e0.forge.correct+' · Điểm cao nhất: '+(e0.forge.bestScore||0)+' điểm · Chuỗi ngày rèn: '+(e0.bounty.streak.n||0)+' · Câu đúng kỷ lục liên tiếp: '+(e0.forge.bestStreak||0)+'</p>'
+      +(g.pool.genCount?'<p class="v48mut">📚 Bộ từ: <b>'+esc(g.pool.scopeName||'Tất cả từ vựng')+'</b> · Câu tạo tự động từ bộ từ ('+g.pool.genCount+' câu) — câu nào không tạo được sẽ lấy từ ngân hàng câu mẫu.</p>':'')
       +'<button type="button" class="v48btn pri" onclick="window.__v48.startForge()">Bắt đầu rèn ('+FORGE_SESSION_N+' câu)</button></div>';
   }
   if(FS.done){
@@ -609,6 +623,7 @@ function forgeHTML(){
   if(!cur)return '<div class="v48empty">Hết câu — bắt đầu buổi mới nhé.</div>';
   if(!FS.tiles)FS.tiles=shuffle(cur.tokens.map(function(t,i){return {t:t,k:i}}));
   var h='<div class="v48card"><b>Câu '+(FS.i+1)+'/'+FS.list.length+' · Độ khó ×'+cur.tier+(cur.lv?' · '+esc(cur.lv):'')+'</b>'
+    +(cur.gen?'<p class="v48mut"><span class="v51gen">Câu tạo tự động</span> Bộ từ: '+esc(cur.scopeName||'')+' · Từ khóa: <b>'+esc(cur.word?cur.word.en:'')+'</b>'+(cur.word&&cur.word.vi?' ('+esc(cur.word.vi)+')':'')+'</p>':'')
     +'<p class="v48mut">Nghĩa: '+esc(cur.vi||'(chưa có nghĩa)')+(cur.hint?' · Đọc: '+esc(cur.hint):'')+'</p>'
     +'<div class="v48built">'+(FS.built.length?FS.built.map(esc).join(' '):'<span class="v48mut">Chạm vào các mảnh từ bên dưới để xếp câu…</span>')+'</div>'
     +'<div class="v48tiles">';
