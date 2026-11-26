@@ -1,0 +1,27 @@
+/* V54 (V19.7) — Bulk Korean Import overlay styles.
+   Palette follows the V51/V53 layer rules: solid dark chips, white text
+   (>= 9:1), gold notice text on the dark overlay background. */
+.v54hub{position:fixed;inset:0;z-index:1200;display:flex;align-items:flex-start;justify-content:center;background:rgba(10,6,24,.72);overflow:auto;padding:18px 10px;box-sizing:border-box}
+.v54in{width:min(760px,100%);background:#201535;color:#fff;border:2px solid #a78bfa;border-radius:14px;padding:16px;box-sizing:border-box}
+.v54head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.v54title b{font-size:18px;color:#ffd76a}
+.v54title span{display:block;font-size:12px;color:#e4ddf1;margin-top:2px}
+.v54x{background:#30204f;color:#fff;border:1px solid #a78bfa;border-radius:8px;min-width:44px;min-height:44px;font-size:18px;cursor:pointer}
+.v54mut{color:#e4ddf1;font-size:13px;line-height:1.5;margin:8px 0}
+.v54msg{color:#ffd76a;font-size:13px;line-height:1.5;margin:8px 0;font-weight:700}
+.v54card{background:#1b1430;border:1px solid #a78bfa;border-radius:10px;padding:12px;margin:12px 0;box-sizing:border-box}
+.v54card>b{color:#ffd76a;font-size:15px}
+.v54empty{background:#1b1430;border:1px solid #a78bfa;border-radius:10px;padding:14px;color:#e4ddf1;margin:12px 0}
+#v54ta{width:100%;min-height:110px;background:#1b1430;color:#fff;border:1px solid #a78bfa;border-radius:8px;padding:10px;box-sizing:border-box;font-size:14px}
+.v54form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.v54form label{font-size:13px;color:#e4ddf1;display:flex;flex-direction:column;gap:4px}
+.v54form input,.v54form select{width:100%;background:#1b1430;color:#fff;border:1px solid #a78bfa;border-radius:8px;padding:10px;box-sizing:border-box;font-size:14px;min-height:44px}
+.v54acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.v54btn{background:#6845a8;color:#fff;border:1px solid #a78bfa;border-radius:8px;padding:10px 14px;min-height:44px;font-size:14px;cursor:pointer}
+.v54btn.pri{background:#f7be38;color:#251a38;border-color:#f7be38;font-weight:700}
+.v54btn.sm{padding:6px 10px;min-height:36px;font-size:13px}
+.v54btn:disabled{opacity:.45;cursor:not-allowed}
+.v54rows{margin:6px 0}
+.v54row{background:#201535;border:1px solid #30204f;border-radius:8px;padding:8px 10px;margin:6px 0;font-size:13px;line-height:1.5;color:#fff;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.v54tag{background:#1e3a5f;color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;white-space:nowrap}
+@media (max-width:480px){.v54form{grid-template-columns:1fr}.v54in{padding:12px}}
