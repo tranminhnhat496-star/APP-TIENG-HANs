@@ -1,0 +1,45 @@
+/* ===== V55 — KO SRS REVIEW UI (V19.8) =====
+   Overlay z-index 1500 (same as V48). Tokens --ui-* (V24/V25/V26
+   design system), WCAG AA contrast, 44px minimum touch targets,
+   no overflow at 360-430px. */
+#v55hub{box-sizing:border-box;position:fixed;inset:0;z-index:1500;display:flex;align-items:flex-start;justify-content:center;background:rgba(10,6,24,.82);overflow-y:auto;padding:14px 10px;color:var(--ui-text-primary,#FFFFFF);font-family:'Be Vietnam Pro',system-ui,sans-serif}
+.v55in{box-sizing:border-box;width:100%;max-width:720px;margin:0 auto;background:linear-gradient(180deg,#241640 0%,#1B1033 60%,#120A24 100%);border:2px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.v55head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.v55title b{display:block;font-size:19px;line-height:1.3;color:var(--ui-title-gold,#FFD76A)}
+.v55title span{display:block;font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);margin-top:2px}
+.v55x{flex:0 0 auto;min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-bg-panel,#292044);color:var(--ui-text-primary,#FFFFFF);font-size:18px;cursor:pointer}
+.v55card{box-sizing:border-box;background:var(--ui-bg-panel,#292044);border:1px solid var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:12px;margin:12px 0 0;color:var(--ui-text-primary,#FFFFFF)}
+.v55card>b{display:block;font-size:15px;line-height:1.4;color:var(--ui-title-gold,#FFD76A);margin-bottom:6px}
+.v55card p,.v55mut{font-size:14px;line-height:1.5;color:var(--ui-text-secondary,#E4DDF1);margin:6px 0 0}
+.v55empty{box-sizing:border-box;background:#1B1430;border:1px dashed var(--ui-border,#A78BFA);border-radius:var(--ui-radius,16px);padding:14px;margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ui-text-secondary,#E4DDF1)}
+.v55sec{margin:16px 0 0}
+.v55sec>h3{font-size:17px;line-height:1.35;color:var(--ui-title-gold,#FFD76A);margin:0 0 4px}
+.v55stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 0}
+.v55stat{box-sizing:border-box;background:#1B1430;border:1px solid var(--ui-border,#A78BFA);border-radius:12px;padding:10px 8px;text-align:center;min-width:0}
+.v55stat b{display:block;font-size:18px;line-height:1.3;color:var(--ui-text-primary,#FFFFFF)}
+.v55stat span{display:block;font-size:12px;line-height:1.4;color:var(--ui-text-secondary,#E4DDF1);margin-top:2px}
+.v55rowline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.v55rowline label{font-size:14px;font-weight:700;color:var(--ui-text-primary,#FFFFFF)}
+.v55sel{box-sizing:border-box;min-height:44px;max-width:100%;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:#1B1430;color:var(--ui-text-primary,#FFFFFF);font-size:15px;padding:8px 10px}
+.v55acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.v55btn{box-sizing:border-box;min-height:var(--ui-btn-min-height,44px);padding:10px 14px;border-radius:12px;border:1px solid var(--ui-border,#A78BFA);background:var(--ui-btn-secondary,#6845A8);color:var(--ui-text-primary,#FFFFFF);font-size:14px;font-weight:700;line-height:1.35;cursor:pointer;white-space:normal;margin-top:6px}
+.v55btn.pri{background:var(--ui-selected,#F7BE38);color:#251A38;border-color:var(--ui-selected,#F7BE38)}
+.v55btn:disabled{opacity:.55;cursor:not-allowed}
+.v55acts .v55btn{flex:1 1 140px}
+.v55rows{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.v55row{box-sizing:border-box;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;background:#1B1430;border:1px solid var(--ui-border,#A78BFA);border-radius:12px;padding:10px 12px;min-width:0}
+.v55w{display:flex;flex-direction:column;gap:2px;min-width:0}
+.v55w>b{font-size:16px;line-height:1.4;color:var(--ui-text-primary,#FFFFFF);word-break:break-word}
+.v55w>span{font-size:13px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1);word-break:break-word}
+.v55w .v55sub{font-size:12px;line-height:1.45;color:var(--ui-text-secondary,#E4DDF1)}
+.v55rowacts{flex:0 0 auto;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.v55badge{display:inline-block;font-size:12px;font-weight:700;line-height:1.4;padding:4px 8px;border-radius:8px;white-space:nowrap}
+.v55badge.weak{background:#7F1D1D;color:#FFFFFF}
+.v55badge.due{background:#1E3A5F;color:#FFFFFF}
+@media (max-width:430px){
+  #v55hub{padding:8px 6px}
+  .v55in{padding:10px}
+  .v55stats{grid-template-columns:repeat(2,1fr)}
+  .v55row{flex-direction:column}
+  .v55rowacts{flex-direction:row;align-items:center}
+}
